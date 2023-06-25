@@ -5,7 +5,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   daisyui: {
-    prefix: 'daisyui',
+    prefix: 'daisyui-',
     themes: [
       {
         pp: {
