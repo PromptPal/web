@@ -11,9 +11,9 @@ function Root() {
   return (
     <div className='container mx-auto flex flex-col h-full'>
       <Header />
-      <div className='flex h-full'>
+      <div className='flex h-full mt-4'>
         <Menubar />
-        <section>
+        <section className='py-2 px-8 bg-gray-800 bg-opacity-50 w-full'>
           {token ? (
             <Outlet />
           ) : (

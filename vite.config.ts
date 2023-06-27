@@ -6,6 +6,6 @@ import { ViteFaviconsPlugin } from 'vite-plugin-favicon';
 export default defineConfig({
   plugins: [
     react(),
-    ViteFaviconsPlugin('./src/assets/prompt-pal-logo.png')
+    // ViteFaviconsPlugin('./src/assets/prompt-pal-logo.png')
   ],
 })

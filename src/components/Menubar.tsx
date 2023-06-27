@@ -24,13 +24,13 @@ const menus = [
 
 function Menubar(props: MenubarProps) {
   return (
-    <nav className='py-2 px-8 hover:bg-blue-300 hover:bg-opacity-10 hover:backdrop-blur-sm mt-4 rounded-lg h-full min-h-[500px]'>
-      <ul>
+    <nav className='py-2 px-8 hover:bg-blue-300 hover:bg-opacity-10 hover:backdrop-blur-sm rounded-lg h-full min-h-[500px]'>
+      <ul className='dark:text-white'>
         {menus.map((menu) => (
           <li key={menu.text}>
             <Link
               to={menu.link}
-              className='flex items-center'
+              className='flex items-center dark:text-white mb-2'
             >
               {menu.icon}
               <span className='ml-2'>{menu.text}</span>
