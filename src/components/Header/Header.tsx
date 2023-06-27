@@ -1,12 +1,12 @@
 import React from 'react'
 import LoginButton from './login'
-import { Link } from '@tanstack/router'
 import Profile from './Profile'
+import { Link } from 'react-router-dom'
 
 type headerProps = {
 }
 
-function header(props: headerProps) {
+function Header(props: headerProps) {
   // get user info
   return (
     <header className='py-2 pl-6 pr-8 bg-blue-300 bg-opacity-10 backdrop-blur-sm mt-4 rounded-full items-center justify-between flex'>
@@ -24,4 +24,4 @@ function header(props: headerProps) {
   )
 }
 
-export default header
+export default Header

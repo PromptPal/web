@@ -1,6 +1,5 @@
-import React from 'react'
 import { HomeIcon, SparklesIcon, Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
-import { Link } from '@tanstack/router'
+import { Link } from 'react-router-dom'
 
 type MenubarProps = {
 }

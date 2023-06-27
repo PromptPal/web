@@ -1,10 +1,10 @@
-import { Outlet } from '@tanstack/router'
 import Header from './Header/Header'
 import Menubar from './Menubar'
 import { Toaster } from 'react-hot-toast'
 import { useAtomValue } from 'jotai'
 import { tokenAtom } from '../stats/profile'
 import AuthorizePage from './authorize.page'
+import { Outlet } from 'react-router-dom'
 
 function Root() {
   const token = useAtomValue(tokenAtom)
