@@ -10,12 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.7.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@formkit/auto-animate": "^0.7.0",
     "@heroicons/react": "^2.0.18",
+    "@hookform/resolvers": "^3.1.1",
     "@metamask/sdk": "^0.3.2",
     "@tanstack/react-query": "^4.29.15",
     "@tanstack/react-table": "^8.9.3",
     "@uidotdev/usehooks": "^2.0.1",
+    "framer-motion": "^10.12.17",
     "jotai": "^2.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

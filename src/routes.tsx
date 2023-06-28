@@ -5,6 +5,7 @@ import PromptsPage from "./pages/prompts/prompts.page";
 import PromptCreatePage from "./pages/prompts/prompt.create";
 import PromptPage from "./pages/prompts/prompt.page";
 import { createBrowserRouter } from "react-router-dom";
+import ProjectCreatePage from "./pages/projects/project.create";
 
 export const router = createBrowserRouter([
   {
@@ -12,12 +13,19 @@ export const router = createBrowserRouter([
     element: <Root />,
     children: [
       {
+        index: true,
         path: '/',
         element: <OverallPage />
       },
       {
         path: '/projects',
         element: <ProjectsPage />,
+        children: [
+          {
+            path: 'new',
+            element: <ProjectCreatePage />
+          }
+        ]
       },
       {
         path: '/prompts',
