@@ -1,5 +1,5 @@
 import { Provider as JotaiProvider } from 'jotai'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import {
   RouterProvider,
@@ -15,11 +15,15 @@ const queryClient = new QueryClient({
   }
 })
 
+const theme = extendTheme({
+  initialColorMode: 'dark',
+})
+
 function App() {
   return (
     <JotaiProvider>
       <QueryClientProvider client={queryClient}>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           <RouterProvider router={router} />
         </ChakraProvider>
       </QueryClientProvider>

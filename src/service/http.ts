@@ -35,6 +35,10 @@ export function HttpRequest<T, I = undefined>(
     ...init,
   }
 
+  if (!data.signal) {
+    data.signal = AbortSignal.timeout(10_000)
+  }
+
   data.headers = {
     ...data.headers,
     'Content-Type': 'application/json',

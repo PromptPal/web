@@ -2,8 +2,21 @@ import { API_PREFIX } from "../constants"
 import { HttpRequest } from "./http"
 import { ListResponse } from "./types"
 
+export type Project = {
+  id: number;
+  create_time: string;
+  update_time: string;
+  name: string;
+  enabled: boolean;
+  OpenAIBaseURL: string;
+  openAIModel: string;
+  openAITemperature: number;
+  openAITopP: number;
+  edges: any;
+}
+
 export function getProjectList(cursor: number, signal?: AbortSignal) {
-  return HttpRequest<ListResponse<any>>(`${API_PREFIX}/admin/projects?cursor=${cursor}`, {
+  return HttpRequest<ListResponse<Project>>(`${API_PREFIX}/admin/projects?cursor=${cursor}&limit=20`, {
     signal,
   });
 }
@@ -14,7 +27,7 @@ export type createProjectPayload = {
 }
 
 export function createProject(payload: createProjectPayload) {
-  return HttpRequest<any, createProjectPayload>(
+  return HttpRequest<Project, createProjectPayload>(
     `${API_PREFIX}/admin/projects`, {
     method: 'POST',
     body: payload
