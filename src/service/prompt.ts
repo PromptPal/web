@@ -1,4 +1,3 @@
-import { number } from "zod";
 import { API_PREFIX } from "../constants"
 import { HttpRequest } from "./http"
 import { ListResponse, PromptRow, PromptVariable } from "./types"
@@ -11,6 +10,8 @@ export function getPromptList(projectId: number, cursor: number, signal?: AbortS
 
 export type createPromptPayload = {
   projectId: number
+  name: string
+  description: string
   tokenCount: number
   prompts: PromptRow[]
   variables: PromptVariable[]

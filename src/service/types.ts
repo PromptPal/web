@@ -1,6 +1,6 @@
 export type PromptRow = {
   prompt: string
-  role: string
+  role: 'user' | 'system' | 'assistant'
 }
 
 export type PromptVariable = {
