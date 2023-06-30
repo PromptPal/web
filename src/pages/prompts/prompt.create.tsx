@@ -5,11 +5,12 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
 import { Stack, FormControl, FormLabel, Input, FormErrorMessage, Divider, Textarea, Select, Button } from '@chakra-ui/react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-
-type PromptCreatePageProps = {
-}
+import { TrashIcon } from '@heroicons/react/24/outline'
+import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
+import { useSearchParams } from 'react-router-dom'
+import { getProjectDetail } from '../../service/project'
 
 function findPlaceholderValues(sentence: string): string[] {
   const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g;
@@ -39,7 +40,10 @@ const schema: Zod.ZodType<createPromptPayload> = Zod.object({
   publicLevel: Zod.enum(['public', 'private', 'protected']),
 })
 
-function PromptCreatePage(props: PromptCreatePageProps) {
+function PromptCreatePage() {
+  const [sp] = useSearchParams()
+  const pid = ~~(sp.get('pid') ?? '0')
+
   const {
     register,
     watch,
@@ -51,6 +55,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   } = useForm<createPromptPayload>({
     resolver: zodResolver(schema),
     defaultValues: {
+      projectId: pid,
       publicLevel: 'protected',
       prompts: [{
         prompt: '',
@@ -58,6 +63,13 @@ function PromptCreatePage(props: PromptCreatePageProps) {
       }],
       variables: [],
     }
+  })
+
+  const { data: project } = useQuery({
+    queryKey: ['projects', pid],
+    queryFn({ signal }) {
+      return getProjectDetail(pid, signal)
+    },
   })
 
   useEffect(() => {
@@ -106,10 +118,12 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     },
     onSuccess() {
       toast.success('Project created')
+      // redirect to prompts list page
     }
   })
 
   const onSubmit = (data: createPromptPayload) => {
+    // TODO: check if tested
     return mutateAsync(data)
   }
 
@@ -134,12 +148,13 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         <Stack flexDirection='row'>
           <FormControl isInvalid={!!errors.projectId}>
             <FormLabel htmlFor='projectId'>Project ID</FormLabel>
-            <Input
-              id='projectId'
-              type='number'
+            <Select
               placeholder='Project ID'
+              disabled
               {...register('projectId')}
-            />
+            >
+              <option value={project?.id}>{project?.name}</option>
+            </Select>
             <FormErrorMessage>{errors.projectId?.message}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.name}>
@@ -205,6 +220,13 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                     {errors.prompts && errors.prompts[index]?.prompt?.message}
                   </FormErrorMessage>
                 </FormControl>
+                <Button
+                  leftIcon={<TrashIcon />}
+                  disabled={index === 0}
+                  onClick={() => remove(index)}
+                >
+                  Remove
+                </Button>
               </div>
             )
           })}
@@ -268,16 +290,21 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         <Divider />
 
         <Stack flexDirection='row' justifyContent='flex-end'>
+          <PromptTestButton
+            testable={testable}
+            data={getValues()}
+            onTested={(data) => {
+              console.log('tested', data)
+            }}
+          />
           <Button
-          disabled={!testable}
+            colorScheme='teal'
+            type='submit'
+            isLoading={isLoading}
           >
-            Test
-          </Button>
-          <Button colorScheme='teal'>
             Save
           </Button>
         </Stack>
-
       </Stack>
     </form>
   )

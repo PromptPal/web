@@ -24,6 +24,10 @@ export const router = createBrowserRouter([
           {
             path: 'new',
             element: <ProjectCreatePage />
+          },
+          {
+            path: ':id/prompts',
+            element: <PromptsPage />
           }
         ]
       },

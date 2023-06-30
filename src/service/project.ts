@@ -21,6 +21,12 @@ export function getProjectList(cursor: number, signal?: AbortSignal) {
   });
 }
 
+export function getProjectDetail(pid: number, signal?: AbortSignal) {
+  return HttpRequest<Project>(`${API_PREFIX}/admin/projects/${pid}`, {
+    signal,
+  });
+}
+
 export type createProjectPayload = {
   name: string
   openaiToken: string

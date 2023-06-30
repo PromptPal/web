@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast'
 
 const LoginWelcomeText = 'Welcome to the PromptPal~ \n It`s your nonce: '
 
-function LoginButton(props: LoginButtonProps) {
+function LoginButton() {
   const [t, setToken] = useAtom(tokenAtom)
 
   const { mutateAsync: doLoginMutation } = useMutation({

@@ -25,3 +25,18 @@ export function createPrompt(payload: createPromptPayload) {
     body: payload
   })
 }
+
+export type testPromptPayload = {
+  projectId: number
+  name: string
+  prompts: PromptRow[]
+  variables: Record<string, string>
+}
+
+export function testPrompt(payload: testPromptPayload) {
+  return HttpRequest<any, testPromptPayload>(
+    `${API_PREFIX}/admin/prompts/test`, {
+    method: 'POST',
+    body: payload
+  })
+}
