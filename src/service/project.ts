@@ -8,10 +8,11 @@ export type Project = {
   update_time: string;
   name: string;
   enabled: boolean;
-  OpenAIBaseURL: string;
+  openAIBaseURL: string;
   openAIModel: string;
   openAITemperature: number;
   openAITopP: number;
+  openAIMaxTokens: number;
   edges: any;
 }
 
@@ -36,6 +37,33 @@ export function createProject(payload: createProjectPayload) {
   return HttpRequest<Project, createProjectPayload>(
     `${API_PREFIX}/admin/projects`, {
     method: 'POST',
+    body: payload
+  })
+}
+
+
+// Enabled           *bool    `json:"enabled"`
+// OpenAIBaseURL     *string  `json:"openAIBaseURL"`
+// OpenAIModel       *string  `json:"openAIModel"`
+// OpenAIToken       *string  `json:"openAIToken"`
+// OpenAITemperature *float64 `json:"openAITemperature"`
+// OpenAITopP        *float64 `json:"openAITopP"`
+// OpenAIMaxTokens   *int     `json:"openAIMaxTokens"`
+
+export type updateProjectPayload = {
+  enabled?: boolean
+  openAIBaseURL?: string
+  openAIModel?: string
+  openAIToken?: string
+  openAITemperature?: number
+  openAITopP?: number
+  openAIMaxTokens?: number
+}
+
+export function updateProject(pid: number, payload: updateProjectPayload) {
+  return HttpRequest<Project, updateProjectPayload>(
+    `${API_PREFIX}/admin/projects/${pid}`, {
+    method: 'PUT',
     body: payload
   })
 }

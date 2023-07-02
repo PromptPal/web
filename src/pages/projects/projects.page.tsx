@@ -3,6 +3,7 @@ import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/re
 import { Project, getProjectList } from '../../service/project'
 import { Link, Outlet } from 'react-router-dom'
 import SimpleTable from '../../components/Table/SimpleTable'
+import { Button, Link as LinkUI, Stack, StackDivider, Switch, Tooltip } from '@chakra-ui/react'
 
 const columnHelper = createColumnHelper<Project>()
 const columns = [
@@ -16,18 +17,52 @@ const columns = [
   }),
   columnHelper.accessor('enabled', {
     header: 'Enabled',
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <Tooltip label={`please use 'edit' button to update ${info.getValue() ? 'disabled' : 'enabled'}`}>
+        <div>
+          <Switch
+            isChecked={info.getValue()}
+            isDisabled
+          />
+        </div>
+      </Tooltip>
+    ),
   }),
   columnHelper.accessor('create_time', {
     header: 'Created At',
     cell: (info) => new Intl.DateTimeFormat()
       .format(new Date(info.getValue())),
+  }),
+  columnHelper.display({
+    id: 'actions',
+    header: 'Actions',
+    cell: (info) => (
+      <Stack
+        spacing={2}
+        flexDirection='row'
+      >
+        <Button
+          as={Link}
+          size='xs'
+          to={`/projects/${info.row.getValue('id')}`}
+        >
+          View
+        </Button>
+        <Button
+          as={Link}
+          size='xs'
+          to={`/projects/${info.row.getValue('id')}/edit`}
+        >
+          Edit
+        </Button>
+      </Stack>
+    )
   })
 ]
 
 function ProjectsPage() {
   const { data: projects } = useInfiniteQuery({
-    queryKey: ['projects'],
+    queryKey: ['projects', 'all'],
     queryFn: ({ pageParam, signal }) => {
       let cursor = pageParam
       if (!cursor) {
@@ -63,7 +98,6 @@ function ProjectsPage() {
       </div>
       <div className=' daisyui-divider' />
       <SimpleTable table={table} />
-      <Outlet />
     </div>
   )
 }

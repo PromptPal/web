@@ -2,7 +2,7 @@ import { Button, FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBo
 import { useMutation } from '@tanstack/react-query'
 import omit from 'lodash/omit'
 import toast from 'react-hot-toast'
-import { createPromptPayload, testPrompt, testPromptPayload } from '../../service/prompt'
+import { createPromptPayload, testPrompt, testPromptPayload, testPromptResponse } from '../../service/prompt'
 import { useFieldArray, useForm } from 'react-hook-form'
 import Zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 type PromptTestButtonProps = {
   testable?: boolean
   data: Omit<testPromptPayload, 'variables'> & { variables: createPromptPayload['variables'] }
-  onTested: (data: any) => void
+  onTested: (data: testPromptResponse) => void
 }
 
 type variableFormType = {
@@ -46,13 +46,8 @@ function PromptTestButton(props: PromptTestButtonProps) {
   })
 
   useEffect(() => {
-    setValue(
-      'variables',
-      data.variables.map(v => ({
-        name: v.name, type: v.type, value: ''
-      }))
-    )
-  }, [data.variables, setValue])
+    setValue('variables', data.variables.map(v => ({ name: v.name, type: v.type, value: '' })))
+  }, [data.variables])
 
   const { fields } = useFieldArray({
     control,
@@ -67,11 +62,11 @@ function PromptTestButton(props: PromptTestButtonProps) {
         acc[v.name] = v.value
         return acc
       }, {})
+      vs.projectId = ~~vs.projectId
       return testPrompt(vs)
     },
     onSuccess(res) {
       onClose()
-      console.log('test passed', res)
       toast.success('Test Passed!')
       onTested(res)
     }
@@ -99,35 +94,39 @@ function PromptTestButton(props: PromptTestButtonProps) {
         <ModalContent>
           <ModalHeader>Test the Prompt</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            {fields.map((field, index) => (
-              <FormControl key={field.id}>
-                <FormLabel htmlFor='name'>{field.name}</FormLabel>
-                <Input
-                  id='name'
-                  type='text'
-                  placeholder='Value'
-                  {...register(`variables.${index}.value`)}
-                />
-                <FormErrorMessage>
-                  {errors.variables && errors.variables[index]?.message}
-                </FormErrorMessage>
-              </FormControl>
-            ))}
-          </ModalBody>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ModalBody>
+              {fields.map((field, index) => (
+                <FormControl key={field.id}>
+                  <FormLabel htmlFor='name'>{field.name}</FormLabel>
+                  <Input
+                    id='name'
+                    type='text'
+                    placeholder='Value'
+                    {...register(`variables.${index}.value`)}
+                  />
+                  <FormErrorMessage>
+                    {errors.variables && errors.variables[index]?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              ))}
+            </ModalBody>
+            <ModalFooter>
+              <Button mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <Button
+                colorScheme='teal'
+                isLoading={testing}
+                loadingText='Testing'
+                isDisabled={(errors.variables?.length ?? 0) > 0}
+                type='submit'
+              >
+                Test
+              </Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
-        <ModalFooter>
-          <Button mr={3} onClick={onClose}>
-            Close
-          </Button>
-          <Button
-            colorScheme='teal'
-            disabled={(errors.variables?.length ?? 0) === 0}
-            onClick={() => handleSubmit(onSubmit)}
-          >
-            Test
-          </Button>
-        </ModalFooter>
       </Modal>
     </>
   )

@@ -1,16 +1,17 @@
 import Zod from 'zod'
 import { AddIcon } from '@chakra-ui/icons'
-import { createPrompt, createPromptPayload } from '../../service/prompt'
+import { createPrompt, createPromptPayload, testPromptResponse } from '../../service/prompt'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
-import { Stack, FormControl, FormLabel, Input, FormErrorMessage, Divider, Textarea, Select, Button } from '@chakra-ui/react'
+import { Stack, FormControl, FormLabel, Input, FormErrorMessage, Divider, Textarea, Select, Button, Tooltip } from '@chakra-ui/react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
-import { useSearchParams } from 'react-router-dom'
-import { getProjectDetail } from '../../service/project'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { getProjectDetail, getProjectList } from '../../service/project'
+import PromptTestPreview from '../../components/PromptTestPreview'
 
 function findPlaceholderValues(sentence: string): string[] {
   const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g;
@@ -43,6 +44,9 @@ const schema: Zod.ZodType<createPromptPayload> = Zod.object({
 function PromptCreatePage() {
   const [sp] = useSearchParams()
   const pid = ~~(sp.get('pid') ?? '0')
+  const navigate = useNavigate()
+
+  const [testResult, setTestResult] = useState<testPromptResponse | null>(null)
 
   const {
     register,
@@ -65,12 +69,31 @@ function PromptCreatePage() {
     }
   })
 
-  const { data: project } = useQuery({
-    queryKey: ['projects', pid],
-    queryFn({ signal }) {
-      return getProjectDetail(pid, signal)
-    },
+
+  const { data: projects } = useQuery({
+    queryKey: ['projects'],
+    queryFn: ({ signal }) => getProjectList(1 << 30, signal),
   })
+
+  const selectedProjectId = watch('projectId')
+
+  useEffect(() => {
+    if (selectedProjectId) {
+      return
+    }
+    if (!projects?.data || projects.data.length === 0) {
+      return
+    }
+    setValue('projectId', projects.data[0].id)
+  }, [selectedProjectId, projects?.data, setValue])
+
+  // const { data: project } = useQuery({
+  //   queryKey: ['projects', pid],
+  //   enabled: !!pid,
+  //   queryFn({ signal }) {
+  //     return getProjectDetail(pid, signal)
+  //   },
+  // })
 
   useEffect(() => {
     // only prompt change
@@ -114,16 +137,21 @@ function PromptCreatePage() {
 
   const { isLoading, mutateAsync } = useMutation({
     mutationFn(payload: createPromptPayload) {
+      payload.projectId = ~~payload.projectId
       return createPrompt(payload)
     },
     onSuccess() {
-      toast.success('Project created')
+      toast.success('Prompt created')
       // redirect to prompts list page
+      navigate(`/prompts`)
     }
   })
 
   const onSubmit = (data: createPromptPayload) => {
-    // TODO: check if tested
+    if (!data.tokenCount) {
+      toast.error('please test it first to make sure it works')
+      return
+    }
     return mutateAsync(data)
   }
 
@@ -137,6 +165,11 @@ function PromptCreatePage() {
     name: 'variables',
   })
 
+  const onTestPassed = (testRes: testPromptResponse) => {
+    setValue('tokenCount', testRes.usage.total_tokens)
+    setTestResult(testRes)
+  }
+
   const testable = Object.values(errors).length === 0
 
   return (
@@ -147,13 +180,14 @@ function PromptCreatePage() {
       <Stack spacing={4}>
         <Stack flexDirection='row'>
           <FormControl isInvalid={!!errors.projectId}>
-            <FormLabel htmlFor='projectId'>Project ID</FormLabel>
+            <FormLabel htmlFor='projectId'>Project</FormLabel>
             <Select
-              placeholder='Project ID'
-              disabled
+              placeholder='Project'
               {...register('projectId')}
             >
-              <option value={project?.id}>{project?.name}</option>
+              {projects?.data?.map((project) => (
+                <option key={project.id} value={project.id}>{project.name}</option>
+              ))}
             </Select>
             <FormErrorMessage>{errors.projectId?.message}</FormErrorMessage>
           </FormControl>
@@ -220,13 +254,15 @@ function PromptCreatePage() {
                     {errors.prompts && errors.prompts[index]?.prompt?.message}
                   </FormErrorMessage>
                 </FormControl>
-                <Button
-                  leftIcon={<TrashIcon />}
-                  disabled={index === 0}
-                  onClick={() => remove(index)}
-                >
-                  Remove
-                </Button>
+                <div className='flex items-center ml-2'>
+                  <Button
+                    leftIcon={<TrashIcon className='w-4 h-4' />}
+                    isDisabled={index === 0}
+                    onClick={() => remove(index)}
+                  >
+                    Remove
+                  </Button>
+                </div>
               </div>
             )
           })}
@@ -289,21 +325,27 @@ function PromptCreatePage() {
 
         <Divider />
 
+        <PromptTestPreview data={testResult} />
+
         <Stack flexDirection='row' justifyContent='flex-end'>
           <PromptTestButton
             testable={testable}
             data={getValues()}
-            onTested={(data) => {
-              console.log('tested', data)
-            }}
+            onTested={onTestPassed}
           />
+          <Tooltip
+          label='Please test it first to make sure it works'
+          isDisabled={!!testResult}
+          >
           <Button
             colorScheme='teal'
+            isDisabled={!testResult}
             type='submit'
             isLoading={isLoading}
           >
             Save
           </Button>
+          </Tooltip>
         </Stack>
       </Stack>
     </form>

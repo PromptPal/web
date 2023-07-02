@@ -64,7 +64,9 @@ export function HttpRequest<T, I = undefined>(
         errorContent = err as any
       }
 
-      if (!options?.ignoreErrors) {
+      const isAbortError = (err as any).name === 'AbortError'
+
+      if (!options?.ignoreErrors && !isAbortError) {
         toast.error(errorContent.message ?? errorContent.error ?? errorContent.toString())
       }
 
