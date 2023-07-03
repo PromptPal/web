@@ -14,11 +14,17 @@ export function listOpenTokens(pid: number, cursor: number, signal?: AbortSignal
   });
 }
 
-export function createOpenToken(pid: number, ttl: number) {
-  return HttpRequest<OpenToken, { ttl: number }>(
+export type createOpenTokenPayload = {
+  name: string
+  description: string
+  ttl: number
+}
+
+export function createOpenToken(pid: number, payload: createOpenTokenPayload) {
+  return HttpRequest<{ token: string }, createOpenTokenPayload>(
     `${API_PREFIX}/admin/projects/${pid}/open-tokens`, {
     method: 'POST',
-    body: { ttl },
+    body: payload,
   });
 }
 
