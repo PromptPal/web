@@ -1,6 +1,7 @@
 import { Provider as JotaiProvider } from 'jotai'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   RouterProvider,
 } from "react-router-dom";
@@ -26,6 +27,7 @@ function App() {
         <ChakraProvider theme={theme}>
           <RouterProvider router={router} />
         </ChakraProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </JotaiProvider>
   )

@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormErrorMessage, FormLabel, Input, Button, ModalFooter, useClipboard } from '@chakra-ui/react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createOpenToken, createOpenTokenPayload } from '../../service/open-token'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import Zod from 'zod'
@@ -17,12 +17,12 @@ type CreateOpenTokenModalProps = {
   projectId: number
 }
 
-const secondsInYear = 365 * 24 * 60 * 60
+const secondsIn3Year = 3 * 365 * 24 * 60 * 60
 
 const schema: Zod.ZodType<createOpenTokenPayload> = Zod.object({
   name: Zod.string().trim().max(100).min(2),
   description: Zod.string().trim().max(255),
-  ttl: Zod.number().min(1).max(secondsInYear),
+  ttl: Zod.number().min(1).max(secondsIn3Year),
 })
 
 function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
@@ -32,28 +32,31 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     return dayjs()
   }, [])
 
-  const { setValue: setClipboardValue } = useClipboard('')
-
-  const { isLoading, mutateAsync } = useMutation({
-    mutationKey: ['createOpenToken'],
-    mutationFn: (val: createOpenTokenPayload) => createOpenToken(projectId, val),
-    onSuccess(res) {
-      setClipboardValue(res.token)
-      toast.success(`the Token has been copied to clipboard`)
-      onClose()
-    }
-  })
-
   const {
     register,
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<createOpenTokenPayload>({
     resolver: zodResolver(schema),
     defaultValues: {
-      ttl: 30 * 24 * 60 * 60
+      ttl: 365 * 24 * 60 * 60
+    }
+  })
+
+  const qc = useQueryClient()
+
+  const { isLoading, mutateAsync } = useMutation({
+    mutationKey: ['createOpenToken'],
+    mutationFn: (val: createOpenTokenPayload) => createOpenToken(projectId, val),
+    onSuccess(res) {
+      reset()
+      navigator.clipboard.writeText(res.token)
+      qc.invalidateQueries(['projects', projectId, 'openTokens'])
+      toast.success(`the token has been copied to clipboard`)
+      onClose()
     }
   })
 
@@ -64,8 +67,10 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
   const ttlValue = watch('ttl')
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
+    <Modal
+     isOpen={isOpen} onClose={onClose} isCentered
+    >
+      <ModalOverlay backdropFilter='blur(5px)' />
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Open Token</ModalHeader>
@@ -93,8 +98,8 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
               <FormLabel htmlFor='ttl'>
                 TTL
               </FormLabel>
-              <Input {...register('ttl')} />
               <DatePicker
+              className='w-full'
                 {...register('ttl')}
                 selected={dayjs(n).add(ttlValue, 'seconds').toDate()}
                 onChange={(d) => {

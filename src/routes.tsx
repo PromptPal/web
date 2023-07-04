@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
         element: <Outlet />,
         children: [
           {
-            path: ':id',
+            path: '',
             index: true,
             element: <ProjectsPage />
           },

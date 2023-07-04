@@ -46,20 +46,24 @@ function ProjectPage() {
     columns,
   })
 
-  const { onClose, isOpen } = useDisclosure()
+  const { onClose, onOpen, isOpen } = useDisclosure()
 
   return (
     <Stack>
-      <Heading>
+      {/* <Heading>
         {project?.name}
-      </Heading>
+      </Heading> */}
 
       <Stack>
-        <Stack>
-          <Heading>
+        <Stack flexDirection='row' justifyContent='space-between'>
+          <Heading variant='h4' size='xl'>
             Open Tokens
           </Heading>
-          <Button isDisabled={(openTokens?.data.length ?? 0) >= 20}>
+          <Button
+            colorScheme='teal'
+            isDisabled={(openTokens?.data.length ?? 0) >= 20}
+            onClick={onOpen}
+          >
             New Token
           </Button>
         </Stack>
