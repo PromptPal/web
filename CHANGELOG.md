@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/PromptPal/web/compare/v1.0.0...v1.0.1) (2023-07-09)
+
+
+### Bug Fixes
+
+* **ci:** fix build arguments. get ready for real release ([2e18a80](https://github.com/PromptPal/web/commit/2e18a80ce4a6555e99349a5e576e0273e5b9ff44))
+
 ## 1.0.0 (2023-07-09)
 
 
