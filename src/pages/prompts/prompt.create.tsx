@@ -10,19 +10,18 @@ import { useEffect, useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { getProjectDetail, getProjectList } from '../../service/project'
+import { getProjectList } from '../../service/project'
 import PromptTestPreview from '../../components/PromptTestPreview'
 
 function findPlaceholderValues(sentence: string): string[] {
-  const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g;
-  const matches = sentence.match(regex);
+  const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g
+  const matches = sentence.match(regex)
 
   if (!matches) {
-    return [];
+    return []
   }
-
-  const values = matches.map(match => match.replace(/{{\s*|\s*}}/g, '').trim());
-  return values;
+  const values = matches.map(match => match.replace(/{{\s*|\s*}}/g, '').trim())
+  return values
 }
 
 const schema: Zod.ZodType<createPromptPayload> = Zod.object({
@@ -143,7 +142,7 @@ function PromptCreatePage() {
     onSuccess() {
       toast.success('Prompt created')
       // redirect to prompts list page
-      navigate(`/prompts`)
+      navigate('/prompts')
     }
   })
 
@@ -334,17 +333,17 @@ function PromptCreatePage() {
             onTested={onTestPassed}
           />
           <Tooltip
-          label='Please test it first to make sure it works'
-          isDisabled={!!testResult}
+            label='Please test it first to make sure it works'
+            isDisabled={!!testResult}
           >
-          <Button
-            colorScheme='teal'
-            isDisabled={!testResult}
-            type='submit'
-            isLoading={isLoading}
-          >
-            Save
-          </Button>
+            <Button
+              colorScheme='teal'
+              isDisabled={!testResult}
+              type='submit'
+              isLoading={isLoading}
+            >
+              Save
+            </Button>
           </Tooltip>
         </Stack>
       </Stack>
