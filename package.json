@@ -1,11 +1,12 @@
 {
-  "name": "web",
+  "name": "@promptpal/web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "legacy:build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -42,18 +43,20 @@
     "@types/react": "^18.0.37",
     "@types/react-datepicker": "^4.11.2",
     "@types/react-dom": "^18.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
-    "@typescript-eslint/parser": "^5.59.0",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "autoprefixer": "^10.4.14",
     "daisyui": "^3.1.6",
-    "eslint": "^8.38.0",
+    "eslint": "^8.43.0",
+    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
-    "vite-plugin-favicon": "^1.0.8"
+    "vite-plugin-favicon": "^1.0.8",
+    "vite-plugin-zip-pack": "^1.0.6"
   }
 }

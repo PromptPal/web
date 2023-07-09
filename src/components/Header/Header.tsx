@@ -5,10 +5,7 @@ import { Link } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 import ProjectSelector from './ProjectSelector'
 
-type headerProps = {
-}
-
-function Header(props: headerProps) {
+function Header() {
   // get user info
   return (
     <header className='py-2 pl-6 pr-8 backdrop-blur-sm mt-4 rounded-full items-center justify-between flex'>
