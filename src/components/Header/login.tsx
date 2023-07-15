@@ -26,7 +26,7 @@ function LoginButton() {
       throw new Error('MetaMask is not connected')
     }
 
-    const accounts = await eth.request<string[]>({ method: 'eth_requestAccounts', params: [] });
+    const accounts = await eth.request<string[]>({ method: 'eth_requestAccounts', params: [] })
 
     if (!accounts) {
       throw new Error('accounts not found')
@@ -38,11 +38,11 @@ function LoginButton() {
     }
     const nonce = Date.now()
     const text = LoginWelcomeText + nonce
-    const msg = text;
+    const msg = text
     const signature = await eth.request<string>({
       method: 'personal_sign',
       params: [msg, address],
-    });
+    })
     if (!signature) {
       throw new Error('signature not found')
     }
@@ -53,12 +53,12 @@ function LoginButton() {
     () => {
       return toast.promise(
         web3Login(), {
-        loading: 'Logging in...',
-        success: (data) => `Welcome ${data.user.addr}`,
-        error: (err) => {
-          return err.message ?? err.error ?? err.toString()
+          loading: 'Logging in...',
+          success: (data) => `Welcome ${data.user.addr}`,
+          error: (err) => {
+            return err.message ?? err.error ?? err.toString()
+          }
         }
-      }
       )
     }
     , [web3Login])

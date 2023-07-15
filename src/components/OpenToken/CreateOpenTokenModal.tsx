@@ -55,7 +55,7 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
       reset()
       navigator.clipboard.writeText(res.token)
       qc.invalidateQueries(['projects', projectId, 'openTokens'])
-      toast.success(`the token has been copied to clipboard`)
+      toast.success('the token has been copied to clipboard')
       onClose()
     }
   })
@@ -68,7 +68,7 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
 
   return (
     <Modal
-     isOpen={isOpen} onClose={onClose} isCentered
+      isOpen={isOpen} onClose={onClose} isCentered
     >
       <ModalOverlay backdropFilter='blur(5px)' />
       <ModalContent>
@@ -99,7 +99,7 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
                 TTL
               </FormLabel>
               <DatePicker
-              className='w-full'
+                className='w-full'
                 {...register('ttl')}
                 selected={dayjs(n).add(ttlValue, 'seconds').toDate()}
                 onChange={(d) => {

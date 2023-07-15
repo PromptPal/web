@@ -1,8 +1,8 @@
-import { toast } from "react-hot-toast"
-import { HTTP_ENDPOINT } from "../constants"
+import { toast } from 'react-hot-toast'
+import { HTTP_ENDPOINT } from '../constants'
 
 function getToken() {
-  const tk = localStorage.getItem("pp:token")
+  const tk = localStorage.getItem('pp:token')
   if (!tk) return null
   try {
     return JSON.parse(tk)

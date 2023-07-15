@@ -1,13 +1,13 @@
-import Root from "./components/Root";
-import OverallPage from "./pages/overall/overall.page";
-import ProjectsPage from "./pages/projects/projects.page";
-import PromptsPage from "./pages/prompts/prompts.page";
-import PromptCreatePage from "./pages/prompts/prompt.create";
-import PromptPage from "./pages/prompts/prompt.page";
-import { Outlet, createBrowserRouter } from "react-router-dom";
-import ProjectCreatePage from "./pages/projects/project.create";
-import ProjectEditPage from "./pages/projects/project.edit";
-import ProjectPage from "./pages/projects/project.page";
+import Root from './components/Root'
+import OverallPage from './pages/overall/overall.page'
+import ProjectsPage from './pages/projects/projects.page'
+import PromptsPage from './pages/prompts/prompts.page'
+import PromptCreatePage from './pages/prompts/prompt.create'
+import PromptPage from './pages/prompts/prompt.page'
+import { Outlet, createBrowserRouter } from 'react-router-dom'
+import ProjectCreatePage from './pages/projects/project.create'
+import ProjectEditPage from './pages/projects/project.edit'
+import ProjectPage from './pages/projects/project.page'
 
 export const router = createBrowserRouter([
   {

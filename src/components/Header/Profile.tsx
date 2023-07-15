@@ -1,10 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
-import { MetaMaskAvatar } from 'react-metamask-avatar';
+import { MetaMaskAvatar } from 'react-metamask-avatar'
 import { getUserProfile } from '../../service/user'
 import { tokenAtom } from '../../stats/profile'
-import Dropdown from '../Dropdown';
-import { Button, Menu, MenuButton, MenuItem, MenuList, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, useColorMode } from '@chakra-ui/react';
+import Dropdown from '../Dropdown'
+import { Button, Menu, MenuButton, MenuItem, MenuList, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, useColorMode } from '@chakra-ui/react'
 
 type ProfileProps = {
 }

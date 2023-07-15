@@ -69,7 +69,7 @@ function ProjectCreatePage() {
         <Button
           variant={'outline'}
           onClick={() => {
-            nav(`/projects`)
+            nav('/projects')
           }}
           disabled={isLoading}
         >

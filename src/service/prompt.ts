@@ -1,6 +1,6 @@
-import { API_PREFIX } from "../constants"
-import { HttpRequest } from "./http"
-import { ListResponse, PromptRow, PromptVariable } from "./types"
+import { API_PREFIX } from '../constants'
+import { HttpRequest } from './http'
+import { ListResponse, PromptRow, PromptVariable } from './types'
 
 export type PromptObject = {
   id: number;
@@ -21,7 +21,7 @@ export type PromptObject = {
 export function getPromptList(projectId: number, cursor: number, signal?: AbortSignal) {
   return HttpRequest<ListResponse<PromptObject>>(`${API_PREFIX}/admin/projects/${projectId}/prompts?cursor=${cursor}&limit=20`, {
     signal,
-  });
+  })
 }
 
 export type createPromptPayload = {
@@ -37,9 +37,9 @@ export type createPromptPayload = {
 export function createPrompt(payload: createPromptPayload) {
   return HttpRequest<PromptObject, createPromptPayload>(
     `${API_PREFIX}/admin/prompts`, {
-    method: 'POST',
-    body: payload
-  })
+      method: 'POST',
+      body: payload
+    })
 }
 
 export type testPromptResponse = {
@@ -75,7 +75,7 @@ export type testPromptPayload = {
 export function testPrompt(payload: testPromptPayload) {
   return HttpRequest<testPromptResponse, testPromptPayload>(
     `${API_PREFIX}/admin/prompts/test`, {
-    method: 'POST',
-    body: payload
-  })
+      method: 'POST',
+      body: payload
+    })
 }

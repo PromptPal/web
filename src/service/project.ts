@@ -1,6 +1,6 @@
-import { API_PREFIX } from "../constants"
-import { HttpRequest } from "./http"
-import { ListResponse } from "./types"
+import { API_PREFIX } from '../constants'
+import { HttpRequest } from './http'
+import { ListResponse } from './types'
 
 export type Project = {
   id: number;
@@ -19,13 +19,13 @@ export type Project = {
 export function getProjectList(cursor: number, signal?: AbortSignal) {
   return HttpRequest<ListResponse<Project>>(`${API_PREFIX}/admin/projects?cursor=${cursor}&limit=20`, {
     signal,
-  });
+  })
 }
 
 export function getProjectDetail(pid: number, signal?: AbortSignal) {
   return HttpRequest<Project>(`${API_PREFIX}/admin/projects/${pid}`, {
     signal,
-  });
+  })
 }
 
 export type createProjectPayload = {
@@ -36,9 +36,9 @@ export type createProjectPayload = {
 export function createProject(payload: createProjectPayload) {
   return HttpRequest<Project, createProjectPayload>(
     `${API_PREFIX}/admin/projects`, {
-    method: 'POST',
-    body: payload
-  })
+      method: 'POST',
+      body: payload
+    })
 }
 
 
@@ -63,7 +63,7 @@ export type updateProjectPayload = {
 export function updateProject(pid: number, payload: updateProjectPayload) {
   return HttpRequest<Project, updateProjectPayload>(
     `${API_PREFIX}/admin/projects/${pid}`, {
-    method: 'PUT',
-    body: payload
-  })
+      method: 'PUT',
+      body: payload
+    })
 }

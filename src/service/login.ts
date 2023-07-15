@@ -1,5 +1,5 @@
-import { API_PREFIX } from "../constants";
-import { HttpRequest } from "./http";
+import { API_PREFIX } from '../constants'
+import { HttpRequest } from './http'
 
 type doLoginPayload = {
   address: string,
@@ -26,7 +26,7 @@ export type User = {
 export function doLogin(payload: doLoginPayload) {
   return HttpRequest<doLoginResponse, doLoginPayload>(
     `${API_PREFIX}/auth/login`, {
-    method: 'POST',
-    body: payload
-  })
+      method: 'POST',
+      body: payload
+    })
 }
