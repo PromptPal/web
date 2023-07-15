@@ -29,6 +29,8 @@ const schema: Zod.ZodType<createPromptPayload> = Zod.object({
   name: Zod.string(),
   description: Zod.string(),
   tokenCount: Zod.number(),
+  enabled: Zod.boolean(),
+  debug: Zod.boolean(),
   prompts: Zod.array(Zod.object({
     prompt: Zod.string(),
     role: Zod.enum(['user', 'system', 'assistant']),
@@ -60,6 +62,8 @@ function PromptCreatePage() {
     defaultValues: {
       projectId: pid,
       publicLevel: 'protected',
+      enabled: true,
+      debug: false,
       prompts: [{
         prompt: '',
         role: 'system',

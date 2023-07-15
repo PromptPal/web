@@ -44,6 +44,14 @@ const columns = [
     header: 'Created At',
     cell: (info) => new Intl.DateTimeFormat()
       .format(new Date(info.getValue())),
+  }),
+  columnHelper.display({
+    header: 'Actions',
+    cell: (info) => (
+      <div>
+        <Link to={`/prompts/${info.row.getValue('id')}`}>View</Link>
+      </div>
+    )
   })
 ]
 

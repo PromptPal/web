@@ -10,6 +10,7 @@ export type PromptObject = {
   name?: string;
   description?: string;
   enabled: boolean;
+  debug: boolean;
   prompts: PromptRow[];
   tokenCount: number;
   variables?: PromptVariable[];
@@ -24,10 +25,35 @@ export function getPromptList(projectId: number, cursor: number, signal?: AbortS
   })
 }
 
+export function getPromptDetail(promptId: number, signal?: AbortSignal) {
+  return HttpRequest<PromptObject>(`${API_PREFIX}/admin/prompts/${promptId}`, {
+    signal,
+  })
+}
+
+export type PromptCall = {
+  id: number;
+  create_time: string;
+  update_time: string;
+  responseToken: number;
+  totalToken: number;
+  duration: number;
+  message: string;
+  edges: any;
+}
+
+export function getPromptCalls(promptId: number, cursor: number, signal?: AbortSignal) {
+  return HttpRequest<ListResponse<PromptCall>>(`${API_PREFIX}/admin/prompts/${promptId}/calls?cursor=${cursor}&limit=20`, {
+    signal,
+  })
+}
+
 export type createPromptPayload = {
   projectId: number
   name: string
   description: string
+  enabled: boolean
+  debug: boolean
   tokenCount: number
   prompts: PromptRow[]
   variables: PromptVariable[]
@@ -36,6 +62,16 @@ export type createPromptPayload = {
 
 export function createPrompt(payload: createPromptPayload) {
   return HttpRequest<PromptObject, createPromptPayload>(
+    `${API_PREFIX}/admin/prompts`, {
+      method: 'POST',
+      body: payload
+    })
+}
+
+export type updatePromptPayload = Omit<createPromptPayload, 'projectId' | 'name'>
+
+export function updatePrompt(payload: updatePromptPayload) {
+  return HttpRequest<PromptObject, updatePromptPayload>(
     `${API_PREFIX}/admin/prompts`, {
       method: 'POST',
       body: payload

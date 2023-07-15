@@ -6,6 +6,7 @@ import { tokenAtom } from '../stats/profile'
 import AuthorizePage from './authorize.page'
 import { Outlet } from 'react-router-dom'
 import { ColorModeScript } from '@chakra-ui/react'
+import { Suspense } from 'react'
 
 function Root() {
   const token = useAtomValue(tokenAtom)
@@ -16,7 +17,9 @@ function Root() {
         <Menubar />
         <section className='py-2 px-8 w-full'>
           {token ? (
-            <Outlet />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Outlet />
+            </Suspense>
           ) : (
             <AuthorizePage />
           )}
