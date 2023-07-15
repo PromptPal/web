@@ -38,7 +38,7 @@ function Profile(props: ProfileProps) {
           </h6>
         </div>
       </PopoverTrigger>
-      <PopoverContent >
+      <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
           <Button

@@ -11,11 +11,17 @@ import { Suspense } from 'react'
 function Root() {
   const token = useAtomValue(tokenAtom)
   return (
-    <div className='container mx-auto flex flex-col h-full'>
+    <div
+      className='container mx-auto flex flex-col h-full'
+      style={{
+        '--menu-width': '150px',
+        '--body-width': 'calc(100% - var(--menu-width))',
+      } as any}
+    >
       <Header />
       <div className='flex h-full mt-4'>
         <Menubar />
-        <section className='py-2 px-8 w-full'>
+        <section className='py-2 flex-1' style={{ maxWidth: 'var(--body-width)' }}>
           {token ? (
             <Suspense fallback={<div>Loading...</div>}>
               <Outlet />

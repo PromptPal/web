@@ -16,7 +16,7 @@ const schema: Zod.ZodType<localUpdateProject> = Zod.object({
   name: Zod.string().trim(),
   enabled: Zod.boolean(),
   openAIToken: Zod.string().trim().max(255).optional(),
-  openAIModel: Zod.enum(['gpt-3.5-turbo']).optional(),
+  openAIModel: Zod.enum(['gpt-3.5-turbo', 'gpt-4-0613']).optional(),
   openAIBaseURL: Zod.string().trim().max(255).optional(),
   openAITemperature: Zod.number().min(0).max(2).optional(),
   openAITopP: Zod.number().min(0).max(1),

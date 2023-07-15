@@ -1,8 +1,8 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import React, { useMemo } from 'react'
+import React, { useDebugValue, useMemo } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { PromptCall, getPromptCalls, getPromptDetail } from '../../service/prompt'
-import { Box, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch } from '@chakra-ui/react'
+import { Badge, Box, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch, Text, Tooltip } from '@chakra-ui/react'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 
@@ -15,12 +15,23 @@ const columns = [
   }),
   columnHelper.accessor('duration', {
     header: 'Duration',
-    cell: (info) => info.getValue(),
+    cell: (info) => info.getValue() + ' ms',
   }),
   columnHelper.accessor('totalToken', {
     header: 'Total Tokens',
     cell: (info) => info.getValue(),
   }),
+  columnHelper.accessor('message', {
+    header: 'Message',
+    cell: (info) => (
+      <Tooltip label={<Text>{info.getValue()}</Text>}>
+        <Text className='line-clamp-1 whitespace-normal'>
+          {info.getValue()}
+        </Text>
+      </Tooltip>
+    ),
+  }),
+  // TODO: add price column
   columnHelper.accessor('create_time', {
     header: 'Created At',
     cell: (info) => new Intl.DateTimeFormat()
@@ -35,7 +46,7 @@ function PromptPage() {
   const { data: promptDetail } = useQuery({
     queryKey: ['prompt', pid],
     queryFn: ({ signal }) => getPromptDetail(pid, signal),
-    suspense: true,
+    enabled: pid > 0,
   })
 
   const { data: promptCalls } = useInfiniteQuery({
@@ -59,21 +70,12 @@ function PromptPage() {
     }
   })
 
-
-  // id: number;
-  // hid: string;
-  // create_time: string;
-  // update_time: string;
-  // name?: string;
-  // description?: string;
-  // enabled: boolean;
-  // prompts: PromptRow[];
-  // tokenCount: number;
-  // variables?: PromptVariable[];
-  // publicLevel: string;
+  const promptCallsTableData = useMemo(() => {
+    return promptCalls?.pages.flatMap((page) => page.data) ?? []
+  }, [promptCalls?.pages.length])
 
   const promptCallsTable = useReactTable({
-    data: promptCalls?.pages.flatMap((page) => page.data) ?? [],
+    data: promptCallsTableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
@@ -94,20 +96,21 @@ function PromptPage() {
         </CardHeader>
         <CardBody>
           <Stack flexDirection='row'>
-            <Box flex={1}>id: {promptDetail?.id}</Box>
-            <Box flex={1}>Hash ID: {promptDetail?.id}</Box>
+            <Box flex={1} textAlign='center'>id: {promptDetail?.id}</Box>
+            <Box flex={1} textAlign='center' >Hash ID: {promptDetail?.hid}</Box>
           </Stack>
+          <Divider my={4} />
           <Stack flexDirection='row'>
-            <div>
+            <div className='flex-1 text-center'>
               Create Time: {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.create_time)) : 'N/A'}
             </div>
-            <div>
-              Visibility: {promptDetail?.publicLevel}
+            <div className='flex-1 text-center'>
+              Visibility: <Badge colorScheme='teal'>{promptDetail?.publicLevel}</Badge>
             </div>
-            <div>
+            <div className='flex-1 text-center'>
               Enabled: <Switch disabled checked={promptDetail?.enabled} />
             </div>
-            <div>
+            <div className='flex-1 text-center' >
               Debug: <Switch disabled checked={promptDetail?.debug} />
             </div>
           </Stack>

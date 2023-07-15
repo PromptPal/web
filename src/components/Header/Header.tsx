@@ -8,7 +8,7 @@ import ProjectSelector from './ProjectSelector'
 function Header() {
   // get user info
   return (
-    <header className='py-2 pl-6 pr-8 backdrop-blur-sm mt-4 rounded-full items-center justify-between flex'>
+    <header className='py-2 px-6 lg:px-0 backdrop-blur-sm mt-4 rounded-full items-center justify-between flex z-50'>
       <div className='flex items-center '>
         <Link to='/' className=' mr-2 px-2 py-1 rounded transition-colors duration-300'>
           <h2>PromptPal</h2>

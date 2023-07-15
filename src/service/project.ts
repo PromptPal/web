@@ -1,5 +1,6 @@
 import { API_PREFIX } from '../constants'
 import { HttpRequest } from './http'
+import { PromptObject } from './prompt';
 import { ListResponse } from './types'
 
 export type Project = {
@@ -28,6 +29,12 @@ export function getProjectDetail(pid: number, signal?: AbortSignal) {
   })
 }
 
+export function getProjectTopPrompts(pid: number, signal?: AbortSignal) {
+  return HttpRequest<ListResponse<{ prompt: PromptObject, count: number }>>(`${API_PREFIX}/admin/projects/${pid}/top-prompts`, {
+    signal,
+  })
+}
+
 export type createProjectPayload = {
   name: string
   openaiToken: string
@@ -36,9 +43,9 @@ export type createProjectPayload = {
 export function createProject(payload: createProjectPayload) {
   return HttpRequest<Project, createProjectPayload>(
     `${API_PREFIX}/admin/projects`, {
-      method: 'POST',
-      body: payload
-    })
+    method: 'POST',
+    body: payload
+  })
 }
 
 
@@ -63,7 +70,7 @@ export type updateProjectPayload = {
 export function updateProject(pid: number, payload: updateProjectPayload) {
   return HttpRequest<Project, updateProjectPayload>(
     `${API_PREFIX}/admin/projects/${pid}`, {
-      method: 'PUT',
-      body: payload
-    })
+    method: 'PUT',
+    body: payload
+  })
 }

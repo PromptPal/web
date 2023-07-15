@@ -3,9 +3,10 @@ import { Link, useParams } from 'react-router-dom'
 import { PromptObject, getPromptList } from '../../service/prompt'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import SimpleTable from '../../components/Table/SimpleTable'
-import { Heading, Switch, Tooltip } from '@chakra-ui/react'
+import { Badge, Button, Heading, Switch, Tooltip } from '@chakra-ui/react'
 import { useAtom, useAtomValue } from 'jotai'
 import { projectAtom } from '../../stats/project'
+import { useMemo } from 'react'
 
 const columnHelper = createColumnHelper<PromptObject>()
 const columns = [
@@ -13,11 +14,11 @@ const columns = [
     header: 'ID',
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor('hid', {
-    header: 'Hash ID',
-    // TODO: add copy button
-    cell: (info) => info.getValue(),
-  }),
+  // columnHelper.accessor('hid', {
+  //   header: 'Hash ID',
+  //   // TODO: add copy button
+  //   cell: (info) => info.getValue(),
+  // }),
   columnHelper.accessor('name', {
     header: 'Name',
     cell: (info) => info.getValue(),
@@ -38,7 +39,7 @@ const columns = [
   }),
   columnHelper.accessor('publicLevel', {
     header: 'Public Level',
-    cell: (info) => info.getValue(),
+    cell: (info) => <Badge colorScheme='teal'>{info.getValue()}</Badge>,
   }),
   columnHelper.accessor('create_time', {
     header: 'Created At',
@@ -49,7 +50,7 @@ const columns = [
     header: 'Actions',
     cell: (info) => (
       <div>
-        <Link to={`/prompts/${info.row.getValue('id')}`}>View</Link>
+        <Button as={Link} size='sm' to={`/prompts/${info.row.getValue('id')}`}>View</Button>
       </div>
     )
   })
@@ -62,7 +63,7 @@ function PromptsPage() {
 
   const { data: prompts } = useInfiniteQuery({
     queryKey: ['projects', pid, 'prompts'],
-    enabled: !!pid,
+    enabled: pid > 0,
     queryFn: ({ pageParam, signal }) => {
       let cursor = pageParam
       if (!cursor) {
@@ -79,22 +80,23 @@ function PromptsPage() {
         return null
       }
       return d[d.length - 1].id
-    }
+    },
   })
 
+  const tableData = useMemo(() => {
+    return prompts?.pages.flatMap((page) => page.data) ?? []
+  }, [prompts?.pages.length])
+
   const table = useReactTable({
-    data: prompts?.pages.flatMap((page) => page.data) ?? [],
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
 
   return (
-    <div>
+    <div className='w-full'>
       <div className='flex items-center justify-between'>
-        <Heading>
-          Prompts
-
-        </Heading>
+        <Heading>Prompts</Heading>
         <Link to={`/prompts/new?pid=${pid}`} className='daisyui-btn daisyui-btn-primary'>
           New Prompt
         </Link>

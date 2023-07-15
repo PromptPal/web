@@ -3,7 +3,8 @@ import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/re
 import { Project, getProjectList } from '../../service/project'
 import { Link, Outlet } from 'react-router-dom'
 import SimpleTable from '../../components/Table/SimpleTable'
-import { Button, Link as LinkUI, Stack, StackDivider, Switch, Tooltip } from '@chakra-ui/react'
+import { Button, Heading, Link as LinkUI, Stack, StackDivider, Switch, Tooltip } from '@chakra-ui/react'
+import { useMemo } from 'react'
 
 const columnHelper = createColumnHelper<Project>()
 const columns = [
@@ -82,8 +83,12 @@ function ProjectsPage() {
     }
   })
 
+  const tableData = useMemo(() => {
+    return projects?.pages.flatMap((page) => page.data) ?? []
+  }, [projects?.pages.length])
+
   const table = useReactTable({
-    data: projects?.pages.flatMap((page) => page.data) ?? [],
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
@@ -91,7 +96,7 @@ function ProjectsPage() {
   return (
     <div>
       <div className='flex items-center justify-between'>
-        <h1>Projects</h1>
+        <Heading>Projects</Heading>
         <Link to='/projects/new' className='daisyui-btn daisyui-btn-primary'>
           New Project
         </Link>

@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getProjectDetail } from '../../service/project'
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Stack, Heading, Button, useDisclosure } from '@chakra-ui/react'
+import { Stack, Heading, Button, useDisclosure, Card, CardHeader, CardBody, Text } from '@chakra-ui/react'
 import { OpenToken, listOpenTokens } from '../../service/open-token'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
+import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
 
 const columnHelper = createColumnHelper<OpenToken>()
 const columns = [
@@ -49,10 +50,19 @@ function ProjectPage() {
   const { onClose, onOpen, isOpen } = useDisclosure()
 
   return (
-    <Stack>
-      {/* <Heading>
-        {project?.name}
-      </Heading> */}
+    <Stack className='w-full'>
+      <Card>
+        <CardHeader display='flex' flexDirection='row' alignItems='flex-end'>
+          <Heading size='lg'>
+            {project?.name}
+          </Heading>
+          <Text ml={2} color={'gray.500'} fontSize={'xs'}>recent 7 days</Text>
+        </CardHeader>
+        <CardBody>
+          <ProjectTopPromptsChart projectId={~~pid} />
+        </CardBody>
+      </Card>
+
 
       <Stack>
         <Stack flexDirection='row' justifyContent='space-between'>
@@ -71,7 +81,6 @@ function ProjectPage() {
       </Stack>
 
       <CreateOpenTokenModal isOpen={isOpen} onClose={onClose} projectId={~~pid} />
-
     </Stack>
   )
 }

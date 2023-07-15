@@ -24,7 +24,7 @@ const menus = [
 
 function Menubar(props: MenubarProps) {
   return (
-    <nav className='py-2 px-8 hover:backdrop-blur-sm rounded-lg h-full min-h-[500px]'>
+    <nav className='py-2 w-40 hover:backdrop-blur-sm rounded-lg h-full min-h-[500px]'>
       <ul>
         {menus.map((menu) => (
           <li key={menu.text}>
