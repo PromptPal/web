@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/PromptPal/web/compare/v1.0.1...v1.1.0) (2023-07-15)
+
+
+### Features
+
+* **app:** add app icon ([612bd81](https://github.com/PromptPal/web/commit/612bd81afa3079883198808142eac4ff758b2240))
+* **project:** add top prompts display ([a813ef8](https://github.com/PromptPal/web/commit/a813ef89e20633631bdea7904bf26df12e57dab3))
+* **prompt:** add prompt calls ([bbfdac3](https://github.com/PromptPal/web/commit/bbfdac370a21e6e342a9f3012bfd56d43814e79f))
+
+
+### Bug Fixes
+
+* **lint:** run eslint autofix ([16757a5](https://github.com/PromptPal/web/commit/16757a5fee2328f73e84540d055215580b06581f))
+
 ## [1.0.1](https://github.com/PromptPal/web/compare/v1.0.0...v1.0.1) (2023-07-09)
 
 
