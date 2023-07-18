@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/PromptPal/web/compare/v1.1.0...v1.2.0) (2023-07-18)
+
+
+### Features
+
+* **overall:** add overall page and update some styles ([7c8a168](https://github.com/PromptPal/web/commit/7c8a168b4a349c2f59651822e63413ae398a7c8e))
+
 ## [1.1.0](https://github.com/PromptPal/web/compare/v1.0.1...v1.1.0) (2023-07-15)
 
 
