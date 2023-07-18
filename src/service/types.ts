@@ -12,3 +12,4 @@ export type ListResponse<T> = {
   count: number;
   data: T[];
 }
+

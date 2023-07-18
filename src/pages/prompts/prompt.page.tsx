@@ -108,10 +108,10 @@ function PromptPage() {
               Visibility: <Badge colorScheme='teal'>{promptDetail?.publicLevel}</Badge>
             </div>
             <div className='flex-1 text-center'>
-              Enabled: <Switch disabled checked={promptDetail?.enabled} />
+              Enabled: <Switch isReadOnly defaultChecked checked={promptDetail?.enabled} />
             </div>
             <div className='flex-1 text-center' >
-              Debug: <Switch disabled checked={promptDetail?.debug} />
+              Debug: <Switch isReadOnly checked={promptDetail?.debug} />
             </div>
           </Stack>
 
@@ -121,7 +121,9 @@ function PromptPage() {
                 <span className='mr-2'>
                   {prompt.role}:
                 </span>
-                <div>
+                <div
+                  className='whitespace-break-spaces'
+                >
                   <Highlight
                     query={variables.map((v) => `{{${v}}}`)}
                     styles={{
