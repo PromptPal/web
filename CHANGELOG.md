@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/PromptPal/web/compare/v1.2.0...v1.2.1) (2023-07-20)
+
+
+### Bug Fixes
+
+* **prompt:** some bugfix and be able to update prompt ([cec663c](https://github.com/PromptPal/web/commit/cec663cf365aa95c01c03c1099eb9e44ddecb33d))
+
 ## [1.2.0](https://github.com/PromptPal/web/compare/v1.1.0...v1.2.0) (2023-07-18)
 
 
