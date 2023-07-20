@@ -5,7 +5,7 @@ import { FormControl, FormLabel, Input, FormErrorMessage, Modal, ModalOverlay, M
 import { createProject, createProjectPayload } from '../../service/project'
 import zod from 'zod'
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-hot-toast'
 
 const schema = zod.object({
@@ -24,12 +24,15 @@ function ProjectCreatePage() {
     resolver: zodResolver(schema),
   })
 
+  const qc = useQueryClient()
+
   const { isLoading, mutateAsync } = useMutation({
     mutationFn(payload: createProjectPayload) {
       return createProject(payload)
     },
     onSuccess(res) {
       nav(`/projects/${res.id}`)
+      qc.invalidateQueries(['projects'])
       toast.success('Project created')
     }
   })

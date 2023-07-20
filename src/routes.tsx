@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/prompts/:id/edit',
-        element: <PromptCreatePage />,
+        element: <PromptCreatePage isUpdate />,
       }
     ]
   }

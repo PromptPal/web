@@ -1,5 +1,6 @@
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { Table as TableInstance, flexRender } from '@tanstack/react-table'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 type SimpleTableProps<T> = {
   table: TableInstance<T>
@@ -7,6 +8,9 @@ type SimpleTableProps<T> = {
 
 function SimpleTable<T>(props: SimpleTableProps<T>) {
   const { table } = props
+
+  const [autoAnimateRef] = useAutoAnimate()
+
   return (
     <TableContainer>
       <Table>
@@ -27,7 +31,7 @@ function SimpleTable<T>(props: SimpleTableProps<T>) {
             </Tr>
           ))}
         </Thead>
-        <Tbody>
+        <Tbody ref={autoAnimateRef}>
           {table.getRowModel().rows.map(row => (
             <Tr key={row.id}>
               {row.getVisibleCells().map(cell => (

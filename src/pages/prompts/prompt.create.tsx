@@ -1,17 +1,19 @@
 import Zod from 'zod'
 import { AddIcon } from '@chakra-ui/icons'
-import { createPrompt, createPromptPayload, testPromptResponse } from '../../service/prompt'
+import { createPrompt, createPromptPayload, getPromptDetail, testPromptResponse, updatePrompt } from '../../service/prompt'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
 import { Stack, FormControl, FormLabel, Input, FormErrorMessage, Divider, Textarea, Select, Button, Tooltip } from '@chakra-ui/react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { getProjectList } from '../../service/project'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { getProjectList, updateProject } from '../../service/project'
 import PromptTestPreview from '../../components/PromptTestPreview'
+import { PromptVariable } from '../../service/types'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 function findPlaceholderValues(sentence: string): string[] {
   const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g
@@ -42,7 +44,25 @@ const schema: Zod.ZodType<createPromptPayload> = Zod.object({
   publicLevel: Zod.enum(['public', 'private', 'protected']),
 })
 
-function PromptCreatePage() {
+type PromptCreatePageProps = {
+  isUpdate?: boolean
+}
+
+function PromptCreatePage(props: PromptCreatePageProps) {
+  const { isUpdate } = props
+  const id = isUpdate ? ~~(useParams().id ?? '0') : 0
+
+  const { refetch: fetchPromptDetail } = useQuery({
+    queryKey: ['prompt', id],
+    queryFn: ({ signal }) => getPromptDetail(id, signal),
+    enabled: isUpdate && id > 0,
+    refetchOnReconnect: false,
+    refetchInterval: 0,
+    refetchOnMount: false,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
+  })
+
   const [sp] = useSearchParams()
   const pid = ~~(sp.get('pid') ?? '0')
   const navigate = useNavigate()
@@ -59,19 +79,38 @@ function PromptCreatePage() {
     formState: { errors },
   } = useForm<createPromptPayload>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      projectId: pid,
-      publicLevel: 'protected',
-      enabled: true,
-      debug: false,
-      prompts: [{
-        prompt: '',
-        role: 'system',
-      }],
-      variables: [],
+    async defaultValues() {
+      const data = await fetchPromptDetail()
+      const payload = data.data
+      if (!payload) {
+        return {
+          projectId: pid,
+          name: '',
+          description: undefined,
+          tokenCount: undefined,
+          publicLevel: 'protected',
+          enabled: true,
+          debug: false,
+          prompts: [{
+            prompt: '',
+            role: 'system',
+          }],
+          variables: [],
+        }
+      }
+      return {
+        projectId: pid,
+        name: payload.name,
+        description: payload.description,
+        tokenCount: payload.tokenCount,
+        publicLevel: payload.publicLevel as createPromptPayload['publicLevel'],
+        enabled: payload.enabled,
+        debug: payload.debug ?? false,
+        prompts: payload.prompts ?? [],
+        variables: payload.variables ?? [],
+      }
     }
   })
-
 
   const { data: projects } = useQuery({
     queryKey: ['projects'],
@@ -89,14 +128,6 @@ function PromptCreatePage() {
     }
     setValue('projectId', projects.data[0].id)
   }, [selectedProjectId, projects?.data, setValue])
-
-  // const { data: project } = useQuery({
-  //   queryKey: ['projects', pid],
-  //   enabled: !!pid,
-  //   queryFn({ signal }) {
-  //     return getProjectDetail(pid, signal)
-  //   },
-  // })
 
   useEffect(() => {
     // only prompt change
@@ -131,26 +162,42 @@ function PromptCreatePage() {
           name: placeholder,
           type: 'string',
         }
-      })
-
+      }).reduce<PromptVariable[]>((acc, cur) => {
+        const has = acc.map(x => x.name).includes(cur.name)
+        if (!has) {
+          acc.push(cur)
+        }
+        return acc
+      }, [])
       setValue('variables', nextVariables)
     })
     return () => subscribe.unsubscribe()
   }, [watch])
 
+  const qc = useQueryClient()
+
   const { isLoading, mutateAsync } = useMutation({
+    mutationKey: ['projects', pid, 'prompts'],
     mutationFn(payload: createPromptPayload) {
       payload.projectId = ~~payload.projectId
+      if (isUpdate) {
+        return updatePrompt(id, payload)
+      }
       return createPrompt(payload)
     },
     onSuccess() {
       toast.success('Prompt created')
+      qc.invalidateQueries(['projects', pid, 'prompts'])
+      if (isUpdate) {
+        qc.invalidateQueries(['prompts', id])
+      }
       // redirect to prompts list page
       navigate('/prompts')
     }
   })
 
   const onSubmit = (data: createPromptPayload) => {
+    console.log('on submit', data)
     if (!data.tokenCount) {
       toast.error('please test it first to make sure it works')
       return
@@ -173,6 +220,10 @@ function PromptCreatePage() {
     setTestResult(testRes)
   }
 
+  const [promptsAnimateParent] = useAutoAnimate()
+  const [variablesAnimateParent] = useAutoAnimate()
+
+  console.log(errors)
   const testable = Object.values(errors).length === 0
 
   return (
@@ -217,7 +268,7 @@ function PromptCreatePage() {
 
         <Divider />
 
-        <Stack>
+        <Stack ref={promptsAnimateParent}>
           <h3>Prompts</h3>
           {fields.map((field, index) => {
             return (
@@ -251,6 +302,8 @@ function PromptCreatePage() {
                   <Textarea
                     id='prompts'
                     placeholder='Prompt'
+                    height='300px'
+                    resize='vertical'
                     {...register(`prompts.${index}.prompt`)}
                   />
                   <FormErrorMessage>
@@ -282,7 +335,7 @@ function PromptCreatePage() {
 
         <Stack>
           <h3>Variables</h3>
-          <div className='grid grid-cols-4 gap-4'>
+          <div className='grid grid-cols-4 gap-4' ref={variablesAnimateParent}>
             {variables.map((variable, index) => {
               return (
                 <div

@@ -68,7 +68,7 @@ function LoginButton() {
   }
   return (
     <button
-      className='daisyui-btn daisyui-btn-neutral'
+      className='daisyui-btn daisyui-btn-neutral mx-2'
       onClick={doWeb3Login}
     >
       Login

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getProjectDetail, updateProject, updateProjectPayload } from '../../service/project'
@@ -65,7 +65,7 @@ function ProjectEditPage() {
       }
     },
   })
-
+  const qc = useQueryClient()
   const { isLoading, mutateAsync } = useMutation({
     mutationFn(payload: updateProjectPayload) {
       const args: Partial<updateProjectPayload> = omitBy(payload, isEmpty)
@@ -73,6 +73,8 @@ function ProjectEditPage() {
       return updateProject(pid, args)
     },
     onSuccess(res) {
+      qc.invalidateQueries(['projects'])
+      qc.invalidateQueries(['project', res.id])
       nav(`/projects/${res.id}`)
       toast.success('Project updated')
     }

@@ -46,7 +46,19 @@ function PromptTestButton(props: PromptTestButtonProps) {
   })
 
   useEffect(() => {
-    setValue('variables', data.variables.map(v => ({ name: v.name, type: v.type, value: '' })))
+    if (!data.variables) {
+      return
+    }
+    setValue(
+      'variables',
+      data.
+        variables.
+        map(v => ({
+          name: v.name,
+          type: v.type,
+          value: ''
+        }))
+    )
   }, [data.variables])
 
   const { fields } = useFieldArray({
@@ -94,7 +106,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
         <ModalContent>
           <ModalHeader>Test the Prompt</ModalHeader>
           <ModalCloseButton />
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <ModalBody>
               {fields.map((field, index) => (
                 <FormControl key={field.id}>
@@ -120,7 +132,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
                 isLoading={testing}
                 loadingText='Testing'
                 isDisabled={(errors.variables?.length ?? 0) > 0}
-                type='submit'
+                onClick={handleSubmit(onSubmit)}
               >
                 Test
               </Button>
