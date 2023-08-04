@@ -8,6 +8,17 @@ import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
 import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+
+import { graphql } from '../../gql'
+
+const q = graphql(`
+  query fetchProject($id: Int!) {
+    project(id: $id) {
+      id
+    }
+  }
+`)
 
 const columnHelper = createColumnHelper<OpenToken>()
 const columns = [
@@ -34,6 +45,15 @@ function ProjectPage() {
     enabled: !!pid,
     queryFn: ({ signal }) => getProjectDetail(~~pid, signal)
   })
+
+  const { data } = useGraphQLQuery(q, {
+    variables: {
+      id: ~~pid
+    }
+  })
+
+  console.log('dd', data)
+  
 
   const { data: openTokens } = useQuery({
     queryKey: ['projects', ~~pid, 'openTokens'],
@@ -62,7 +82,6 @@ function ProjectPage() {
           <ProjectTopPromptsChart projectId={~~pid} />
         </CardBody>
       </Card>
-
 
       <Stack>
         <Stack flexDirection='row' justifyContent='space-between'>

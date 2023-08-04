@@ -6,6 +6,8 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { router } from './routes'
+import { ApolloProvider } from '@apollo/client'
+import { apolloClient } from './service/apollo'
 import './App.css'
 
 const queryClient = new QueryClient({
@@ -23,12 +25,14 @@ const theme = extendTheme({
 function App() {
   return (
     <JotaiProvider>
-      <QueryClientProvider client={queryClient}>
-        <ChakraProvider theme={theme}>
-          <RouterProvider router={router} />
-        </ChakraProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <ApolloProvider client={apolloClient}>
+        <QueryClientProvider client={queryClient}>
+          <ChakraProvider theme={theme}>
+            <RouterProvider router={router} />
+          </ChakraProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ApolloProvider>
     </JotaiProvider>
   )
 }
