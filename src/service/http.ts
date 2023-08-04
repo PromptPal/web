@@ -56,6 +56,14 @@ export function HttpRequest<T, I = undefined>(
         throw res
       }
     }).catch(async (err: Response | Error) => {
+      if (err instanceof Response) {
+        if (err.status === 401) {
+          // clear token
+          localStorage.removeItem('pp:token')
+          window.location.reload()
+        }
+      }
+
       // let errorContent: HttpErrorResponse | Error
       let errorContent: any
       if ((err instanceof Response) && !err.bodyUsed) {
