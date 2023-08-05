@@ -10,10 +10,39 @@ import { useEffect, useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { getProjectList, updateProject } from '../../service/project'
 import PromptTestPreview from '../../components/PromptTestPreview'
 import { PromptVariable } from '../../service/types'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { graphql } from '../../gql'
+import { useQuery as useGraphQLQuery, useMutation as useGraphQLMutation } from '@apollo/client'
+
+const q = graphql(`
+  query allProjectListLite($pagination: PaginationInput!) {
+    projects(pagination: $pagination) {
+      count
+      edges {
+        id
+        name
+      }
+    }
+  }
+`)
+
+const cm = graphql(`
+  mutation createPrompt($data: PromptPayload!) {
+    createPrompt(data: $data) {
+      id
+    }
+  }
+`)
+
+const um = graphql(`
+  mutation updatePrompt($id: Int!, $data: PromptPayload!) {
+    updatePrompt(id: $id, data: $data) {
+      id
+    }
+  }
+`)
 
 function findPlaceholderValues(sentence: string): string[] {
   const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g
@@ -112,10 +141,16 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     }
   })
 
-  const { data: projects } = useQuery({
-    queryKey: ['projects'],
-    queryFn: ({ signal }) => getProjectList(1 << 30, signal),
+  const { data: pjs } = useGraphQLQuery(q, {
+    variables: {
+      pagination: {
+        limit: 100,
+        offset: 0,
+      }
+    }
   })
+
+  const projects = pjs?.projects.edges ?? []
 
   const selectedProjectId = watch('projectId')
 
@@ -123,11 +158,11 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     if (selectedProjectId) {
       return
     }
-    if (!projects?.data || projects.data.length === 0) {
+    if (projects.length === 0) {
       return
     }
-    setValue('projectId', projects.data[0].id)
-  }, [selectedProjectId, projects?.data, setValue])
+    setValue('projectId', projects[0].id)
+  }, [selectedProjectId, projects, setValue])
 
   useEffect(() => {
     // only prompt change
@@ -223,7 +258,6 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   const [promptsAnimateParent] = useAutoAnimate()
   const [variablesAnimateParent] = useAutoAnimate()
 
-  console.log(errors)
   const testable = Object.values(errors).length === 0
 
   return (
@@ -239,7 +273,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               placeholder='Project'
               {...register('projectId')}
             >
-              {projects?.data?.map((project) => (
+              {projects.map((project) => (
                 <option key={project.id} value={project.id}>{project.name}</option>
               ))}
             </Select>

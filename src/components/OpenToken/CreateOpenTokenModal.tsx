@@ -1,15 +1,15 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormErrorMessage, FormLabel, Input, Button, ModalFooter, useClipboard } from '@chakra-ui/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createOpenToken, createOpenTokenPayload } from '../../service/open-token'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormErrorMessage, FormLabel, Input, Button, ModalFooter } from '@chakra-ui/react'
+import { createOpenTokenPayload } from '../../service/open-token'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import Zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
 import dayjs from 'dayjs'
 import DatePicker from 'react-datepicker'
-
+import { useMutation as useGraphQLMutation } from '@apollo/client'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useMemo } from 'react'
+import { graphql } from '../../gql'
 
 type CreateOpenTokenModalProps = {
   isOpen: boolean
@@ -24,6 +24,14 @@ const schema: Zod.ZodType<createOpenTokenPayload> = Zod.object({
   description: Zod.string().trim().max(255),
   ttl: Zod.number().min(1).max(secondsIn3Year),
 })
+
+const m = graphql(`
+  mutation createOpenToken($data: openTokenInput!) {
+    createOpenToken(data: $data) {
+      token
+    }
+  }
+`)
 
 function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
   const { projectId, isOpen, onClose } = props
@@ -46,22 +54,26 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     }
   })
 
-  const qc = useQueryClient()
-
-  const { isLoading, mutateAsync } = useMutation({
-    mutationKey: ['createOpenToken'],
-    mutationFn: (val: createOpenTokenPayload) => createOpenToken(projectId, val),
-    onSuccess(res) {
+  const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
+    onCompleted(data) {
+      const res = data.createOpenToken
       reset()
       navigator.clipboard.writeText(res.token)
-      qc.invalidateQueries(['projects', projectId, 'openTokens'])
+      // qc.invalidateQueries(['projects', projectId, 'openTokens'])
       toast.success('the token has been copied to clipboard')
       onClose()
     }
   })
 
   const onSubmit: SubmitHandler<createOpenTokenPayload> = (data: createOpenTokenPayload) => {
-    return mutateAsync(data)
+    return mutateAsync({
+      variables: {
+        data: {
+          projectId,
+          ...data
+        }
+      }
+    })
   }
 
   const ttlValue = watch('ttl')

@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { updateProjectPayload } from '../../service/project'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -13,7 +12,7 @@ import { useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation 
 import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
 
-type localUpdateProject = updateProjectPayload & { name?: string }
+type localUpdateProject = ProjectPayload
 
 const schema: Zod.ZodType<localUpdateProject> = Zod.object({
   name: Zod.string().trim(),
@@ -145,7 +144,7 @@ function ProjectEditPage() {
                 <Switch
                   id='enabled'
                   type='checkbox'
-                  isChecked={isEnabled}
+                  isChecked={isEnabled ?? true}
                   {...register('enabled')}
                 />
                 <Text>{isEnabled ? 'Enabled' : 'Disabled'}</Text>

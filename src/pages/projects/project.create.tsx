@@ -2,13 +2,13 @@ import React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormControl, FormLabel, Input, FormErrorMessage, Modal, ModalOverlay, ModalContent, ModalHeader, Button, Stack } from '@chakra-ui/react'
-import { createProject, createProjectPayload } from '../../service/project'
 import zod from 'zod'
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useMutation as useGraphQLMutation } from '@apollo/client'
 import { toast } from 'react-hot-toast'
 import { graphql } from '../../gql'
+import { ProjectPayload } from '../../gql/graphql'
 
 const schema = zod.object({
   name: zod.string().trim().max(100).min(2),
@@ -45,13 +45,13 @@ function ProjectCreatePage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<createProjectPayload>({
+  } = useForm<ProjectPayload & { openaiToken: string}>({
     resolver: zodResolver(schema),
   })
 
   const qc = useQueryClient()
 
-  const onSubmit: SubmitHandler<createProjectPayload> = (data) => {
+  const onSubmit: SubmitHandler<ProjectPayload> = (data) => {
     return mutateAsync({
       variables: {
         data,

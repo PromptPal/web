@@ -5,19 +5,33 @@ import { getUserProfile } from '../../service/user'
 import { tokenAtom } from '../../stats/profile'
 import Dropdown from '../Dropdown'
 import { Button, Menu, MenuButton, MenuItem, MenuList, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, useColorMode } from '@chakra-ui/react'
+import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
+import { graphql } from '../../gql'
 
-type ProfileProps = {
-}
+const q = graphql(`
+  query getUserProfile($id: Int!) {
+    user(id: $id) {
+      id
+      name
+      addr
+    }
+  }
+`)
 
-function Profile(props: ProfileProps) {
+function Profile() {
   const [token, setToken] = useAtom(tokenAtom)
   const loggedIn = !!token
   const qc = useQueryClient()
-  const { data: myProfile } = useQuery({
-    queryKey: ['user', -1],
-    queryFn: ({ signal }) => getUserProfile(-1, signal),
-    enabled: !!loggedIn,
+
+  const client = useApolloClient()
+  const { data } = useGraphQLQuery(q, {
+    variables: {
+      id: -1
+    },
+    skip: !loggedIn
   })
+
+  const myProfile = data?.user
 
   const { colorMode } = useColorMode()
 
@@ -47,6 +61,7 @@ function Profile(props: ProfileProps) {
             onClick={() => {
               setToken(null)
               qc.clear()
+              client.resetStore()
               // TODO: redirect to overall page
             }}>
             Logout

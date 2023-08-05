@@ -1,36 +1,52 @@
-import { useQuery } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { tokenAtom } from '../../stats/profile'
-import { getProjectList } from '../../service/project'
 import { Center, Divider, Select, Stack } from '@chakra-ui/react'
 import { projectAtom } from '../../stats/project'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { graphql } from '@/gql'
 
-type ProjectSelectorProps = {
-}
+const q = graphql(`
+  query allProjectsNameOnly($pagination: PaginationInput!) {
+    projects(pagination: $pagination) {
+      count
+      edges {
+        id
+        name
+        enabled
+      }
+    }
+  }
+`)
 
-function ProjectSelector(props: ProjectSelectorProps) {
+function ProjectSelector() {
   const logged = !!useAtomValue(tokenAtom)
   const [currentProject, setCurrentProject] = useAtom(projectAtom)
 
-  const { data: projects } = useQuery({
-    queryKey: ['projects'],
-    queryFn: ({ signal }) => getProjectList(1 << 30, signal),
-    enabled: logged
+  const { data: projectsData } = useGraphQLQuery(q, {
+    variables: {
+      pagination: {
+        limit: 100,
+        offset: 0
+      }
+    },
+    skip: !logged
   })
 
+  const projects = projectsData?.projects.edges ?? []
+
   useEffect(() => {
-    if (!projects?.data || projects.data.length === 0) {
+    if (projects.length === 0) {
       return
     }
     if (currentProject) {
       return
     }
 
-    setCurrentProject(projects.data[0].id)
-  }, [projects?.data, currentProject])
+    setCurrentProject(projects[0].id)
+  }, [projects, currentProject])
 
-  if (!projects?.data) {
+  if (projects.length === 0) {
     return null
   }
 
@@ -42,9 +58,9 @@ function ProjectSelector(props: ProjectSelectorProps) {
       <Select
         size='xs'
         value={currentProject}
-        onChange={(e) => setCurrentProject(e.target.value!)}
+        onChange={(e) => setCurrentProject(parseInt(e.target.value))}
       >
-        {projects?.data?.map((project) => (
+        {projects.map((project) => (
           <option key={project.id} value={project.id}>{project.name}</option>
         ))}
       </Select>
