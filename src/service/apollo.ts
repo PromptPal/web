@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-hot-toast'
+import { HTTP_ENDPOINT } from '../constants'
 
 // Log any GraphQL errors or network error that occurred
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -10,11 +11,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       )
     )
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (networkError) console.log(`[Network error]: ${networkError}`)
 })
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:7788/api/v2/graphql',
+  uri: `${HTTP_ENDPOINT}/api/v2/graphql`,
   credentials: 'include',
   // fetch: HttpRequest
 })
