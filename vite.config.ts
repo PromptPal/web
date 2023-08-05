@@ -12,4 +12,9 @@ export default defineConfig({
     isProduction && zipPack(),
     // ViteFaviconsPlugin('./src/assets/prompt-pal-logo.png')
   ].filter(x => x),
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  }
 })

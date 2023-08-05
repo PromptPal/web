@@ -1,7 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getProjectDetail, updateProject, updateProjectPayload } from '../../service/project'
+import { updateProjectPayload } from '../../service/project'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -9,6 +9,9 @@ import Zod from 'zod'
 import { Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Slider, SliderFilledTrack, SliderMark, Text, SliderThumb, SliderTrack, Stack, Switch, Tooltip, Link as LinkUI, Box, Heading, Divider } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { isEmpty, omitBy } from 'lodash'
+import { useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
+import { graphql } from '../../gql'
+import { ProjectPayload } from '../../gql/graphql'
 
 type localUpdateProject = updateProjectPayload & { name?: string }
 
@@ -23,20 +26,45 @@ const schema: Zod.ZodType<localUpdateProject> = Zod.object({
   openAIMaxTokens: Zod.number().min(0).optional(),
 })
 
+const q = graphql(`
+  query fetchProjectLite($id: Int!) {
+    project(id: $id) {
+      id
+      name
+      enabled
+      openAIModel
+      openAIBaseURL
+      openAITemperature
+      openAITopP
+      openAIMaxTokens
+    }
+  }
+`)
+
+const m = graphql(`
+  mutation updateProject($id: Int!, $data: ProjectPayload!) {
+    updateProject(id: $id, data: $data) {
+      id
+      name
+      enabled
+      openAIModel
+      openAIBaseURL
+      openAITemperature
+      openAITopP
+      openAIMaxTokens
+    }
+  }
+`)
+
 function ProjectEditPage() {
   const nav = useNavigate()
   const pidStr = useParams().id ?? '0'
   const pid = ~~pidStr
 
-  const { refetch } = useQuery({
-    queryKey: ['projects', pid],
-    enabled: false,
-    queryFn: ({ signal }) => getProjectDetail(pid, signal),
-    refetchInterval: 0,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
+  const [refetch] = useGraphQLLazyQuery(q, {
+    variables: {
+      id: pid
+    },
   })
 
   const {
@@ -49,7 +77,7 @@ function ProjectEditPage() {
     resolver: zodResolver(schema),
     async defaultValues() {
       const data = await refetch()
-      const payload = data.data
+      const payload = data.data?.project
       if (!payload) {
         return {}
       }
@@ -66,22 +94,25 @@ function ProjectEditPage() {
     },
   })
   const qc = useQueryClient()
-  const { isLoading, mutateAsync } = useMutation({
-    mutationFn(payload: updateProjectPayload) {
-      const args: Partial<updateProjectPayload> = omitBy(payload, isEmpty)
-      args.openAIMaxTokens = payload.openAIMaxTokens
-      return updateProject(pid, args)
-    },
-    onSuccess(res) {
+  const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
+    onCompleted(data) {
+      const res = data.updateProject
       qc.invalidateQueries(['projects'])
       qc.invalidateQueries(['project', res.id])
       nav(`/projects/${res.id}`)
       toast.success('Project updated')
-    }
+    },
   })
 
-  const onSubmit: SubmitHandler<updateProjectPayload> = (data) => {
-    return mutateAsync(data)
+  const onSubmit: SubmitHandler<ProjectPayload> = (data) => {
+    const args: ProjectPayload = omitBy(data, isEmpty)
+    args.openAIMaxTokens = data.openAIMaxTokens
+    return mutateAsync({
+      variables: {
+        id: pid,
+        data: args
+      }
+    })
   }
 
   const temperature = watch('openAITemperature')
