@@ -1,16 +1,17 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
-import { PromptObject, getPromptList } from '../../service/prompt'
 import { ColumnDef, createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { Badge, Button, Heading, Stack, Switch, Tooltip } from '@chakra-ui/react'
-import { useAtom, useAtomValue } from 'jotai'
-import { projectAtom } from '../../stats/project'
+import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { projectAtom } from '../../stats/project'
+import { graphql } from '../../gql'
+import { FetchPromptsQuery } from '../../gql/graphql'
 
-const columnHelper = createColumnHelper<PromptObject>()
+const columnHelper = createColumnHelper<FetchPromptsQuery['prompts']['edges'][0]>()
 function usePromptListColumns(pid: number) {
-  return useMemo<ColumnDef<PromptObject, any>[]>(() => {
+  return useMemo<ColumnDef<FetchPromptsQuery['prompts']['edges'][0], any>[]>(() => {
     return [
       columnHelper.accessor('id', {
         header: 'ID',
@@ -43,7 +44,7 @@ function usePromptListColumns(pid: number) {
         header: 'Public Level',
         cell: (info) => <Badge colorScheme='teal'>{info.getValue()}</Badge>,
       }),
-      columnHelper.accessor('create_time', {
+      columnHelper.accessor('createdAt', {
         header: 'Created At',
         cell: (info) => new Intl.DateTimeFormat()
           .format(new Date(info.getValue())),
@@ -67,36 +68,44 @@ function usePromptListColumns(pid: number) {
 
   }, [pid])
 }
+
+const q = graphql(`
+  query fetchPrompts($id: Int!, $pagination: PaginationInput!) {
+    prompts(projectId: $id, pagination: $pagination) {
+      count
+      edges {
+        id
+        hashId
+        name
+        publicLevel
+        enabled
+        tokenCount
+        createdAt
+      }
+    }
+  }
+`)
+
 function PromptsPage() {
   const currentProject = useAtomValue(projectAtom)
   // TODO: handle the page that without project id
   const pid = ~~(useParams().id ?? currentProject ?? '0')
 
-  const { data: prompts } = useInfiniteQuery({
-    queryKey: ['projects', pid, 'prompts'],
-    enabled: pid > 0,
-    queryFn: ({ pageParam, signal }) => {
-      let cursor = pageParam
-      if (!cursor) {
-        cursor = 1 << 30
+  const { data } = useGraphQLQuery(q, {
+    variables: {
+      id: pid,
+      pagination: {
+        limit: 100,
+        offset: 0,
       }
-      return getPromptList(pid, cursor, signal)
     },
-    getNextPageParam: (lastPage) => {
-      if (!lastPage) {
-        return 1 << 30
-      }
-      const d = lastPage.data
-      if (d.length === 0) {
-        return null
-      }
-      return d[d.length - 1].id
-    },
+    skip: !pid
   })
 
+
   const tableData = useMemo(() => {
-    return prompts?.pages.flatMap((page) => page.data) ?? []
-  }, [prompts?.pages.length])
+    return data?.prompts.edges ?? []
+  }, [data])
 
   const columns = usePromptListColumns(pid)
 
