@@ -9,7 +9,8 @@
     "build": "vite build --base=/public",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "g": "graphql-codegen",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "exit 0"
   },
   "dependencies": {
     "@apollo/client": "^3.7.17",
