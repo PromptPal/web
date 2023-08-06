@@ -26,6 +26,15 @@ const q = graphql(`
           expireAt
         }
       }
+      promptMetrics {
+        recentCounts {
+          prompt {
+            id
+            name
+          }
+          count
+        }
+      }
     }
   }
 `)
@@ -76,7 +85,7 @@ function ProjectPage() {
           <Text ml={2} color={'gray.500'} fontSize={'xs'}>recent 7 days</Text>
         </CardHeader>
         <CardBody>
-          <ProjectTopPromptsChart projectId={~~pid} />
+          <ProjectTopPromptsChart recentCounts={project?.promptMetrics.recentCounts} />
         </CardBody>
       </Card>
 

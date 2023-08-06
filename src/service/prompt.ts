@@ -48,36 +48,6 @@ export function getPromptCalls(promptId: number, cursor: number, signal?: AbortS
   })
 }
 
-export type createPromptPayload = {
-  projectId: number
-  name: string
-  description?: string
-  enabled: boolean
-  debug: boolean
-  tokenCount?: number
-  prompts: PromptRow[]
-  variables: PromptVariable[]
-  publicLevel: 'public' | 'protected' | 'private'
-}
-
-export function createPrompt(payload: createPromptPayload) {
-  return HttpRequest<PromptObject, createPromptPayload>(
-    `${API_PREFIX}/admin/prompts`, {
-      method: 'POST',
-      body: payload
-    })
-}
-
-export type updatePromptPayload = Omit<createPromptPayload, 'projectId' | 'name'>
-
-export function updatePrompt(id: number, payload: updatePromptPayload) {
-  return HttpRequest<PromptObject, updatePromptPayload>(
-    `${API_PREFIX}/admin/prompts/${id}`, {
-      method: 'PUT',
-      body: payload
-    })
-}
-
 export type testPromptResponse = {
   id: string
   object: string

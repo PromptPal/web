@@ -1,20 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import React, { useMemo } from 'react'
-import { getProjectTopPrompts } from '../../service/project'
 import echarts from '../../utils/echarts'
+import { GetOverallProjectDataQuery } from '../../gql/graphql'
 
 type ProjectTopPromptsChartProps = {
-  projectId: number
+  recentCounts?: GetOverallProjectDataQuery['project']['promptMetrics']['recentCounts']
 }
 
 function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
-  const { projectId } = props
-  const { data: topPrompts } = useQuery({
-    queryKey: ['projects', ~~projectId, 'top-prompts'],
-    queryFn: ({ signal }) => getProjectTopPrompts(~~projectId, signal),
-    suspense: true
-  })
+  const { recentCounts } = props
 
   const echartDataOptions = useMemo<echarts.EChartsCoreOption>(() => {
     return {
@@ -24,19 +19,19 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
       },
       xAxis: {
         type: 'category',
-        data: topPrompts?.data.map((p) => p.prompt.name),
+        data: recentCounts?.map((p) => p.prompt.name),
       },
       yAxis: {
         type: 'value',
       },
       series: [
         {
-          data: topPrompts?.data.map((p) => p.count),
+          data: recentCounts?.map((p) => p.count),
           type: 'bar',
         },
       ],
     } as echarts.EChartsCoreOption
-  }, [topPrompts?.data])
+  }, [recentCounts])
 
   return (
     <div>
@@ -45,10 +40,7 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
         option={echartDataOptions}
         notMerge={true}
         lazyUpdate={true}
-        theme={"dark"}
-      // onChartReady={this.onChartReadyCallback}
-      // onEvents={EventsDict}
-      // opts={}
+        theme={'dark'}
       />
     </div>
   )

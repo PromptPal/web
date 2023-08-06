@@ -1,5 +1,4 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormErrorMessage, FormLabel, Input, Button, ModalFooter } from '@chakra-ui/react'
-import { createOpenTokenPayload } from '../../service/open-token'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import Zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,6 +9,7 @@ import { useMutation as useGraphQLMutation } from '@apollo/client'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useMemo } from 'react'
 import { graphql } from '../../gql'
+import { OpenToken, OpenTokenInput } from '../../gql/graphql'
 
 type CreateOpenTokenModalProps = {
   isOpen: boolean
@@ -19,7 +19,8 @@ type CreateOpenTokenModalProps = {
 
 const secondsIn3Year = 3 * 365 * 24 * 60 * 60
 
-const schema: Zod.ZodType<createOpenTokenPayload> = Zod.object({
+const schema: Zod.ZodType<OpenTokenInput> = Zod.object({
+  projectId: Zod.number(),
   name: Zod.string().trim().max(100).min(2),
   description: Zod.string().trim().max(255),
   ttl: Zod.number().min(1).max(secondsIn3Year),
@@ -47,9 +48,10 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     watch,
     reset,
     formState: { errors },
-  } = useForm<createOpenTokenPayload>({
+  } = useForm<OpenTokenInput>({
     resolver: zodResolver(schema),
     defaultValues: {
+      projectId,
       ttl: 365 * 24 * 60 * 60
     }
   })
@@ -65,12 +67,12 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     }
   })
 
-  const onSubmit: SubmitHandler<createOpenTokenPayload> = (data: createOpenTokenPayload) => {
+  const onSubmit: SubmitHandler<OpenTokenInput> = (data: OpenTokenInput) => {
     return mutateAsync({
       variables: {
         data: {
+          ...data,
           projectId,
-          ...data
         }
       }
     })

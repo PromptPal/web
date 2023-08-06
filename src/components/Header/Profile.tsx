@@ -1,10 +1,9 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useAtom, useAtomValue } from 'jotai'
+import { useQueryClient } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
 import { MetaMaskAvatar } from 'react-metamask-avatar'
-import { getUserProfile } from '../../service/user'
 import { tokenAtom } from '../../stats/profile'
 import Dropdown from '../Dropdown'
-import { Button, Menu, MenuButton, MenuItem, MenuList, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, useColorMode } from '@chakra-ui/react'
+import { Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, useColorMode } from '@chakra-ui/react'
 import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 
