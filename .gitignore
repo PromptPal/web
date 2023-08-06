@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 dist.zip
+
+graphql.schema.json
+gql/

@@ -1,19 +1,73 @@
 import Zod from 'zod'
 import { AddIcon } from '@chakra-ui/icons'
-import { createPrompt, createPromptPayload, getPromptDetail, testPromptResponse, updatePrompt } from '../../service/prompt'
+import { testPromptResponse } from '../../service/prompt'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
 import { Stack, FormControl, FormLabel, Input, FormErrorMessage, Divider, Textarea, Select, Button, Tooltip } from '@chakra-ui/react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCallback, useEffect, useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { getProjectList, updateProject } from '../../service/project'
 import PromptTestPreview from '../../components/PromptTestPreview'
 import { PromptVariable } from '../../service/types'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { graphql } from '../../gql'
+import { useQuery as useGraphQLQuery, useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
+import { PromptPayload, PromptRole, PublicLevel } from '../../gql/graphql'
+
+const q = graphql(`
+  query allProjectListLite($pagination: PaginationInput!) {
+    projects(pagination: $pagination) {
+      count
+      edges {
+        id
+        name
+      }
+    }
+  }
+`)
+
+const qd = graphql(`
+  query getPromptForEdit($id: Int!) {
+    prompt(id: $id) {
+      id
+      name
+      description
+      enabled
+      debug
+      tokenCount
+      prompts {
+        prompt
+        role
+      }
+      variables {
+        name
+        type
+      }
+      publicLevel
+      createdAt
+      updatedAt
+    }
+  }
+`)
+
+const cm = graphql(`
+  mutation createPrompt($data: PromptPayload!) {
+    createPrompt(data: $data) {
+      id
+    }
+  }
+`)
+
+const um = graphql(`
+  mutation updatePrompt($id: Int!, $data: PromptPayload!) {
+    updatePrompt(id: $id, data: $data) {
+      id
+    }
+  }
+`)
 
 function findPlaceholderValues(sentence: string): string[] {
   const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g
@@ -26,7 +80,12 @@ function findPlaceholderValues(sentence: string): string[] {
   return values
 }
 
-const schema: Zod.ZodType<createPromptPayload> = Zod.object({
+type mutatePromptType = Omit<PromptPayload, 'description' | 'tokenCount'> & {
+  description?: string
+  tokenCount?: number
+}
+
+const schema: Zod.ZodType<mutatePromptType> = Zod.object({
   projectId: Zod.number(),
   name: Zod.string(),
   description: Zod.string(),
@@ -35,13 +94,13 @@ const schema: Zod.ZodType<createPromptPayload> = Zod.object({
   debug: Zod.boolean(),
   prompts: Zod.array(Zod.object({
     prompt: Zod.string(),
-    role: Zod.enum(['user', 'system', 'assistant']),
+    role: Zod.enum([PromptRole.Assistant, PromptRole.User, PromptRole.System]),
   })),
   variables: Zod.array(Zod.object({
     name: Zod.string(),
     type: Zod.string(),
   })),
-  publicLevel: Zod.enum(['public', 'private', 'protected']),
+  publicLevel: Zod.enum([PublicLevel.Private, PublicLevel.Public, PublicLevel.Protected]),
 })
 
 type PromptCreatePageProps = {
@@ -52,15 +111,23 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   const { isUpdate } = props
   const id = isUpdate ? ~~(useParams().id ?? '0') : 0
 
-  const { refetch: fetchPromptDetail } = useQuery({
-    queryKey: ['prompt', id],
-    queryFn: ({ signal }) => getPromptDetail(id, signal),
-    enabled: isUpdate && id > 0,
-    refetchOnReconnect: false,
-    refetchInterval: 0,
-    refetchOnMount: false,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
+  const [fetchPromptDetail] = useGraphQLLazyQuery(qd, {
+    variables: {
+      id,
+    },
+  })
+
+  const [updatePrompt, { loading: updating }] = useGraphQLMutation(um, {
+    onCompleted() {
+      toast.success('Prompt updated')
+      navigate('/prompts')
+    }
+  })
+  const [createPrompt, { loading: creating }] = useGraphQLMutation(cm, {
+    onCompleted() {
+      toast.success('Prompt created')
+      navigate('/prompts')
+    }
   })
 
   const [sp] = useSearchParams()
@@ -77,23 +144,23 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<createPromptPayload>({
+  } = useForm<mutatePromptType>({
     resolver: zodResolver(schema),
     async defaultValues() {
       const data = await fetchPromptDetail()
-      const payload = data.data
+      const payload = data.data?.prompt
       if (!payload) {
         return {
           projectId: pid,
           name: '',
           description: undefined,
           tokenCount: undefined,
-          publicLevel: 'protected',
+          publicLevel: PublicLevel.Protected,
           enabled: true,
           debug: false,
           prompts: [{
             prompt: '',
-            role: 'system',
+            role: PromptRole.System,
           }],
           variables: [],
         }
@@ -103,7 +170,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         name: payload.name,
         description: payload.description,
         tokenCount: payload.tokenCount,
-        publicLevel: payload.publicLevel as createPromptPayload['publicLevel'],
+        publicLevel: payload.publicLevel,
         enabled: payload.enabled,
         debug: payload.debug ?? false,
         prompts: payload.prompts ?? [],
@@ -112,10 +179,16 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     }
   })
 
-  const { data: projects } = useQuery({
-    queryKey: ['projects'],
-    queryFn: ({ signal }) => getProjectList(1 << 30, signal),
+  const { data: pjs } = useGraphQLQuery(q, {
+    variables: {
+      pagination: {
+        limit: 100,
+        offset: 0,
+      }
+    }
   })
+
+  const projects = pjs?.projects.edges ?? []
 
   const selectedProjectId = watch('projectId')
 
@@ -123,11 +196,11 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     if (selectedProjectId) {
       return
     }
-    if (!projects?.data || projects.data.length === 0) {
+    if (projects.length === 0) {
       return
     }
-    setValue('projectId', projects.data[0].id)
-  }, [selectedProjectId, projects?.data, setValue])
+    setValue('projectId', projects[0].id)
+  }, [selectedProjectId, projects, setValue])
 
   useEffect(() => {
     // only prompt change
@@ -151,7 +224,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         return acc
       }, [])
 
-      const prevVariables = getValues('variables')
+      const prevVariables = getValues('variables') ?? []
       const flattedPrevVariables = prevVariables.map(x => x.name)
 
       const nextVariables = allPlaceholders.map((placeholder) => {
@@ -176,28 +249,30 @@ function PromptCreatePage(props: PromptCreatePageProps) {
 
   const qc = useQueryClient()
 
-  const { isLoading, mutateAsync } = useMutation({
-    mutationKey: ['projects', pid, 'prompts'],
-    mutationFn(payload: createPromptPayload) {
-      payload.projectId = ~~payload.projectId
-      if (isUpdate) {
-        return updatePrompt(id, payload)
-      }
-      return createPrompt(payload)
-    },
-    onSuccess() {
-      toast.success('Prompt created')
-      qc.invalidateQueries(['projects', pid, 'prompts'])
-      if (isUpdate) {
-        qc.invalidateQueries(['prompts', id])
-      }
-      // redirect to prompts list page
-      navigate('/prompts')
+  const mutateAsync = useCallback((data: mutatePromptType) => {
+    const payload = {
+      ...data,
+      projectId: ~~data.projectId,
+      description: data.description ?? '',
+      tokenCount: data.tokenCount ?? 0,
     }
-  })
+    if (isUpdate) {
+      return updatePrompt({
+        variables: {
+          id,
+          data: payload,
+        }
+      })
+    }
+    return createPrompt({
+      variables: {
+        data: payload,
+      }
+    })
+  }, [id, isUpdate, createPrompt, updatePrompt])
+  const isLoading = updating || creating
 
-  const onSubmit = (data: createPromptPayload) => {
-    console.log('on submit', data)
+  const onSubmit = (data: mutatePromptType) => {
     if (!data.tokenCount) {
       toast.error('please test it first to make sure it works')
       return
@@ -223,7 +298,6 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   const [promptsAnimateParent] = useAutoAnimate()
   const [variablesAnimateParent] = useAutoAnimate()
 
-  console.log(errors)
   const testable = Object.values(errors).length === 0
 
   return (
@@ -239,7 +313,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               placeholder='Project'
               {...register('projectId')}
             >
-              {projects?.data?.map((project) => (
+              {projects.map((project) => (
                 <option key={project.id} value={project.id}>{project.name}</option>
               ))}
             </Select>
@@ -325,7 +399,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
           <Button
             leftIcon={<AddIcon />}
             disabled={fields.length >= 20}
-            onClick={() => append({ prompt: '', role: 'user' })}
+            onClick={() => append({ prompt: '', role: PromptRole.User })}
           >
             Add
           </Button>

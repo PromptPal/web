@@ -1,12 +1,13 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import React, { useDebugValue, useMemo } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
-import { PromptCall, getPromptCalls, getPromptDetail } from '../../service/prompt'
+import { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
 import { Badge, Box, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch, Text, Tooltip } from '@chakra-ui/react'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { graphql } from '../../gql'
+import { FetchPromptDetailQuery } from '../../gql/graphql'
 
-const columnHelper = createColumnHelper<PromptCall>()
+const columnHelper = createColumnHelper<FetchPromptDetailQuery['prompt']['latestCalls']['edges'][0]>()
 
 const columns = [
   columnHelper.accessor('id', {
@@ -32,47 +33,62 @@ const columns = [
     ),
   }),
   // TODO: add price column
-  columnHelper.accessor('create_time', {
+  columnHelper.accessor('createdAt', {
     header: 'Created At',
     cell: (info) => new Intl.DateTimeFormat()
       .format(new Date(info.getValue())),
   })
 ]
 
+const q = graphql(`
+  query fetchPromptDetail($id: Int!) {
+    prompt(id: $id) {
+      id
+      hashId
+      name
+      description
+      enabled
+      debug
+      tokenCount
+      publicLevel
+      createdAt
+      updatedAt
+      prompts {
+        prompt
+        role
+      }
+      variables {
+        name
+        type
+      }
+      latestCalls {
+        count
+        edges {
+          id
+          duration
+          totalToken
+          message
+          createdAt
+        }
+      }
+    }
+  }
+`)
+
 function PromptPage() {
   const params = useParams()
   const pid = ~~(params?.id ?? '0')
-
-  const { data: promptDetail } = useQuery({
-    queryKey: ['prompt', pid],
-    queryFn: ({ signal }) => getPromptDetail(pid, signal),
-    enabled: pid > 0,
-  })
-
-  const { data: promptCalls } = useInfiniteQuery({
-    queryKey: ['prompt', pid, 'calls-all'],
-    queryFn: ({ pageParam, signal }) => {
-      let cursor = pageParam
-      if (!cursor) {
-        cursor = 1 << 30
-      }
-      return getPromptCalls(pid, cursor, signal)
-    },
-    getNextPageParam: (lastPage) => {
-      if (!lastPage) {
-        return null
-      }
-      const d = lastPage.data
-      if (d.length === 0) {
-        return null
-      }
-      return d[d.length - 1].id
+  const { data } = useGraphQLQuery(q, {
+    variables: {
+      id: pid
     }
   })
 
+  const promptDetail = data?.prompt
+
   const promptCallsTableData = useMemo(() => {
-    return promptCalls?.pages.flatMap((page) => page.data) ?? []
-  }, [promptCalls?.pages.length])
+    return promptDetail?.latestCalls.edges ?? []
+  }, [promptDetail])
 
   const promptCallsTable = useReactTable({
     data: promptCallsTableData,
@@ -97,12 +113,12 @@ function PromptPage() {
         <CardBody>
           <Stack flexDirection='row'>
             <Box flex={1} textAlign='center'>id: {promptDetail?.id}</Box>
-            <Box flex={1} textAlign='center' >Hash ID: {promptDetail?.hid}</Box>
+            <Box flex={1} textAlign='center' >Hash ID: {promptDetail?.hashId}</Box>
           </Stack>
           <Divider my={4} />
           <Stack flexDirection='row'>
             <div className='flex-1 text-center'>
-              Create Time: {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.create_time)) : 'N/A'}
+              Create Time: {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.createdAt)) : 'N/A'}
             </div>
             <div className='flex-1 text-center'>
               Visibility: <Badge colorScheme='teal'>{promptDetail?.publicLevel}</Badge>

@@ -1,12 +1,14 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { Project, getProjectList } from '../../service/project'
-import { Link, Outlet } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { Button, Heading, Link as LinkUI, Stack, StackDivider, Switch, Tooltip } from '@chakra-ui/react'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { useMemo } from 'react'
+import { graphql } from '../../gql'
+import { ProjectsQuery } from '../../gql/graphql'
 
-const columnHelper = createColumnHelper<Project>()
+const columnHelper = createColumnHelper<ProjectsQuery['projects']['edges'][0]>()
 const columns = [
   columnHelper.accessor('id', {
     header: 'ID',
@@ -29,7 +31,7 @@ const columns = [
       </Tooltip>
     ),
   }),
-  columnHelper.accessor('create_time', {
+  columnHelper.accessor('createdAt', {
     header: 'Created At',
     cell: (info) => new Intl.DateTimeFormat()
       .format(new Date(info.getValue())),
@@ -61,31 +63,33 @@ const columns = [
   })
 ]
 
+const q = graphql(`
+  query projects($pagination: PaginationInput!) {
+    projects(pagination: $pagination) {
+      count
+      edges {
+        id
+        name
+        enabled
+        createdAt
+      }
+    }
+  }
+`)
+
 function ProjectsPage() {
-  const { data: projects } = useInfiniteQuery({
-    queryKey: ['projects', 'all'],
-    queryFn: ({ pageParam, signal }) => {
-      let cursor = pageParam
-      if (!cursor) {
-        cursor = 1 << 30
+  const { data: projects } = useGraphQLQuery(q, {
+    variables: {
+      pagination: {
+        limit: 100,
+        offset: 0
       }
-      return getProjectList(cursor, signal)
-    },
-    getNextPageParam: (lastPage) => {
-      if (!lastPage) {
-        return 1 << 30
-      }
-      const d = lastPage.data
-      if (d.length === 0) {
-        return null
-      }
-      return d[d.length - 1].id
     }
   })
 
   const tableData = useMemo(() => {
-    return projects?.pages.flatMap((page) => page.data) ?? []
-  }, [projects?.pages.length])
+    return projects?.projects.edges ?? []
+  }, [projects])
 
   const table = useReactTable({
     data: tableData,

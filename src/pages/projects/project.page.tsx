@@ -1,13 +1,43 @@
-import { useQuery } from '@tanstack/react-query'
-import React from 'react'
 import { useParams } from 'react-router-dom'
-import { getProjectDetail } from '../../service/project'
 import { Stack, Heading, Button, useDisclosure, Card, CardHeader, CardBody, Text } from '@chakra-ui/react'
-import { OpenToken, listOpenTokens } from '../../service/open-token'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
 import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { graphql } from '@/gql'
+import { OpenToken } from '@/gql/graphql'
+
+const q = graphql(`
+  query fetchProject($id: Int!) {
+    project(id: $id) {
+      id
+      name
+      enabled
+      openAIModel
+      openAIBaseURL
+      openAITemperature
+      openTokens {
+        count
+        edges {
+          id
+          name
+          description
+          expireAt
+        }
+      }
+      promptMetrics {
+        recentCounts {
+          prompt {
+            id
+            name
+          }
+          count
+        }
+      }
+    }
+  }
+`)
 
 const columnHelper = createColumnHelper<OpenToken>()
 const columns = [
@@ -29,20 +59,16 @@ const columns = [
 function ProjectPage() {
   const pid = useParams().id ?? '0'
 
-  const { data: project } = useQuery({
-    queryKey: ['projects', ~~pid],
-    enabled: !!pid,
-    queryFn: ({ signal }) => getProjectDetail(~~pid, signal)
+  const { data: projectData } = useGraphQLQuery(q, {
+    variables: {
+      id: ~~pid
+    }
   })
-
-  const { data: openTokens } = useQuery({
-    queryKey: ['projects', ~~pid, 'openTokens'],
-    enabled: !!pid,
-    queryFn: ({ signal }) => listOpenTokens(~~pid, 1 << 30, signal)
-  })
+  const project = projectData?.project
+  const openTokens = project?.openTokens.edges ?? []
 
   const table = useReactTable({
-    data: openTokens?.data ?? [],
+    data: openTokens,
     getCoreRowModel: getCoreRowModel(),
     columns,
   })
@@ -59,10 +85,9 @@ function ProjectPage() {
           <Text ml={2} color={'gray.500'} fontSize={'xs'}>recent 7 days</Text>
         </CardHeader>
         <CardBody>
-          <ProjectTopPromptsChart projectId={~~pid} />
+          <ProjectTopPromptsChart recentCounts={project?.promptMetrics.recentCounts} />
         </CardBody>
       </Card>
-
 
       <Stack>
         <Stack flexDirection='row' justifyContent='space-between'>
@@ -71,7 +96,7 @@ function ProjectPage() {
           </Heading>
           <Button
             colorScheme='teal'
-            isDisabled={(openTokens?.data.length ?? 0) >= 20}
+            isDisabled={(openTokens?.length ?? 0) >= 20}
             onClick={onOpen}
           >
             New Token

@@ -2,15 +2,16 @@ import { Button, FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBo
 import { useMutation } from '@tanstack/react-query'
 import omit from 'lodash/omit'
 import toast from 'react-hot-toast'
-import { createPromptPayload, testPrompt, testPromptPayload, testPromptResponse } from '../../service/prompt'
+import { testPrompt, testPromptPayload, testPromptResponse } from '../../service/prompt'
 import { useFieldArray, useForm } from 'react-hook-form'
 import Zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
+import { PromptPayload } from '../../gql/graphql'
 
 type PromptTestButtonProps = {
   testable?: boolean
-  data: Omit<testPromptPayload, 'variables'> & { variables: createPromptPayload['variables'] }
+  data: Omit<testPromptPayload, 'variables'> & { variables: PromptPayload['variables'] }
   onTested: (data: testPromptResponse) => void
 }
 

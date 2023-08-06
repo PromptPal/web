@@ -25,7 +25,7 @@ export function HttpRequest<T, I = undefined>(
     ignoreErrors?: boolean
   }
 ): Promise<T> {
-  const req = input.startsWith('https') ?
+  const req = input.startsWith('http') ?
     input :
     `${HTTP_ENDPOINT}${input}`
 

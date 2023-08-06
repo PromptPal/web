@@ -1,6 +1,8 @@
+import { PromptRole } from '../gql/graphql'
+
 export type PromptRow = {
   prompt: string
-  role: 'user' | 'system' | 'assistant'
+  role: PromptRole
 }
 
 export type PromptVariable = {

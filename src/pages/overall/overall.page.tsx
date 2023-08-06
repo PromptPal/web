@@ -1,20 +1,40 @@
 import { useAtomValue } from 'jotai'
-import React from 'react'
 import { projectAtom } from '../../stats/project'
 import { Box, Text, Button, Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
-import { getProjectDetail } from '../../service/project'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { graphql } from '../../gql'
 
-function OverallPage(props: OverallPageProps) {
+const q = graphql(`
+  query getOverallProjectData($id: Int!) {
+    project(id: $id) {
+      id
+      name
+      promptMetrics {
+        recentCounts {
+          prompt {
+            id
+            name
+          }
+          count
+        }
+      }
+    }
+  }
+`)
+
+function OverallPage() {
   const p = useAtomValue(projectAtom)
 
-  const { data: pj } = useQuery({
-    queryKey: ['projects', p],
-    enabled: !!p,
-    queryFn: ({ signal }) => getProjectDetail(p, signal)
+  const {data} = useGraphQLQuery(q, {
+    variables: {
+      id: p ?? -1
+    },
+    skip: !p
   })
+
+  const pj = data?.project
 
   if (!p) {
     return (
@@ -48,7 +68,7 @@ function OverallPage(props: OverallPageProps) {
         <Text ml={2} color={'gray.500'} fontSize={'xs'}>recent 7 days</Text>
       </CardHeader>
       <CardBody>
-        <ProjectTopPromptsChart projectId={p} />
+        <ProjectTopPromptsChart recentCounts={pj?.promptMetrics.recentCounts} />
       </CardBody>
     </Card>
   )
