@@ -17,17 +17,17 @@ jobs:
       matrix:
         node-version: [20.x]
     steps:
-    - name: fetch GraphQL schema
-      uses: actions/checkout@v3
-      with:
-        repository: PromptPal/PromptPal
-        path: ./PromptPal
     - uses: google-github-actions/release-please-action@v3
       id: release
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         release-type: node
     - uses: actions/checkout@v3
+    - name: fetch GraphQL schema
+      uses: actions/checkout@v3
+      with:
+        repository: PromptPal/PromptPal
+        path: ./PromptPal
     - uses: pnpm/action-setup@v2
       with:
         version: 8
@@ -38,9 +38,7 @@ jobs:
         cache: 'pnpm'
     - name: Build
       run: |
-        sed -i 's/\.\.\/PromptPal\/schema\/schema\.gql/\.\/PromptPal\/schema\/schema\.gql/g' ./codegen.ts
-        ls
-        ls PromptPal
+        sed -i 's/\.\.\/PromptPal\/schema\/schema\.gql/.\/PromptPal\/schema\/schema\.gql/g' ./codegen.ts
         pnpm install
         pnpm run g
         pnpm run build
