@@ -1,23 +1,21 @@
-
-import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   overwrite: true,
-  // schema: "../PromptPal/schema/schema.gql",
-  schema: "../PromptPal/schema/schema.gql",
-  documents: "src/**/*.tsx",
+  schema: '../PromptPal/schema/schema.gql',
+  documents: 'src/**/*.tsx',
   generates: {
-    "src/gql/": {
-      preset: "client",
+    'src/gql/': {
+      preset: 'client',
       presetConfig: {
         persistedDocuments: true
       },
       plugins: []
     },
-    "./graphql.schema.json": {
-      plugins: ["introspection"]
+    './graphql.schema.json': {
+      plugins: ['introspection']
     }
   }
-};
+}
 
-export default config;
+export default config
