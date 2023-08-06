@@ -34,6 +34,7 @@ jobs:
         ls ..
         ls PromptPal
         sed -i 's/\.\.\/PromptPal\/schema\/schema\.gql/(echo $GITHUB_WORKSPACE)\/PromptPal\/schema\/schema\.gql/g' ./codegen.ts
+        cat ./codegen.ts
         pnpm install
         pnpm run g
         pnpm run build
