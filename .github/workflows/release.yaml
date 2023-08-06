@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: PromptPal/PromptPal
-        path: ../PromptPal
+        path: ./PromptPal
     - uses: google-github-actions/release-please-action@v3
       id: release
       with:
@@ -38,6 +38,7 @@ jobs:
         cache: 'pnpm'
     - name: Build
       run: |
+        sed -i 's/\.\.\/PromptPal\/schema\/schema\.gql/\.\/PromptPal\/schema\/schema\.gql/g' ./codegen.ts
         pnpm install
         pnpm run g
         pnpm run build
