@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.3.0](https://github.com/PromptPal/web/compare/v1.2.1...v1.3.0) (2023-08-06)
+
+
+### Features
+
+* **ci:** add generate graphql phase for ci ([932b3ff](https://github.com/PromptPal/web/commit/932b3ffb20141b4f51bfab6669cd3292b588df3d))
+* **gql:** add gql integration ([d555969](https://github.com/PromptPal/web/commit/d555969357d7bf6b10f9b59516f77cd70fb056e8))
+* **graphql:** migrating api to graphql based ([9e04896](https://github.com/PromptPal/web/commit/9e0489607d6fa4d574af5552c68f8a96f2cb7f20))
+* **graphql:** upgrade to graphql api ([20869a0](https://github.com/PromptPal/web/commit/20869a06c88c4fd2c51621cc59c1da348c7b8c23))
+* **graphql:** upgrade to graphql api ([fd2b944](https://github.com/PromptPal/web/commit/fd2b9448be5b695e5c82f085b0d3768f2157cc48))
+* **project:** use graphql api ([7f64ff3](https://github.com/PromptPal/web/commit/7f64ff30cf239b7c1e4784f9fa024d1332fd3f13))
+
+
+### Bug Fixes
+
+* **ci:** add debug info ([db34fa9](https://github.com/PromptPal/web/commit/db34fa9bdebb7a500a95c62d3cc5a08bc102a271))
+* **ci:** add debug info ([db34fa9](https://github.com/PromptPal/web/commit/db34fa9bdebb7a500a95c62d3cc5a08bc102a271))
+* **ci:** add debug info ([d4c972c](https://github.com/PromptPal/web/commit/d4c972c5cb8f21584299622b131b6e92cabca4b8))
+* **ci:** add debug info for ci ([99f1b9e](https://github.com/PromptPal/web/commit/99f1b9eb623e76ee1202091f69d9161e3fdbfcb3))
+* **ci:** debug ci ([e616bb0](https://github.com/PromptPal/web/commit/e616bb09509e9223481827702d52856acba1d774))
+* **ci:** fix ci ([db34fa9](https://github.com/PromptPal/web/commit/db34fa9bdebb7a500a95c62d3cc5a08bc102a271))
+* **ci:** fix schema repo destination ([e45ac1a](https://github.com/PromptPal/web/commit/e45ac1a3ae7305d6e4b3b9510b66e8b518600f06))
+* **graphql:** use dynmaic http endpoint ([11355b9](https://github.com/PromptPal/web/commit/11355b9e6b3fb8352844dead099688047ec3835d))
+* **http:** remove token and reload app if got 401 ([3c9e9bc](https://github.com/PromptPal/web/commit/3c9e9bcfc59c1585ace77aab93766299655567f6))
+
 ## [1.2.1](https://github.com/PromptPal/web/compare/v1.2.0...v1.2.1) (2023-07-20)
 
 
