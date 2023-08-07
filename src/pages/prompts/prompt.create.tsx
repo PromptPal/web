@@ -15,7 +15,7 @@ import { PromptVariable } from '../../service/types'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { graphql } from '../../gql'
 import { useQuery as useGraphQLQuery, useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
-import { PromptPayload, PromptRole, PublicLevel } from '../../gql/graphql'
+import { GetPromptForEditQuery, PromptPayload, PromptRole, PublicLevel } from '../../gql/graphql'
 
 const q = graphql(`
   query allProjectListLite($pagination: PaginationInput!) {
@@ -147,8 +147,11 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   } = useForm<mutatePromptType>({
     resolver: zodResolver(schema),
     async defaultValues() {
-      const data = await fetchPromptDetail()
-      const payload = data.data?.prompt
+      let payload: GetPromptForEditQuery['prompt'] | undefined
+      if (isUpdate) {
+        const data = await fetchPromptDetail()
+        payload = data.data?.prompt
+      }
       if (!payload) {
         return {
           projectId: pid,

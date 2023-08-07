@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
-import { Badge, Box, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch, Text, Tooltip } from '@chakra-ui/react'
+import { Link, useParams } from 'react-router-dom'
+import { Badge, Box, Button, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch, Text, Tooltip } from '@chakra-ui/react'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
@@ -106,9 +106,17 @@ function PromptPage() {
   return (
     <div>
       <Card>
-        <CardHeader display='flex' alignItems='flex-end' flexDirection='row'>
-          <Heading>{promptDetail?.name}</Heading>
-          <span className='ml-2 text-gray-400'>{promptDetail?.description}</span>
+        <CardHeader display='flex' alignItems='flex-end' flexDirection='row' justifyContent='space-between'>
+          <div className='flex items-end'>
+            <Heading>{promptDetail?.name}</Heading>
+            <span className='ml-2 text-gray-400'>{promptDetail?.description}</span>
+          </div>
+          <div className='flex gap-4 items-center'>
+            <Link className='daisyui-btn daisyui-btn-primary' to={`/prompts/${promptDetail?.id}/edit`}>
+              Edit
+            </Link>
+            <Button>How to use</Button>
+          </div>
         </CardHeader>
         <CardBody>
           <Stack flexDirection='row'>
