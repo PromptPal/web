@@ -12,7 +12,7 @@ import { ProjectPayload } from '../../gql/graphql'
 
 const schema = zod.object({
   name: zod.string().trim().max(100).min(2),
-  openaiToken: zod.string().trim().min(3).max(255),
+  openAIToken: zod.string().trim().min(3).max(255),
 })
 
 const m = graphql(`
@@ -34,6 +34,7 @@ function ProjectCreatePage() {
   const nav = useNavigate()
 
   const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
+    refetchQueries: ['projects'],
     onCompleted(data, clientOptions) {
       nav(`/projects/${data.createProject.id}`)
       qc.invalidateQueries(['projects'])
@@ -45,7 +46,7 @@ function ProjectCreatePage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProjectPayload & { openaiToken: string}>({
+  } = useForm<ProjectPayload & { openAIToken: string}>({
     resolver: zodResolver(schema),
   })
 
@@ -76,13 +77,13 @@ function ProjectCreatePage() {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.openaiToken}>
-          <FormLabel htmlFor='openaiToken'>
+        <FormControl isInvalid={!!errors.openAIToken}>
+          <FormLabel htmlFor='openAIToken'>
             OpenAI Token
           </FormLabel>
-          <Input {...register('openaiToken')} />
+          <Input {...register('openAIToken')} />
           <FormErrorMessage>
-            {errors.openaiToken && errors.openaiToken.message}
+            {errors.openAIToken && errors.openAIToken.message}
           </FormErrorMessage>
         </FormControl>
       </div>

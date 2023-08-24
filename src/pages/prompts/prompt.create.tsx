@@ -118,12 +118,14 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   })
 
   const [updatePrompt, { loading: updating }] = useGraphQLMutation(um, {
+    refetchQueries: ['fetchPrompts'],
     onCompleted() {
       toast.success('Prompt updated')
       navigate('/prompts')
     }
   })
   const [createPrompt, { loading: creating }] = useGraphQLMutation(cm, {
+    refetchQueries: ['fetchPrompts'],
     onCompleted() {
       toast.success('Prompt created')
       navigate('/prompts')
