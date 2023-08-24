@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/PromptPal/web/compare/v1.3.0...v1.4.0) (2023-08-24)
+
+
+### Features
+
+* **prompts:** update styles of prompt ([63ebfd9](https://github.com/PromptPal/web/commit/63ebfd9dd622cccc53aa662cdb5a15da4187267b))
+
+
+### Bug Fixes
+
+* **project:** fix project creation ([7abbdf1](https://github.com/PromptPal/web/commit/7abbdf166eb924fd92da75163a1b7d4f153ef91d))
+
 ## [1.3.0](https://github.com/PromptPal/web/compare/v1.2.1...v1.3.0) (2023-08-06)
 
 
