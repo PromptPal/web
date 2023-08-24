@@ -12,14 +12,14 @@ function Root() {
   const token = useAtomValue(tokenAtom)
   return (
     <div
-      className='container mx-auto flex flex-col h-full'
+      className='container mx-auto flex flex-col h-full min-h-screen'
       style={{
         '--menu-width': '150px',
         '--body-width': 'calc(100% - var(--menu-width))',
       } as any}
     >
       <Header />
-      <div className='flex h-full mt-4'>
+      <div className='flex h-full mt-4 flex-1'>
         <Menubar />
         <section className='py-2 flex-1' style={{ maxWidth: 'var(--body-width)' }}>
           {token ? (

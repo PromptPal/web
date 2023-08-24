@@ -57,6 +57,7 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
   })
 
   const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
+    refetchQueries: ['fetchProject'],
     onCompleted(data) {
       const res = data.createOpenToken
       reset()
