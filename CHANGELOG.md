@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/PromptPal/web/compare/v1.4.0...v1.4.1) (2023-08-24)
+
+
+### Bug Fixes
+
+* **app:** add basic build info and fix refetch logic after commit ([77219e8](https://github.com/PromptPal/web/commit/77219e8e79f03cfb31131cd5735b54e35726210a))
+
 ## [1.4.0](https://github.com/PromptPal/web/compare/v1.3.0...v1.4.0) (2023-08-24)
 
 
