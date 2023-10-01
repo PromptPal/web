@@ -1,11 +1,12 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Badge, Box, Button, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch, Text, Tooltip } from '@chakra-ui/react'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
 import { graphql } from '../../gql'
 import { FetchPromptDetailQuery } from '../../gql/graphql'
+import toast from 'react-hot-toast'
 
 const columnHelper = createColumnHelper<FetchPromptDetailQuery['prompt']['latestCalls']['edges'][0]>()
 
@@ -40,6 +41,18 @@ const columns = [
   })
 ]
 
+const pm = graphql(`
+  mutation togglePrompt($id: Int!, $payload: PromptPayload!) {
+    updatePrompt(id: $id, data: $payload) {
+      id
+      name
+      description
+      enabled
+      debug
+    }
+  }
+`)
+
 const q = graphql(`
   query fetchPromptDetail($id: Int!) {
     prompt(id: $id) {
@@ -53,6 +66,10 @@ const q = graphql(`
       publicLevel
       createdAt
       updatedAt
+      project {
+        id
+        name
+      }
       prompts {
         prompt
         role
@@ -103,6 +120,37 @@ function PromptPage() {
     return promptDetail.variables.map(x => x.name)
   }, [promptDetail])
 
+  const [doPromptUpdate, { loading: isPromptUpdating }] = useMutation(pm)
+
+  const onDebugChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!promptDetail) {
+      return
+    }
+    const n = event.target.checked
+    toast.promise(
+      doPromptUpdate({
+        variables: {
+          id: promptDetail?.id ?? 0,
+          payload: {
+            name: promptDetail.name,
+            description: promptDetail.description,
+            tokenCount: promptDetail.tokenCount,
+            publicLevel: promptDetail.publicLevel,
+            enabled: promptDetail.enabled,
+            projectId: promptDetail.project.id,
+            prompts: promptDetail.prompts,
+            variables: promptDetail.variables,
+            debug: n
+          }
+        }
+      }),
+      {
+        loading: 'Updating prompt',
+        success: 'Updated prompt',
+        error: 'Failed to update prompt'
+      })
+  }, [doPromptUpdate, promptDetail])
+
   return (
     <div>
       <Card>
@@ -132,10 +180,14 @@ function PromptPage() {
               Visibility: <Badge colorScheme='teal'>{promptDetail?.publicLevel}</Badge>
             </div>
             <div className='flex-1 text-center'>
-              Enabled: <Switch isReadOnly defaultChecked checked={promptDetail?.enabled} />
+              Enabled: <Switch isReadOnly isChecked={promptDetail?.enabled} />
             </div>
             <div className='flex-1 text-center' >
-              Debug: <Switch isReadOnly checked={promptDetail?.debug} />
+              Debug: <Switch
+                isReadOnly={isPromptUpdating}
+                isChecked={promptDetail?.debug}
+                onChange={onDebugChange}
+              />
             </div>
           </Stack>
 

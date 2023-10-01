@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, from } from '@apollo
 import { onError } from '@apollo/client/link/error'
 import { toast } from 'react-hot-toast'
 import { HTTP_ENDPOINT } from '../constants'
+import { HttpRequest } from './http'
 
 // Log any GraphQL errors or network error that occurred
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -17,21 +18,21 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const httpLink = new HttpLink({
   uri: `${HTTP_ENDPOINT}/api/v2/graphql`,
   credentials: 'include',
-  // fetch: HttpRequest
+  fetch: HttpRequest
 })
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-  let token = localStorage.getItem('pp:token')
-  if (token) {
-    token = token.replace(/"/g, '')
-  }
-  // add the authorization to the headers
-  operation.setContext(({ headers = {} }) => ({
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${token}`
-    }
-  }))
+  // let token = localStorage.getItem('pp:token')
+  // if (token) {
+  //   token = token.replace(/"/g, '')
+  // }
+  // // add the authorization to the headers
+  // operation.setContext(({ headers = {} }) => ({
+  //   headers: {
+  //     ...headers,
+  //     Authorization: `Bearer ${token}`
+  //   }
+  // }))
 
   return forward(operation)
 })

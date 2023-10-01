@@ -2,21 +2,30 @@ import React, { useCallback } from 'react'
 import MetaMaskSDK from '@metamask/sdk'
 import { useAtom } from 'jotai'
 import { tokenAtom } from '../../stats/profile'
-import { useMutation } from '@tanstack/react-query'
 import { doLogin } from '../../service/login'
 import { toast } from 'react-hot-toast'
+import { graphql } from '../../gql'
+import { useLazyQuery, useQuery } from '@apollo/client'
 
 const LoginWelcomeText = 'Welcome to the PromptPal~ \n It`s your nonce: '
+
+const q = graphql(`
+  query auth($auth: AuthInput!) {
+    auth(auth: $auth) {
+      token
+      user {
+        id
+        addr
+        name
+      }
+    }
+  }
+`)
 
 function LoginButton() {
   const [t, setToken] = useAtom(tokenAtom)
 
-  const { mutateAsync: doLoginMutation } = useMutation({
-    mutationKey: ['auth', 'login'],
-    mutationFn: (val: { address: string, signature: string, message: string }) => doLogin(val),
-    onSuccess(res) {
-      setToken(res.token)
-    }
+  const [doLoginMutation] = useLazyQuery(q, {
   })
 
   const web3Login = useCallback(async () => {
@@ -46,13 +55,27 @@ function LoginButton() {
     if (!signature) {
       throw new Error('signature not found')
     }
-    return doLoginMutation({ address, signature, message: msg })
+    const res = await doLoginMutation({
+      variables: {
+        auth: {
+          address,
+          signature,
+          message: msg
+        }
+      }
+    })
+    if (!res.data?.auth) {
+      throw new Error('token not found')
+    }
+    setToken(res.data.auth.token)
+    return res.data.auth
   }, [doLoginMutation])
 
   const doWeb3Login = useCallback(
     () => {
       return toast.promise(
-        web3Login(), {
+        web3Login(),
+        {
           loading: 'Logging in...',
           success: (data) => `Welcome ${data.user.addr}`,
           error: (err) => {

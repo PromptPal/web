@@ -24,7 +24,7 @@ export function HttpRequest<T, I = undefined>(
   options?: {
     ignoreErrors?: boolean
   }
-): Promise<T> {
+): Promise<Response> {
   const req = input.startsWith('http') ?
     input :
     `${HTTP_ENDPOINT}${input}`
@@ -41,17 +41,17 @@ export function HttpRequest<T, I = undefined>(
 
   data.headers = {
     ...data.headers,
-    'Content-Type': 'application/json',
+    // 'Content-Type': 'application/json',
     'Authorization': token ? `Bearer ${getToken()}` : ''
   }
   if (data.body) {
-    (data as any).body = JSON.stringify(data.body)
+    (data as any).body = data.body
   }
 
   return fetch(req, data as any)
     .then(res => {
       if (res.ok) {
-        return res.json()
+        return res
       } else {
         throw res
       }
