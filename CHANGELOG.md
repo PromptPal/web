@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/PromptPal/web/compare/v1.4.1...v1.4.2) (2023-10-01)
+
+
+### Bug Fixes
+
+* **app:** fix http request and make prompt be able to debug ([b035988](https://github.com/PromptPal/web/commit/b035988b12ecab33a531432fbcc99e0f24eb34bd))
+
 ## [1.4.1](https://github.com/PromptPal/web/compare/v1.4.0...v1.4.1) (2023-08-24)
 
 
