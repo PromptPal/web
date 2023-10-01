@@ -23,6 +23,24 @@ const columns = [
     header: 'Total Tokens',
     cell: (info) => info.getValue(),
   }),
+  columnHelper.accessor('payload', {
+    header: 'Payload',
+    cell: (info) => {
+      const val: Record<string, string> = JSON.parse(info.getValue())
+      const dataset = Object.keys(val).map((key) => {
+        return `${key}: ${val[key]}`
+      }).join('\n')
+
+      // TODO: compose the variables with the prompt
+      return (
+        <Tooltip label={<Text>{dataset}</Text>}>
+          <div className='line-clamp-4 whitespace-break-spaces'>
+            {dataset}
+          </div>
+        </Tooltip>
+      )
+    },
+  }),
   columnHelper.accessor('message', {
     header: 'Message',
     cell: (info) => (
@@ -84,6 +102,7 @@ const q = graphql(`
           id
           duration
           totalToken
+          payload
           message
           createdAt
         }
@@ -222,7 +241,11 @@ function PromptPage() {
 
       <Card>
         <CardHeader>
-          <Heading>Prompt Calls</Heading>
+          <Heading>Prompt Calls
+            <i className='ml-2 text-gray-400 text-sm'>
+              ({promptDetail?.latestCalls.count ?? 0})
+            </i>
+          </Heading>
         </CardHeader>
         <CardBody>
           <SimpleTable table={promptCallsTable} />
