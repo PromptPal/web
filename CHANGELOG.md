@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/PromptPal/web/compare/v1.4.2...v1.5.0) (2023-10-26)
+
+
+### Features
+
+* **promptcall:** add variables info when prompt debugging ([076d643](https://github.com/PromptPal/web/commit/076d64347849cbd9f27f071745fcf386ebac2b5d))
+
+
+### Bug Fixes
+
+* **app:** upgrade packages version and fix test prompt bug ([664f362](https://github.com/PromptPal/web/commit/664f362faec609ba7430347c5cabe9d8acf11b15))
+
 ## [1.4.2](https://github.com/PromptPal/web/compare/v1.4.1...v1.4.2) (2023-10-01)
 
 
