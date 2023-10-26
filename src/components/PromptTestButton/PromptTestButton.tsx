@@ -67,7 +67,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
     name: 'variables',
   })
 
-  const { mutateAsync: doTestPrompt, isLoading: testing } = useMutation({
+  const { mutateAsync: doTestPrompt, isPending: testing } = useMutation({
     mutationKey: ['prompt', 'test', data],
     mutationFn(variables: variableFormType) {
       const vs = omit(data, 'variables') as testPromptPayload
@@ -92,7 +92,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
   return (
     <>
       <Button
-        disabled={!testable}
+        isDisabled={!testable}
         isLoading={testing}
         loadingText='Testing'
         onClick={onOpen}

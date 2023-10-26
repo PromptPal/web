@@ -95,8 +95,12 @@ function ProjectEditPage() {
   const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
     onCompleted(data) {
       const res = data.updateProject
-      qc.invalidateQueries(['projects'])
-      qc.invalidateQueries(['project', res.id])
+      qc.invalidateQueries({
+        queryKey: ['projects']
+      })
+      qc.invalidateQueries({
+        queryKey: ['project', res.id]
+      })
       nav(`/projects/${res.id}`)
       toast.success('Project updated')
     },
@@ -292,7 +296,7 @@ function ProjectEditPage() {
               id='openAIMaxTokens'
               placeholder='OpenAI Max Tokens'
               {...register('openAIMaxTokens')}
-              value={maxTokens}
+              value={maxTokens ?? 0}
               onChange={sliderValue => setValue('openAIMaxTokens', ~~sliderValue)}
             >
               <NumberInputField />

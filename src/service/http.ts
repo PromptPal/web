@@ -18,6 +18,7 @@ export type HttpErrorResponse = {
   error: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function HttpRequest<T, I = undefined>(
   input: string,
   init: HttpRequestInit<I> = {} as HttpRequestInit<I>,
@@ -44,11 +45,11 @@ export function HttpRequest<T, I = undefined>(
     // 'Content-Type': 'application/json',
     'Authorization': token ? `Bearer ${getToken()}` : ''
   }
-  if (data.body) {
-    (data as any).body = data.body
+  if (data.body && typeof data.body !== 'string') {
+    (data as any).body = JSON.stringify(data.body)
   }
 
-  return fetch(req, data as any)
+  return fetch(req, data as never)
     .then(res => {
       if (res.ok) {
         return res
@@ -65,14 +66,13 @@ export function HttpRequest<T, I = undefined>(
       }
 
       // let errorContent: HttpErrorResponse | Error
-      let errorContent: any
+      let errorContent: HttpErrorResponse & { message?: string, name?: string }
       if ((err instanceof Response) && !err.bodyUsed) {
         errorContent = await err.json() as HttpErrorResponse
       } else {
-        errorContent = err as any
+        errorContent = err as unknown as HttpErrorResponse
       }
-
-      const isAbortError = (err as any).name === 'AbortError'
+      const isAbortError = err instanceof Error ? err.name === 'AbortError' : false
 
       if (!options?.ignoreErrors && !isAbortError) {
         toast.error(errorContent.message ?? errorContent.error ?? errorContent.toString())

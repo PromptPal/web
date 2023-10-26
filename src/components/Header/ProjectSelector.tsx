@@ -58,7 +58,10 @@ function ProjectSelector() {
       <Select
         size='xs'
         value={currentProject}
-        onChange={(e) => setCurrentProject(parseInt(e.target.value))}
+        onChange={(e) => {
+          const pjId = parseInt(e.target.value)
+          setCurrentProject(pjId)
+        }}
       >
         {projects.map((project) => (
           <option key={project.id} value={project.id}>{project.name}</option>

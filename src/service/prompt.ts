@@ -32,10 +32,13 @@ export type testPromptPayload = {
   variables: Record<string, string>
 }
 
-export function testPrompt(payload: testPromptPayload) {
+export function testPrompt(payload: testPromptPayload): Promise<testPromptResponse> {
   return HttpRequest<testPromptResponse, testPromptPayload>(
     `${API_PREFIX}/admin/prompts/test`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: payload
-    })
+    }).then(res => res.json())
 }

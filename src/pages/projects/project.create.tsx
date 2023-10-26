@@ -1,11 +1,10 @@
-import React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FormControl, FormLabel, Input, FormErrorMessage, Modal, ModalOverlay, ModalContent, ModalHeader, Button, Stack } from '@chakra-ui/react'
+import { FormControl, FormLabel, Input, FormErrorMessage, Button, Stack } from '@chakra-ui/react'
 import zod from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { useMutation as useGraphQLMutation } from '@apollo/client'
+import { useApolloClient, useMutation as useGraphQLMutation } from '@apollo/client'
 import { toast } from 'react-hot-toast'
 import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
@@ -33,11 +32,16 @@ const m = graphql(`
 function ProjectCreatePage() {
   const nav = useNavigate()
 
+  const c = useApolloClient()
+
   const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
     refetchQueries: ['projects'],
-    onCompleted(data, clientOptions) {
+    onCompleted(data) {
       nav(`/projects/${data.createProject.id}`)
-      qc.invalidateQueries(['projects'])
+      qc.invalidateQueries({
+        queryKey: ['projects']
+      })
+      c.resetStore()
       toast.success('Project created')
     },
   })
@@ -46,7 +50,7 @@ function ProjectCreatePage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProjectPayload & { openAIToken: string}>({
+  } = useForm<ProjectPayload & { openAIToken: string }>({
     resolver: zodResolver(schema),
   })
 

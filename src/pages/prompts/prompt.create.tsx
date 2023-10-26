@@ -5,7 +5,6 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
 import { Stack, FormControl, FormLabel, Input, FormErrorMessage, Divider, Textarea, Select, Button, Tooltip } from '@chakra-ui/react'
-import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
@@ -251,8 +250,6 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     })
     return () => subscribe.unsubscribe()
   }, [watch])
-
-  const qc = useQueryClient()
 
   const mutateAsync = useCallback((data: mutatePromptType) => {
     const payload = {
