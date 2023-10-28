@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/PromptPal/web/compare/v1.5.0...v1.5.1) (2023-10-28)
+
+
+### Bug Fixes
+
+* **openai:** support more models and make test accpet more context ([d4aa7f5](https://github.com/PromptPal/web/commit/d4aa7f55764733af73db880fc48f24c5a8670110))
+
 ## [1.5.0](https://github.com/PromptPal/web/compare/v1.4.2...v1.5.0) (2023-10-26)
 
 
