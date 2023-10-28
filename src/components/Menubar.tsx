@@ -4,9 +4,6 @@ import buildTime from '~build/time'
 import { lastTag } from '~build/info'
 import dayjs from 'dayjs'
 
-type MenubarProps = {
-}
-
 const menus = [
   {
     icon: <HomeIcon className='w-3 h-3' />,
@@ -25,7 +22,7 @@ const menus = [
   }
 ]
 
-function Menubar(props: MenubarProps) {
+function Menubar() {
   return (
     <nav className='py-2 w-40 hover:backdrop-blur-sm rounded-lg flex flex-col items-center justify-between'>
       <ul>

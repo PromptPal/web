@@ -1,4 +1,4 @@
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import { Button, FormControl, FormErrorMessage, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Textarea, useDisclosure } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 import omit from 'lodash/omit'
 import toast from 'react-hot-toast'
@@ -27,7 +27,7 @@ const variablesSchema = Zod.object({
   variables: Zod.array(Zod.object({
     name: Zod.string().min(2).max(32),
     type: Zod.string(),
-    value: Zod.string().min(1).max(128),
+    value: Zod.string().min(1),
   }))
 })
 
@@ -112,9 +112,9 @@ function PromptTestButton(props: PromptTestButtonProps) {
               {fields.map((field, index) => (
                 <FormControl key={field.id}>
                   <FormLabel htmlFor='name'>{field.name}</FormLabel>
-                  <Input
+                  <Textarea
                     id='name'
-                    type='text'
+                    cols={8}
                     placeholder='Value'
                     {...register(`variables.${index}.value`)}
                   />

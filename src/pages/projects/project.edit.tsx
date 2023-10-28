@@ -10,6 +10,7 @@ import { isEmpty, omitBy } from 'lodash'
 import { useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
 import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
+import { OpenAIModels } from '../../constants'
 
 type localUpdateProject = ProjectPayload
 
@@ -17,7 +18,7 @@ const schema: Zod.ZodType<localUpdateProject> = Zod.object({
   name: Zod.string().trim(),
   enabled: Zod.boolean(),
   openAIToken: Zod.string().trim().max(255).optional(),
-  openAIModel: Zod.enum(['gpt-3.5-turbo', 'gpt-4-0613']).optional(),
+  openAIModel: Zod.enum(OpenAIModels),
   openAIBaseURL: Zod.string().trim().max(255).optional(),
   openAITemperature: Zod.number().min(0).max(2).optional(),
   openAITopP: Zod.number().min(0).max(1),
@@ -187,8 +188,9 @@ function ProjectEditPage() {
               placeholder='OpenAI Model'
               {...register('openAIModel')}
             >
-              <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-              <option value="gpt4-0613">gpt4-0613</option>
+              {OpenAIModels.map(m => (
+                <option key={m} value={m}>{m}</option>
+              ))}
             </Select>
             <FormHelperText>
               Find more models
