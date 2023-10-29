@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import MetaMaskSDK from '@metamask/sdk'
 import { useAtom } from 'jotai'
 import { tokenAtom } from '../../stats/profile'
-import { doLogin } from '../../service/login'
 import { toast } from 'react-hot-toast'
 import { graphql } from '../../gql'
 import { useLazyQuery, useQuery } from '@apollo/client'
@@ -30,6 +29,7 @@ function LoginButton() {
 
   const web3Login = useCallback(async () => {
     const m = new MetaMaskSDK()
+    await m.init()
     const eth = m.getProvider()
     if (!eth) {
       throw new Error('MetaMask is not connected')
