@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.2](https://github.com/PromptPal/web/compare/v1.5.1...v1.5.2) (2023-10-29)
+
+
+### Bug Fixes
+
+* **app:** await metamask init ([5117fee](https://github.com/PromptPal/web/commit/5117fee8345d6ef947c9b5cdd3f22eb2f114c2a7))
+
 ## [1.5.1](https://github.com/PromptPal/web/compare/v1.5.0...v1.5.1) (2023-10-28)
 
 
