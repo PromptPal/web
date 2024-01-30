@@ -2,8 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { MetaMaskAvatar } from 'react-metamask-avatar'
 import { tokenAtom } from '../../stats/profile'
-import Dropdown from '../Dropdown'
-import { Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, useColorMode } from '@chakra-ui/react'
+import { Button, HoverCard, } from '@mantine/core'
 import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 
@@ -32,15 +31,15 @@ function Profile() {
 
   const myProfile = data?.user
 
-  const { colorMode } = useColorMode()
+  // const { colorMode } = useColorMode()
 
   if (!loggedIn) {
     return null
   }
 
   return (
-    <Popover trigger='hover'>
-      <PopoverTrigger>
+    <HoverCard>
+      <HoverCard.Target>
         <div className='flex items-center px-2 py-1 rounded'>
           <MetaMaskAvatar
             address={myProfile?.addr ?? ''}
@@ -50,24 +49,21 @@ function Profile() {
             {myProfile?.name ?? ''}
           </h6>
         </div>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverArrow />
-        <PopoverBody>
-          <Button
-            width='100%'
-            backgroundColor='red.400'
-            onClick={() => {
-              setToken(null)
-              qc.clear()
-              client.resetStore()
-              // TODO: redirect to overall page
-            }}>
-            Logout
-          </Button>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+      </HoverCard.Target>
+      <HoverCard.Dropdown>
+        <Button
+          fullWidth
+          bg={'red'}
+          onClick={() => {
+            setToken(null)
+            qc.clear()
+            client.resetStore()
+            // TODO: redirect to overall page
+          }}>
+          Logout
+        </Button>
+      </HoverCard.Dropdown>
+    </HoverCard>
   )
 }
 

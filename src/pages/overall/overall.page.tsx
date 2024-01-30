@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 import { projectAtom } from '../../stats/project'
-import { Box, Text, Button, Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
+import { Box, Text, Button, Card, Title } from '@mantine/core'
 import { Link } from 'react-router-dom'
 import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
@@ -27,7 +27,7 @@ const q = graphql(`
 function OverallPage() {
   const p = useAtomValue(projectAtom)
 
-  const {data} = useGraphQLQuery(q, {
+  const { data } = useGraphQLQuery(q, {
     variables: {
       id: p ?? -1
     },
@@ -39,18 +39,15 @@ function OverallPage() {
   if (!p) {
     return (
       <Box
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-        flexDirection='column'
+        className='flex items-center justify-center flex-col'
         mt={4}
       >
-        <Heading>😔</Heading>
-        <Heading>No existing project found</Heading>
+        <Title>😔</Title>
+        <Title>No existing project found</Title>
         <Button
-          as={Link}
+          component={Link}
           to='/projects/new'
-          colorScheme='teal'
+          color='teal'
           mt={4}
         >
           Create new project
@@ -61,15 +58,15 @@ function OverallPage() {
 
   return (
     <Card>
-      <CardHeader display='flex' flexDirection='row' alignItems='flex-end'>
-        <Heading size='lg'>
+      <div className='flex flex-row items-end'>
+        <Title size='lg'>
           {pj?.name}
-        </Heading>
-        <Text ml={2} color={'gray.500'} fontSize={'xs'}>recent 7 days</Text>
-      </CardHeader>
-      <CardBody>
+        </Title>
+        <Text ml={2} color={'gray.500'} size={'xs'}>recent 7 days</Text>
+      </div>
+      <div>
         <ProjectTopPromptsChart recentCounts={pj?.promptMetrics.recentCounts} />
-      </CardBody>
+      </div>
     </Card>
   )
 }

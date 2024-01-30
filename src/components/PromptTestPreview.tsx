@@ -1,6 +1,6 @@
 import React from 'react'
 import { testPromptResponse } from '../service/prompt'
-import { Box, Text, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Textarea, Input } from '@chakra-ui/react'
+import { Box, Text, Card, Stack, Textarea, Input, Title } from '@mantine/core'
 
 type PromptTestPreviewProps = {
   data: testPromptResponse | null
@@ -11,9 +11,9 @@ function PromptTestPreview(props: PromptTestPreviewProps) {
   if (!data) {
     return (
       <Box>
-        <Heading>
+        <Title>
           Empty
-        </Heading>
+        </Title>
         <Text>
           Please test the prompt first
         </Text>
@@ -21,61 +21,57 @@ function PromptTestPreview(props: PromptTestPreviewProps) {
     )
   }
   return (
-    <Stack divider={<StackDivider />} direction='row' width='100%'>
+    <Stack w={'100%'} className='flex-row'>
       <Card flex={1}>
-        <CardHeader>
-          <Heading size='md'>Response</Heading>
-        </CardHeader>
-        <CardBody>
-          <Stack divider={<StackDivider />} spacing={4}>
+        <Title size='md'>Response</Title>
+        <div>
+          <Stack gap={4}>
             {data.choices.map((choice, i) => (
-              <Stack key={i} direction='row'>
+              <Stack key={i} className='flex-row'>
                 <Input
-                  isDisabled
+                  disabled
                   w={'150px'}
                   value={choice.message.role}
                 />
                 <Textarea
                   value={choice.message.content}
-                  isDisabled
+                  disabled
                 />
               </Stack>
             ))}
           </Stack>
-        </CardBody>
+        </div>
       </Card>
       <Card flex={1}>
-        <CardHeader>
-          <Heading size='md'>Usage</Heading>
-        </CardHeader>
-        <CardBody>
-          <Stack divider={<StackDivider />} spacing={4}>
+        <Title size='md'>Usage</Title>
+        <div>
+          <Stack gap={4}>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Title size='xs' className='uppercase'>
                 Prompt Tokens
-              </Heading>
+              </Title>
               <Text>
                 Tokens: {data.usage.prompt_tokens}
               </Text>
             </Box>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Title size='xs' className='uppercase' >
                 Completion Tokens
-              </Heading>
+              </Title>
               <Text>
                 Tokens: {data.usage.completion_tokens}
               </Text>
             </Box>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Title size='xs' className='uppercase'>
                 Total Tokens
-              </Heading>
+              </Title>
               <Text>
                 Tokens: {data.usage.total_tokens}
               </Text>
             </Box>
           </Stack>
-        </CardBody>
+        </div>
       </Card>
     </Stack>
   )

@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { tokenAtom } from '../../stats/profile'
-import { Center, Divider, Select, Stack } from '@chakra-ui/react'
+import { Center, Divider, Select, Stack } from '@mantine/core'
 import { projectAtom } from '../../stats/project'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '@/gql'
@@ -51,15 +51,19 @@ function ProjectSelector() {
   }
 
   return (
-    <Stack flexDirection='row' alignItems='center' gap={1}>
-      <Center height={'20px'} ml={2} mr={1}>
+    <Stack dir='row' align='center' gap={1}>
+      <Center h={'20px'} ml={2} mr={1}>
         <Divider orientation='vertical' />
       </Center>
       <Select
         size='xs'
-        value={currentProject}
-        onChange={(e) => {
-          const pjId = parseInt(e.target.value)
+        value={currentProject?.toString()}
+        onChange={(val) => {
+          if (!val) {
+            setCurrentProject(null)
+            return
+          }
+          const pjId = parseInt(val)
           setCurrentProject(pjId)
         }}
       >

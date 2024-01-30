@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { Stack, Heading, Button, useDisclosure, Card, CardHeader, CardBody, Text } from '@chakra-ui/react'
+import { Stack, Heading, Button, useDisclosure, Card, CardHeader, CardBody, Text } from '@mantine/core'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'

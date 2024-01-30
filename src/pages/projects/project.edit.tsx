@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
-import { Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Slider, SliderFilledTrack, SliderMark, Text, SliderThumb, SliderTrack, Stack, Switch, Tooltip, Link as LinkUI, Box, Heading, Divider } from '@chakra-ui/react'
+import { Button, Stack, Switch, Tooltip, Box, Divider, Title, Input, Alert, Select } from '@mantine/core'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { isEmpty, omitBy } from 'lodash'
 import { useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
@@ -129,83 +129,54 @@ function ProjectEditPage() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box>
-        <Heading>Editing {pjName}</Heading>
+        <Title>Editing {pjName}</Title>
         <Divider my={6} />
       </Box>
       <div className='px-6'>
-        <Stack flexDir='row'>
-          <FormControl isInvalid={!!errors.name} className='flex justify-center items-center'>
-            <FormLabel htmlFor='name' className='w-40' >Name</FormLabel>
-            <Box className='w-full flex items-center'>
-              <Input
-                id='name'
-                disabled
-                placeholder='Name'
-                {...register('name')}
-              />
-              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-              <Stack flexDirection='row' alignItems='center' ml={4}>
-                <Switch
-                  id='enabled'
-                  type='checkbox'
-                  isChecked={isEnabled ?? true}
-                  {...register('enabled')}
-                />
-                <Text>{isEnabled ? 'Enabled' : 'Disabled'}</Text>
-              </Stack>
-            </Box>
-          </FormControl>
+        <Stack className='w-full flex-row' >
+          <Input.Wrapper label='Name' error={errors.name?.message}>
+            <Input {...register('name')} />
+          </Input.Wrapper>
+          <Switch {...register('enabled')} />
+
         </Stack>
 
-        <FormControl isInvalid={!!errors.openAIToken} className='mt-4 flex items-center w-full'>
-          <FormLabel htmlFor='openAIToken' className='w-40'>OpenAI Token</FormLabel>
-          <Box className='w-full '>
-            <Input
-              id='openAIToken'
-              placeholder='OpenAI Token'
-              className='w-full'
-              {...register('openAIToken')}
-            />
-            <FormErrorMessage>{errors.openAIToken?.message}</FormErrorMessage>
-            <FormHelperText>
-              Create your own API key
-              <LinkUI
-                href="https://platform.openai.com/account/api-keys"
-                className='ml-1'
-                isExternal
-              >
-                here <ExternalLinkIcon mx='2px' />
-              </LinkUI>
-            </FormHelperText>
-          </Box>
-        </FormControl>
-
-        <FormControl isInvalid={!!errors.openAIModel} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAIModel' className='w-40' >OpenAI Model</FormLabel>
-          <Box className='w-full'>
-            <Select
-              id='openAIModel'
-              placeholder='OpenAI Model'
-              {...register('openAIModel')}
+        <Input.Wrapper label='OpenAI Token' error={errors.openAIToken?.message}>
+          <Input {...register('openAIToken')} placeholder='OpenAI Token' />
+          <Alert>
+            Create your own API key
+            <Button
+              component='a'
+              href="https://platform.openai.com/account/api-keys"
+              className='ml-1'
+            // isExternal
             >
-              {OpenAIModels.map(m => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </Select>
-            <FormHelperText>
-              Find more models
-              <LinkUI
-                href="https://platform.openai.com/docs/models/overview"
-                className='ml-1'
-                isExternal
-              >
-                here <ExternalLinkIcon mx='2px' />
-              </LinkUI>
-            </FormHelperText>
-            {/* add help info */}
-            <FormErrorMessage>{errors.openAIModel?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
+              here <ExternalLinkIcon mx='2px' />
+            </Button>
+          </Alert>
+        </Input.Wrapper>
+
+
+        <Select
+          label='OpenAI Model'
+          data={OpenAIModels}
+          {...register('openAIModel')}
+        >
+        </Select>
+        <Alert>
+          Find more models
+          <Button
+            component='a'
+            href="https://platform.openai.com/docs/models/overview"
+            className='ml-1'
+          // isExternal
+          >
+            here <ExternalLinkIcon mx='2px' />
+          </Button>
+        </Alert>
+
+
+
         <FormControl isInvalid={!!errors.openAIBaseURL} className='mt-4 flex items-center'>
           <FormLabel htmlFor='openAIBaseURL' className=' w-40' >OpenAI Base URL</FormLabel>
           <Box className='w-full'>

@@ -1,4 +1,4 @@
-import { Badge } from '@chakra-ui/react'
+import { Badge } from '@mantine/core'
 import { Prompt } from '../../gql/graphql'
 import { Link } from 'react-router-dom'
 

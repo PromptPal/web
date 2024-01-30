@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { Badge, Button, Heading, Stack, Switch, Tooltip } from '@chakra-ui/react'
+import { Badge, Button, Heading, Stack, Switch, Tooltip } from '@mantine/core'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { useQuery as useGraphQLQuery } from '@apollo/client'

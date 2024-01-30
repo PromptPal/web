@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button, Heading, Link as LinkUI, Stack, StackDivider, Switch, Tooltip } from '@chakra-ui/react'
+import { Button, Heading, Link as LinkUI, Stack, StackDivider, Switch, Tooltip } from '@mantine/core'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { useMemo } from 'react'
 import { graphql } from '../../gql'

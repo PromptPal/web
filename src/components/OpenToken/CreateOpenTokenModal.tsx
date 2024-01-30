@@ -1,4 +1,4 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormErrorMessage, FormLabel, Input, Button, ModalFooter } from '@chakra-ui/react'
+import { Modal, FormControl, FormErrorMessage, FormLabel, Input, Button, ModalFooter, Title } from '@mantine/core'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import Zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,7 +9,7 @@ import { useMutation as useGraphQLMutation } from '@apollo/client'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useMemo } from 'react'
 import { graphql } from '../../gql'
-import { OpenToken, OpenTokenInput } from '../../gql/graphql'
+import { OpenTokenInput } from '../../gql/graphql'
 
 type CreateOpenTokenModalProps = {
   isOpen: boolean
@@ -83,62 +83,59 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
 
   return (
     <Modal
-      isOpen={isOpen} onClose={onClose} isCentered
+      opened={isOpen} onClose={onClose} centered
+      overlayProps={{ opacity: 0.5, blur: 8 }}
     >
-      <ModalOverlay backdropFilter='blur(5px)' />
-      <ModalContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Open Token</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl isInvalid={!!errors.name}>
-              <FormLabel htmlFor='name'>
-                Name
-              </FormLabel>
-              <Input {...register('name')} />
-              <FormErrorMessage>
-                {errors.name && errors.name.message}
-              </FormErrorMessage>
-            </FormControl>
-            <FormControl isInvalid={!!errors.description}>
-              <FormLabel htmlFor='description'>
-                Description
-              </FormLabel>
-              <Input {...register('description')} />
-              <FormErrorMessage>
-                {errors.description && errors.description.message}
-              </FormErrorMessage>
-            </FormControl>
-            <FormControl isInvalid={!!errors.ttl}>
-              <FormLabel htmlFor='ttl'>
-                TTL
-              </FormLabel>
-              <DatePicker
-                className='w-full'
-                {...register('ttl')}
-                selected={dayjs(n).add(ttlValue, 'seconds').toDate()}
-                onChange={(d) => {
-                  if (!d) {
-                    return
-                  }
-                  setValue('ttl', dayjs(d).diff(n, 'seconds'))
-                }}
-              />
-              <FormErrorMessage>
-                {errors.ttl && errors.ttl.message}
-              </FormErrorMessage>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button type='submit' isLoading={isLoading}>
-              Create
-            </Button>
-          </ModalFooter>
-        </form>
-      </ModalContent>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Title>Open Token</Title>
+        <div>
+          <FormControl isInvalid={!!errors.name}>
+            <FormLabel htmlFor='name'>
+              Name
+            </FormLabel>
+            <Input {...register('name')} />
+            <FormErrorMessage>
+              {errors.name && errors.name.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.description}>
+            <FormLabel htmlFor='description'>
+              Description
+            </FormLabel>
+            <Input {...register('description')} />
+            <FormErrorMessage>
+              {errors.description && errors.description.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.ttl}>
+            <FormLabel htmlFor='ttl'>
+              TTL
+            </FormLabel>
+            <DatePicker
+              className='w-full'
+              {...register('ttl')}
+              selected={dayjs(n).add(ttlValue, 'seconds').toDate()}
+              onChange={(d) => {
+                if (!d) {
+                  return
+                }
+                setValue('ttl', dayjs(d).diff(n, 'seconds'))
+              }}
+            />
+            <FormErrorMessage>
+              {errors.ttl && errors.ttl.message}
+            </FormErrorMessage>
+          </FormControl>
+        </div>
+        <ModalFooter>
+          <Button color='blue' mr={3} onClick={onClose}>
+            Close
+          </Button>
+          <Button type='submit' loading={isLoading}>
+            Create
+          </Button>
+        </ModalFooter>
+      </form>
     </Modal>
   )
 }
