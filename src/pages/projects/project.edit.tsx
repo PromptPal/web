@@ -225,7 +225,6 @@ function ProjectEditPage() {
           >OpenAI Temperature</FormLabel>
           <Box className='w-full'>
             <Slider
-              placeholder='OpenAI Temperature'
               {...register('openAITemperature')}
               min={0}
               max={2}
@@ -261,7 +260,6 @@ function ProjectEditPage() {
           <FormLabel htmlFor='openAITopP' className='w-40' >OpenAI TopP</FormLabel>
           <Box className='w-full'>
             <Slider
-              placeholder='OpenAI TopP'
               {...register('openAITopP')}
               min={0}
               max={1}
@@ -296,12 +294,13 @@ function ProjectEditPage() {
           <Box className='w-full'>
             <NumberInput
               id='openAIMaxTokens'
-              placeholder='OpenAI Max Tokens'
               {...register('openAIMaxTokens')}
               value={maxTokens ?? 0}
               onChange={sliderValue => setValue('openAIMaxTokens', ~~sliderValue)}
             >
-              <NumberInputField />
+              <NumberInputField
+                placeholder='OpenAI Max Tokens'
+              />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />

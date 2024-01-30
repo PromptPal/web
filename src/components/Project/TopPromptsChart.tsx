@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import echarts from '../../utils/echarts'
 import { GetOverallProjectDataQuery } from '../../gql/graphql'
+import { useColorMode } from '@chakra-ui/react'
 
 type ProjectTopPromptsChartProps = {
   recentCounts?: GetOverallProjectDataQuery['project']['promptMetrics']['recentCounts']
@@ -33,6 +33,8 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
     } as echarts.EChartsCoreOption
   }, [recentCounts])
 
+  const { colorMode } = useColorMode()
+
   return (
     <div>
       <ReactEChartsCore
@@ -40,7 +42,7 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
         option={echartDataOptions}
         notMerge={true}
         lazyUpdate={true}
-        theme={'dark'}
+        theme={colorMode === 'dark' ? 'dark' : 'light'}
       />
     </div>
   )

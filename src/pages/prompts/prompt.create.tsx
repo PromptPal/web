@@ -444,7 +444,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                         <option value='boolean'>Boolean</option>
                       </Select>
                       <FormErrorMessage>
-                        {errors.variables && errors.variables[index]?.type?.message}
+                        {errors.variables?.[index]?.type?.toString()}
                       </FormErrorMessage>
                     </FormControl>
 
