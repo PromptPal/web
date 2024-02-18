@@ -1,5 +1,6 @@
 import { HomeIcon, SparklesIcon, Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
+import { NavLink } from '@mantine/core'
 import buildTime from '~build/time'
 import { lastTag } from '~build/info'
 import dayjs from 'dayjs'
@@ -28,13 +29,18 @@ function Menubar() {
       <ul>
         {menus.map((menu) => (
           <li key={menu.text}>
-            <Link
+            <NavLink
+              component={Link}
               to={menu.link}
               className='flex items-center mb-2'
+              label={(
+                <div className='flex items-center'>
+                  {menu.icon}
+                  <span className='ml-2'>{menu.text}</span>
+                </div>
+              )}
             >
-              {menu.icon}
-              <span className='ml-2'>{menu.text}</span>
-            </Link>
+            </NavLink>
           </li>
         ))}
       </ul>

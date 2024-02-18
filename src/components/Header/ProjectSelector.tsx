@@ -46,22 +46,18 @@ function ProjectSelector() {
         offset: 0
       }
     },
-    skip: !logged
+    skip: !logged,
+    onCompleted(data) {
+      // init project if not set before
+      const projects = data?.projects.edges ?? []
+      const pjId = new URLSearchParams(location.search).get('pjId')
+      if (!pjId && projects.length > 0) {
+        navigateToProject(projects[0].id)
+      }
+    },
   })
 
   const projects = projectsData?.projects.edges ?? []
-
-  // init project if not set before
-  useEffect(() => {
-    if (projects.length === 0) {
-      return
-    }
-    if (currentProject) {
-      return
-    }
-
-    navigateToProject(projects[0].id)
-  }, [projects, currentProject])
 
   const onProjectChange = useCallback((val?: string | null) => {
     if (!val) {

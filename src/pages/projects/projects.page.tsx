@@ -43,7 +43,7 @@ function ProjectsPage() {
       </div>
       <div className='daisyui-divider' />
 
-      <div className='grid gap-4 grid-cols-3'>
+      <div className='grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'>
         {tableData.map((row) => (
           <ProjectCardItem key={row.id} project={row} />
         ))}

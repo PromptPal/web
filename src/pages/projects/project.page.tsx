@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Stack, Title, Button, Card } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import SimpleTable from '../../components/Table/SimpleTable'
@@ -81,29 +81,36 @@ function ProjectPage() {
   return (
     <Stack className='w-full'>
       <Card>
-        <Card.Section display='flex'>
-          <Title size='lg'>
-            {project?.name}
-          </Title>
-          <span color={'gray.500'}>recent 7 days</span>
-        </Card.Section>
-        <Card.Section>
+        <div className='flex justify-between items-center'>
+          <div className='ml-4 mt-4 flex'>
+            <Title size='lg'>
+              {project?.name}
+            </Title>
+            <span color={'gray.500'}>recent 7 days</span>
+          </div>
+          <Button component={Link} to={`/projects/${pid}/edit`}>
+            Edit
+          </Button>
+        </div>
+        <div>
           <ProjectTopPromptsChart recentCounts={project?.promptMetrics.recentCounts} />
-        </Card.Section>
+        </div>
       </Card>
 
       <Stack>
-        <Stack >
+        <div className='w-full flex justify-between items-center'>
           <Title order={4} size='xl'>
             Open Tokens
           </Title>
           <Button
+            variant='gradient'
+            gradient={{ from: 'blue', to: 'cyan' }}
             disabled={(openTokens?.length ?? 0) >= 20}
             onClick={onOpen}
           >
             New Token
           </Button>
-        </Stack>
+        </div>
         <SimpleTable table={table} />
       </Stack>
 
