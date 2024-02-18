@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { tokenAtom } from '../../stats/profile'
 import { Center, Divider, Select } from '@mantine/core'
 import { useQuery as useGraphQLQuery } from '@apollo/client'

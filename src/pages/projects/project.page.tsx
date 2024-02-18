@@ -88,7 +88,7 @@ function ProjectPage() {
             </Title>
             <span color={'gray.500'}>recent 7 days</span>
           </div>
-          <Button component={Link} to={`/projects/${pid}/edit`}>
+          <Button variant='filled' className='text-white' component={Link} to={`/projects/${pid}/edit`}>
             Edit
           </Button>
         </div>

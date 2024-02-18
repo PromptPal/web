@@ -1,10 +1,9 @@
-import { useAtomValue } from 'jotai'
-import { projectAtom } from '../../stats/project'
-import { Box, Text, Button, Card, Title } from '@mantine/core'
-import { Link } from 'react-router-dom'
+import { Box, Button, Card, Title } from '@mantine/core'
+import { Link, useLocation } from 'react-router-dom'
 import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
+import { useMemo } from 'react'
 
 const q = graphql(`
   query getOverallProjectData($id: Int!) {
@@ -25,7 +24,15 @@ const q = graphql(`
 `)
 
 function OverallPage() {
-  const p = useAtomValue(projectAtom)
+  const location = useLocation()
+
+  const p = useMemo(() => {
+    const sq = new URLSearchParams(location.search)
+    if (!sq.has('pjId')) {
+      return null
+    }
+    return parseInt(sq.get('pjId')!)
+  }, [location.search])
 
   const { data } = useGraphQLQuery(q, {
     variables: {
@@ -62,10 +69,12 @@ function OverallPage() {
         <Title size='lg'>
           {pj?.name}
         </Title>
-        <Text ml={2} color={'gray.500'} size={'xs'}>recent 7 days</Text>
+        <span className='ml-2 text-gray-500 text-xs'>recent 7 days</span>
       </div>
       <div>
-        <ProjectTopPromptsChart recentCounts={pj?.promptMetrics.recentCounts} />
+        <ProjectTopPromptsChart
+          recentCounts={pj?.promptMetrics.recentCounts}
+        />
       </div>
     </Card>
   )

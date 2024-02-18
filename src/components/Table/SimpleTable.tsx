@@ -4,6 +4,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 type SimpleTableProps<T> = {
   table: TableInstance<T>
+  loading?: boolean
 }
 
 function SimpleTable<T>(props: SimpleTableProps<T>) {

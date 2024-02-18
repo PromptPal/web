@@ -31,14 +31,12 @@ function Profile() {
 
   const myProfile = data?.user
 
-  // const { colorMode } = useColorMode()
-
   if (!loggedIn) {
     return null
   }
 
   return (
-    <HoverCard>
+    <HoverCard withArrow transitionProps={{ transition: 'pop' }}>
       <HoverCard.Target>
         <div className='flex items-center px-2 py-1 rounded'>
           <MetaMaskAvatar

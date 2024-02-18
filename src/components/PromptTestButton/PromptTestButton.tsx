@@ -104,39 +104,37 @@ function PromptTestButton(props: PromptTestButtonProps) {
         opened={isOpen}
         onClose={onClose}
         centered
-        overlayProps={{ opacity: 0.5, blur: 8 }}
+        title='Test Prompt'
+        overlayProps={{ backgroundOpacity: 0.5, blur: 8 }}
       >
-        <div>
-          <Title>Test the Prompt</Title>
-          <form>
-            <div>
-              {fields.map((field, index) => (
-                <Textarea
-                  label={field.name}
-                  id='name'
-                  key={field.id}
-                  cols={8}
-                  placeholder='Value'
-                  {...register(`variables.${index}.value`)}
-                  error={errors.variables?.[index]?.value?.message}
-                />
-              ))}
-            </div>
-            <div>
-              <Button mr={3} onClick={onClose}>
-                Close
-              </Button>
-              <Button
-                color='teal'
-                loading={testing}
-                disabled={(errors.variables?.length ?? 0) > 0}
-                onClick={handleSubmit(onSubmit)}
-              >
-                Test
-              </Button>
-            </div>
-          </form>
-        </div>
+        <form>
+          <div>
+            {fields.map((field, index) => (
+              <Textarea
+                label={field.name}
+                id='name'
+                key={field.id}
+                cols={8}
+                placeholder='Value'
+                {...register(`variables.${index}.value`)}
+                error={errors.variables?.[index]?.value?.message}
+              />
+            ))}
+          </div>
+          <div className='flex justify-end items-center gap-4 mt-4'>
+            <Button mr={3} onClick={onClose} variant='outline'>
+              Close
+            </Button>
+            <Button
+              color='teal'
+              loading={testing}
+              disabled={(errors.variables?.length ?? 0) > 0}
+              onClick={handleSubmit(onSubmit)}
+            >
+              Test
+            </Button>
+          </div>
+        </form>
       </Modal>
     </>
   )

@@ -11,6 +11,7 @@ import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
 import { OpenAIModels } from '../../constants'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 const schema = zod.object({
   name: zod.string().trim().max(100).min(2),
@@ -69,26 +70,31 @@ function ProjectCreatePage() {
           data
         }
       }))}
-      className="px-4 py-6 container mx-auto"
+      className="px-4 py-6 container mx-auto flex flex-col gap-4"
     >
       <h3 className="font-bold text-lg">New Project</h3>
       <div>
         <TextInput label="Name" className='mt-4' {...form.getInputProps('name')} />
 
         <Select
-          label={(
-            <div className='flex items-center'>
-              <span>
-                Model
-              </span>
-              <Tooltip label="The model to use. See https://platform.openai.com">
-                <InformationCircleIcon className="w-4 h-4 ml-1" />
-              </Tooltip>
+          label='GPT Model'
+          description={
+            <div>
+              Find more models
+              <a
+                href="https://platform.openai.com/docs/models/overview"
+                className='inline-flex ml-1'
+                target='_blank'
+                rel="noreferrer"
+              >
+                Here
+                <ExternalLinkIcon className='ml-1' />
+              </a>
             </div>
-          )}
+          }
+          data={OpenAIModels}
           {...form.getInputProps('openAIModel')}
         />
-
 
         <TextInput
           label={(
@@ -107,7 +113,7 @@ function ProjectCreatePage() {
 
         <TextInput label='OpenAI Token' className='mt-4' {...form.getInputProps('openAIToken')} />
       </div>
-      <Stack className='flex flex-row justify-end' mt={4}>
+      <div className='flex flex-row justify-end mt-4 gap-4'>
         <Button
           variant={'outline'}
           onClick={() => {
@@ -120,12 +126,11 @@ function ProjectCreatePage() {
         <Button
           loading={isLoading}
           color='teal'
-          // loadingText='Submitting'
           type='submit'
         >
           Create
         </Button>
-      </Stack>
+      </div>
     </form>
   )
 }

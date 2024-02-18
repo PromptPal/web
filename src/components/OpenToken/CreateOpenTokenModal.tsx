@@ -1,10 +1,10 @@
-import { Modal, TextInput, Button, Title } from '@mantine/core'
+import { Modal, TextInput, Button, Title, Input } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import Zod from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import toast from 'react-hot-toast'
 import dayjs from 'dayjs'
-import { DatePicker } from '@mantine/dates'
+import { DateInput } from '@mantine/dates'
 import { useMutation as useGraphQLMutation } from '@apollo/client'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useMemo } from 'react'
@@ -78,38 +78,37 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
   return (
     <Modal
       opened={isOpen} onClose={onClose} centered
-      overlayProps={{ opacity: 0.5, blur: 8 }}
+      title='Create Open Token'
+      overlayProps={{ backgroundOpacity: 0.5, blur: 8 }}
     >
       <form onSubmit={f.onSubmit(onSubmit)}>
-        <Title>Open Token</Title>
-        <div>
-          <TextInput
-            label='Name'
-            {...f.getInputProps('name')}
+        <TextInput
+          label='Name'
+          placeholder='name of this token'
+          description='just remind you what you are doing'
+          {...f.getInputProps('name')}
+        />
+        <TextInput
+          label='Description'
+          placeholder='Your purpose on this token'
+          {...f.getInputProps('description')}
+        />
+
+        <Input.Wrapper
+          label='Expire At'
+          {...f.getInputProps('ttl')}
+        >
+          <DateInput
+            placeholder='expire time of this token'
+            className='w-full'
           />
-          <TextInput label='Description' {...f.getInputProps('description')} />
+        </Input.Wrapper>
 
-          <div>
-            <span>Expire At:</span>
-            <DatePicker
-              className='w-full'
-              {...f.getInputProps('ttl')}
-            // selected={dayjs(n).add(ttlValue, 'seconds').toDate()}
-            // onChange={(d) => {
-            //   if (!d) {
-            //     return
-            //   }
-            //   setValue('ttl', dayjs(d).diff(n, 'seconds'))
-            // }}
-            />
-          </div>
-
-        </div>
-        <div>
-          <Button color='blue' mr={3} onClick={onClose}>
+        <div className='flex justify-end items-center gap-4 mt-4'>
+          <Button color='blue' mr={3} onClick={onClose} variant='outline'>
             Close
           </Button>
-          <Button type='submit' loading={isLoading}>
+          <Button type='submit' color='teal' loading={isLoading}>
             Create
           </Button>
         </div>

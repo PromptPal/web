@@ -6,9 +6,11 @@ import { tokenAtom } from '../stats/profile'
 import AuthorizePage from './authorize.page'
 import { Outlet } from 'react-router-dom'
 import { Suspense } from 'react'
+import { usePointerUpdate } from '../hooks/glow'
 
 function Root() {
   const token = useAtomValue(tokenAtom)
+  usePointerUpdate()
   return (
     <div
       className='container mx-auto flex flex-col h-full min-h-screen'
