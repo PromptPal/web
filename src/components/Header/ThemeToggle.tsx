@@ -1,19 +1,15 @@
-import { Icon, IconButton, useColorMode } from '@chakra-ui/react'
-import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
-import React from 'react'
+import { useMantineColorScheme, Select } from '@mantine/core'
 
-type ThemeToggleProps = {
-}
+function ThemeToggle() {
+  const { setColorScheme, colorScheme } = useMantineColorScheme()
 
-function ThemeToggle(props: ThemeToggleProps) {
-  const { colorMode, toggleColorMode } = useColorMode()
   return (
-    <IconButton
-      aria-label='Toggle color mode'
-      size='xs'
-      bg='transparent'
-      icon={colorMode === 'light' ? <SunIcon /> : <MoonIcon />}
-      onClick={toggleColorMode}
+    <Select
+      className='w-24'
+      value={colorScheme}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onChange={(value) => setColorScheme(value as any)}
+      data={['auto', 'light', 'dark']}
     />
   )
 }

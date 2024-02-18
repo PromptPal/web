@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import MetaMaskSDK from '@metamask/sdk'
 import { useAtom } from 'jotai'
 import { tokenAtom } from '../../stats/profile'
 import { toast } from 'react-hot-toast'
 import { graphql } from '../../gql'
-import { useLazyQuery, useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 
 const LoginWelcomeText = 'Welcome to the PromptPal~ \n It`s your nonce: '
 

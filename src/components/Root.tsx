@@ -5,17 +5,19 @@ import { useAtomValue } from 'jotai'
 import { tokenAtom } from '../stats/profile'
 import AuthorizePage from './authorize.page'
 import { Outlet } from 'react-router-dom'
-import { ColorModeScript } from '@chakra-ui/react'
 import { Suspense } from 'react'
+import { usePointerUpdate } from '../hooks/glow'
 
 function Root() {
   const token = useAtomValue(tokenAtom)
+  usePointerUpdate()
   return (
     <div
       className='container mx-auto flex flex-col h-full min-h-screen'
       style={{
         '--menu-width': '150px',
         '--body-width': 'calc(100% - var(--menu-width))',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any}
     >
       <Header />
@@ -31,7 +33,6 @@ function Root() {
           )}
         </section>
       </div>
-      <ColorModeScript initialColorMode='dark' />
       <Toaster />
     </div>
   )

@@ -46,6 +46,7 @@ export function HttpRequest<T, I = undefined>(
     'Authorization': token ? `Bearer ${getToken()}` : ''
   }
   if (data.body && typeof data.body !== 'string') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (data as any).body = JSON.stringify(data.body)
   }
 

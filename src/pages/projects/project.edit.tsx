@@ -1,13 +1,18 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { zodResolver } from 'mantine-form-zod-resolver'
+import { useForm } from '@mantine/form'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
-import { Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Slider, SliderFilledTrack, SliderMark, Text, SliderThumb, SliderTrack, Stack, Switch, Tooltip, Link as LinkUI, Box, Heading, Divider } from '@chakra-ui/react'
+import {
+  Fieldset,
+  Tooltip,
+  Input,
+  TextInput, NumberInput, Slider, Button, Stack, Switch, Box, Divider, Title, Alert, Select
+} from '@mantine/core'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { isEmpty, omitBy } from 'lodash'
-import { useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
+import { useMutation as useGraphQLMutation, useQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
 import { OpenAIModels } from '../../constants'
@@ -60,27 +65,20 @@ function ProjectEditPage() {
   const pidStr = useParams().id ?? '0'
   const pid = ~~pidStr
 
-  const [refetch] = useGraphQLLazyQuery(q, {
+  const f = useForm<localUpdateProject>({
+    validate: zodResolver(schema),
+  })
+
+  useQuery(q, {
     variables: {
       id: pid
     },
-  })
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<localUpdateProject>({
-    resolver: zodResolver(schema),
-    async defaultValues() {
-      const data = await refetch()
-      const payload = data.data?.project
+    onCompleted(data) {
+      const payload = data.project
       if (!payload) {
-        return {}
+        return
       }
-      return {
+      f.setValues({
         name: payload.name,
         enabled: payload.enabled,
         openAIToken: undefined,
@@ -89,7 +87,7 @@ function ProjectEditPage() {
         openAITemperature: payload.openAITemperature,
         openAITopP: payload.openAITopP,
         openAIMaxTokens: payload.openAIMaxTokens,
-      }
+      })
     },
   })
   const qc = useQueryClient()
@@ -107,7 +105,7 @@ function ProjectEditPage() {
     },
   })
 
-  const onSubmit: SubmitHandler<ProjectPayload> = (data) => {
+  const onSubmit = (data: ProjectPayload) => {
     const args: ProjectPayload = omitBy(data, isEmpty)
     args.openAIMaxTokens = data.openAIMaxTokens
     return mutateAsync({
@@ -118,219 +116,131 @@ function ProjectEditPage() {
     })
   }
 
-  const temperature = watch('openAITemperature')
-  const topP = watch('openAITopP')
-  const maxTokens = watch('openAIMaxTokens')
-  const pjName = watch('name')
-  const isEnabled = watch('enabled')
+  const pjName = f.values.name
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={f.onSubmit(onSubmit)}
     >
       <Box>
-        <Heading>Editing {pjName}</Heading>
+        <div className='w-full flex justify-between items-center'>
+          <Title>Editing {pjName}</Title>
+          <Tooltip label='Enable/Disable Project' withArrow refProp='rootRef'>
+            <Switch
+              onLabel="Enabled"
+              offLabel="Disabled"
+              size='lg'
+              {...f.getInputProps('enabled')}
+            />
+          </Tooltip>
+        </div>
         <Divider my={6} />
       </Box>
-      <div className='px-6'>
-        <Stack flexDir='row'>
-          <FormControl isInvalid={!!errors.name} className='flex justify-center items-center'>
-            <FormLabel htmlFor='name' className='w-40' >Name</FormLabel>
-            <Box className='w-full flex items-center'>
-              <Input
-                id='name'
-                disabled
-                placeholder='Name'
-                {...register('name')}
-              />
-              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-              <Stack flexDirection='row' alignItems='center' ml={4}>
-                <Switch
-                  id='enabled'
-                  type='checkbox'
-                  isChecked={isEnabled ?? true}
-                  {...register('enabled')}
-                />
-                <Text>{isEnabled ? 'Enabled' : 'Disabled'}</Text>
-              </Stack>
-            </Box>
-          </FormControl>
+      <div className='container flex flex-col gap-4'>
+        <Stack className='w-full flex-row items-center' >
+          <TextInput
+            disabled
+            label='Project Name'
+            className='w-full'
+            placeholder='Project Name'
+            {...f.getInputProps('name')}
+          />
         </Stack>
 
-        <FormControl isInvalid={!!errors.openAIToken} className='mt-4 flex items-center w-full'>
-          <FormLabel htmlFor='openAIToken' className='w-40'>OpenAI Token</FormLabel>
-          <Box className='w-full '>
-            <Input
-              id='openAIToken'
-              placeholder='OpenAI Token'
-              className='w-full'
-              {...register('openAIToken')}
-            />
-            <FormErrorMessage>{errors.openAIToken?.message}</FormErrorMessage>
-            <FormHelperText>
+        <TextInput
+          label={'OpenAI Token'}
+          description={
+            <div>
               Create your own API key
-              <LinkUI
+              <a
                 href="https://platform.openai.com/account/api-keys"
-                className='ml-1'
-                isExternal
+                target='_blank'
+                className='inline-flex ml-1' rel="noreferrer"
               >
-                here <ExternalLinkIcon mx='2px' />
-              </LinkUI>
-            </FormHelperText>
-          </Box>
-        </FormControl>
+                Here
+                <ExternalLinkIcon className='ml-1' />
+              </a>
+            </div>
 
-        <FormControl isInvalid={!!errors.openAIModel} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAIModel' className='w-40' >OpenAI Model</FormLabel>
-          <Box className='w-full'>
-            <Select
-              id='openAIModel'
-              placeholder='OpenAI Model'
-              {...register('openAIModel')}
-            >
-              {OpenAIModels.map(m => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </Select>
-            <FormHelperText>
+          }
+          placeholder='OpenAI Token'
+          {...f.getInputProps('openAIToken')}
+        />
+
+        <Select
+          label={'GPT Model'}
+          description={
+            <div>
               Find more models
-              <LinkUI
+              <a
                 href="https://platform.openai.com/docs/models/overview"
-                className='ml-1'
-                isExternal
+                className='inline-flex ml-1'
+                target='_blank'
+                rel="noreferrer"
               >
-                here <ExternalLinkIcon mx='2px' />
-              </LinkUI>
-            </FormHelperText>
-            {/* add help info */}
-            <FormErrorMessage>{errors.openAIModel?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
-        <FormControl isInvalid={!!errors.openAIBaseURL} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAIBaseURL' className=' w-40' >OpenAI Base URL</FormLabel>
-          <Box className='w-full'>
-            <Input
-              id='openAIBaseURL'
-              placeholder='OpenAI Base URL'
-              {...register('openAIBaseURL')}
-            />
-            <FormErrorMessage>{errors.openAIBaseURL?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
+                Here
+                <ExternalLinkIcon className='ml-1' />
+              </a>
+            </div>
+          }
+          data={OpenAIModels}
+          {...f.getInputProps('openAIModel')}
+        >
+        </Select>
 
-        <FormControl isInvalid={!!errors.openAITemperature} className='mt-4 flex items-center'>
-          <FormLabel
-            htmlFor='openAITemperature'
-            className='w-40'
-          >OpenAI Temperature</FormLabel>
-          <Box className='w-full'>
+        <TextInput
+          label='OpenAI Base URL'
+          labelProps={{
+            className: 'pb-4'
+          }}
+          placeholder='OpenAI Base URL'
+          {...f.getInputProps('openAIBaseURL')}
+        />
+
+        <Fieldset legend='OpenAI Settings'>
+          <Input.Wrapper label='OpenAI Temperature' className='w-full' {...f.getInputProps('openAITemperature')}>
             <Slider
-              {...register('openAITemperature')}
+              {...f.getInputProps('openAITemperature')}
               min={0}
               max={2}
-              colorScheme='teal'
               step={0.1}
-              onChange={sliderValue => setValue('openAITemperature', sliderValue)}
-            // onMouseEnter={() => setShowTooltip(true)}
-            // onMouseLeave={() => setShowTooltip(false)}
-            >
-              <SliderMark value={1} mt='1' ml='-2.5' fontSize='sm'>
-                1
-              </SliderMark>
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <Tooltip
-                hasArrow
-                bg='teal.500'
-                color='white'
-                placement='top'
-                // isOpen={showTooltip}
-                label={`${temperature}`}
-              >
-                <SliderThumb />
-              </Tooltip>
-            </Slider>
+            ></Slider>
+          </Input.Wrapper>
 
-            <FormErrorMessage>{errors.openAITemperature?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
-
-        <FormControl isInvalid={!!errors.openAITopP} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAITopP' className='w-40' >OpenAI TopP</FormLabel>
-          <Box className='w-full'>
+          <Input.Wrapper label='OpenAI TopP' className='w-full' {...f.getInputProps('openAITopP')}>
             <Slider
-              {...register('openAITopP')}
+              {...f.getInputProps('openAITopP')}
               min={0}
               max={1}
               step={0.1}
-              colorScheme='teal'
-              onChange={sliderValue => setValue('openAITopP', sliderValue)}
-            // onMouseEnter={() => setShowTooltip(true)}
-            // onMouseLeave={() => setShowTooltip(false)}
-            >
-              <SliderMark value={1} mt='1' ml='-2.5' fontSize='sm'>
-                1
-              </SliderMark>
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <Tooltip
-                hasArrow
-                bg='teal.500'
-                color='white'
-                placement='top'
-                // isOpen={showTooltip}
-                label={`${topP}`}
-              >
-                <SliderThumb />
-              </Tooltip>
-            </Slider>
-          </Box>
-        </FormControl>
+            ></Slider>
+          </Input.Wrapper>
 
-        <FormControl isInvalid={!!errors.openAIMaxTokens} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAIMaxTokens' className='w-40'>OpenAI Max Tokens</FormLabel>
-          <Box className='w-full'>
-            <NumberInput
-              id='openAIMaxTokens'
-              {...register('openAIMaxTokens')}
-              value={maxTokens ?? 0}
-              onChange={sliderValue => setValue('openAIMaxTokens', ~~sliderValue)}
-            >
-              <NumberInputField
-                placeholder='OpenAI Max Tokens'
-              />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <FormErrorMessage>{errors.openAIMaxTokens?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
+          <NumberInput label='OpenAI Max Tokens' {...f.getInputProps('openAIMaxTokens')} />
+        </Fieldset>
 
       </div>
-      <Box mr={6}>
-        <Stack direction='row' justifyContent='flex-end' mt={4}>
-          <Button
-            onClick={() => {
-              nav(`/projects/${pid}`)
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            colorScheme='teal'
-            disabled={Object.keys(errors).length > 0}
-            isLoading={isLoading}
-            loadingText='Updating'
-            type='submit'
-          >
-            Update
-          </Button>
-        </Stack>
-      </Box>
+      <div className='flex w-full items-center justify-end gap-4 mt-8'>
+        <Button
+          variant='outline'
+          onClick={() => {
+            nav(`/projects/${pid}`)
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant='gradient'
+          gradient={{ from: 'indigo', to: 'cyan' }}
+          // variant='filled'
+          // color='blue'
+          disabled={!f.isValid()}
+          loading={isLoading}
+          type='submit'
+        >
+          Update
+        </Button>
+      </div>
     </form>
   )
 }

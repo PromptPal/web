@@ -1,6 +1,7 @@
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormControl, FormLabel, Input, FormErrorMessage, Button, Stack, Select, Tooltip } from '@chakra-ui/react'
+// import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm } from '@mantine/form'
+import { zodResolver } from 'mantine-form-zod-resolver'
+import { Button, Stack, Select, Tooltip, TextInput } from '@mantine/core'
 import zod from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
@@ -10,6 +11,7 @@ import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
 import { OpenAIModels } from '../../constants'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 const schema = zod.object({
   name: zod.string().trim().max(100).min(2),
@@ -50,68 +52,52 @@ function ProjectCreatePage() {
     },
   })
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProjectPayload & { openAIToken: string }>({
-    resolver: zodResolver(schema),
-    defaultValues: {
+  const form = useForm<ProjectPayload & { openAIToken: string }>({
+    validate: zodResolver(schema),
+    initialValues: {
       openAIModel: 'gpt-3.5-turbo',
       openAIBaseURL: 'https://api.openai.com/v1',
+      openAIToken: '',
     }
   })
 
   const qc = useQueryClient()
 
-  const onSubmit: SubmitHandler<ProjectPayload> = (data) => {
-    return mutateAsync({
-      variables: {
-        data,
-      }
-    })
-  }
-
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="px-4 py-6 container mx-auto"
+      onSubmit={form.onSubmit((data) => mutateAsync({
+        variables: {
+          data
+        }
+      }))}
+      className="px-4 py-6 container mx-auto flex flex-col gap-4"
     >
       <h3 className="font-bold text-lg">New Project</h3>
       <div>
-        <FormControl isInvalid={!!errors.name} className='mt-4'>
-          <FormLabel htmlFor='name'>
-            Project Name
-          </FormLabel>
-          <Input {...register('name')} />
-          <FormErrorMessage>
-            {errors.name?.message}
-          </FormErrorMessage>
-        </FormControl>
+        <TextInput label="Name" className='mt-4' {...form.getInputProps('name')} />
 
-        <FormControl isInvalid={!!errors.openAIModel} className='mt-4'>
-          <FormLabel htmlFor='openAIModel'>
-            <div className='flex items-center'>
-              <span>
-                Model
-              </span>
-              <Tooltip label="The model to use. See https://platform.openai.com">
-                <InformationCircleIcon className="w-4 h-4 ml-1" />
-              </Tooltip>
+        <Select
+          label='GPT Model'
+          description={
+            <div>
+              Find more models
+              <a
+                href="https://platform.openai.com/docs/models/overview"
+                className='inline-flex ml-1'
+                target='_blank'
+                rel="noreferrer"
+              >
+                Here
+                <ExternalLinkIcon className='ml-1' />
+              </a>
             </div>
-          </FormLabel>
-          <Select {...register('openAIModel')}>
-            {OpenAIModels.map(m => (
-              <option key={m} value={m}>{m}</option>
-            ))}
-          </Select>
-          <FormErrorMessage>
-            {errors.openAIModel?.message}
-          </FormErrorMessage>
-        </FormControl>
+          }
+          data={OpenAIModels}
+          {...form.getInputProps('openAIModel')}
+        />
 
-        <FormControl isInvalid={!!errors.openAIBaseURL} className='mt-4'>
-          <FormLabel htmlFor='openAIBaseURL'>
+        <TextInput
+          label={(
             <div className='flex items-center'>
               <span>
                 Base URL
@@ -120,24 +106,14 @@ function ProjectCreatePage() {
                 <InformationCircleIcon className="w-4 h-4 ml-1" />
               </Tooltip>
             </div>
-          </FormLabel>
-          <Input {...register('openAIBaseURL')} />
-          <FormErrorMessage>
-            {errors.openAIBaseURL?.message}
-          </FormErrorMessage>
-        </FormControl>
+          )}
+          className='mt-4'
+          {...form.getInputProps('openAIBaseURL')}
+        />
 
-        <FormControl isInvalid={!!errors.openAIToken} className='mt-4'>
-          <FormLabel htmlFor='openAIToken'>
-            OpenAI Token
-          </FormLabel>
-          <Input {...register('openAIToken')} />
-          <FormErrorMessage>
-            {errors.openAIToken && errors.openAIToken.message}
-          </FormErrorMessage>
-        </FormControl>
+        <TextInput label='OpenAI Token' className='mt-4' {...form.getInputProps('openAIToken')} />
       </div>
-      <Stack flexDirection={'row'} justifyContent={'flex-end'} mt={4}>
+      <div className='flex flex-row justify-end mt-4 gap-4'>
         <Button
           variant={'outline'}
           onClick={() => {
@@ -148,14 +124,13 @@ function ProjectCreatePage() {
           Cancel
         </Button>
         <Button
-          isLoading={isLoading}
-          colorScheme='teal'
-          loadingText='Submitting'
+          loading={isLoading}
+          color='teal'
           type='submit'
         >
           Create
         </Button>
-      </Stack>
+      </div>
     </form>
   )
 }

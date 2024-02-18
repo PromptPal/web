@@ -1,5 +1,6 @@
-import { useParams } from 'react-router-dom'
-import { Stack, Heading, Button, useDisclosure, Card, CardHeader, CardBody, Text } from '@chakra-ui/react'
+import { Link, useParams } from 'react-router-dom'
+import { Stack, Title, Button, Card } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
@@ -73,35 +74,43 @@ function ProjectPage() {
     columns,
   })
 
-  const { onClose, onOpen, isOpen } = useDisclosure()
+  const [isOpen, {
+    close: onClose, open: onOpen,
+  }] = useDisclosure()
 
   return (
     <Stack className='w-full'>
       <Card>
-        <CardHeader display='flex' flexDirection='row' alignItems='flex-end'>
-          <Heading size='lg'>
-            {project?.name}
-          </Heading>
-          <Text ml={2} color={'gray.500'} fontSize={'xs'}>recent 7 days</Text>
-        </CardHeader>
-        <CardBody>
+        <div className='flex justify-between items-center'>
+          <div className='ml-4 mt-4 flex'>
+            <Title size='lg'>
+              {project?.name}
+            </Title>
+            <span color={'gray.500'}>recent 7 days</span>
+          </div>
+          <Button variant='filled' className='text-white' component={Link} to={`/projects/${pid}/edit`}>
+            Edit
+          </Button>
+        </div>
+        <div>
           <ProjectTopPromptsChart recentCounts={project?.promptMetrics.recentCounts} />
-        </CardBody>
+        </div>
       </Card>
 
       <Stack>
-        <Stack flexDirection='row' justifyContent='space-between'>
-          <Heading variant='h4' size='xl'>
+        <div className='w-full flex justify-between items-center'>
+          <Title order={4} size='xl'>
             Open Tokens
-          </Heading>
+          </Title>
           <Button
-            colorScheme='teal'
-            isDisabled={(openTokens?.length ?? 0) >= 20}
+            variant='gradient'
+            gradient={{ from: 'blue', to: 'cyan' }}
+            disabled={(openTokens?.length ?? 0) >= 20}
             onClick={onOpen}
           >
             New Token
           </Button>
-        </Stack>
+        </div>
         <SimpleTable table={table} />
       </Stack>
 

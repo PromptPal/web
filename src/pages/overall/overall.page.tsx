@@ -1,10 +1,9 @@
-import { useAtomValue } from 'jotai'
-import { projectAtom } from '../../stats/project'
-import { Box, Text, Button, Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Box, Button, Card, Title } from '@mantine/core'
+import { Link, useLocation } from 'react-router-dom'
 import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
+import { useMemo } from 'react'
 
 const q = graphql(`
   query getOverallProjectData($id: Int!) {
@@ -25,9 +24,17 @@ const q = graphql(`
 `)
 
 function OverallPage() {
-  const p = useAtomValue(projectAtom)
+  const location = useLocation()
 
-  const {data} = useGraphQLQuery(q, {
+  const p = useMemo(() => {
+    const sq = new URLSearchParams(location.search)
+    if (!sq.has('pjId')) {
+      return null
+    }
+    return parseInt(sq.get('pjId')!)
+  }, [location.search])
+
+  const { data } = useGraphQLQuery(q, {
     variables: {
       id: p ?? -1
     },
@@ -39,18 +46,15 @@ function OverallPage() {
   if (!p) {
     return (
       <Box
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-        flexDirection='column'
+        className='flex items-center justify-center flex-col'
         mt={4}
       >
-        <Heading>😔</Heading>
-        <Heading>No existing project found</Heading>
+        <Title>😔</Title>
+        <Title>No existing project found</Title>
         <Button
-          as={Link}
+          component={Link}
           to='/projects/new'
-          colorScheme='teal'
+          color='teal'
           mt={4}
         >
           Create new project
@@ -61,15 +65,17 @@ function OverallPage() {
 
   return (
     <Card>
-      <CardHeader display='flex' flexDirection='row' alignItems='flex-end'>
-        <Heading size='lg'>
+      <div className='flex flex-row items-end'>
+        <Title size='lg'>
           {pj?.name}
-        </Heading>
-        <Text ml={2} color={'gray.500'} fontSize={'xs'}>recent 7 days</Text>
-      </CardHeader>
-      <CardBody>
-        <ProjectTopPromptsChart recentCounts={pj?.promptMetrics.recentCounts} />
-      </CardBody>
+        </Title>
+        <span className='ml-2 text-gray-500 text-xs'>recent 7 days</span>
+      </div>
+      <div>
+        <ProjectTopPromptsChart
+          recentCounts={pj?.promptMetrics.recentCounts}
+        />
+      </div>
     </Card>
   )
 }

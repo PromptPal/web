@@ -1,20 +1,21 @@
 import Zod from 'zod'
 import { AddIcon } from '@chakra-ui/icons'
 import { testPromptResponse } from '../../service/prompt'
-import { useFieldArray, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from '@mantine/form'
+import { zodResolver } from 'mantine-form-zod-resolver'
 import toast from 'react-hot-toast'
-import { Stack, FormControl, FormLabel, Input, FormErrorMessage, Divider, Textarea, Select, Button, Tooltip } from '@chakra-ui/react'
+import { Stack, TextInput, Divider, Textarea, Select, Button, Tooltip } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PromptTestPreview from '../../components/PromptTestPreview'
 import { PromptVariable } from '../../service/types'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { graphql } from '../../gql'
-import { useQuery as useGraphQLQuery, useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
-import { GetPromptForEditQuery, PromptPayload, PromptRole, PublicLevel } from '../../gql/graphql'
+import { useQuery as useGraphQLQuery, useMutation as useGraphQLMutation, useQuery, useApolloClient } from '@apollo/client'
+import { PromptPayload, PromptRole, PublicLevel } from '../../gql/graphql'
+import { useProjectId } from '../../hooks/route'
 
 const q = graphql(`
   query allProjectListLite($pagination: PaginationInput!) {
@@ -79,13 +80,14 @@ function findPlaceholderValues(sentence: string): string[] {
   return values
 }
 
-type mutatePromptType = Omit<PromptPayload, 'description' | 'tokenCount'> & {
+type mutatePromptType = Omit<PromptPayload, 'projectId' | 'description' | 'tokenCount'> & {
+  projectId?: string
   description?: string
   tokenCount?: number
 }
 
 const schema: Zod.ZodType<mutatePromptType> = Zod.object({
-  projectId: Zod.number(),
+  projectId: Zod.string(),
   name: Zod.string(),
   description: Zod.string(),
   tokenCount: Zod.number(),
@@ -109,68 +111,65 @@ type PromptCreatePageProps = {
 function PromptCreatePage(props: PromptCreatePageProps) {
   const { isUpdate } = props
   const id = isUpdate ? ~~(useParams().id ?? '0') : 0
+  const pjId = useProjectId()
 
-  const [fetchPromptDetail] = useGraphQLLazyQuery(qd, {
-    variables: {
-      id,
-    },
-  })
+  const ac = useApolloClient()
 
   const [updatePrompt, { loading: updating }] = useGraphQLMutation(um, {
     refetchQueries: ['fetchPrompts'],
     onCompleted() {
       toast.success('Prompt updated')
-      navigate('/prompts')
+      ac.resetStore()
+      navigate('/prompts?pjId=' + pjId)
     }
   })
   const [createPrompt, { loading: creating }] = useGraphQLMutation(cm, {
     refetchQueries: ['fetchPrompts'],
     onCompleted() {
       toast.success('Prompt created')
-      navigate('/prompts')
+      ac.resetStore()
+      navigate('/prompts?pjId=' + pjId)
     }
   })
 
-  const [sp] = useSearchParams()
-  const pid = ~~(sp.get('pid') ?? '0')
+  const pid = useProjectId()
   const navigate = useNavigate()
 
   const [testResult, setTestResult] = useState<testPromptResponse | null>(null)
 
-  const {
-    register,
-    watch,
-    control,
-    handleSubmit,
-    getValues,
-    setValue,
-    formState: { errors },
-  } = useForm<mutatePromptType>({
-    resolver: zodResolver(schema),
-    async defaultValues() {
-      let payload: GetPromptForEditQuery['prompt'] | undefined
-      if (isUpdate) {
-        const data = await fetchPromptDetail()
-        payload = data.data?.prompt
-      }
+  const f = useForm<mutatePromptType>({
+    validate: zodResolver(schema),
+    initialValues: {
+      projectId: pid?.toString(),
+      name: '',
+      description: undefined,
+      tokenCount: undefined,
+      publicLevel: PublicLevel.Protected,
+      enabled: true,
+      debug: false,
+      prompts: [{
+        prompt: '',
+        role: PromptRole.System,
+      }],
+      variables: [],
+    }
+  })
+  useEffect(() => {
+    f.setFieldValue('projectId', pid?.toString())
+  }, [pid])
+
+  useQuery(qd, {
+    variables: {
+      id,
+    },
+    skip: isUpdate ? false : true,
+    onCompleted(data) {
+      const payload = data.prompt
       if (!payload) {
-        return {
-          projectId: pid,
-          name: '',
-          description: undefined,
-          tokenCount: undefined,
-          publicLevel: PublicLevel.Protected,
-          enabled: true,
-          debug: false,
-          prompts: [{
-            prompt: '',
-            role: PromptRole.System,
-          }],
-          variables: [],
-        }
+        return
       }
-      return {
-        projectId: pid,
+      f.setValues({
+        projectId: pid?.toString(),
         name: payload.name,
         description: payload.description,
         tokenCount: payload.tokenCount,
@@ -179,9 +178,10 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         debug: payload.debug ?? false,
         prompts: payload.prompts ?? [],
         variables: payload.variables ?? [],
-      }
+      })
     }
   })
+
 
   const { data: pjs } = useGraphQLQuery(q, {
     variables: {
@@ -189,69 +189,59 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         limit: 100,
         offset: 0,
       }
+    },
+    onCompleted(data) {
+      const payload = data.projects
+      if (!payload) {
+        return
+      }
+      f.setFieldValue('projectId', payload.edges[0]?.id.toString())
     }
   })
 
   const projects = pjs?.projects.edges ?? []
 
-  const selectedProjectId = watch('projectId')
-
-  useEffect(() => {
-    if (selectedProjectId) {
-      return
-    }
-    if (projects.length === 0) {
-      return
-    }
-    setValue('projectId', projects[0].id)
-  }, [selectedProjectId, projects, setValue])
+  const prompts = f.values.prompts
 
   useEffect(() => {
     // only prompt change
-    const subscribe = watch((data, { name, type }) => {
-      if (!data.prompts) {
-        return
-      }
-      if (!name || type !== 'change') {
-        return
-      }
+    if (!prompts) {
+      return
+    }
 
-      if (!/prompts\.(\d+)\.prompt/.test(name)) {
-        return
-      }
-
-      const allPlaceholders = data.prompts.reduce<string[]>((acc, prompt) => {
-        if (!prompt?.prompt) {
-          return acc
-        }
-        acc.push(...findPlaceholderValues(prompt.prompt))
+    const allPlaceholders = prompts.reduce<string[]>((acc, prompt) => {
+      if (!prompt?.prompt) {
         return acc
-      }, [])
+      }
+      acc.push(...findPlaceholderValues(prompt.prompt))
+      return acc
+    }, [])
 
-      const prevVariables = getValues('variables') ?? []
-      const flattedPrevVariables = prevVariables.map(x => x.name)
+    const prevVariables = f.values.variables ?? []
+    const flattedPrevVariables = prevVariables.map(x => x.name)
 
-      const nextVariables = allPlaceholders.map((placeholder) => {
-        if (flattedPrevVariables.includes(placeholder)) {
-          return prevVariables.find(z => z.name === placeholder)!
-        }
-        return {
-          name: placeholder,
-          type: 'string',
-        }
-      }).reduce<PromptVariable[]>((acc, cur) => {
-        const has = acc.map(x => x.name).includes(cur.name)
-        if (!has) {
-          acc.push(cur)
-        }
-        return acc
-      }, [])
-      setValue('variables', nextVariables)
-    })
-    return () => subscribe.unsubscribe()
-  }, [watch])
+    const nextVariables = allPlaceholders.map((placeholder) => {
+      if (flattedPrevVariables.includes(placeholder)) {
+        return prevVariables.find(z => z.name === placeholder)!
+      }
+      return {
+        name: placeholder,
+        type: 'string',
+      }
+    }).reduce<PromptVariable[]>((acc, cur) => {
+      const has = acc.map(x => x.name).includes(cur.name)
+      if (!has) {
+        acc.push(cur)
+      }
+      return acc
+    }, [])
+    f.setFieldValue('variables', nextVariables)
+  }, [JSON.stringify(prompts)])
 
   const mutateAsync = useCallback((data: mutatePromptType) => {
+    if (!data.projectId) {
+      throw new Error('projectId is required')
+    }
     const payload = {
       ...data,
       projectId: ~~data.projectId,
@@ -282,115 +272,81 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     return mutateAsync(data)
   }
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'prompts',
-  })
-
-  const { fields: variables } = useFieldArray({
-    control,
-    name: 'variables',
-  })
-
   const onTestPassed = (testRes: testPromptResponse) => {
-    setValue('tokenCount', testRes.usage.total_tokens)
+    f.setFieldValue('tokenCount', testRes.usage.total_tokens)
     setTestResult(testRes)
   }
 
   const [promptsAnimateParent] = useAutoAnimate()
   const [variablesAnimateParent] = useAutoAnimate()
 
-  const testable = Object.values(errors).length === 0
+  const testable = prompts.length > 0
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={f.onSubmit(onSubmit)}
       className='container mx-auto'
     >
-      <Stack spacing={4}>
-        <Stack flexDirection='row'>
-          <FormControl isInvalid={!!errors.projectId}>
-            <FormLabel htmlFor='projectId'>Project</FormLabel>
-            <Select
-              placeholder='Project'
-              {...register('projectId')}
-            >
-              {projects.map((project) => (
-                <option key={project.id} value={project.id}>{project.name}</option>
-              ))}
-            </Select>
-            <FormErrorMessage>{errors.projectId?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={!!errors.name}>
-            <FormLabel htmlFor='name'>Name</FormLabel>
-            <Input
-              id='name'
-              type='text'
-              placeholder='Name'
-              {...register('name')}
-            />
-            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-          </FormControl>
+      <Stack gap={4}>
+        <Stack>
+          <Select
+            label='Project'
+            placeholder='Project'
+            disabled
+            {...f.getInputProps('projectId')}
+            data={projects.map(p => ({ value: p.id.toString(), label: p.name }))}
+          />
+          <TextInput
+            label='Name'
+            placeholder='Name'
+            {...f.getInputProps('name')}
+          />
         </Stack>
 
-        <FormControl isInvalid={!!errors.description}>
-          <FormLabel htmlFor='description'>Description</FormLabel>
-          <Textarea
-            id='description'
-            {...register('description')}
-          />
-          <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
-        </FormControl>
+        <Textarea
+          label='Description'
+          placeholder='Description'
+          {...f.getInputProps('description')}
+        />
 
-        <Divider />
+        <Divider className='my-4' />
 
         <Stack ref={promptsAnimateParent}>
           <h3>Prompts</h3>
-          {fields.map((field, index) => {
+          {f.values.prompts.map((_, index) => {
             return (
               <div
-                key={field.id}
-                className='flex flex-row'
+                key={index}
+                className='flex flex-row gap-4'
               >
-                <FormControl
-                  isInvalid={errors.prompts && !!errors.prompts[index]?.role}
-                  width='200px'
-                  mr={4}
-                >
-                  <Select
-                    id='prompts'
-                    width='200px'
-                    disabled={index === 0}
-                    {...register(`prompts.${index}.role`)}
-                  >
-                    <option value='system'>System</option>
-                    <option value='assistant'>Assistant</option>
-                    <option value='user'>User</option>
-                  </Select>
-                  <FormErrorMessage>{
-                    errors.prompts &&
-                    errors.prompts[index]?.role?.message
-                  }</FormErrorMessage>
-                </FormControl>
-                <FormControl
-                  isInvalid={errors.prompts && !!errors.prompts[index]?.prompt}
-                >
-                  <Textarea
-                    id='prompts'
-                    placeholder='Prompt'
-                    height='300px'
-                    resize='vertical'
-                    {...register(`prompts.${index}.prompt`)}
-                  />
-                  <FormErrorMessage>
-                    {errors.prompts && errors.prompts[index]?.prompt?.message}
-                  </FormErrorMessage>
-                </FormControl>
-                <div className='flex items-center ml-2'>
+                <Select
+                  disabled={index === 0}
+                  {...f.getInputProps(`prompts.${index}.role`)}
+                  data={[{
+                    value: PromptRole.User,
+                    label: 'User',
+                  }, {
+                    value: PromptRole.Assistant,
+                    label: 'Assistant',
+                  }, {
+                    value: PromptRole.System,
+                    label: 'System',
+                  }]}
+                />
+                <Textarea
+                  resize='vertical'
+                  placeholder='Prompt'
+                  className='w-full'
+                  rows={8}
+                  {...f.getInputProps(`prompts.${index}.prompt`)}
+                />
+                <div className='flex items-start'>
                   <Button
-                    leftIcon={<TrashIcon className='w-4 h-4' />}
-                    isDisabled={index === 0}
-                    onClick={() => remove(index)}
+                    variant='filled'
+                    color='red'
+                    leftSection={<TrashIcon className='w-4 h-4' />}
+                    disabled={index === 0}
+                    onClick={() => f.removeListItem('prompts', index)}
                   >
                     Remove
                   </Button>
@@ -399,9 +355,9 @@ function PromptCreatePage(props: PromptCreatePageProps) {
             )
           })}
           <Button
-            leftIcon={<AddIcon />}
-            disabled={fields.length >= 20}
-            onClick={() => append({ prompt: '', role: PromptRole.User })}
+            leftSection={<AddIcon />}
+            disabled={f.values.prompts.length >= 20}
+            onClick={() => f.insertListItem('prompts', { prompt: '', role: PromptRole.User })}
           >
             Add
           </Button>
@@ -412,43 +368,23 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         <Stack>
           <h3>Variables</h3>
           <div className='grid grid-cols-4 gap-4' ref={variablesAnimateParent}>
-            {variables.map((variable, index) => {
+            {f.values.variables.map((_, index) => {
               return (
                 <div
-                  key={variable.id}
-                  className='flex flex-row w-full justify-center'
+                  key={index}
+                  className='flex flex-col gap-2 w-full justify-center'
                 >
-                  <FormControl
-                    isInvalid={errors.variables && !!errors.variables[index]?.name}
-                    width='200px'
-                  >
-                    <Input
-                      disabled
-                      {...register(`variables.${index}.name`)}
-                    />
-                    <FormErrorMessage>
-                      {errors.variables && errors.variables[index]?.name?.message}
-                    </FormErrorMessage>
-
-                    <FormControl
-                      isInvalid={errors.variables && !!errors.variables[index]?.type}
-                      mt={2}
-                    >
-                      <Select
-                        id='variables'
-                        width='200px'
-                        {...register(`variables.${index}.type`)}
-                      >
-                        <option value='string'>String</option>
-                        <option value='number'>Number</option>
-                        <option value='boolean'>Boolean</option>
-                      </Select>
-                      <FormErrorMessage>
-                        {errors.variables?.[index]?.type?.toString()}
-                      </FormErrorMessage>
-                    </FormControl>
-
-                  </FormControl>
+                  <TextInput
+                    disabled
+                    {...f.getInputProps(`variables.${index}.name`)}
+                  />
+                  <Select
+                    {...f.getInputProps(`variables.${index}.type`)}
+                    data={['String', 'Number', 'Boolean'].map(x => ({
+                      label: x,
+                      value: x.toLowerCase()
+                    }))}
+                  />
                 </div>
               )
             })}
@@ -459,26 +395,32 @@ function PromptCreatePage(props: PromptCreatePageProps) {
 
         <PromptTestPreview data={testResult} />
 
-        <Stack flexDirection='row' justifyContent='flex-end'>
+        <div className='flex items-center justify-end gap-4'>
           <PromptTestButton
             testable={testable}
-            data={getValues()}
+            data={{
+              ...f.values,
+              projectId: ~~(f.values.projectId!),
+            }}
             onTested={onTestPassed}
           />
           <Tooltip
-            label='Please test it first to make sure it works'
-            isDisabled={!!testResult}
+            withArrow
+            transitionProps={{ transition: 'pop' }}
+            label='Please test it first to make sure it can be work'
+            disabled={!!testResult}
           >
             <Button
-              colorScheme='teal'
-              isDisabled={!testResult}
+              variant='gradient'
+              gradient={{ from: 'indigo', to: 'cyan' }}
+              disabled={!testResult}
               type='submit'
-              isLoading={isLoading}
+              loading={isLoading}
             >
               Save
             </Button>
           </Tooltip>
-        </Stack>
+        </div>
       </Stack>
     </form>
   )

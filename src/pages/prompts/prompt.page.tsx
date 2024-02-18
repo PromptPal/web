@@ -1,12 +1,14 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Badge, Box, Button, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch, Text, Tooltip } from '@chakra-ui/react'
+import { ActionIcon, Badge, Box, Button, Card, Divider, Title as Heading, Highlight, Switch, Text, Tooltip } from '@mantine/core'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
 import { graphql } from '../../gql'
 import { FetchPromptDetailQuery } from '../../gql/graphql'
 import toast from 'react-hot-toast'
+import { useProjectId } from '../../hooks/route'
+import { ArrowPathIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 
 const columnHelper = createColumnHelper<FetchPromptDetailQuery['prompt']['latestCalls']['edges'][0]>()
 
@@ -114,7 +116,7 @@ const q = graphql(`
 function PromptPage() {
   const params = useParams()
   const pid = ~~(params?.id ?? '0')
-  const { data } = useGraphQLQuery(q, {
+  const { data, loading, refetch } = useGraphQLQuery(q, {
     variables: {
       id: pid
     }
@@ -170,86 +172,116 @@ function PromptPage() {
       })
   }, [doPromptUpdate, promptDetail])
 
+  const pjId = useProjectId()
+
   return (
     <div>
       <Card>
-        <CardHeader display='flex' alignItems='flex-end' flexDirection='row' justifyContent='space-between'>
+        <div className='flex justify-between items-center'>
           <div className='flex items-end'>
             <Heading>{promptDetail?.name}</Heading>
             <span className='ml-2 text-gray-400'>{promptDetail?.description}</span>
           </div>
           <div className='flex gap-4 items-center'>
-            <Link className='daisyui-btn daisyui-btn-primary' to={`/prompts/${promptDetail?.id}/edit`}>
+            <Button
+              variant='filled'
+              color='teal'
+              component={Link}
+              to={`/prompts/${promptDetail?.id}/edit?pjId=${pjId}`}
+            >
               Edit
-            </Link>
-            <Button>How to use</Button>
+            </Button>
+            <Button
+              leftSection={<InformationCircleIcon />}
+              onClick={() => {
+                toast.success('Help coming soon...')
+              }}
+            >
+              Help
+            </Button>
           </div>
-        </CardHeader>
-        <CardBody>
-          <Stack flexDirection='row'>
-            <Box flex={1} textAlign='center'>id: {promptDetail?.id}</Box>
-            <Box flex={1} textAlign='center' >Hash ID: {promptDetail?.hashId}</Box>
-          </Stack>
+        </div>
+        <Card.Section className='px-4 mt-4'>
+          <div className='flex items-center justify-around'>
+            <Box className='text-center'>
+              id: {promptDetail?.id}</Box>
+            <Box className='text-center' >
+              Hash ID: {promptDetail?.hashId}
+            </Box>
+          </div>
           <Divider my={4} />
-          <Stack flexDirection='row'>
+          <div className='flex'>
             <div className='flex-1 text-center'>
               Create Time: {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.createdAt)) : 'N/A'}
             </div>
             <div className='flex-1 text-center'>
-              Visibility: <Badge colorScheme='teal'>{promptDetail?.publicLevel}</Badge>
+              Visibility: <Badge >{promptDetail?.publicLevel}</Badge>
             </div>
             <div className='flex-1 text-center'>
-              Enabled: <Switch isReadOnly isChecked={promptDetail?.enabled} />
+              Enabled:
+              <Switch
+                readOnly
+                checked={promptDetail?.enabled}
+                className='text-center justify-center flex'
+                classNames={{
+                  body: 'w-fit'
+                }}
+              />
             </div>
-            <div className='flex-1 text-center' >
-              Debug: <Switch
-                isReadOnly={isPromptUpdating}
-                isChecked={promptDetail?.debug}
+            <div className='flex-1 text-center justify-center'>
+              <span>
+                Debug:
+              </span>
+              <Switch
+                className='text-center justify-center flex'
+                classNames={{
+                  body: 'w-fit'
+                }}
+                readOnly={isPromptUpdating}
+                checked={promptDetail?.debug}
                 onChange={onDebugChange}
               />
             </div>
-          </Stack>
+          </div>
 
-          <Stack mt={4}>
+          <div className='my-4'>
             {promptDetail?.prompts.map((prompt, idx) => (
-              <Box key={idx} display='flex' flexDirection='row'>
+              <Box key={idx} display='flex' >
                 <span className='mr-2'>
                   {prompt.role}:
                 </span>
                 <div
-                  className='whitespace-break-spaces'
+                  className='whitespace-break-spaces bg-opacity-30 bg-slate-900 rounded w-full p-4'
                 >
-                  <Highlight
-                    query={variables.map((v) => `{{${v}}}`)}
-                    styles={{
-                      color: 'white',
-                      borderRadius: '4px',
-                      padding: '1px 4px',
-                      backgroundColor: 'teal'
-                    }}
-                  >
+                  <Highlight highlight={variables.map((v) => `{{${v}}}`)}>
                     {prompt.prompt}
                   </Highlight>
                 </div>
               </Box>
             ))}
-          </Stack>
-        </CardBody>
+          </div>
+        </Card.Section>
       </Card>
 
       <Divider my={8} />
 
       <Card>
-        <CardHeader>
-          <Heading>Prompt Calls
-            <i className='ml-2 text-gray-400 text-sm'>
-              ({promptDetail?.latestCalls.count ?? 0})
-            </i>
-          </Heading>
-        </CardHeader>
-        <CardBody>
-          <SimpleTable table={promptCallsTable} />
-        </CardBody>
+        <Card.Section className='p-4'>
+          <div className='flex items-center justify-between'>
+            <Heading>
+              Prompt Calls
+              <i className='ml-2 text-gray-400 text-sm'>
+                ({promptDetail?.latestCalls.count ?? 0})
+              </i>
+            </Heading>
+            <ActionIcon onClick={() => refetch()} disabled={loading}>
+              <ArrowPathIcon className='w-4 h-4' />
+            </ActionIcon>
+          </div>
+        </Card.Section>
+        <Card.Section className='p-4'>
+          <SimpleTable loading={loading} table={promptCallsTable} />
+        </Card.Section>
       </Card>
     </div>
   )

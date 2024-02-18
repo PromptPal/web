@@ -23,7 +23,7 @@ import {
   // ThemeRiverChart,
   // SunburstChart,
   // CustomChart,
-} from 'echarts/charts';
+} from 'echarts/charts'
 import {
   // GridSimpleComponent,
   GridComponent,
