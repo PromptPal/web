@@ -148,7 +148,6 @@ function ProjectEditPage() {
           </Button>
         </Alert>
 
-
         <Select
           label='OpenAI Model'
           data={OpenAIModels}

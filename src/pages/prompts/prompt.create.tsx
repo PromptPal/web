@@ -371,6 +371,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                     {...f.getInputProps(`variables.${index}.type`)}
                     data={['String', 'Number', 'Boolean']}
                   />
+
                 </div>
               )
             })}
