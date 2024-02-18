@@ -1,30 +1,17 @@
 import { useMantineColorScheme, Select } from '@mantine/core'
-import React from 'react'
-
 
 function ThemeToggle() {
-  const { setColorScheme, colorScheme, clearColorScheme } = useMantineColorScheme()
-
-  console.warn('TODO')
+  const { setColorScheme, colorScheme } = useMantineColorScheme()
 
   return (
-    <Select value={colorScheme}
+    <Select
+      className='w-24'
+      value={colorScheme}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onChange={(value) => setColorScheme(value as any)}
       data={['auto', 'light', 'dark']}
     />
   )
-
-
-
-  // return (
-  //   <IconButton
-  //     aria-label='Toggle color mode'
-  //     size='xs'
-  //     bg='transparent'
-  //     icon={colorMode === 'light' ? <SunIcon /> : <MoonIcon />}
-  //     onClick={toggleColorMode}
-  //   />
-  // )
 }
 
 export default ThemeToggle

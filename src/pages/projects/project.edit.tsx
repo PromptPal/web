@@ -4,7 +4,12 @@ import { zodResolver } from 'mantine-form-zod-resolver'
 import { useForm } from '@mantine/form'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
-import { TextInput, NumberInput, Slider, Button, Stack, Switch, Box, Divider, Title, Alert, Select } from '@mantine/core'
+import {
+  Fieldset,
+  Tooltip,
+  Input,
+  TextInput, NumberInput, Slider, Button, Stack, Switch, Box, Divider, Title, Alert, Select
+} from '@mantine/core'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { isEmpty, omitBy } from 'lodash'
 import { useMutation as useGraphQLMutation, useQuery } from '@apollo/client'
@@ -73,7 +78,7 @@ function ProjectEditPage() {
       if (!payload) {
         return
       }
-      f.setInitialValues({
+      f.setValues({
         name: payload.name,
         enabled: payload.enabled,
         openAIToken: undefined,
@@ -111,8 +116,6 @@ function ProjectEditPage() {
     })
   }
 
-
-
   const pjName = f.values.name
 
   return (
@@ -120,101 +123,124 @@ function ProjectEditPage() {
       onSubmit={f.onSubmit(onSubmit)}
     >
       <Box>
-        <Title>Editing {pjName}</Title>
+        <div className='w-full flex justify-between items-center'>
+          <Title>Editing {pjName}</Title>
+          <Tooltip label='Enable/Disable Project' withArrow refProp='rootRef'>
+            <Switch
+              onLabel="Enabled"
+              offLabel="Disabled"
+              size='lg'
+              {...f.getInputProps('enabled')}
+            />
+          </Tooltip>
+        </div>
         <Divider my={6} />
       </Box>
-      <div className='px-6'>
-        <Stack className='w-full flex-row' >
-          <TextInput label='Project Name' placeholder='Project Name' {...f.getInputProps('name')} />
-          <Switch {...f.getInputProps('enabled')} />
-
+      <div className='container flex flex-col gap-4'>
+        <Stack className='w-full flex-row items-center' >
+          <TextInput
+            disabled
+            label='Project Name'
+            className='w-full'
+            placeholder='Project Name'
+            {...f.getInputProps('name')}
+          />
         </Stack>
 
         <TextInput
-          label='OpenAI Token'
+          label={'OpenAI Token'}
+          description={
+            <div>
+              Create your own API key
+              <a
+                href="https://platform.openai.com/account/api-keys"
+                target='_blank'
+                className='inline-flex ml-1' rel="noreferrer"
+              >
+                Here
+                <ExternalLinkIcon className='ml-1' />
+              </a>
+            </div>
+
+          }
           placeholder='OpenAI Token'
           {...f.getInputProps('openAIToken')}
         />
 
-        <Alert>
-          Create your own API key
-          <Button
-            component='a'
-            href="https://platform.openai.com/account/api-keys"
-            className='ml-1'
-          // isExternal
-          >
-            here <ExternalLinkIcon mx='2px' />
-          </Button>
-        </Alert>
-
         <Select
-          label='OpenAI Model'
+          label={'GPT Model'}
+          description={
+            <div>
+              Find more models
+              <a
+                href="https://platform.openai.com/docs/models/overview"
+                className='inline-flex ml-1'
+                target='_blank'
+                rel="noreferrer"
+              >
+                Here
+                <ExternalLinkIcon className='ml-1' />
+              </a>
+            </div>
+          }
           data={OpenAIModels}
           {...f.getInputProps('openAIModel')}
         >
         </Select>
-        <Alert>
-          Find more models
-          <Button
-            component='a'
-            href="https://platform.openai.com/docs/models/overview"
-            className='ml-1'
-          // isExternal
-          >
-            here <ExternalLinkIcon mx='2px' />
-          </Button>
-        </Alert>
-
 
         <TextInput
           label='OpenAI Base URL'
+          labelProps={{
+            className: 'pb-4'
+          }}
           placeholder='OpenAI Base URL'
           {...f.getInputProps('openAIBaseURL')}
         />
 
-        <Slider
-          {...f.getInputProps('openAITemperature')}
-          min={0}
-          max={2}
-          step={0.1}
-          label='OpenAI Temperature'
-        // onMouseEnter={() => setShowTooltip(true)}
-        // onMouseLeave={() => setShowTooltip(false)}
-        ></Slider>
+        <Fieldset legend='OpenAI Settings'>
+          <Input.Wrapper label='OpenAI Temperature' className='w-full' {...f.getInputProps('openAITemperature')}>
+            <Slider
+              {...f.getInputProps('openAITemperature')}
+              min={0}
+              max={2}
+              step={0.1}
+            ></Slider>
+          </Input.Wrapper>
 
+          <Input.Wrapper label='OpenAI TopP' className='w-full' {...f.getInputProps('openAITopP')}>
+            <Slider
+              {...f.getInputProps('openAITopP')}
+              min={0}
+              max={1}
+              step={0.1}
+            ></Slider>
+          </Input.Wrapper>
 
-        <Slider
-          {...f.getInputProps('openAITopP')}
-          min={0}
-          max={1}
-          step={0.1}
-          label='OpenAI TopP'
-        // onMouseEnter={() => setShowTooltip(true)}
-        // onMouseLeave={() => setShowTooltip(false)}
-        ></Slider>
-
-        <NumberInput label='OpenAI Max Tokens' {...f.getInputProps('openAIMaxTokens')} />
+          <NumberInput label='OpenAI Max Tokens' {...f.getInputProps('openAIMaxTokens')} />
+        </Fieldset>
 
       </div>
-      <Box mr={6}>
-        <Stack mt={4}>
-          <Button
-            onClick={() => {
-              nav(`/projects/${pid}`)
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            disabled={!f.isValid}
-            loading={isLoading}
-            type='submit'
-          >
-            Update
-          </Button>
-        </Stack>
-      </Box>
+      <div className='flex w-full items-center justify-end gap-4 mt-8'>
+        <Button
+          variant='outline'
+          onClick={() => {
+            nav(`/projects/${pid}`)
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant='gradient'
+          gradient={{ from: 'indigo', to: 'cyan' }}
+          // variant='filled'
+          // color='blue'
+          disabled={!f.isValid()}
+          loading={isLoading}
+          type='submit'
+        >
+          Update
+        </Button>
+      </div>
     </form>
   )
 }

@@ -2,7 +2,7 @@ import ReactEChartsCore from 'echarts-for-react/lib/core'
 import { useMemo } from 'react'
 import echarts from '../../utils/echarts'
 import { GetOverallProjectDataQuery } from '../../gql/graphql'
-import { useColorMode } from '@chakra-ui/react'
+import { useMantineColorScheme } from '@mantine/core'
 
 type ProjectTopPromptsChartProps = {
   recentCounts?: GetOverallProjectDataQuery['project']['promptMetrics']['recentCounts']
@@ -33,7 +33,7 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
     } as echarts.EChartsCoreOption
   }, [recentCounts])
 
-  const { colorMode } = useColorMode()
+  const { colorScheme } = useMantineColorScheme()
 
   return (
     <div>
@@ -42,7 +42,7 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
         option={echartDataOptions}
         notMerge={true}
         lazyUpdate={true}
-        theme={colorMode === 'dark' ? 'dark' : 'light'}
+        theme={colorScheme === 'dark' ? 'dark' : 'light'}
       />
     </div>
   )
