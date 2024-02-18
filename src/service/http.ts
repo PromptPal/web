@@ -20,13 +20,13 @@ export type HttpErrorResponse = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function HttpRequest<T, I = undefined>(
-  input: string,
+  input: RequestInfo | URL,
   init: HttpRequestInit<I> = {} as HttpRequestInit<I>,
   options?: {
     ignoreErrors?: boolean
   }
 ): Promise<Response> {
-  const req = input.startsWith('http') ?
+  const req = (typeof input === 'string' ? input : input.toString()).startsWith('http') ?
     input :
     `${HTTP_ENDPOINT}${input}`
 
