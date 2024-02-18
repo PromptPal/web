@@ -24,7 +24,7 @@ function ProjectCardItem(props: ProjectCardItemProps) {
         '--spread': 20,
         '--outer': 1,
         '--bg-spot-opacity': 0.05,
-        'backdrop-filter': 'blur(calc(var(--cardblur, 5) * 1px))'
+        backdropFilter: 'blur(calc(var(--cardblur, 5) * 1px))'
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any}
     >
