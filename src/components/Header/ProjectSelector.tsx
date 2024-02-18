@@ -1,10 +1,10 @@
 import { useAtomValue } from 'jotai'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { tokenAtom } from '../../stats/profile'
 import { Center, Divider, Select } from '@mantine/core'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '@/gql'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 
 const q = graphql(`
   query allProjectsNameOnly($pagination: PaginationInput!) {

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ActionIcon, Badge, Box, Button, Card, Divider, Title as Heading, Highlight, NavLink, Stack, Switch, Text, Tooltip } from '@mantine/core'
+import { ActionIcon, Badge, Box, Button, Card, Divider, Title as Heading, Highlight, Switch, Text, Tooltip } from '@mantine/core'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
@@ -251,17 +251,9 @@ function PromptPage() {
                   {prompt.role}:
                 </span>
                 <div
-                  className='whitespace-break-spaces'
+                  className='whitespace-break-spaces bg-opacity-30 bg-slate-900 rounded w-full p-4'
                 >
-                  <Highlight
-                    highlight={variables.map((v) => `{{${v}}}`)}
-                    styles={{
-                      // color: 'white',
-                      // borderRadius: '4px',
-                      // padding: '1px 4px',
-                      // backgroundColor: 'teal'
-                    }}
-                  >
+                  <Highlight highlight={variables.map((v) => `{{${v}}}`)}>
                     {prompt.prompt}
                   </Highlight>
                 </div>

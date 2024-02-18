@@ -111,6 +111,7 @@ type PromptCreatePageProps = {
 function PromptCreatePage(props: PromptCreatePageProps) {
   const { isUpdate } = props
   const id = isUpdate ? ~~(useParams().id ?? '0') : 0
+  const pjId = useProjectId()
 
   const ac = useApolloClient()
 
@@ -119,7 +120,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     onCompleted() {
       toast.success('Prompt updated')
       ac.resetStore()
-      navigate('/prompts')
+      navigate('/prompts?pjId=' + pjId)
     }
   })
   const [createPrompt, { loading: creating }] = useGraphQLMutation(cm, {
@@ -127,7 +128,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     onCompleted() {
       toast.success('Prompt created')
       ac.resetStore()
-      navigate('/prompts')
+      navigate('/prompts?pjId=' + pjId)
     }
   })
 
