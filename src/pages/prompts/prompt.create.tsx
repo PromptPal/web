@@ -265,7 +265,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   const isLoading = updating || creating
 
   const onSubmit = (data: mutatePromptType) => {
-    if (!data.tokenCount) {
+    if (data.tokenCount === undefined) {
       toast.error('please test it first to make sure it works')
       return
     }
