@@ -45,7 +45,7 @@ function Menubar() {
           </li>
         ))}
       </ul>
-      <div className='w-full pb-2'>
+      <div className='w-full pb-2 mr-4'>
         <hr className='divide-x my-4' />
         <div className='text-xs text-gray-600 dark:text-gray-300 flex flex-col gap-2'>
           <span>

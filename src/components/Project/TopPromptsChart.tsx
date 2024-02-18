@@ -35,14 +35,6 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
 
   const { colorScheme } = useMantineColorScheme()
 
-  if (recentCounts?.length === 0) {
-    return (
-      <div className='w-full flex items-center justify-center my-48'>
-        <span>No Data</span>
-      </div>
-    )
-  }
-
   return (
     <div>
       <ReactEChartsCore

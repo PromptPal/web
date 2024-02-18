@@ -4,6 +4,7 @@ import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 import { useMemo } from 'react'
+import HelpIntegration from '../../components/Helps/Intergation'
 
 const q = graphql(`
   query getOverallProjectData($id: Int!) {
@@ -72,9 +73,14 @@ function OverallPage() {
         <span className='ml-2 text-gray-500 text-xs'>recent 7 days</span>
       </div>
       <div>
-        <ProjectTopPromptsChart
-          recentCounts={pj?.promptMetrics.recentCounts}
-        />
+        {pj?.promptMetrics.recentCounts.length === 0 && (
+          <HelpIntegration />
+        )}
+        {pj && pj?.promptMetrics.recentCounts.length > 0 && (
+          <ProjectTopPromptsChart
+            recentCounts={pj?.promptMetrics.recentCounts}
+          />
+        )}
       </div>
     </Card>
   )

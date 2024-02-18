@@ -253,7 +253,11 @@ function PromptPage() {
                 <div
                   className='whitespace-break-spaces bg-opacity-30 bg-slate-900 rounded w-full p-4'
                 >
-                  <Highlight highlight={variables.map((v) => `{{${v}}}`)}>
+                  <Highlight
+                    highlight={variables.map((v) => `{{${v}}}`)}
+                    highlightStyles={{
+                      padding: '2px 4px', borderRadius: '4px'
+                    }}>
                     {prompt.prompt}
                   </Highlight>
                 </div>
