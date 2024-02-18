@@ -4,7 +4,7 @@ import { tokenAtom } from '../../stats/profile'
 import { Center, Divider, Select } from '@mantine/core'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '@/gql'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 const q = graphql(`
   query allProjectsNameOnly($pagination: PaginationInput!) {
@@ -23,20 +23,13 @@ function ProjectSelector() {
   const logged = !!useAtomValue(tokenAtom)
   const location = useLocation()
 
-  const sq = useMemo(() => {
-    return new URLSearchParams(location.search)
-  }, [location.search])
+  const [sq, setSq] = useSearchParams()
   const currentProject = sq.get('pjId')
 
-  const navigate = useNavigate()
   const navigateToProject = useCallback((id?: number) => {
-    const nextSq = new URLSearchParams(location.search)
-    if (!id) {
-      nextSq.delete('pjId')
-    } else {
-      nextSq.set('pjId', id.toString())
-    }
-    navigate(`${location.pathname}?${nextSq.toString()}`)
+    setSq({
+      pjId: id ? id.toString() : '',
+    })
   }, [location.search, location.pathname])
 
   const { data: projectsData } = useGraphQLQuery(q, {

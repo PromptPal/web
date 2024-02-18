@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { MetaMaskAvatar } from 'react-metamask-avatar'
 import { tokenAtom } from '../../stats/profile'
-import { Button, HoverCard, } from '@mantine/core'
+import { Button, HoverCard } from '@mantine/core'
 import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 
@@ -51,7 +51,8 @@ function Profile() {
       <HoverCard.Dropdown>
         <Button
           fullWidth
-          bg={'red'}
+          bg='red'
+          className='min-w-24'
           onClick={() => {
             setToken(null)
             qc.clear()
