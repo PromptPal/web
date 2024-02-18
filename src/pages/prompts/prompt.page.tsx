@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Badge, Box, Button, Card, CardBody, CardHeader, Divider, Heading, Highlight, Stack, StackDivider, Switch, Text, Tooltip } from '@mantine/core'
+import { Badge, Box, Button, Card, Divider, Title as Heading, Highlight, Stack, Switch, Text, Tooltip } from '@mantine/core'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
@@ -173,7 +173,7 @@ function PromptPage() {
   return (
     <div>
       <Card>
-        <CardHeader display='flex' alignItems='flex-end' flexDirection='row' justifyContent='space-between'>
+        <Card.Section display='flex'>
           <div className='flex items-end'>
             <Heading>{promptDetail?.name}</Heading>
             <span className='ml-2 text-gray-400'>{promptDetail?.description}</span>
@@ -184,27 +184,27 @@ function PromptPage() {
             </Link>
             <Button>How to use</Button>
           </div>
-        </CardHeader>
-        <CardBody>
-          <Stack flexDirection='row'>
-            <Box flex={1} textAlign='center'>id: {promptDetail?.id}</Box>
-            <Box flex={1} textAlign='center' >Hash ID: {promptDetail?.hashId}</Box>
+        </Card.Section>
+        <Card.Section>
+          <Stack>
+            <Box flex={1} className='text-center'>id: {promptDetail?.id}</Box>
+            <Box flex={1} className='text-center' >Hash ID: {promptDetail?.hashId}</Box>
           </Stack>
           <Divider my={4} />
-          <Stack flexDirection='row'>
+          <Stack >
             <div className='flex-1 text-center'>
               Create Time: {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.createdAt)) : 'N/A'}
             </div>
             <div className='flex-1 text-center'>
-              Visibility: <Badge colorScheme='teal'>{promptDetail?.publicLevel}</Badge>
+              Visibility: <Badge >{promptDetail?.publicLevel}</Badge>
             </div>
             <div className='flex-1 text-center'>
-              Enabled: <Switch isReadOnly isChecked={promptDetail?.enabled} />
+              Enabled: <Switch readOnly checked={promptDetail?.enabled} />
             </div>
             <div className='flex-1 text-center' >
               Debug: <Switch
-                isReadOnly={isPromptUpdating}
-                isChecked={promptDetail?.debug}
+                readOnly={isPromptUpdating}
+                checked={promptDetail?.debug}
                 onChange={onDebugChange}
               />
             </div>
@@ -212,7 +212,7 @@ function PromptPage() {
 
           <Stack mt={4}>
             {promptDetail?.prompts.map((prompt, idx) => (
-              <Box key={idx} display='flex' flexDirection='row'>
+              <Box key={idx} display='flex' >
                 <span className='mr-2'>
                   {prompt.role}:
                 </span>
@@ -220,12 +220,12 @@ function PromptPage() {
                   className='whitespace-break-spaces'
                 >
                   <Highlight
-                    query={variables.map((v) => `{{${v}}}`)}
+                    highlight={variables.map((v) => `{{${v}}}`)}
                     styles={{
-                      color: 'white',
-                      borderRadius: '4px',
-                      padding: '1px 4px',
-                      backgroundColor: 'teal'
+                      // color: 'white',
+                      // borderRadius: '4px',
+                      // padding: '1px 4px',
+                      // backgroundColor: 'teal'
                     }}
                   >
                     {prompt.prompt}
@@ -234,22 +234,22 @@ function PromptPage() {
               </Box>
             ))}
           </Stack>
-        </CardBody>
+        </Card.Section>
       </Card>
 
       <Divider my={8} />
 
       <Card>
-        <CardHeader>
+        <Card.Section>
           <Heading>Prompt Calls
             <i className='ml-2 text-gray-400 text-sm'>
               ({promptDetail?.latestCalls.count ?? 0})
             </i>
           </Heading>
-        </CardHeader>
-        <CardBody>
+        </Card.Section>
+        <Card.Section>
           <SimpleTable table={promptCallsTable} />
-        </CardBody>
+        </Card.Section>
       </Card>
     </div>
   )

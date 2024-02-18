@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button, Heading, Link as LinkUI, Stack, StackDivider, Switch, Tooltip } from '@mantine/core'
+import { Title as Heading } from '@mantine/core'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { useMemo } from 'react'
 import { graphql } from '../../gql'
@@ -41,7 +41,7 @@ function ProjectsPage() {
           New Project
         </Link>
       </div>
-      <div className=' daisyui-divider' />
+      <div className='daisyui-divider' />
 
       <div className='grid gap-4 grid-cols-3'>
         {tableData.map((row) => (

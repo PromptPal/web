@@ -1,10 +1,10 @@
-import { Modal, FormControl, FormErrorMessage, FormLabel, Input, Button, ModalFooter, Title } from '@mantine/core'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Modal, TextInput, Button, Title } from '@mantine/core'
+import { useForm } from '@mantine/form'
 import Zod from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver } from 'mantine-form-zod-resolver'
 import toast from 'react-hot-toast'
 import dayjs from 'dayjs'
-import DatePicker from 'react-datepicker'
+import { DatePicker } from '@mantine/dates'
 import { useMutation as useGraphQLMutation } from '@apollo/client'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useMemo } from 'react'
@@ -17,13 +17,16 @@ type CreateOpenTokenModalProps = {
   projectId: number
 }
 
-const secondsIn3Year = 3 * 365 * 24 * 60 * 60
+// const secondsIn3Year = 3 * 365 * 24 * 60 * 60
 
-const schema: Zod.ZodType<OpenTokenInput> = Zod.object({
+type OpenTokenInputForm = Omit<OpenTokenInput, 'ttl'> & { expireAt: Date }
+
+const schema: Zod.ZodType<OpenTokenInputForm> = Zod.object({
   projectId: Zod.number(),
   name: Zod.string().trim().max(100).min(2),
   description: Zod.string().trim().max(255),
-  ttl: Zod.number().min(1).max(secondsIn3Year),
+  // ttl: Zod.number().min(1).max(secondsIn3Year),
+  expireAt: Zod.date().max(dayjs().add(3, 'year').toDate()).min(dayjs().toDate()),
 })
 
 const m = graphql(`
@@ -41,26 +44,21 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     return dayjs()
   }, [])
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<OpenTokenInput>({
-    resolver: zodResolver(schema),
-    defaultValues: {
+  const f = useForm<OpenTokenInputForm>({
+    validate: zodResolver(schema),
+    initialValues: {
       projectId,
-      ttl: 365 * 24 * 60 * 60
-    }
+      name: '',
+      description: '',
+      expireAt: n.add(1, 'year').toDate(),
+    },
   })
 
   const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
     refetchQueries: ['fetchProject'],
     onCompleted(data) {
       const res = data.createOpenToken
-      reset()
+      f.reset()
       navigator.clipboard.writeText(res.token)
       // qc.invalidateQueries(['projects', projectId, 'openTokens'])
       toast.success('the token has been copied to clipboard')
@@ -68,73 +66,53 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     }
   })
 
-  const onSubmit: SubmitHandler<OpenTokenInput> = (data: OpenTokenInput) => {
+  const onSubmit = (data: OpenTokenInputForm) => {
+    const val = { ...data, ttl: dayjs(data.expireAt).diff(n, 'seconds') }
     return mutateAsync({
       variables: {
-        data: {
-          ...data,
-          projectId,
-        }
+        data: val
       }
     })
   }
-
-  const ttlValue = watch('ttl')
 
   return (
     <Modal
       opened={isOpen} onClose={onClose} centered
       overlayProps={{ opacity: 0.5, blur: 8 }}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={f.onSubmit(onSubmit)}>
         <Title>Open Token</Title>
         <div>
-          <FormControl isInvalid={!!errors.name}>
-            <FormLabel htmlFor='name'>
-              Name
-            </FormLabel>
-            <Input {...register('name')} />
-            <FormErrorMessage>
-              {errors.name && errors.name.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={!!errors.description}>
-            <FormLabel htmlFor='description'>
-              Description
-            </FormLabel>
-            <Input {...register('description')} />
-            <FormErrorMessage>
-              {errors.description && errors.description.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={!!errors.ttl}>
-            <FormLabel htmlFor='ttl'>
-              TTL
-            </FormLabel>
+          <TextInput
+            label='Name'
+            {...f.getInputProps('name')}
+          />
+          <TextInput label='Description' {...f.getInputProps('description')} />
+
+          <div>
+            <span>Expire At:</span>
             <DatePicker
               className='w-full'
-              {...register('ttl')}
-              selected={dayjs(n).add(ttlValue, 'seconds').toDate()}
-              onChange={(d) => {
-                if (!d) {
-                  return
-                }
-                setValue('ttl', dayjs(d).diff(n, 'seconds'))
-              }}
+              {...f.getInputProps('ttl')}
+            // selected={dayjs(n).add(ttlValue, 'seconds').toDate()}
+            // onChange={(d) => {
+            //   if (!d) {
+            //     return
+            //   }
+            //   setValue('ttl', dayjs(d).diff(n, 'seconds'))
+            // }}
             />
-            <FormErrorMessage>
-              {errors.ttl && errors.ttl.message}
-            </FormErrorMessage>
-          </FormControl>
+          </div>
+
         </div>
-        <ModalFooter>
+        <div>
           <Button color='blue' mr={3} onClick={onClose}>
             Close
           </Button>
           <Button type='submit' loading={isLoading}>
             Create
           </Button>
-        </ModalFooter>
+        </div>
       </form>
     </Modal>
   )

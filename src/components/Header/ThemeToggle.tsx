@@ -1,15 +1,20 @@
-import { useMantineColorScheme } from '@mantine/core'
+import { useMantineColorScheme, Select } from '@mantine/core'
 import React from 'react'
 
 
 function ThemeToggle() {
-  const { setColorScheme, clearColorScheme } = useMantineColorScheme()
+  const { setColorScheme, colorScheme, clearColorScheme } = useMantineColorScheme()
 
   console.warn('TODO')
 
   return (
-    <span>TODO, will be a select options</span>
+    <Select value={colorScheme}
+      onChange={(value) => setColorScheme(value as any)}
+      data={['auto', 'light', 'dark']}
+    />
   )
+
+
 
   // return (
   //   <IconButton

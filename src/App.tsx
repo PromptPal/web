@@ -10,6 +10,8 @@ import { apolloClient } from './service/apollo'
 import { MantineProvider } from '@mantine/core'
 
 import '@mantine/core/styles.css'
+import '@mantine/code-highlight/styles.css'
+import '@mantine/dates/styles.css'
 import './App.css'
 
 const queryClient = new QueryClient({

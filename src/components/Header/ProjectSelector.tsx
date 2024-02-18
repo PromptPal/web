@@ -60,17 +60,14 @@ function ProjectSelector() {
         value={currentProject?.toString()}
         onChange={(val) => {
           if (!val) {
-            setCurrentProject(null)
+            setCurrentProject(undefined)
             return
           }
           const pjId = parseInt(val)
           setCurrentProject(pjId)
         }}
-      >
-        {projects.map((project) => (
-          <option key={project.id} value={project.id}>{project.name}</option>
-        ))}
-      </Select>
+        data={projects.map((project) => ({ value: project.id.toString(), label: project.name }))}
+      />
     </Stack>
   )
 }

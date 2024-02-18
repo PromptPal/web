@@ -1,13 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { zodResolver } from 'mantine-form-zod-resolver'
+import { useForm } from '@mantine/form'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
-import { Button, Stack, Switch, Tooltip, Box, Divider, Title, Input, Alert, Select } from '@mantine/core'
+import { TextInput, NumberInput, Slider, Button, Stack, Switch, Box, Divider, Title, Alert, Select } from '@mantine/core'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { isEmpty, omitBy } from 'lodash'
-import { useLazyQuery as useGraphQLLazyQuery, useMutation as useGraphQLMutation } from '@apollo/client'
+import { useMutation as useGraphQLMutation, useQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
 import { OpenAIModels } from '../../constants'
@@ -60,27 +60,20 @@ function ProjectEditPage() {
   const pidStr = useParams().id ?? '0'
   const pid = ~~pidStr
 
-  const [refetch] = useGraphQLLazyQuery(q, {
+  const f = useForm<localUpdateProject>({
+    validate: zodResolver(schema),
+  })
+
+  useQuery(q, {
     variables: {
       id: pid
     },
-  })
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<localUpdateProject>({
-    resolver: zodResolver(schema),
-    async defaultValues() {
-      const data = await refetch()
-      const payload = data.data?.project
+    onCompleted(data) {
+      const payload = data.project
       if (!payload) {
-        return {}
+        return
       }
-      return {
+      f.setInitialValues({
         name: payload.name,
         enabled: payload.enabled,
         openAIToken: undefined,
@@ -89,7 +82,7 @@ function ProjectEditPage() {
         openAITemperature: payload.openAITemperature,
         openAITopP: payload.openAITopP,
         openAIMaxTokens: payload.openAIMaxTokens,
-      }
+      })
     },
   })
   const qc = useQueryClient()
@@ -107,7 +100,7 @@ function ProjectEditPage() {
     },
   })
 
-  const onSubmit: SubmitHandler<ProjectPayload> = (data) => {
+  const onSubmit = (data: ProjectPayload) => {
     const args: ProjectPayload = omitBy(data, isEmpty)
     args.openAIMaxTokens = data.openAIMaxTokens
     return mutateAsync({
@@ -118,15 +111,13 @@ function ProjectEditPage() {
     })
   }
 
-  const temperature = watch('openAITemperature')
-  const topP = watch('openAITopP')
-  const maxTokens = watch('openAIMaxTokens')
-  const pjName = watch('name')
-  const isEnabled = watch('enabled')
+
+
+  const pjName = f.values.name
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={f.onSubmit(onSubmit)}
     >
       <Box>
         <Title>Editing {pjName}</Title>
@@ -134,33 +125,34 @@ function ProjectEditPage() {
       </Box>
       <div className='px-6'>
         <Stack className='w-full flex-row' >
-          <Input.Wrapper label='Name' error={errors.name?.message}>
-            <Input {...register('name')} />
-          </Input.Wrapper>
-          <Switch {...register('enabled')} />
+          <TextInput label='Project Name' placeholder='Project Name' {...f.getInputProps('name')} />
+          <Switch {...f.getInputProps('enabled')} />
 
         </Stack>
 
-        <Input.Wrapper label='OpenAI Token' error={errors.openAIToken?.message}>
-          <Input {...register('openAIToken')} placeholder='OpenAI Token' />
-          <Alert>
-            Create your own API key
-            <Button
-              component='a'
-              href="https://platform.openai.com/account/api-keys"
-              className='ml-1'
-            // isExternal
-            >
-              here <ExternalLinkIcon mx='2px' />
-            </Button>
-          </Alert>
-        </Input.Wrapper>
+        <TextInput
+          label='OpenAI Token'
+          placeholder='OpenAI Token'
+          {...f.getInputProps('openAIToken')}
+        />
+
+        <Alert>
+          Create your own API key
+          <Button
+            component='a'
+            href="https://platform.openai.com/account/api-keys"
+            className='ml-1'
+          // isExternal
+          >
+            here <ExternalLinkIcon mx='2px' />
+          </Button>
+        </Alert>
 
 
         <Select
           label='OpenAI Model'
           data={OpenAIModels}
-          {...register('openAIModel')}
+          {...f.getInputProps('openAIModel')}
         >
         </Select>
         <Alert>
@@ -176,115 +168,38 @@ function ProjectEditPage() {
         </Alert>
 
 
+        <TextInput
+          label='OpenAI Base URL'
+          placeholder='OpenAI Base URL'
+          {...f.getInputProps('openAIBaseURL')}
+        />
 
-        <FormControl isInvalid={!!errors.openAIBaseURL} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAIBaseURL' className=' w-40' >OpenAI Base URL</FormLabel>
-          <Box className='w-full'>
-            <Input
-              id='openAIBaseURL'
-              placeholder='OpenAI Base URL'
-              {...register('openAIBaseURL')}
-            />
-            <FormErrorMessage>{errors.openAIBaseURL?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
+        <Slider
+          {...f.getInputProps('openAITemperature')}
+          min={0}
+          max={2}
+          step={0.1}
+          label='OpenAI Temperature'
+        // onMouseEnter={() => setShowTooltip(true)}
+        // onMouseLeave={() => setShowTooltip(false)}
+        ></Slider>
 
-        <FormControl isInvalid={!!errors.openAITemperature} className='mt-4 flex items-center'>
-          <FormLabel
-            htmlFor='openAITemperature'
-            className='w-40'
-          >OpenAI Temperature</FormLabel>
-          <Box className='w-full'>
-            <Slider
-              placeholder='OpenAI Temperature'
-              {...register('openAITemperature')}
-              min={0}
-              max={2}
-              colorScheme='teal'
-              step={0.1}
-              onChange={sliderValue => setValue('openAITemperature', sliderValue)}
-            // onMouseEnter={() => setShowTooltip(true)}
-            // onMouseLeave={() => setShowTooltip(false)}
-            >
-              <SliderMark value={1} mt='1' ml='-2.5' fontSize='sm'>
-                1
-              </SliderMark>
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <Tooltip
-                hasArrow
-                bg='teal.500'
-                color='white'
-                placement='top'
-                // isOpen={showTooltip}
-                label={`${temperature}`}
-              >
-                <SliderThumb />
-              </Tooltip>
-            </Slider>
 
-            <FormErrorMessage>{errors.openAITemperature?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
+        <Slider
+          {...f.getInputProps('openAITopP')}
+          min={0}
+          max={1}
+          step={0.1}
+          label='OpenAI TopP'
+        // onMouseEnter={() => setShowTooltip(true)}
+        // onMouseLeave={() => setShowTooltip(false)}
+        ></Slider>
 
-        <FormControl isInvalid={!!errors.openAITopP} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAITopP' className='w-40' >OpenAI TopP</FormLabel>
-          <Box className='w-full'>
-            <Slider
-              placeholder='OpenAI TopP'
-              {...register('openAITopP')}
-              min={0}
-              max={1}
-              step={0.1}
-              colorScheme='teal'
-              onChange={sliderValue => setValue('openAITopP', sliderValue)}
-            // onMouseEnter={() => setShowTooltip(true)}
-            // onMouseLeave={() => setShowTooltip(false)}
-            >
-              <SliderMark value={1} mt='1' ml='-2.5' fontSize='sm'>
-                1
-              </SliderMark>
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <Tooltip
-                hasArrow
-                bg='teal.500'
-                color='white'
-                placement='top'
-                // isOpen={showTooltip}
-                label={`${topP}`}
-              >
-                <SliderThumb />
-              </Tooltip>
-            </Slider>
-          </Box>
-        </FormControl>
-
-        <FormControl isInvalid={!!errors.openAIMaxTokens} className='mt-4 flex items-center'>
-          <FormLabel htmlFor='openAIMaxTokens' className='w-40'>OpenAI Max Tokens</FormLabel>
-          <Box className='w-full'>
-            <NumberInput
-              id='openAIMaxTokens'
-              placeholder='OpenAI Max Tokens'
-              {...register('openAIMaxTokens')}
-              value={maxTokens ?? 0}
-              onChange={sliderValue => setValue('openAIMaxTokens', ~~sliderValue)}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <FormErrorMessage>{errors.openAIMaxTokens?.message}</FormErrorMessage>
-          </Box>
-        </FormControl>
+        <NumberInput label='OpenAI Max Tokens' {...f.getInputProps('openAIMaxTokens')} />
 
       </div>
       <Box mr={6}>
-        <Stack direction='row' justifyContent='flex-end' mt={4}>
+        <Stack mt={4}>
           <Button
             onClick={() => {
               nav(`/projects/${pid}`)
@@ -293,10 +208,8 @@ function ProjectEditPage() {
             Cancel
           </Button>
           <Button
-            colorScheme='teal'
-            disabled={Object.keys(errors).length > 0}
-            isLoading={isLoading}
-            loadingText='Updating'
+            disabled={!f.isValid}
+            loading={isLoading}
             type='submit'
           >
             Update
