@@ -1,10 +1,10 @@
 import { Box, Button, Card, Title } from '@mantine/core'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
-import { useMemo } from 'react'
 import HelpIntegration from '../../components/Helps/Intergation'
+import { useProjectId } from '../../hooks/route'
 
 const q = graphql(`
   query getOverallProjectData($id: Int!) {
@@ -25,16 +25,7 @@ const q = graphql(`
 `)
 
 function OverallPage() {
-  const location = useLocation()
-
-  const p = useMemo(() => {
-    const sq = new URLSearchParams(location.search)
-    if (!sq.has('pjId')) {
-      return null
-    }
-    return parseInt(sq.get('pjId')!)
-  }, [location.search])
-
+  const p = useProjectId()
   const { data } = useGraphQLQuery(q, {
     variables: {
       id: p ?? -1

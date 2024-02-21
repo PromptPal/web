@@ -1,7 +1,7 @@
 // import { useForm, SubmitHandler } from 'react-hook-form'
 import { useForm } from '@mantine/form'
 import { zodResolver } from 'mantine-form-zod-resolver'
-import { Button, Stack, Select, Tooltip, TextInput } from '@mantine/core'
+import { Button, Select, Tooltip, TextInput } from '@mantine/core'
 import zod from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
@@ -28,6 +28,7 @@ const m = graphql(`
       enabled
       openAIModel
       openAIBaseURL
+      geminiBaseURL
       openAITemperature
       openAITopP
       openAIMaxTokens
@@ -52,12 +53,14 @@ function ProjectCreatePage() {
     },
   })
 
-  const form = useForm<ProjectPayload & { openAIToken: string }>({
+  const form = useForm<ProjectPayload>({
     validate: zodResolver(schema),
     initialValues: {
       openAIModel: 'gpt-3.5-turbo',
       openAIBaseURL: 'https://api.openai.com/v1',
       openAIToken: '',
+      geminiBaseURL: 'https://generativelanguage.googleapis.com',
+      geminiToken: '',
     }
   })
 
@@ -111,7 +114,24 @@ function ProjectCreatePage() {
           {...form.getInputProps('openAIBaseURL')}
         />
 
+        <TextInput
+          label={(
+            <div className='flex items-center'>
+              <span>
+                Base URL
+              </span>
+              <Tooltip label="The base URL of the Google gemini API. you can set this for proxy(大陆项目可以用此字段设置转发服务器代理)">
+                <InformationCircleIcon className="w-4 h-4 ml-1" />
+              </Tooltip>
+            </div>
+          )}
+          className='mt-4'
+          {...form.getInputProps('geminiBaseURL')}
+        />
+
         <TextInput label='OpenAI Token' className='mt-4' {...form.getInputProps('openAIToken')} />
+
+        <TextInput label='Gemini Token' className='mt-4' {...form.getInputProps('geminiToken')} />
       </div>
       <div className='flex flex-row justify-end mt-4 gap-4'>
         <Button

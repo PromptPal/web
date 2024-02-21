@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useForm } from '@mantine/form'
 import toast from 'react-hot-toast'
@@ -8,7 +8,7 @@ import {
   Fieldset,
   Tooltip,
   Input,
-  TextInput, NumberInput, Slider, Button, Stack, Switch, Box, Divider, Title, Alert, Select
+  TextInput, NumberInput, Slider, Button, Stack, Switch, Box, Divider, Title, Select
 } from '@mantine/core'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { isEmpty, omitBy } from 'lodash'
@@ -16,15 +16,19 @@ import { useMutation as useGraphQLMutation, useQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
 import { OpenAIModels } from '../../constants'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { useProjectId } from '../../hooks/route'
 
 type localUpdateProject = ProjectPayload
 
 const schema: Zod.ZodType<localUpdateProject> = Zod.object({
   name: Zod.string().trim(),
   enabled: Zod.boolean(),
-  openAIToken: Zod.string().trim().max(255).optional(),
   openAIModel: Zod.enum(OpenAIModels),
-  openAIBaseURL: Zod.string().trim().max(255).optional(),
+  openAIBaseURL: Zod.string().trim().max(255).optional().default('https://api.openai.com'),
+  openAIToken: Zod.string().trim().max(255).optional(),
+  geminiBaseURL: Zod.string().trim().max(255).optional().default('https://generativelanguage.googleapis.com'),
+  geminiToken: Zod.string().trim().max(255).optional(),
   openAITemperature: Zod.number().min(0).max(2).optional(),
   openAITopP: Zod.number().min(0).max(1),
   openAIMaxTokens: Zod.number().min(0).optional(),
@@ -38,6 +42,8 @@ const q = graphql(`
       enabled
       openAIModel
       openAIBaseURL
+      geminiBaseURL
+      geminiToken
       openAITemperature
       openAITopP
       openAIMaxTokens
@@ -53,6 +59,8 @@ const m = graphql(`
       enabled
       openAIModel
       openAIBaseURL
+      geminiBaseURL
+      geminiToken
       openAITemperature
       openAITopP
       openAIMaxTokens
@@ -62,8 +70,7 @@ const m = graphql(`
 
 function ProjectEditPage() {
   const nav = useNavigate()
-  const pidStr = useParams().id ?? '0'
-  const pid = ~~pidStr
+  const pid = useProjectId()
 
   const f = useForm<localUpdateProject>({
     validate: zodResolver(schema),
@@ -71,8 +78,9 @@ function ProjectEditPage() {
 
   useQuery(q, {
     variables: {
-      id: pid
+      id: pid!
     },
+    skip: !pid,
     onCompleted(data) {
       const payload = data.project
       if (!payload) {
@@ -81,9 +89,11 @@ function ProjectEditPage() {
       f.setValues({
         name: payload.name,
         enabled: payload.enabled,
-        openAIToken: undefined,
         openAIModel: payload.openAIModel,
         openAIBaseURL: payload.openAIBaseURL,
+        openAIToken: undefined,
+        geminiBaseURL: payload.geminiBaseURL,
+        geminiToken: payload.geminiToken,
         openAITemperature: payload.openAITemperature,
         openAITopP: payload.openAITopP,
         openAIMaxTokens: payload.openAIMaxTokens,
@@ -110,13 +120,15 @@ function ProjectEditPage() {
     args.openAIMaxTokens = data.openAIMaxTokens
     return mutateAsync({
       variables: {
-        id: pid,
+        id: pid!,
         data: args
       }
     })
   }
 
   const pjName = f.values.name
+
+  const [settingAreaRef] = useAutoAnimate()
 
   return (
     <form
@@ -147,26 +159,6 @@ function ProjectEditPage() {
           />
         </Stack>
 
-        <TextInput
-          label={'OpenAI Token'}
-          description={
-            <div>
-              Create your own API key
-              <a
-                href="https://platform.openai.com/account/api-keys"
-                target='_blank'
-                className='inline-flex ml-1' rel="noreferrer"
-              >
-                Here
-                <ExternalLinkIcon className='ml-1' />
-              </a>
-            </div>
-
-          }
-          placeholder='OpenAI Token'
-          {...f.getInputProps('openAIToken')}
-        />
-
         <Select
           label={'GPT Model'}
           description={
@@ -188,17 +180,62 @@ function ProjectEditPage() {
         >
         </Select>
 
-        <TextInput
-          label='OpenAI Base URL'
-          labelProps={{
-            className: 'pb-4'
-          }}
-          placeholder='OpenAI Base URL'
-          {...f.getInputProps('openAIBaseURL')}
-        />
+        <div ref={settingAreaRef}>
+          {f.values.openAIModel?.startsWith('gpt') && (
+            <>
+              <TextInput
+                key={1}
+                label='OpenAI Base URL'
+                labelProps={{
+                  className: 'pb-4'
+                }}
+                placeholder='OpenAI Base URL'
+                {...f.getInputProps('openAIBaseURL')}
+              />
+              <TextInput
+                label={'OpenAI Token'}
+                key={2}
+                description={
+                  <div>
+                    Create your own API key
+                    <a
+                      href="https://platform.openai.com/account/api-keys"
+                      target='_blank'
+                      className='inline-flex ml-1' rel="noreferrer"
+                    >
+                      Here
+                      <ExternalLinkIcon className='ml-1' />
+                    </a>
+                  </div>
+                }
+                placeholder='OpenAI Token'
+                {...f.getInputProps('openAIToken')}
+              />
+            </>
+          )}
+          {f.values.openAIModel?.startsWith('gemini') && (
+            <>
+              <TextInput
+                key={3}
+                label='Gemini Base URL'
+                labelProps={{
+                  className: 'pb-4'
+                }}
+                placeholder='Gemini Base URL'
+                {...f.getInputProps('geminiBaseURL')}
+              />
+              <TextInput
+                key={4}
+                label='Gemini Token'
+                placeholder='Gemini Token'
+                {...f.getInputProps('geminiToken')}
+              />
+            </>
+          )}
+        </div>
 
-        <Fieldset legend='OpenAI Settings'>
-          <Input.Wrapper label='OpenAI Temperature' className='w-full' {...f.getInputProps('openAITemperature')}>
+        <Fieldset legend='Basic Settings'>
+          <Input.Wrapper label='Temperature' className='w-full' {...f.getInputProps('openAITemperature')}>
             <Slider
               {...f.getInputProps('openAITemperature')}
               min={0}
@@ -207,7 +244,7 @@ function ProjectEditPage() {
             ></Slider>
           </Input.Wrapper>
 
-          <Input.Wrapper label='OpenAI TopP' className='w-full' {...f.getInputProps('openAITopP')}>
+          <Input.Wrapper label='TopP' className='w-full' {...f.getInputProps('openAITopP')}>
             <Slider
               {...f.getInputProps('openAITopP')}
               min={0}
@@ -216,7 +253,7 @@ function ProjectEditPage() {
             ></Slider>
           </Input.Wrapper>
 
-          <NumberInput label='OpenAI Max Tokens' {...f.getInputProps('openAIMaxTokens')} />
+          <NumberInput label='Max Tokens' {...f.getInputProps('openAIMaxTokens')} />
         </Fieldset>
 
       </div>

@@ -2,9 +2,10 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { MetaMaskAvatar } from 'react-metamask-avatar'
 import { tokenAtom } from '../../stats/profile'
-import { Button, HoverCard } from '@mantine/core'
+import { Button, Divider, HoverCard } from '@mantine/core'
 import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
+import { Link } from 'react-router-dom'
 
 const q = graphql(`
   query getUserProfile($id: Int!) {
@@ -48,7 +49,16 @@ function Profile() {
           </h6>
         </div>
       </HoverCard.Target>
-      <HoverCard.Dropdown>
+      <HoverCard.Dropdown className=' min-w-48'>
+        <Button
+          component={Link}
+          to={'/projects'}
+          fullWidth
+          variant='filled'
+        >
+          Projects
+        </Button>
+        <Divider className='my-4' />
         <Button
           fullWidth
           bg='red'

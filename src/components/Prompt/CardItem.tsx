@@ -12,7 +12,7 @@ function PromptCardItem(props: PromptCardItemProps) {
   const pj = useProjectId()
   return (
     <Link
-      to={`/prompts/${prompt.id}?pjId=${pj}`}
+      to={`/${pj}/prompts/${prompt.id}`}
       className='w-full py-4 rounded-lg flex justify-center items-center flex-col'
       data-glow
     >

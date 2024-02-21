@@ -1,5 +1,5 @@
-import { HomeIcon, SparklesIcon, Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
-import { Link, useLocation } from 'react-router-dom'
+import { HomeIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { Link, useParams } from 'react-router-dom'
 import { NavLink } from '@mantine/core'
 import buildTime from '~build/time'
 import { lastTag } from '~build/info'
@@ -9,22 +9,22 @@ const menus = [
   {
     icon: <HomeIcon className='w-3 h-3' />,
     text: 'Overall',
-    link: '/',
+    link: (id: number) => `/${id}`,
   },
-  {
-    icon: <Bars3BottomLeftIcon className='w-3 h-3' />,
-    text: 'Projects',
-    link: '/projects',
-  },
+  // {
+  //   icon: <Bars3BottomLeftIcon className='w-3 h-3' />,
+  //   text: 'Projects',
+  //   link: '/projects',
+  // },
   {
     icon: <SparklesIcon className='w-3 h-3' />,
     text: 'Prompts',
-    link: '/prompts',
+    link: (id: number) => `/${id}/prompts`,
   }
 ]
 
 function Menubar() {
-  const sq = useLocation().search
+  const params = useParams<{ pid: string }>()
   return (
     <nav className='py-2 w-40 hover:backdrop-blur-sm rounded-lg flex flex-col items-center justify-between'>
       <ul>
@@ -32,7 +32,7 @@ function Menubar() {
           <li key={menu.text}>
             <NavLink
               component={Link}
-              to={menu.link + `${sq.includes('?') ? '' : '?'}${sq}`}
+              to={menu.link((params?.pid) ? ~~params.pid : 0)}
               className='flex items-center mb-2'
               label={(
                 <div className='flex items-center'>

@@ -15,7 +15,7 @@ function ProjectCardItem(props: ProjectCardItemProps) {
 
   return (
     <Link
-      to={`/projects/${project.id}`}
+      to={`/${project.id}`}
       className='w-full py-4 rounded-lg flex justify-center items-center flex-col'
       data-glow
       style={{
