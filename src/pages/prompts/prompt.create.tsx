@@ -111,16 +111,16 @@ type PromptCreatePageProps = {
 function PromptCreatePage(props: PromptCreatePageProps) {
   const { isUpdate } = props
   const id = isUpdate ? ~~(useParams().id ?? '0') : 0
-  const pjId = useProjectId()
+  const pid = useProjectId()
 
   const ac = useApolloClient()
 
   const [updatePrompt, { loading: updating }] = useGraphQLMutation(um, {
     refetchQueries: ['fetchPrompts'],
-    onCompleted() {
+    onCompleted(data) {
       toast.success('Prompt updated')
       ac.resetStore()
-      navigate('/prompts?pjId=' + pjId)
+      navigate(`/${pid}/prompts/` + data.updatePrompt.id)
     }
   })
   const [createPrompt, { loading: creating }] = useGraphQLMutation(cm, {
@@ -128,11 +128,10 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     onCompleted() {
       toast.success('Prompt created')
       ac.resetStore()
-      navigate('/prompts?pjId=' + pjId)
+      navigate(`/${pid}/prompts`)
     }
   })
 
-  const pid = useProjectId()
   const navigate = useNavigate()
 
   const [testResult, setTestResult] = useState<testPromptResponse | null>(null)
@@ -182,7 +181,6 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     }
   })
 
-
   const { data: pjs } = useGraphQLQuery(q, {
     variables: {
       pagination: {
@@ -195,7 +193,6 @@ function PromptCreatePage(props: PromptCreatePageProps) {
       if (!payload) {
         return
       }
-      f.setFieldValue('projectId', payload.edges[0]?.id.toString())
     }
   })
 

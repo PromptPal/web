@@ -46,7 +46,7 @@ function PromptsPage() {
     <div className='w-full'>
       <div className='flex items-center justify-between'>
         <Heading>Prompts</Heading>
-        <Link to={`/prompts/new?pjId=${pid}`} className='daisyui-btn daisyui-btn-primary'>
+        <Link to={`/${pid}/prompts/new`} className='daisyui-btn daisyui-btn-primary'>
           New Prompt
         </Link>
       </div>

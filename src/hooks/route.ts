@@ -1,9 +1,9 @@
-import { useSearchParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 export function useProjectId() {
-  const [sp] = useSearchParams()
-  if (sp.has('pjId')) {
-    return ~~(sp.get('pjId') ?? '0')
+  const pid = useParams<{ pid: string }>().pid
+  if (pid) {
+    return ~~pid
   }
   return null
 }

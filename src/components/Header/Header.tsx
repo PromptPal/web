@@ -1,9 +1,8 @@
-import React from 'react'
 import LoginButton from './login'
 import Profile from './Profile'
 import { Link } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
-import ProjectSelector from './ProjectSelector'
+import ProjectLiteInfo from './ProjectLiteInfo'
 
 function Header() {
   // get user info
@@ -14,7 +13,8 @@ function Header() {
           <h2>PromptPal</h2>
         </Link>
         <div className='text-xs daisyui-badge daisyui-badge-info'>Alpha</div>
-        <ProjectSelector />
+        <ProjectLiteInfo />
+        {/* <ProjectSelector /> */}
       </div>
       <div className='flex items-center'>
         <ThemeToggle />

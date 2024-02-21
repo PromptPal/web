@@ -114,8 +114,8 @@ const q = graphql(`
 `)
 
 function PromptPage() {
-  const params = useParams()
-  const pid = ~~(params?.id ?? '0')
+  const params = useParams<{ id: string }>()
+  const pid = ~~(params.id ?? '0')
   const { data, loading, refetch } = useGraphQLQuery(q, {
     variables: {
       id: pid
@@ -187,7 +187,7 @@ function PromptPage() {
               variant='filled'
               color='teal'
               component={Link}
-              to={`/prompts/${promptDetail?.id}/edit?pjId=${pjId}`}
+              to={`/${pjId}/prompts/${promptDetail?.id}/edit`}
             >
               Edit
             </Button>
