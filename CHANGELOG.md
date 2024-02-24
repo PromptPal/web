@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.6.0](https://github.com/PromptPal/web/compare/v1.5.2...v1.6.0) (2024-02-24)
+
+
+### Features
+
+* **app:** update routes for better design and gemini support ([cb406af](https://github.com/PromptPal/web/commit/cb406afcc1a75260ac429c4c5a0988f614996067))
+* **app:** update the deps ([122a681](https://github.com/PromptPal/web/commit/122a681f318d4c3d3133ffd6e58c0f25f2ee39ae))
+* **docs:** add help info if user has no data at first scene ([e56bd1b](https://github.com/PromptPal/web/commit/e56bd1ba69de0ee5dd88e939ba1e84bca28cdd2b))
+* **gemini:** add gemini support ([1551bb3](https://github.com/PromptPal/web/commit/1551bb3bea4d8284e4c7cd50c81d5c91eab18de4))
+
+
+### Bug Fixes
+
+* **ci:** upgrade ci actions ([f446394](https://github.com/PromptPal/web/commit/f4463949e7ba025cef372be330df5c2b59fd41b2))
+* **css:** update tailwindcss configuration to respect color scheme set by mantine ([aa59ee7](https://github.com/PromptPal/web/commit/aa59ee79c929fea80e700b0937e4afcb515ddae5))
+* **deps:** fix signature in request fn to fix ts issues ([a45ce29](https://github.com/PromptPal/web/commit/a45ce297606a443639d43846f7b97e5fb0565982))
+* **deps:** upgrade deps ([1f0d1ac](https://github.com/PromptPal/web/commit/1f0d1acbe550588329e52d11bd0b653d86a26d2b))
+* **overall:** make chart theme respect global theme config ([6b39db5](https://github.com/PromptPal/web/commit/6b39db558ba22c85153c89a20a342e8ff6f0eb42))
+* **project:** fix project updater ([f95cd7b](https://github.com/PromptPal/web/commit/f95cd7b5833701f3ff3518732292248ee2c283e5))
+
 ## [1.5.2](https://github.com/PromptPal/web/compare/v1.5.1...v1.5.2) (2023-10-29)
 
 
