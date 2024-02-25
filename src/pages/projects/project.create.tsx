@@ -12,6 +12,7 @@ import { ProjectPayload } from '../../gql/graphql'
 import { OpenAIModels } from '../../constants'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const schema = zod.object({
   name: zod.string().trim().max(100).min(2),
@@ -65,6 +66,7 @@ function ProjectCreatePage() {
   })
 
   const qc = useQueryClient()
+  const [settingAreaRef] = useAutoAnimate()
 
   return (
     <form
@@ -99,39 +101,49 @@ function ProjectCreatePage() {
           {...form.getInputProps('openAIModel')}
         />
 
-        <TextInput
-          label={(
-            <div className='flex items-center'>
-              <span>
-                Base URL
-              </span>
-              <Tooltip label="The base URL of the OpenAI API. you can set this for proxy(大陆项目可以用此字段设置转发服务器代理)">
-                <InformationCircleIcon className="w-4 h-4 ml-1" />
-              </Tooltip>
-            </div>
+        <div ref={settingAreaRef}>
+
+          {form.values.openAIModel?.startsWith('gpt') && (
+            <>
+              <TextInput
+                label={(
+                  <div className='flex items-center'>
+                    <span>
+                      Base URL
+                    </span>
+                    <Tooltip label="The base URL of the OpenAI API. you can set this for proxy(大陆项目可以用此字段设置转发服务器代理)">
+                      <InformationCircleIcon className="w-4 h-4 ml-1" />
+                    </Tooltip>
+                  </div>
+                )}
+                className='mt-4'
+                {...form.getInputProps('openAIBaseURL')}
+              />
+
+              <TextInput label='OpenAI Token' className='mt-4' {...form.getInputProps('openAIToken')} />
+            </>
           )}
-          className='mt-4'
-          {...form.getInputProps('openAIBaseURL')}
-        />
 
-        <TextInput
-          label={(
-            <div className='flex items-center'>
-              <span>
-                Base URL
-              </span>
-              <Tooltip label="The base URL of the Google gemini API. you can set this for proxy(大陆项目可以用此字段设置转发服务器代理)">
-                <InformationCircleIcon className="w-4 h-4 ml-1" />
-              </Tooltip>
-            </div>
+          {form.values.openAIModel?.startsWith('gemini') && (
+            <>
+              <TextInput
+                label={(
+                  <div className='flex items-center'>
+                    <span>
+                      Base URL
+                    </span>
+                    <Tooltip label="The base URL of the Google gemini API. you can set this for proxy(大陆项目可以用此字段设置转发服务器代理)">
+                      <InformationCircleIcon className="w-4 h-4 ml-1" />
+                    </Tooltip>
+                  </div>
+                )}
+                className='mt-4'
+                {...form.getInputProps('geminiBaseURL')}
+              />
+              <TextInput label='Gemini Token' className='mt-4' {...form.getInputProps('geminiToken')} />
+            </>
           )}
-          className='mt-4'
-          {...form.getInputProps('geminiBaseURL')}
-        />
-
-        <TextInput label='OpenAI Token' className='mt-4' {...form.getInputProps('openAIToken')} />
-
-        <TextInput label='Gemini Token' className='mt-4' {...form.getInputProps('geminiToken')} />
+        </div>
       </div>
       <div className='flex flex-row justify-end mt-4 gap-4'>
         <Button
