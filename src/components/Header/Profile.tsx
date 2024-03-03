@@ -5,7 +5,7 @@ import { tokenAtom } from '../../stats/profile'
 import { Button, Divider, HoverCard } from '@mantine/core'
 import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const q = graphql(`
   query getUserProfile($id: Int!) {
@@ -21,6 +21,7 @@ function Profile() {
   const [token, setToken] = useAtom(tokenAtom)
   const loggedIn = !!token
   const qc = useQueryClient()
+  const nav = useNavigate()
 
   const client = useApolloClient()
   const { data } = useGraphQLQuery(q, {
@@ -68,6 +69,7 @@ function Profile() {
             qc.clear()
             client.resetStore()
             // TODO: redirect to overall page
+            nav('/auth')
           }}>
           Logout
         </Button>
