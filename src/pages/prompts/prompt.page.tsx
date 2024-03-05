@@ -200,6 +200,9 @@ function PromptPage() {
               Edit
             </Button>
             <Button
+              component='a'
+              target='_blank'
+              href='https://promptpal.github.io/docs/intro'
               leftSection={<InformationCircleIcon />}
               onClick={() => {
                 toast.success('Help coming soon...')
