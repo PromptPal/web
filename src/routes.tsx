@@ -11,6 +11,8 @@ import BaseLayout from './components/layout/Base'
 import ProjectLayout from './components/layout/ProjectLayout'
 import LandingPage from './pages/landing/Landing'
 import AuthorizePage from './pages/auth/authorize.page'
+import AuthSSOCallbackPage from './pages/auth/callback.page'
+import AuthLayout from './pages/auth/layout'
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +26,18 @@ export const router = createBrowserRouter([
       },
       {
         path: '/auth',
-        element: <AuthorizePage />
+        element: <AuthLayout />,
+        children: [
+          {
+            path: '',
+            index: true,
+            element: <AuthorizePage />
+          },
+          {
+            path: 'sso/cb',
+            element: <AuthSSOCallbackPage />
+          },
+        ]
       },
       {
         path: '/projects',

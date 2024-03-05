@@ -1,4 +1,4 @@
-import { Modal, TextInput, Button, Title, Input } from '@mantine/core'
+import { Modal, TextInput, Button, Input } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import Zod from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
@@ -96,11 +96,12 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
 
         <Input.Wrapper
           label='Expire At'
-          {...f.getInputProps('ttl')}
+          {...f.getInputProps('expireAt')}
         >
           <DateInput
             placeholder='expire time of this token'
             className='w-full'
+            {...f.getInputProps('expireAt')}
           />
         </Input.Wrapper>
 

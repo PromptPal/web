@@ -45,7 +45,7 @@ function ProjectCreatePage() {
   const [mutateAsync, { loading: isLoading }] = useGraphQLMutation(m, {
     refetchQueries: ['projects'],
     onCompleted(data) {
-      nav(`/projects/${data.createProject.id}`)
+      nav(`/${data.createProject.id}/view`)
       qc.invalidateQueries({
         queryKey: ['projects']
       })

@@ -35,7 +35,11 @@ const columns = [
 
       // TODO: compose the variables with the prompt
       return (
-        <Tooltip label={<Text>{dataset}</Text>}>
+        <Tooltip
+          label={<Text className='max-w-96'>{dataset}</Text>}
+          withArrow
+          transitionProps={{ transition: 'pop', duration: 150 }}
+        >
           <div className='line-clamp-4 whitespace-break-spaces'>
             {dataset}
           </div>
@@ -46,7 +50,11 @@ const columns = [
   columnHelper.accessor('message', {
     header: 'Message',
     cell: (info) => (
-      <Tooltip label={<Text>{info.getValue()}</Text>}>
+      <Tooltip
+        withArrow
+        transitionProps={{ transition: 'pop', duration: 150 }}
+        label={<Text className='max-w-96'>{info.getValue()}</Text>}
+      >
         <Text className='line-clamp-1 whitespace-normal'>
           {info.getValue()}
         </Text>
@@ -192,6 +200,9 @@ function PromptPage() {
               Edit
             </Button>
             <Button
+              component='a'
+              target='_blank'
+              href='https://promptpal.github.io/docs/intro'
               leftSection={<InformationCircleIcon />}
               onClick={() => {
                 toast.success('Help coming soon...')

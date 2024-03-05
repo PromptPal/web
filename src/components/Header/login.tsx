@@ -5,6 +5,7 @@ import { tokenAtom } from '../../stats/profile'
 import { toast } from 'react-hot-toast'
 import { graphql } from '../../gql'
 import { useLazyQuery } from '@apollo/client'
+import { Button } from '@mantine/core'
 
 const LoginWelcomeText = 'Welcome to the PromptPal~ \n It`s your nonce: '
 
@@ -21,7 +22,12 @@ const q = graphql(`
   }
 `)
 
-function LoginButton() {
+type LoginButtonProps = {
+  buttonText?: string
+}
+
+function LoginButton(props: LoginButtonProps) {
+  const { buttonText = 'Login' } = props
   const [t, setToken] = useAtom(tokenAtom)
 
   const [doLoginMutation] = useLazyQuery(q, {
@@ -90,12 +96,16 @@ function LoginButton() {
     return null
   }
   return (
-    <button
-      className='daisyui-btn daisyui-btn-neutral mx-2'
+    <Button
+      variant='gradient'
+      gradient={{
+        from: 'indigo',
+        to: 'cyan',
+      }}
       onClick={doWeb3Login}
     >
-      Login
-    </button>
+      {buttonText}
+    </Button>
   )
 }
 
