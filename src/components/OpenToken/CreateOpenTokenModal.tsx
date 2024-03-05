@@ -96,11 +96,12 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
 
         <Input.Wrapper
           label='Expire At'
-          {...f.getInputProps('ttl')}
+          {...f.getInputProps('expireAt')}
         >
           <DateInput
             placeholder='expire time of this token'
             className='w-full'
+            {...f.getInputProps('expireAt')}
           />
         </Input.Wrapper>
 

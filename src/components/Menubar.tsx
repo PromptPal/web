@@ -1,4 +1,4 @@
-import { HomeIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { CubeIcon, HomeIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import { Link, useParams } from 'react-router-dom'
 import { NavLink } from '@mantine/core'
 import buildTime from '~build/time'
@@ -10,6 +10,11 @@ const menus = [
     icon: <HomeIcon className='w-3 h-3' />,
     text: 'Overall',
     link: (id: number) => `/${id}`,
+  },
+  {
+    icon: <CubeIcon className='w-3 h-3' />,
+    text: 'Detail',
+    link: (id: number) => `/${id}/view`,
   },
   // {
   //   icon: <Bars3BottomLeftIcon className='w-3 h-3' />,

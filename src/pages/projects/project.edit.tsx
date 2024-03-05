@@ -110,7 +110,7 @@ function ProjectEditPage() {
       qc.invalidateQueries({
         queryKey: ['project', res.id]
       })
-      nav(`/projects/${res.id}`)
+      nav(`/${res.id}/view`)
       toast.success('Project updated')
     },
   })
@@ -261,7 +261,7 @@ function ProjectEditPage() {
         <Button
           variant='outline'
           onClick={() => {
-            nav(`/projects/${pid}`)
+            nav(`/${pid}/view`)
           }}
         >
           Cancel

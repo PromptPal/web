@@ -58,7 +58,7 @@ const columns = [
 ]
 
 function ProjectPage() {
-  const pid = useParams().id ?? '0'
+  const pid = useParams().pid ?? '0'
 
   const { data: projectData } = useGraphQLQuery(q, {
     variables: {
@@ -81,14 +81,14 @@ function ProjectPage() {
   return (
     <Stack className='w-full'>
       <Card>
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between items-center mb-4'>
           <div className='ml-4 mt-4 flex'>
             <Title size='lg'>
               {project?.name}
             </Title>
             <span color={'gray.500'}>recent 7 days</span>
           </div>
-          <Button variant='filled' className='text-white' component={Link} to={`/projects/${pid}/edit`}>
+          <Button variant='filled' className='text-white' component={Link} to={`/${pid}/edit`}>
             Edit
           </Button>
         </div>
