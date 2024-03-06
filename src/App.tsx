@@ -14,6 +14,7 @@ import './styles/glow.css'
 import '@mantine/core/styles.css'
 import '@mantine/code-highlight/styles.css'
 import '@mantine/dates/styles.css'
+import '@mantine/charts/styles.css'
 
 const queryClient = new QueryClient({
   defaultOptions: {
