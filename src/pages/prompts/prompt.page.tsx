@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ActionIcon, Badge, Box, Button, Card, Divider, Title as Heading, Highlight, Switch, Text, Tooltip } from '@mantine/core'
+import { ActionIcon, Badge, Box, Button, Card, Divider, Title as Heading, Highlight, HoverCard, Switch, Text } from '@mantine/core'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
@@ -35,30 +35,42 @@ const columns = [
 
       // TODO: compose the variables with the prompt
       return (
-        <Tooltip
-          label={<Text className='max-w-96'>{dataset}</Text>}
+        <HoverCard
           withArrow
           transitionProps={{ transition: 'pop', duration: 150 }}
         >
-          <div className='line-clamp-4 whitespace-break-spaces'>
-            {dataset}
-          </div>
-        </Tooltip>
+          <HoverCard.Dropdown>
+            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
+              {dataset}
+            </Text>
+          </HoverCard.Dropdown>
+          <HoverCard.Target>
+            <Text className='line-clamp-4 whitespace-break-spaces w-fit'>
+              {dataset}
+            </Text>
+          </HoverCard.Target>
+        </HoverCard>
       )
     },
   }),
   columnHelper.accessor('message', {
     header: 'Message',
     cell: (info) => (
-      <Tooltip
+      <HoverCard
         withArrow
         transitionProps={{ transition: 'pop', duration: 150 }}
-        label={<Text className='max-w-96'>{info.getValue()}</Text>}
       >
-        <Text className='line-clamp-1 whitespace-normal'>
-          {info.getValue()}
-        </Text>
-      </Tooltip>
+        <HoverCard.Dropdown>
+          <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
+            {info.getValue()}
+          </Text>
+        </HoverCard.Dropdown>
+        <HoverCard.Target>
+          <Text className='line-clamp-4 whitespace-normal w-fit'>
+            {info.getValue()}
+          </Text>
+        </HoverCard.Target>
+      </HoverCard>
     ),
   }),
   // TODO: add price column
@@ -127,7 +139,8 @@ function PromptPage() {
   const { data, loading, refetch } = useGraphQLQuery(q, {
     variables: {
       id: pid
-    }
+    },
+    pollInterval: 20_000
   })
 
   const promptDetail = data?.prompt
