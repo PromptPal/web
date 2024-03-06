@@ -57,7 +57,7 @@ function OverallPage() {
 
   return (
     <Card>
-      <div className='flex flex-row items-end'>
+      <div className='flex flex-row items-end mb-4'>
         <Title size='lg'>
           {pj?.name}
         </Title>

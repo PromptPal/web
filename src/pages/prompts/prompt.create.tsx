@@ -175,8 +175,8 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         publicLevel: payload.publicLevel,
         enabled: payload.enabled,
         debug: payload.debug ?? false,
-        prompts: payload.prompts ?? [],
-        variables: payload.variables ?? [],
+        prompts: structuredClone(payload.prompts),
+        variables: structuredClone(payload.variables),
       })
     }
   })
@@ -335,7 +335,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                   placeholder='Prompt'
                   className='w-full'
                   rows={8}
-                  {...f.getInputProps(`prompts.${index}.prompt`)}
+                  {...f.getInputProps(`prompts.${index}.prompt`, { type: 'input' })}
                 />
                 <div className='flex items-start'>
                   <Button
