@@ -1,8 +1,6 @@
-import ReactEChartsCore from 'echarts-for-react/lib/core'
 import { useMemo } from 'react'
-import echarts from '../../utils/echarts'
+import { BarChart } from '@mantine/charts'
 import { GetOverallProjectDataQuery } from '../../gql/graphql'
-import { useMantineColorScheme } from '@mantine/core'
 
 type ProjectTopPromptsChartProps = {
   recentCounts?: GetOverallProjectDataQuery['project']['promptMetrics']['recentCounts']
@@ -11,38 +9,33 @@ type ProjectTopPromptsChartProps = {
 function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
   const { recentCounts } = props
 
-  const echartDataOptions = useMemo<echarts.EChartsCoreOption>(() => {
-    return {
-      // title: 'Top Prompts',
-      tooltip: {
-        trigger: 'axis',
-      },
-      xAxis: {
-        type: 'category',
-        data: recentCounts?.map((p) => p.prompt.name),
-      },
-      yAxis: {
-        type: 'value',
-      },
-      series: [
-        {
-          data: recentCounts?.map((p) => p.count),
-          type: 'bar',
-        },
-      ],
-    } as echarts.EChartsCoreOption
+  const chartData = useMemo(() => {
+    return recentCounts?.reduce<Record<string, number | string>[]>((acc, p) => {
+      acc.push({
+        name: p.prompt.name,
+        count: p.count,
+      })
+      return acc
+    }, [])
   }, [recentCounts])
 
-  const { colorScheme } = useMantineColorScheme()
+  console.log('chartdata', chartData)
 
   return (
     <div>
-      <ReactEChartsCore
-        echarts={echarts}
-        option={echartDataOptions}
-        notMerge={true}
-        lazyUpdate={true}
-        theme={colorScheme === 'dark' ? 'dark' : 'light'}
+      <BarChart
+        h={300}
+        data={chartData ?? []}
+        dataKey='name'
+        series={[{
+          name: 'count',
+          color: 'violet.6'
+        }]}
+        tooltipAnimationDuration={150}
+        tickLine="y"
+        yAxisProps={{
+          allowDecimals: false,
+        }}
       />
     </div>
   )
