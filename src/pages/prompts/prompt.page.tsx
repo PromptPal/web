@@ -1,85 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ActionIcon, Badge, Box, Button, Card, Divider, Title as Heading, Highlight, HoverCard, Switch, Text } from '@mantine/core'
-import SimpleTable from '../../components/Table/SimpleTable'
-import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { Badge, Box, Button, Card, Divider, Title as Heading, Highlight, Switch } from '@mantine/core'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
 import { graphql } from '../../gql'
-import { FetchPromptDetailQuery } from '../../gql/graphql'
 import toast from 'react-hot-toast'
 import { useProjectId } from '../../hooks/route'
-import { ArrowPathIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
-
-const columnHelper = createColumnHelper<FetchPromptDetailQuery['prompt']['latestCalls']['edges'][0]>()
-
-const columns = [
-  columnHelper.accessor('id', {
-    header: 'ID',
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('duration', {
-    header: 'Duration',
-    cell: (info) => info.getValue() + ' ms',
-  }),
-  columnHelper.accessor('totalToken', {
-    header: 'Total Tokens',
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('payload', {
-    header: 'Payload',
-    cell: (info) => {
-      const val: Record<string, string> = JSON.parse(info.getValue())
-      const dataset = Object.keys(val).map((key) => {
-        return `${key}: ${val[key]}`
-      }).join('\n')
-
-      // TODO: compose the variables with the prompt
-      return (
-        <HoverCard
-          withArrow
-          transitionProps={{ transition: 'pop', duration: 150 }}
-        >
-          <HoverCard.Dropdown>
-            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
-              {dataset}
-            </Text>
-          </HoverCard.Dropdown>
-          <HoverCard.Target>
-            <Text className='line-clamp-4 whitespace-break-spaces w-fit'>
-              {dataset}
-            </Text>
-          </HoverCard.Target>
-        </HoverCard>
-      )
-    },
-  }),
-  columnHelper.accessor('message', {
-    header: 'Message',
-    cell: (info) => (
-      <HoverCard
-        withArrow
-        transitionProps={{ transition: 'pop', duration: 150 }}
-      >
-        <HoverCard.Dropdown>
-          <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
-            {info.getValue()}
-          </Text>
-        </HoverCard.Dropdown>
-        <HoverCard.Target>
-          <Text className='line-clamp-4 whitespace-normal w-fit'>
-            {info.getValue()}
-          </Text>
-        </HoverCard.Target>
-      </HoverCard>
-    ),
-  }),
-  // TODO: add price column
-  columnHelper.accessor('createdAt', {
-    header: 'Created At',
-    cell: (info) => new Intl.DateTimeFormat()
-      .format(new Date(info.getValue())),
-  })
-]
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import PromptCalls from '../../components/Calls/PromptCalls'
+import PromptCallMetric from '../../components/Calls/Metrics'
 
 const pm = graphql(`
   mutation togglePrompt($id: Int!, $payload: PromptPayload!) {
@@ -118,17 +46,6 @@ const q = graphql(`
         name
         type
       }
-      latestCalls {
-        count
-        edges {
-          id
-          duration
-          totalToken
-          payload
-          message
-          createdAt
-        }
-      }
     }
   }
 `)
@@ -136,7 +53,7 @@ const q = graphql(`
 function PromptPage() {
   const params = useParams<{ id: string }>()
   const pid = ~~(params.id ?? '0')
-  const { data, loading, refetch } = useGraphQLQuery(q, {
+  const { data } = useGraphQLQuery(q, {
     variables: {
       id: pid
     },
@@ -144,16 +61,6 @@ function PromptPage() {
   })
 
   const promptDetail = data?.prompt
-
-  const promptCallsTableData = useMemo(() => {
-    return promptDetail?.latestCalls.edges ?? []
-  }, [promptDetail])
-
-  const promptCallsTable = useReactTable({
-    data: promptCallsTableData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
 
   const variables = useMemo(() => {
     if (!promptDetail?.variables) {
@@ -268,10 +175,10 @@ function PromptPage() {
             </div>
           </div>
 
-          <div className='my-4'>
+          <div className='my-4 flex flex-col gap-4'>
             {promptDetail?.prompts.map((prompt, idx) => (
               <Box key={idx} display='flex' >
-                <span className='mr-2'>
+                <span className='mr-2 w-48'>
                   {prompt.role}:
                 </span>
                 <div
@@ -281,7 +188,8 @@ function PromptPage() {
                     highlight={variables.map((v) => `{{${v}}}`)}
                     highlightStyles={{
                       padding: '2px 4px', borderRadius: '4px'
-                    }}>
+                    }}
+                  >
                     {prompt.prompt}
                   </Highlight>
                 </div>
@@ -293,24 +201,10 @@ function PromptPage() {
 
       <Divider my={8} />
 
-      <Card>
-        <Card.Section className='p-4'>
-          <div className='flex items-center justify-between'>
-            <Heading>
-              Prompt Calls
-              <i className='ml-2 text-gray-400 text-sm'>
-                ({promptDetail?.latestCalls.count ?? 0})
-              </i>
-            </Heading>
-            <ActionIcon onClick={() => refetch()} disabled={loading}>
-              <ArrowPathIcon className='w-4 h-4' />
-            </ActionIcon>
-          </div>
-        </Card.Section>
-        <Card.Section className='p-4'>
-          <SimpleTable loading={loading} table={promptCallsTable} />
-        </Card.Section>
-      </Card>
+      <PromptCallMetric promptId={pid} />
+
+      <PromptCalls promptId={pid} />
+
     </div>
   )
 }
