@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.7.0](https://github.com/PromptPal/web/compare/v1.6.0...v1.7.0) (2024-03-10)
+
+
+### Features
+
+* **charts:** replace charts to mantine/charts ([2e43de1](https://github.com/PromptPal/web/commit/2e43de1da33aa2203f7d195368c7608f1189c4bb))
+* **metrics:** add project and prompt metric ([ec9d751](https://github.com/PromptPal/web/commit/ec9d751e2c27b8166ec0676f32871bc65b208241))
+* **sso:** add sso support ([b08678b](https://github.com/PromptPal/web/commit/b08678bec449b107ce4ba74ecf9e6a5b62c90927))
+
+
+### Bug Fixes
+
+* **auth:** add base layout of callback page ([f9b4bb7](https://github.com/PromptPal/web/commit/f9b4bb7a56cf2d532ba0778774ae441446e68381))
+* **project:** add support for dynamic rendering of form fields based on selected model ([be58d17](https://github.com/PromptPal/web/commit/be58d17136599e4896a0afe4e47f3d1ffca7c961))
+* **project:** fix issues because of project upgrading ([4f90ecc](https://github.com/PromptPal/web/commit/4f90ecc3d77853fa473242a56a4fd6488a9a6e31))
+* **prompt:** add help docs in prompt page ([4101a72](https://github.com/PromptPal/web/commit/4101a72e46010dfcc9ef112afb83ead53d928591))
+* **prompt:** fix prompt response preview bug in debug mode and fix edit prompt bug ([ffb10f2](https://github.com/PromptPal/web/commit/ffb10f25fec3e6fb416ecccfa64012e67d5f25a5))
+* **prompt:** update prompt debug messages ([b6a01ff](https://github.com/PromptPal/web/commit/b6a01ffd6985a954d003cd795acb4d6f3ec7fc5f))
+
 ## [1.6.0](https://github.com/PromptPal/web/compare/v1.5.2...v1.6.0) (2024-02-24)
 
 
