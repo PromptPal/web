@@ -19,7 +19,6 @@ function ProjectCardItem(props: ProjectCardItemProps) {
       className='w-full py-4 rounded-lg flex justify-center items-center flex-col'
       data-glow
       style={{
-        // '--base': 80,
         '--base': project.id * 300,
         '--spread': 20,
         '--outer': 1,

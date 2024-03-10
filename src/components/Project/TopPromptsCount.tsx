@@ -6,7 +6,7 @@ type ProjectTopPromptsChartProps = {
   recentCounts?: GetOverallProjectDataQuery['project']['promptMetrics']['recentCounts']
 }
 
-function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
+function ProjectTopPromptsCount(props: ProjectTopPromptsChartProps) {
   const { recentCounts } = props
 
   const chartData = useMemo(() => {
@@ -41,4 +41,4 @@ function ProjectTopPromptsChart(props: ProjectTopPromptsChartProps) {
   )
 }
 
-export default ProjectTopPromptsChart
+export default ProjectTopPromptsCount

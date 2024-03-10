@@ -1,10 +1,10 @@
 import { Box, Button, Card, Title } from '@mantine/core'
 import { Link } from 'react-router-dom'
-import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 import HelpIntegration from '../../components/Helps/Intergation'
 import { useProjectId } from '../../hooks/route'
+import ProjectTopPromptsByDate from '../../components/Project/TopPromptsByDate'
 
 const q = graphql(`
   query getOverallProjectData($id: Int!) {
@@ -18,6 +18,16 @@ const q = graphql(`
             name
           }
           count
+        }
+        last7Days {
+          date
+          prompts {
+            count
+            prompt {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -63,13 +73,18 @@ function OverallPage() {
         </Title>
         <span className='ml-2 text-gray-500 text-xs'>recent 7 days</span>
       </div>
-      <div>
+      <div className='flex flex-col gap-12'>
         {pj?.promptMetrics.recentCounts.length === 0 && (
           <HelpIntegration />
         )}
-        {pj && pj?.promptMetrics.recentCounts.length > 0 && (
-          <ProjectTopPromptsChart
+        {/* {pj && pj?.promptMetrics.recentCounts.length > 0 && (
+          <ProjectTopPromptsCount
             recentCounts={pj?.promptMetrics.recentCounts}
+          />
+        )} */}
+        {pj && pj?.promptMetrics.last7Days.length > 0 && (
+          <ProjectTopPromptsByDate
+            recentCounts={pj?.promptMetrics.last7Days}
           />
         )}
       </div>

@@ -4,7 +4,7 @@ import { useDisclosure } from '@mantine/hooks'
 import SimpleTable from '../../components/Table/SimpleTable'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
-import ProjectTopPromptsChart from '../../components/Project/TopPromptsChart'
+import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '@/gql'
 import { OpenToken } from '@/gql/graphql'
@@ -93,7 +93,7 @@ function ProjectPage() {
           </Button>
         </div>
         <div>
-          <ProjectTopPromptsChart recentCounts={project?.promptMetrics.recentCounts} />
+          <ProjectTopPromptsCount recentCounts={project?.promptMetrics.recentCounts} />
         </div>
       </Card>
 

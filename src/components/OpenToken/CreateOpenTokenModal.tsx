@@ -77,9 +77,14 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
 
   return (
     <Modal
-      opened={isOpen} onClose={onClose} centered
+      opened={isOpen}
+      onClose={onClose}
+      centered
       title='Create Open Token'
-      overlayProps={{ backgroundOpacity: 0.5, blur: 8 }}
+      overlayProps={{
+        backgroundOpacity: 0.5,
+        blur: 8
+      }}
     >
       <form onSubmit={f.onSubmit(onSubmit)}>
         <TextInput
