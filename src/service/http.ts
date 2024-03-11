@@ -61,8 +61,10 @@ export function HttpRequest<T, I = undefined>(
       if (err instanceof Response) {
         if (err.status === 401) {
           // clear token
-          localStorage.removeItem('pp:token')
-          window.location.reload()
+          if (localStorage.getItem('pp:token')) {
+            localStorage.removeItem('pp:token')
+          }
+          window.location.href = '/auth'
         }
       }
 
