@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/PromptPal/web/compare/v1.7.0...v1.7.1) (2024-03-11)
+
+
+### Bug Fixes
+
+* **auth:** redirect to auth page if unauthorized ([80f0c25](https://github.com/PromptPal/web/commit/80f0c25c09d1741125c8e61133c0d7654bcbd591))
+
 ## [1.7.0](https://github.com/PromptPal/web/compare/v1.6.0...v1.7.0) (2024-03-10)
 
 
