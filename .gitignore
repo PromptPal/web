@@ -26,3 +26,4 @@ dist.zip
 
 graphql.schema.json
 gql/
+*storybook.log

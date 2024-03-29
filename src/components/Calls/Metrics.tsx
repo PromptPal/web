@@ -6,7 +6,7 @@ type PromptCallMetricProps = {
   promptId: number
 }
 
-const q = graphql(`
+export const q = graphql(`
   query fetchPromptCallsMetricsOnly($id: Int!) {
     prompt(id: $id) {
       id
@@ -56,8 +56,6 @@ function PromptCallMetric(props: PromptCallMetricProps) {
   })
 
   const metrics = data?.prompt.metrics
-
-  console.log('data', data)
 
   return (
     <div className='grid grid-cols-3 gap-8 mb-2' >
