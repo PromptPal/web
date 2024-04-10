@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.7.2](https://github.com/PromptPal/web/compare/v1.7.1...v1.7.2) (2024-04-10)
+
+
+### Features
+
+* **tests:** setup tests ([9c8c491](https://github.com/PromptPal/web/commit/9c8c491a966336ca697c6720bd4f1927d7484e03))
+
+
+### Bug Fixes
+
+* **deps:** upgrade deps to latest ([3d0ac14](https://github.com/PromptPal/web/commit/3d0ac146e5393e3517e17f67a6df630674a0dfc2))
+* **models:** add gpt4-turbo to supported models ([7476451](https://github.com/PromptPal/web/commit/74764516493be5f217f9fd4a270c42e58d16dc30))
+
+
+### Miscellaneous Chores
+
+* change release number to 1.7.2 ([6e62be7](https://github.com/PromptPal/web/commit/6e62be786ebb79f0c7c58757b0c5351ec391825d))
+
 ## [1.7.1](https://github.com/PromptPal/web/compare/v1.7.0...v1.7.1) (2024-03-11)
 
 
