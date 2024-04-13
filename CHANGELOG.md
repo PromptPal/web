@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.3](https://github.com/PromptPal/web/compare/v1.7.2...v1.7.3) (2024-04-13)
+
+
+### Bug Fixes
+
+* **ui:** fix ui issues ([c6d542d](https://github.com/PromptPal/web/commit/c6d542d499d23abfd6e691d009c0f1953b1be762))
+
 ## [1.7.2](https://github.com/PromptPal/web/compare/v1.7.1...v1.7.2) (2024-04-10)
 
 
