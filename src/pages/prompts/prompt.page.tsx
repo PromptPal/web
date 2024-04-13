@@ -102,6 +102,16 @@ function PromptPage() {
 
   const pjId = useProjectId()
 
+  const highlightValues = useMemo(() => {
+    const withSpaces = variables.reduce<string[]>((acc, v) => {
+      // left space and right space
+      acc.push(v, ` ${v} `, `${v} `, ` ${v}`)
+      return acc
+    }, [])
+
+    return withSpaces.map((v) => `{{${v}}}`)
+  }, [variables])
+
   return (
     <div>
       <Card>
@@ -143,10 +153,16 @@ function PromptPage() {
           <Divider my={4} />
           <div className='flex'>
             <div className='flex-1 text-center'>
-              Create Time: {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.createdAt)) : 'N/A'}
+              Create Time:
+              <div>
+                {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.createdAt)) : 'N/A'}
+              </div>
             </div>
             <div className='flex-1 text-center'>
-              Visibility: <Badge >{promptDetail?.publicLevel}</Badge>
+              Visibility:
+              <div>
+                <Badge>{promptDetail?.publicLevel}</Badge>
+              </div>
             </div>
             <div className='flex-1 text-center'>
               Enabled:
@@ -185,7 +201,7 @@ function PromptPage() {
                   className='whitespace-break-spaces bg-opacity-30 bg-slate-900 rounded w-full p-4'
                 >
                   <Highlight
-                    highlight={variables.map((v) => `{{${v}}}`)}
+                    highlight={highlightValues}
                     highlightStyles={{
                       padding: '2px 4px', borderRadius: '4px'
                     }}

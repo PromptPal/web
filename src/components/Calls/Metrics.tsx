@@ -1,6 +1,7 @@
 import { graphql } from '../../gql'
 import { useQuery } from '@apollo/client'
 import { FetchPromptCallsMetricsOnlyQuery } from '../../gql/graphql'
+import { useMemo } from 'react'
 
 type PromptCallMetricProps = {
   promptId: number
@@ -26,6 +27,12 @@ function MetricCard(props: {
   unit?: string
 }) {
   const { title, value, unit = 'ms', index } = props
+  const displayValue = useMemo(() => {
+    if (typeof value === 'number') {
+      return value.toFixed(2)
+    }
+    return value
+  }, [value])
   return (
     <div
       data-glow
@@ -36,7 +43,7 @@ function MetricCard(props: {
       } as any}
     >
       <h3 className='text-3xl'>
-        {value}
+        {displayValue}
         <span className='text-sm ml-2'>{unit}</span>
       </h3>
       <div className='text-sm'>{title}</div>
