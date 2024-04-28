@@ -6,6 +6,7 @@ import { Button, Divider, HoverCard } from '@mantine/core'
 import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
 import { Link, useNavigate } from 'react-router-dom'
+import UserAvatar from '../User/UserAvatar'
 
 const q = graphql(`
   query getUserProfile($id: Int!) {
@@ -40,15 +41,10 @@ function Profile() {
   return (
     <HoverCard withArrow transitionProps={{ transition: 'pop' }}>
       <HoverCard.Target>
-        <div className='flex items-center px-2 py-1 rounded'>
-          <MetaMaskAvatar
-            address={myProfile?.addr ?? ''}
-          />
-          <h6
-            className='max-w-[120px] line-clamp-1 text-ellipsis overflow-hidden ml-2 cursor-pointer'>
-            {myProfile?.name ?? ''}
-          </h6>
-        </div>
+        <UserAvatar
+          addr={myProfile?.addr}
+          name={myProfile?.name ?? ''}
+        />
       </HoverCard.Target>
       <HoverCard.Dropdown className=' min-w-48'>
         <Button
