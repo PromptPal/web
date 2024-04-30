@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.0](https://github.com/PromptPal/web/compare/v1.7.3...v1.8.0) (2024-04-30)
+
+
+### Features
+
+* **prompt:** add history modal ([091c217](https://github.com/PromptPal/web/commit/091c217a3cb9a5a86ca0059778df6f96eca4e8d6))
+* Update PromptHistoriesPage with PromptDiffView component ([4af7414](https://github.com/PromptPal/web/commit/4af74142a2c0edb6187e4ab0e108c2e37cca39f0))
+
 ## [1.7.3](https://github.com/PromptPal/web/compare/v1.7.2...v1.7.3) (2024-04-13)
 
 
