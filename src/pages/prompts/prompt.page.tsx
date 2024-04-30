@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Badge, Box, Button, Card, Divider, Title as Heading, Highlight, Switch } from '@mantine/core'
+import { Badge, Box, Button, Card, Divider, Title as Heading, Modal, Switch } from '@mantine/core'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
 import { graphql } from '../../gql'
 import toast from 'react-hot-toast'
@@ -8,6 +8,9 @@ import { useProjectId } from '../../hooks/route'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import PromptCalls from '../../components/Calls/PromptCalls'
 import PromptCallMetric from '../../components/Calls/Metrics'
+import PromptReadonly from '../../components/Prompt/PromptReadonly'
+import { useDisclosure } from '@mantine/hooks'
+import PromptHistoriesPage from './history.page'
 
 const pm = graphql(`
   mutation togglePrompt($id: Int!, $payload: PromptPayload!) {
@@ -38,6 +41,10 @@ const q = graphql(`
         id
         name
       }
+      creator {
+        id
+        name
+      }
       prompts {
         prompt
         role
@@ -61,13 +68,6 @@ function PromptPage() {
   })
 
   const promptDetail = data?.prompt
-
-  const variables = useMemo(() => {
-    if (!promptDetail?.variables) {
-      return []
-    }
-    return promptDetail.variables.map(x => x.name)
-  }, [promptDetail])
 
   const [doPromptUpdate, { loading: isPromptUpdating }] = useMutation(pm)
 
@@ -102,15 +102,7 @@ function PromptPage() {
 
   const pjId = useProjectId()
 
-  const highlightValues = useMemo(() => {
-    const withSpaces = variables.reduce<string[]>((acc, v) => {
-      // left space and right space
-      acc.push(v, ` ${v} `, `${v} `, ` ${v}`)
-      return acc
-    }, [])
-
-    return withSpaces.map((v) => `{{${v}}}`)
-  }, [variables])
+  const [historyOpened, historyHandlers] = useDisclosure()
 
   return (
     <div>
@@ -121,6 +113,15 @@ function PromptPage() {
             <span className='ml-2 text-gray-400'>{promptDetail?.description}</span>
           </div>
           <div className='flex gap-4 items-center'>
+            <Button
+              variant='filled'
+              color='teal'
+              onClick={() => {
+                historyHandlers.open()
+              }}
+            >
+              Versions
+            </Button>
             <Button
               variant='filled'
               color='teal'
@@ -193,23 +194,12 @@ function PromptPage() {
 
           <div className='my-4 flex flex-col gap-4'>
             {promptDetail?.prompts.map((prompt, idx) => (
-              <Box key={idx} display='flex' >
-                <span className='mr-2 w-48'>
-                  {prompt.role}:
-                </span>
-                <div
-                  className='whitespace-break-spaces bg-opacity-30 bg-slate-900 rounded w-full p-4'
-                >
-                  <Highlight
-                    highlight={highlightValues}
-                    highlightStyles={{
-                      padding: '2px 4px', borderRadius: '4px'
-                    }}
-                  >
-                    {prompt.prompt}
-                  </Highlight>
-                </div>
-              </Box>
+              <PromptReadonly
+                key={idx}
+                index={idx}
+                prompt={prompt}
+                promptVariables={promptDetail.variables}
+              />
             ))}
           </div>
         </Card.Section>
@@ -221,6 +211,17 @@ function PromptPage() {
 
       <PromptCalls promptId={pid} />
 
+      <Modal
+        opened={historyOpened}
+        centered
+        size='xl'
+        title='Versions'
+        withCloseButton
+        onClose={historyHandlers.close}>
+        <PromptHistoriesPage
+          promptId={pid}
+        />
+      </Modal>
     </div>
   )
 }
