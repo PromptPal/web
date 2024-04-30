@@ -1,3 +1,4 @@
+import { Tooltip } from '@mantine/core'
 import { MetaMaskAvatar } from 'react-metamask-avatar'
 
 type UserAvatarProps = {
@@ -12,10 +13,18 @@ function UserAvatar(props: UserAvatarProps) {
       <MetaMaskAvatar
         address={addr ?? ''}
       />
-      <h6
-        className='max-w-[120px] line-clamp-1 text-ellipsis overflow-hidden ml-2 cursor-pointer'>
-        {name}
-      </h6>
+      <Tooltip
+        withArrow
+        transitionProps={{
+          transition: 'pop',
+        }}
+        label={name}
+      >
+        <h6
+          className='max-w-[120px] line-clamp-1 text-ellipsis overflow-hidden ml-2 cursor-pointer'>
+          {name}
+        </h6>
+      </Tooltip>
     </div>
   )
 }

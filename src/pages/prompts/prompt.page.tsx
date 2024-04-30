@@ -120,7 +120,7 @@ function PromptPage() {
                 historyHandlers.open()
               }}
             >
-              History
+              Versions
             </Button>
             <Button
               variant='filled'
@@ -215,7 +215,7 @@ function PromptPage() {
         opened={historyOpened}
         centered
         size='xl'
-        title='History'
+        title='Versions'
         withCloseButton
         onClose={historyHandlers.close}>
         <PromptHistoriesPage

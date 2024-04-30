@@ -1,9 +1,9 @@
 import { Accordion, Divider, Pill } from '@mantine/core'
+import dayjs from 'dayjs'
 import { graphql } from '../../gql'
 import { useQuery } from '@apollo/client'
-import PromptReadonly from '../../components/Prompt/PromptReadonly'
 import UserAvatar from '../../components/User/UserAvatar'
-import dayjs from 'dayjs'
+import PromptDiffView from '../../components/Prompt/PromptDiffView'
 
 type PromptHistoriesPageProps = {
   promptId: number
@@ -13,6 +13,10 @@ const q = graphql(`
   query fetchPromptHistories($id: Int!) {
     prompt(id: $id) {
       id
+      prompts {
+        prompt
+        role
+      }
       histories {
         count
         edges {
@@ -59,8 +63,13 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
 
   if (!data) {
     return (
-      <div>
-        Loading...
+      <div className='grid gap-4'>
+        {Array.from({ length: 3 }).map((_, idx) => (
+          <div
+            key={idx}
+            className='w-full h-10 bg-slate-700 animate-pulse rounded'
+          />
+        ))}
       </div>
     )
   }
@@ -90,14 +99,10 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
                   </div>
                   <Divider className='my-4' />
                   <div className='grid gap-4'>
-                    {x.prompts.map((p, idx) => (
-                      <PromptReadonly
-                        key={idx}
-                        index={idx}
-                        prompt={p}
-                        promptVariables={x.variables}
-                      />
-                    ))}
+                    <PromptDiffView
+                      originalPrompt={x.prompts}
+                      latestPrompt={data.prompt.prompts}
+                    />
                   </div>
                 </div>
               </Accordion.Panel>
