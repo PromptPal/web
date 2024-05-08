@@ -85,7 +85,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
   return (
     <div>
       <Accordion>
-        {data.prompt.histories.edges.map((x, idx) => {
+        {data!.prompt.histories.edges.map((x, idx) => {
           return (
             <Accordion.Item
               key={idx}
@@ -109,7 +109,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
                   <div className='grid gap-4'>
                     <PromptDiffView
                       originalPrompt={x.prompts}
-                      latestPrompt={data.prompt.prompts}
+                      latestPrompt={data!.prompt.prompts}
                     />
                   </div>
                 </div>
