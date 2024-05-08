@@ -5,6 +5,8 @@ import { FetchPromptCallsTableQuery } from '../../gql/graphql'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { graphql } from '../../gql'
 import { useQuery } from '@apollo/client'
+import dayjs from 'dayjs'
+import UABadge from './UABadge'
 
 type PromptCallsProps = {
   promptId: number
@@ -23,6 +25,8 @@ const q = graphql(`
           payload
           message
           createdAt
+          costInCents
+          userAgent
         }
       }
     }
@@ -34,15 +38,36 @@ const columnHelper = createColumnHelper<FetchPromptCallsTableQuery['prompt']['la
 const columns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    cell: (info) => info.getValue(),
+    cell: (info) => {
+      return (
+        <div>
+          <span>
+            {info.getValue()}
+          </span>
+          <UABadge userAgent={info.row.original.userAgent} className='ml-2' />
+        </div>
+      )
+    },
   }),
   columnHelper.accessor('duration', {
     header: 'Duration',
     cell: (info) => info.getValue() + ' ms',
   }),
   columnHelper.accessor('totalToken', {
-    header: 'Total Tokens',
-    cell: (info) => info.getValue(),
+    header: 'Total Tokens(USD)',
+    id: 'totalToken',
+    cell: (info) => {
+      return (
+        <div>
+          <span>
+            {info.getValue()}
+          </span>
+          <span className='ml-2 text-xs'>
+            (${info.row.original.costInCents})
+          </span>
+        </div>
+      )
+    },
   }),
   columnHelper.accessor('payload', {
     header: 'Payload',
@@ -51,6 +76,12 @@ const columns = [
       const dataset = Object.keys(val).map((key) => {
         return `${key}: ${val[key]}`
       }).join('\n')
+
+      if (Object.keys(val).length === 0) {
+        return (
+          <span>-</span>
+        )
+      }
 
       // TODO: compose the variables with the prompt
       return (
@@ -74,29 +105,63 @@ const columns = [
   }),
   columnHelper.accessor('message', {
     header: 'Message',
-    cell: (info) => (
-      <HoverCard
-        withArrow
-        transitionProps={{ transition: 'pop', duration: 150 }}
-      >
-        <HoverCard.Dropdown>
-          <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
-            {info.getValue()}
-          </Text>
-        </HoverCard.Dropdown>
-        <HoverCard.Target>
-          <Text className='line-clamp-4 whitespace-normal w-fit'>
-            {info.getValue()}
-          </Text>
-        </HoverCard.Target>
-      </HoverCard>
-    ),
+    cell: (info) => {
+      const content = info.getValue()
+
+      if (!content) {
+        return (
+          <span>-</span>
+        )
+      }
+
+      return (
+        <HoverCard
+          withArrow
+          transitionProps={{ transition: 'pop', duration: 150 }}
+        >
+          <HoverCard.Dropdown>
+            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
+              {content}
+            </Text>
+          </HoverCard.Dropdown>
+          <HoverCard.Target>
+            <Text className='line-clamp-4 whitespace-normal w-fit'>
+              {content}
+            </Text>
+          </HoverCard.Target>
+        </HoverCard>
+      )
+    },
   }),
-  // TODO: add price column
   columnHelper.accessor('createdAt', {
     header: 'Created At',
-    cell: (info) => new Intl.DateTimeFormat()
-      .format(new Date(info.getValue())),
+    cell: (info) => {
+      const date = dayjs(info.getValue())
+
+      let result = date.format('YYYY-MM-DD HH:mm')
+
+      if (date.diff(dayjs(), 'D') < 1) {
+        result = date.fromNow()
+      }
+      return (
+        <HoverCard
+          withArrow
+          position='top'
+          transitionProps={{ transition: 'pop', duration: 150 }}
+        >
+          <HoverCard.Dropdown>
+            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
+              {date.format('YYYY-MM-DD HH:mm:ss')}
+            </Text>
+          </HoverCard.Dropdown>
+          <HoverCard.Target>
+            <Text>
+              {result}
+            </Text>
+          </HoverCard.Target>
+        </HoverCard>
+      )
+    },
   })
 ]
 
@@ -110,10 +175,10 @@ function PromptCalls(props: PromptCallsProps) {
     pollInterval: 20_000
   })
 
-  const lastestCalls = promptData?.prompt?.latestCalls
+  const latestCalls = promptData?.prompt?.latestCalls
 
   const promptCallsTable = useReactTable({
-    data: lastestCalls?.edges ?? [],
+    data: latestCalls?.edges ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
@@ -124,7 +189,7 @@ function PromptCalls(props: PromptCallsProps) {
           <Title>
             Prompt Calls
             <i className='ml-2 text-gray-400 text-sm'>
-              ({lastestCalls?.count ?? 0})
+              ({latestCalls?.count ?? 0})
             </i>
           </Title>
           <ActionIcon
