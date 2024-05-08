@@ -1,5 +1,5 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { Text, Card, ActionIcon, Title, HoverCard, Badge } from '@mantine/core'
+import { Text, Card, ActionIcon, Title, HoverCard } from '@mantine/core'
 import SimpleTable from '../Table/SimpleTable'
 import { FetchPromptCallsTableQuery } from '../../gql/graphql'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'

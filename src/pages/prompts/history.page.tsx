@@ -55,13 +55,13 @@ const q = graphql(`
 function PromptHistoriesPage(props: PromptHistoriesPageProps) {
   const { promptId } = props
 
-  const { data } = useQuery(q, {
+  const { data, loading } = useQuery(q, {
     variables: {
       id: promptId
     }
   })
 
-  if (!data) {
+  if (loading && !data) {
     return (
       <div className='grid gap-4'>
         {Array.from({ length: 3 }).map((_, idx) => (
@@ -70,6 +70,14 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
             className='w-full h-10 bg-slate-700 animate-pulse rounded'
           />
         ))}
+      </div>
+    )
+  }
+
+  if (data?.prompt.histories.count === 0) {
+    return (
+      <div className='flex items-center justify-center py-10'>
+        No History
       </div>
     )
   }
