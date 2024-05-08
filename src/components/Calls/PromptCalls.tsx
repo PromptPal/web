@@ -1,11 +1,12 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { Text, Card, ActionIcon, Title, HoverCard } from '@mantine/core'
+import { Text, Card, ActionIcon, Title, HoverCard, Badge } from '@mantine/core'
 import SimpleTable from '../Table/SimpleTable'
 import { FetchPromptCallsTableQuery } from '../../gql/graphql'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { graphql } from '../../gql'
 import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs'
+import UABadge from './UABadge'
 
 type PromptCallsProps = {
   promptId: number
@@ -37,7 +38,16 @@ const columnHelper = createColumnHelper<FetchPromptCallsTableQuery['prompt']['la
 const columns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    cell: (info) => info.getValue(),
+    cell: (info) => {
+      return (
+        <div>
+          <span>
+            {info.getValue()}
+          </span>
+          <UABadge userAgent={info.row.original.userAgent} className='ml-2' />
+        </div>
+      )
+    },
   }),
   columnHelper.accessor('duration', {
     header: 'Duration',
