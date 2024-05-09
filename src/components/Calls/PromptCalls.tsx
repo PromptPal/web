@@ -63,7 +63,7 @@ const columns = [
             {info.getValue()}
           </span>
           <span className='ml-2 text-xs'>
-            (${info.row.original.costInCents})
+            (${info.row.original.costInCents / 100})
           </span>
         </div>
       )
