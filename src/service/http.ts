@@ -18,17 +18,19 @@ export type HttpErrorResponse = {
   error: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 export function HttpRequest<T, I = undefined>(
   input: RequestInfo | URL,
   init: HttpRequestInit<I> = {} as HttpRequestInit<I>,
   options?: {
     ignoreErrors?: boolean
-  }
+  },
 ): Promise<Response> {
-  const req = (typeof input === 'string' ? input : input.toString()).startsWith('http') ?
-    input :
-    `${HTTP_ENDPOINT}${input}`
+  const req = (typeof input === 'string' ? input : input.toString()).startsWith(
+    'http',
+  )
+    ? input
+    : `${HTTP_ENDPOINT}${input}`
 
   const token = getToken()
 
@@ -43,21 +45,22 @@ export function HttpRequest<T, I = undefined>(
   data.headers = {
     ...data.headers,
     // 'Content-Type': 'application/json',
-    'Authorization': token ? `Bearer ${getToken()}` : ''
+    Authorization: token ? `Bearer ${getToken()}` : '',
   }
   if (data.body && typeof data.body !== 'string') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (data as any).body = JSON.stringify(data.body)
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    ;(data as any).body = JSON.stringify(data.body)
   }
 
   return fetch(req, data as never)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         return res
       } else {
         throw res
       }
-    }).catch(async (err: Response | Error) => {
+    })
+    .catch(async (err: Response | Error) => {
       if (err instanceof Response) {
         if (err.status === 401) {
           // clear token
@@ -69,16 +72,19 @@ export function HttpRequest<T, I = undefined>(
       }
 
       // let errorContent: HttpErrorResponse | Error
-      let errorContent: HttpErrorResponse & { message?: string, name?: string }
-      if ((err instanceof Response) && !err.bodyUsed) {
-        errorContent = await err.json() as HttpErrorResponse
+      let errorContent: HttpErrorResponse & { message?: string; name?: string }
+      if (err instanceof Response && !err.bodyUsed) {
+        errorContent = (await err.json()) as HttpErrorResponse
       } else {
         errorContent = err as unknown as HttpErrorResponse
       }
-      const isAbortError = err instanceof Error ? err.name === 'AbortError' : false
+      const isAbortError =
+        err instanceof Error ? err.name === 'AbortError' : false
 
       if (!options?.ignoreErrors && !isAbortError) {
-        toast.error(errorContent.message ?? errorContent.error ?? errorContent.toString())
+        toast.error(
+          errorContent.message ?? errorContent.error ?? errorContent.toString(),
+        )
       }
 
       throw errorContent

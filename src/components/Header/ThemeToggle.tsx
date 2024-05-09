@@ -1,13 +1,13 @@
-import { useMantineColorScheme, Select } from '@mantine/core'
+import { Select, useMantineColorScheme } from '@mantine/core'
 
 function ThemeToggle() {
   const { setColorScheme, colorScheme } = useMantineColorScheme()
 
   return (
     <Select
-      className='w-24'
+      className="w-24"
       value={colorScheme}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       onChange={(value) => setColorScheme(value as any)}
       data={['auto', 'light', 'dark']}
     />

@@ -4,18 +4,18 @@ function syncPointer({ x, y }: PointerEvent) {
   document.documentElement.style.setProperty('--pointer-x', x.toFixed(2))
   document.documentElement.style.setProperty(
     '--pointer-xp',
-    (x / window.innerWidth).toFixed(2)
+    (x / window.innerWidth).toFixed(2),
   )
   document.documentElement.style.setProperty('--pointer-y', y.toFixed(2))
   document.documentElement.style.setProperty(
     '--pointer-yp',
-    (y / window.innerHeight).toFixed(2)
+    (y / window.innerHeight).toFixed(2),
   )
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 function isTouchDevice() {
-  return (('ontouchstart' in window) ||
-    (navigator.maxTouchPoints > 0))
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
 }
 
 // https://codepen.io/jh3y/pen/oNVvQRo
