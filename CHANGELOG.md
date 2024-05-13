@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.9.0](https://github.com/PromptPal/web/compare/v1.8.0...v1.9.0) (2024-05-09)
+
+
+### Features
+
+* **calls:** add costs support on each prompt ([3522b27](https://github.com/PromptPal/web/commit/3522b272be40cb018e871e8c9fa0c112c83ea7c7))
+* **calls:** add userAgent info in prompt call ([01d9e45](https://github.com/PromptPal/web/commit/01d9e452a4cae86c8ee4da13d8bdff45297ae603))
+* **ci:** add githook for check code quality ([c2e0a12](https://github.com/PromptPal/web/commit/c2e0a121b0681e5b7ac6c512d47aac482d5967b1))
+* **ci:** upgrade to node 22 ([145b8ef](https://github.com/PromptPal/web/commit/145b8ef8ac9ab125df0eb188f06f9014ecad23fa))
+* **lint:** move lint from eslint to biome ([884ae09](https://github.com/PromptPal/web/commit/884ae0967f1c432be5cb711fa3caee9476c005c6))
+
+
+### Bug Fixes
+
+* **calls:** fix costs to cents ([27be701](https://github.com/PromptPal/web/commit/27be7014c53cf42821a0114a1d56269be190ce18))
+* **history:** show empty info if there are no history ([bc6a3ce](https://github.com/PromptPal/web/commit/bc6a3ce65b684bfd49f5f4bb89a40865046559ee))
+
 ## [1.8.0](https://github.com/PromptPal/web/compare/v1.7.3...v1.8.0) (2024-04-30)
 
 
