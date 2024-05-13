@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/PromptPal/web/compare/v1.9.0...v1.9.1) (2024-05-13)
+
+
+### Bug Fixes
+
+* **ci:** fix package manager ([8028a3e](https://github.com/PromptPal/web/commit/8028a3e27c63d32c5f7818f509b52d20bae3474d))
+
 ## [1.9.0](https://github.com/PromptPal/web/compare/v1.8.0...v1.9.0) (2024-05-09)
 
 
