@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.2](https://github.com/PromptPal/web/compare/v1.9.1...v1.9.2) (2024-05-13)
+
+
+### Bug Fixes
+
+* **ci:** fix version in ci ([9a1b7af](https://github.com/PromptPal/web/commit/9a1b7af08d2ee8f71efc607177606ab6990afadb))
+
 ## [1.9.1](https://github.com/PromptPal/web/compare/v1.9.0...v1.9.1) (2024-05-13)
 
 
