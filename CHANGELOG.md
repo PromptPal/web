@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.3](https://github.com/PromptPal/web/compare/v1.9.2...v1.9.3) (2024-05-14)
+
+
+### Bug Fixes
+
+* **gpt4o:** enable gpt-4o ([b49deea](https://github.com/PromptPal/web/commit/b49deea1947e2255e9c62d4e980db92b71181286))
+
 ## [1.9.2](https://github.com/PromptPal/web/compare/v1.9.1...v1.9.2) (2024-05-13)
 
 
