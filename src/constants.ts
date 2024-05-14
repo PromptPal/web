@@ -6,5 +6,6 @@ export const OpenAIModels = [
   'gpt-3.5-turbo',
   'gpt-4-turbo',
   'gpt-4',
-  'gemini-pro'
+  'gpt-4o',
+  'gemini-pro',
 ] as const
