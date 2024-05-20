@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.4](https://github.com/PromptPal/web/compare/v1.9.3...v1.9.4) (2024-05-20)
+
+
+### Bug Fixes
+
+* **project:** ignore gemini token incorrect assignment when update ([80ee678](https://github.com/PromptPal/web/commit/80ee67830382efe837eeacb08451eae29b5803ca))
+
 ## [1.9.3](https://github.com/PromptPal/web/compare/v1.9.2...v1.9.3) (2024-05-14)
 
 
