@@ -9,19 +9,19 @@ export type testPromptResponse = {
   choices: {
     index: number
     message: {
-      role: string;
-      content: string;
+      role: string
+      content: string
     }
     finish_reason: string
     delta: {
-      role: string;
-      content: string;
+      role: string
+      content: string
     }
   }[]
   usage: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
+    prompt_tokens: number
+    completion_tokens: number
+    total_tokens: number
   }
 }
 
@@ -29,17 +29,20 @@ export type testPromptPayload = {
   projectId: number
   name: string
   prompts: PromptRow[]
-  variables: Record<string, string>
+  variables: Record<string, string | number | boolean | File>
 }
 
-export function testPrompt(payload: testPromptPayload): Promise<testPromptResponse> {
+export function testPrompt(
+  payload: testPromptPayload,
+): Promise<testPromptResponse> {
   return HttpRequest<testPromptResponse, testPromptPayload>(
     `${API_PREFIX}/admin/prompts/test`,
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: payload
-    }).then(res => res.json())
+      body: payload,
+    },
+  ).then((res) => res.json())
 }

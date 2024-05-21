@@ -24,6 +24,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Zod from 'zod'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
 import PromptTestPreview from '../../components/PromptTestPreview'
+import { SupportedVariableType } from '../../constants'
 import { graphql } from '../../gql'
 import { PromptPayload, PromptRole, PublicLevel } from '../../gql/graphql'
 import { useProjectId } from '../../hooks/route'
@@ -419,7 +420,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                   />
                   <Select
                     {...f.getInputProps(`variables.${index}.type`)}
-                    data={['String', 'Number', 'Boolean'].map((x) => ({
+                    data={SupportedVariableType.map((x) => ({
                       label: x,
                       value: x.toLowerCase(),
                     }))}
