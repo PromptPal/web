@@ -9,3 +9,12 @@ export const OpenAIModels = [
   'gpt-4o',
   'gemini-pro',
 ] as const
+
+export const SupportedVariableType = [
+  'String',
+  'Number',
+  'Boolean',
+  'Video',
+  'Audio',
+  'Image',
+] as const
