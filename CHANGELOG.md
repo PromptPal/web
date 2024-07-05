@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.10.0](https://github.com/PromptPal/web/compare/v1.9.3...v1.10.0) (2024-07-05)
+
+
+### Features
+
+* **pages:** support more types in prompt ([f633ed9](https://github.com/PromptPal/web/commit/f633ed98b693ae7cc204f9aa5970fc0e691e7ffe))
+* **prompt:** add support for multiple type of variable in prompt ([3675ba6](https://github.com/PromptPal/web/commit/3675ba67823c3a1f8890242573edb39ffe502833))
+
+
+### Bug Fixes
+
+* **http:** increase default timeout to 10 mins ([624b779](https://github.com/PromptPal/web/commit/624b779b2f96cdf76bfadd4dfdc85cc25a3077a0))
+* **project:** ignore gemini token incorrect assignment when update ([80ee678](https://github.com/PromptPal/web/commit/80ee67830382efe837eeacb08451eae29b5803ca))
+
 ## [1.9.3](https://github.com/PromptPal/web/compare/v1.9.2...v1.9.3) (2024-05-14)
 
 
