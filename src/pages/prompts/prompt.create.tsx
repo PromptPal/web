@@ -24,8 +24,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Zod from 'zod'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
 import PromptTestPreview from '../../components/PromptTestPreview'
+import { SupportedVariableType } from '../../constants'
 import { graphql } from '../../gql'
-import { PromptPayload, PromptRole, PublicLevel } from '../../gql/graphql'
+import {
+  PromptPayload,
+  PromptRole,
+  PromptVariableTypes,
+  PublicLevel,
+} from '../../gql/graphql'
 import { useProjectId } from '../../hooks/route'
 import { testPromptResponse } from '../../service/prompt'
 import { PromptVariable } from '../../service/types'
@@ -124,7 +130,7 @@ const schema: Zod.ZodType<mutatePromptType> = Zod.object({
   variables: Zod.array(
     Zod.object({
       name: Zod.string(),
-      type: Zod.string(),
+      type: Zod.nativeEnum(PromptVariableTypes),
     }),
   ),
   publicLevel: Zod.enum([
@@ -256,7 +262,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         }
         return {
           name: placeholder,
-          type: 'string',
+          type: PromptVariableTypes.String,
         }
       })
       .reduce<PromptVariable[]>((acc, cur) => {
@@ -419,7 +425,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                   />
                   <Select
                     {...f.getInputProps(`variables.${index}.type`)}
-                    data={['String', 'Number', 'Boolean'].map((x) => ({
+                    data={SupportedVariableType.map((x) => ({
                       label: x,
                       value: x.toLowerCase(),
                     }))}
