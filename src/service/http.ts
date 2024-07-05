@@ -39,7 +39,8 @@ export function HttpRequest<T, I = undefined>(
   }
 
   if (!data.signal) {
-    data.signal = AbortSignal.timeout(10_000)
+    // 10 mins
+    data.signal = AbortSignal.timeout(1000 * 60 * 10)
   }
 
   data.headers = {
