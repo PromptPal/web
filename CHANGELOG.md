@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.10.1](https://github.com/PromptPal/web/compare/v1.10.0...v1.10.1) (2024-07-12)
+
+
+### Bug Fixes
+
+* **ci:** update lint command ([df6d0b4](https://github.com/PromptPal/web/commit/df6d0b41acec6c94d2e998c1053104ea2885b61d))
+* **deps:** update deps ([7073e58](https://github.com/PromptPal/web/commit/7073e58df6885dad85e7fa70986eb08a608d6a64))
+* **prompt:** fix visual errors ([2e0cb59](https://github.com/PromptPal/web/commit/2e0cb59f0e2e1ed32e38b99c5efe317b4faea850))
+
 ## [1.10.0](https://github.com/PromptPal/web/compare/v1.9.3...v1.10.0) (2024-07-05)
 
 
