@@ -122,7 +122,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
         opened={isOpen}
         onClose={onClose}
         centered
-        title="Test Prompt"
+        title='Test Prompt'
         overlayProps={{ backgroundOpacity: 0.5, blur: 8 }}
       >
         <form>
@@ -135,20 +135,20 @@ function PromptTestButton(props: PromptTestButtonProps) {
                   return (
                     <FileInput
                       label={field.name}
-                      id="name"
+                      id='name'
                       key={f.key(`variables.${index}.value`)}
-                      placeholder="Value"
+                      placeholder='Value'
                       {...f.getInputProps(`variables.${index}.value`)}
                     />
                   )
                 case PromptVariableTypes.Boolean:
                   return (
                     <Switch
-                      type="checkbox"
+                      type='checkbox'
                       label={field.name}
-                      id="name"
+                      id='name'
                       key={f.key(`variables.${index}.value`)}
-                      placeholder="Value"
+                      placeholder='Value'
                       {...f.getInputProps(`variables.${index}.value`)}
                     />
                   )
@@ -156,9 +156,9 @@ function PromptTestButton(props: PromptTestButtonProps) {
                   return (
                     <NumberInput
                       label={field.name}
-                      id="name"
+                      id='name'
                       key={f.key(`variables.${index}.value`)}
-                      placeholder="Value"
+                      placeholder='Value'
                       {...f.getInputProps(`variables.${index}.value`)}
                     />
                   )
@@ -166,22 +166,23 @@ function PromptTestButton(props: PromptTestButtonProps) {
                   return (
                     <Textarea
                       label={field.name}
-                      id="name"
+                      id='name'
                       key={f.key(`variables.${index}.value`)}
                       cols={8}
-                      placeholder="Value"
+                      rows={8}
+                      placeholder='Value'
                       {...f.getInputProps(`variables.${index}.value`)}
                     />
                   )
               }
             })}
           </div>
-          <div className="flex justify-end items-center gap-4 mt-4">
-            <Button mr={3} onClick={onClose} variant="outline">
+          <div className='flex justify-end items-center gap-4 mt-4'>
+            <Button mr={3} onClick={onClose} variant='outline'>
               Close
             </Button>
             <Button
-              color="teal"
+              color='teal'
               loading={testing}
               disabled={!f.validate}
               onClick={

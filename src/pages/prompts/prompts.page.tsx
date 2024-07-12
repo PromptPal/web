@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Title as Heading } from '@mantine/core'
 import { useMemo } from 'react'
-import { useQuery as useGraphQLQuery } from '@apollo/client'
-import { graphql } from '../../gql'
+import { Link } from 'react-router-dom'
 import PromptCardItem from '../../components/Prompt/CardItem'
+import { graphql } from '../../gql'
 import { useProjectId } from '../../hooks/route'
 
 const q = graphql(`
@@ -32,11 +32,10 @@ function PromptsPage() {
       pagination: {
         limit: 100,
         offset: 0,
-      }
+      },
     },
-    skip: !pid
+    skip: !pid,
   })
-
 
   const tableData = useMemo(() => {
     return data?.prompts.edges ?? []
@@ -46,7 +45,10 @@ function PromptsPage() {
     <div className='w-full'>
       <div className='flex items-center justify-between'>
         <Heading>Prompts</Heading>
-        <Link to={`/${pid}/prompts/new`} className='daisyui-btn daisyui-btn-primary'>
+        <Link
+          to={`/${pid}/prompts/new`}
+          className='daisyui-btn daisyui-btn-primary'
+        >
           New Prompt
         </Link>
       </div>
@@ -57,7 +59,6 @@ function PromptsPage() {
           <PromptCardItem key={row.id} prompt={row} />
         ))}
       </div>
-
     </div>
   )
 }

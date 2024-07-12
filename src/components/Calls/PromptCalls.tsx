@@ -1,11 +1,16 @@
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { Text, Card, ActionIcon, Title, HoverCard } from '@mantine/core'
-import SimpleTable from '../Table/SimpleTable'
-import { FetchPromptCallsTableQuery } from '../../gql/graphql'
-import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { graphql } from '../../gql'
 import { useQuery } from '@apollo/client'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { ActionIcon, Card, HoverCard, Text, Title } from '@mantine/core'
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
+import { graphql } from '../../gql'
+import { FetchPromptCallsTableQuery } from '../../gql/graphql'
+import SimpleTable from '../Table/SimpleTable'
 import UABadge from './UABadge'
 
 type PromptCallsProps = {
@@ -33,7 +38,10 @@ const q = graphql(`
   }
 `)
 
-const columnHelper = createColumnHelper<FetchPromptCallsTableQuery['prompt']['latestCalls']['edges'][0]>()
+const columnHelper =
+  createColumnHelper<
+    FetchPromptCallsTableQuery['prompt']['latestCalls']['edges'][0]
+  >()
 
 const columns = [
   columnHelper.accessor('id', {
@@ -41,9 +49,7 @@ const columns = [
     cell: (info) => {
       return (
         <div>
-          <span>
-            {info.getValue()}
-          </span>
+          <span>{info.getValue()}</span>
           <UABadge userAgent={info.row.original.userAgent} className='ml-2' />
         </div>
       )
@@ -57,13 +63,12 @@ const columns = [
     header: 'Total Tokens(USD)',
     id: 'totalToken',
     cell: (info) => {
+      const costInCents = new BigNumber(info.row.original.costInCents)
       return (
         <div>
-          <span>
-            {info.getValue()}
-          </span>
+          <span>{info.getValue()}</span>
           <span className='ml-2 text-xs'>
-            (${info.row.original.costInCents / 100})
+            (${costInCents.dividedBy(100).toFixed(8)})
           </span>
         </div>
       )
@@ -73,14 +78,14 @@ const columns = [
     header: 'Payload',
     cell: (info) => {
       const val: Record<string, string> = JSON.parse(info.getValue())
-      const dataset = Object.keys(val).map((key) => {
-        return `${key}: ${val[key]}`
-      }).join('\n')
+      const dataset = Object.keys(val)
+        .map((key) => {
+          return `${key}: ${val[key]}`
+        })
+        .join('\n')
 
       if (Object.keys(val).length === 0) {
-        return (
-          <span>-</span>
-        )
+        return <span>-</span>
       }
 
       // TODO: compose the variables with the prompt
@@ -109,9 +114,7 @@ const columns = [
       const content = info.getValue()
 
       if (!content) {
-        return (
-          <span>-</span>
-        )
+        return <span>-</span>
       }
 
       return (
@@ -155,24 +158,26 @@ const columns = [
             </Text>
           </HoverCard.Dropdown>
           <HoverCard.Target>
-            <Text>
-              {result}
-            </Text>
+            <Text>{result}</Text>
           </HoverCard.Target>
         </HoverCard>
       )
     },
-  })
+  }),
 ]
 
 function PromptCalls(props: PromptCallsProps) {
   const { promptId } = props
 
-  const { data: promptData, loading, refetch } = useQuery(q, {
+  const {
+    data: promptData,
+    loading,
+    refetch,
+  } = useQuery(q, {
     variables: {
-      id: promptId
+      id: promptId,
     },
-    pollInterval: 20_000
+    pollInterval: 20_000,
   })
 
   const latestCalls = promptData?.prompt?.latestCalls
@@ -192,19 +197,13 @@ function PromptCalls(props: PromptCallsProps) {
               ({latestCalls?.count ?? 0})
             </i>
           </Title>
-          <ActionIcon
-            onClick={() => refetch()}
-            disabled={loading}
-          >
+          <ActionIcon onClick={() => refetch()} disabled={loading}>
             <ArrowPathIcon className='w-4 h-4' />
           </ActionIcon>
         </div>
       </Card.Section>
       <Card.Section className='p-4'>
-        <SimpleTable
-          loading={loading}
-          table={promptCallsTable}
-        />
+        <SimpleTable loading={loading} table={promptCallsTable} />
       </Card.Section>
     </Card>
   )

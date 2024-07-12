@@ -1,15 +1,24 @@
-import { useCallback } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Badge, Box, Button, Card, Divider, Title as Heading, Modal, Switch } from '@mantine/core'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
-import { graphql } from '../../gql'
-import toast from 'react-hot-toast'
-import { useProjectId } from '../../hooks/route'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
-import PromptCalls from '../../components/Calls/PromptCalls'
-import PromptCallMetric from '../../components/Calls/Metrics'
-import PromptReadonly from '../../components/Prompt/PromptReadonly'
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Divider,
+  Title as Heading,
+  Modal,
+  Switch,
+} from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { useCallback } from 'react'
+import toast from 'react-hot-toast'
+import { Link, useParams } from 'react-router-dom'
+import PromptCallMetric from '../../components/Calls/Metrics'
+import PromptCalls from '../../components/Calls/PromptCalls'
+import PromptReadonly from '../../components/Prompt/PromptReadonly'
+import { graphql } from '../../gql'
+import { useProjectId } from '../../hooks/route'
 import PromptHistoriesPage from './history.page'
 
 const pm = graphql(`
@@ -62,43 +71,47 @@ function PromptPage() {
   const pid = ~~(params.id ?? '0')
   const { data } = useGraphQLQuery(q, {
     variables: {
-      id: pid
+      id: pid,
     },
-    pollInterval: 20_000
+    pollInterval: 20_000,
   })
 
   const promptDetail = data?.prompt
 
   const [doPromptUpdate, { loading: isPromptUpdating }] = useMutation(pm)
 
-  const onDebugChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!promptDetail) {
-      return
-    }
-    const n = event.target.checked
-    toast.promise(
-      doPromptUpdate({
-        variables: {
-          id: promptDetail?.id ?? 0,
-          payload: {
-            name: promptDetail.name,
-            description: promptDetail.description,
-            tokenCount: promptDetail.tokenCount,
-            publicLevel: promptDetail.publicLevel,
-            enabled: promptDetail.enabled,
-            projectId: promptDetail.project.id,
-            prompts: promptDetail.prompts,
-            variables: promptDetail.variables,
-            debug: n
-          }
-        }
-      }),
-      {
-        loading: 'Updating prompt',
-        success: 'Updated prompt',
-        error: 'Failed to update prompt'
-      })
-  }, [doPromptUpdate, promptDetail])
+  const onDebugChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!promptDetail) {
+        return
+      }
+      const n = event.target.checked
+      toast.promise(
+        doPromptUpdate({
+          variables: {
+            id: promptDetail?.id ?? 0,
+            payload: {
+              name: promptDetail.name,
+              description: promptDetail.description,
+              tokenCount: promptDetail.tokenCount,
+              publicLevel: promptDetail.publicLevel,
+              enabled: promptDetail.enabled,
+              projectId: promptDetail.project.id,
+              prompts: promptDetail.prompts,
+              variables: promptDetail.variables,
+              debug: n,
+            },
+          },
+        }),
+        {
+          loading: 'Updating prompt',
+          success: 'Updated prompt',
+          error: 'Failed to update prompt',
+        },
+      )
+    },
+    [doPromptUpdate, promptDetail],
+  )
 
   const pjId = useProjectId()
 
@@ -108,9 +121,9 @@ function PromptPage() {
     <div>
       <Card>
         <div className='flex justify-between items-center'>
-          <div className='flex items-end'>
+          <div className='flex items-start flex-col '>
             <Heading>{promptDetail?.name}</Heading>
-            <span className='ml-2 text-gray-400'>{promptDetail?.description}</span>
+            <span className='text-gray-400'>{promptDetail?.description}</span>
           </div>
           <div className='flex gap-4 items-center'>
             <Button
@@ -145,18 +158,19 @@ function PromptPage() {
         </div>
         <Card.Section className='px-4 mt-4'>
           <div className='flex items-center justify-around'>
-            <Box className='text-center'>
-              id: {promptDetail?.id}</Box>
-            <Box className='text-center' >
-              Hash ID: {promptDetail?.hashId}
-            </Box>
+            <Box className='text-center'>id: {promptDetail?.id}</Box>
+            <Box className='text-center'>Hash ID: {promptDetail?.hashId}</Box>
           </div>
           <Divider my={4} />
           <div className='flex'>
             <div className='flex-1 text-center'>
               Create Time:
               <div>
-                {promptDetail ? new Intl.DateTimeFormat().format(new Date(promptDetail?.createdAt)) : 'N/A'}
+                {promptDetail
+                  ? new Intl.DateTimeFormat().format(
+                      new Date(promptDetail?.createdAt),
+                    )
+                  : 'N/A'}
               </div>
             </div>
             <div className='flex-1 text-center'>
@@ -172,18 +186,16 @@ function PromptPage() {
                 checked={promptDetail?.enabled}
                 className='text-center justify-center flex'
                 classNames={{
-                  body: 'w-fit'
+                  body: 'w-fit',
                 }}
               />
             </div>
             <div className='flex-1 text-center justify-center'>
-              <span>
-                Debug:
-              </span>
+              <span>Debug:</span>
               <Switch
                 className='text-center justify-center flex'
                 classNames={{
-                  body: 'w-fit'
+                  body: 'w-fit',
                 }}
                 readOnly={isPromptUpdating}
                 checked={promptDetail?.debug}
@@ -217,10 +229,9 @@ function PromptPage() {
         size='xl'
         title='Versions'
         withCloseButton
-        onClose={historyHandlers.close}>
-        <PromptHistoriesPage
-          promptId={pid}
-        />
+        onClose={historyHandlers.close}
+      >
+        <PromptHistoriesPage promptId={pid} />
       </Modal>
     </div>
   )
