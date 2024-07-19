@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.10.2](https://github.com/PromptPal/web/compare/v1.10.1...v1.10.2) (2024-07-19)
+
+
+### Features
+
+* **model:** add gpt-4o-mini support ([79a7024](https://github.com/PromptPal/web/commit/79a70247ddb6425a3b0a27d3ddcc87f75925494e))
+
+
+### Miscellaneous Chores
+
+* release 1.10.2 ([03c8410](https://github.com/PromptPal/web/commit/03c8410c3367f12f0cc5fda648b198ccbfd53b15))
+
 ## [1.10.1](https://github.com/PromptPal/web/compare/v1.10.0...v1.10.1) (2024-07-12)
 
 
