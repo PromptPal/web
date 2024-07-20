@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom'
-import { Title as Heading } from '@mantine/core'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { Title as Heading } from '@mantine/core'
 import { useMemo } from 'react'
-import { graphql } from '../../gql'
+import { Link } from 'react-router-dom'
+import LinkGlow from '../../components/Button/LinkGlow'
 import ProjectCardItem from '../../components/Project/CardItem'
+import { graphql } from '../../gql'
 
 const q = graphql(`
   query projects($pagination: PaginationInput!) {
@@ -24,9 +25,9 @@ function ProjectsPage() {
     variables: {
       pagination: {
         limit: 100,
-        offset: 0
-      }
-    }
+        offset: 0,
+      },
+    },
   })
 
   const tableData = useMemo(() => {
@@ -37,9 +38,12 @@ function ProjectsPage() {
     <div>
       <div className='flex items-center justify-between'>
         <Heading>Projects</Heading>
-        <Link to='/projects/new' className='daisyui-btn daisyui-btn-primary'>
+        <LinkGlow
+          to='/projects/new'
+          className='px-4 py-2 rounded-md text-sm cursor-pointer '
+        >
           New Project
-        </Link>
+        </LinkGlow>
       </div>
       <div className='daisyui-divider' />
 
@@ -48,7 +52,6 @@ function ProjectsPage() {
           <ProjectCardItem key={row.id} project={row} />
         ))}
       </div>
-
     </div>
   )
 }
