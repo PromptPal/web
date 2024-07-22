@@ -1,13 +1,18 @@
-import { Link, useParams } from 'react-router-dom'
-import { Stack, Title, Button, Card } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import SimpleTable from '../../components/Table/SimpleTable'
-import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
-import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
-import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '@/gql'
 import { OpenToken } from '@/gql/graphql'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { Button, Card, Stack, Title } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import { Link, useParams } from 'react-router-dom'
+import ButtonGlow from '../../components/Button/ButtonGlow'
+import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
+import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
+import SimpleTable from '../../components/Table/SimpleTable'
 
 const q = graphql(`
   query fetchProject($id: Int!) {
@@ -54,7 +59,7 @@ const columns = [
     id: 'token',
     header: 'Token',
     cell: '-',
-  })
+  }),
 ]
 
 function ProjectPage() {
@@ -62,8 +67,8 @@ function ProjectPage() {
 
   const { data: projectData } = useGraphQLQuery(q, {
     variables: {
-      id: ~~pid
-    }
+      id: ~~pid,
+    },
   })
   const project = projectData?.project
   const openTokens = project?.openTokens.edges ?? []
@@ -74,26 +79,29 @@ function ProjectPage() {
     columns,
   })
 
-  const [isOpen, {
-    close: onClose, open: onOpen,
-  }] = useDisclosure()
+  const [isOpen, { close: onClose, open: onOpen }] = useDisclosure()
 
   return (
     <Stack className='w-full'>
       <Card>
         <div className='flex justify-between items-center mb-4'>
           <div className='ml-4 mt-4 flex'>
-            <Title size='lg'>
-              {project?.name}
-            </Title>
+            <Title size='lg'>{project?.name}</Title>
             <span className='ml-2 text-gray-500'>recent 7 days</span>
           </div>
-          <Button variant='filled' className='text-white' component={Link} to={`/${pid}/edit`}>
+          <Button
+            variant='filled'
+            className='text-white'
+            component={Link}
+            to={`/${pid}/edit`}
+          >
             Edit
           </Button>
         </div>
         <div>
-          <ProjectTopPromptsCount recentCounts={project?.promptMetrics.recentCounts} />
+          <ProjectTopPromptsCount
+            recentCounts={project?.promptMetrics.recentCounts}
+          />
         </div>
       </Card>
 
@@ -102,19 +110,22 @@ function ProjectPage() {
           <Title order={4} size='xl'>
             Open Tokens
           </Title>
-          <Button
-            variant='gradient'
-            gradient={{ from: 'blue', to: 'cyan' }}
+          <ButtonGlow
+            className=' px-4 py-2 rounded font-bold text-sm cursor-pointer'
             disabled={(openTokens?.length ?? 0) >= 20}
             onClick={onOpen}
           >
             New Token
-          </Button>
+          </ButtonGlow>
         </div>
         <SimpleTable table={table} />
       </Stack>
 
-      <CreateOpenTokenModal isOpen={isOpen} onClose={onClose} projectId={~~pid} />
+      <CreateOpenTokenModal
+        isOpen={isOpen}
+        onClose={onClose}
+        projectId={~~pid}
+      />
     </Stack>
   )
 }

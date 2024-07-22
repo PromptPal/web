@@ -34,8 +34,8 @@
 .glow:hover::before {
   background: linear-gradient(
     to bottom right,
-    #e91e63 0%,
-    #525252 62%,
-    #ffc107 100%
+    oklch(0.48 0.16 271 / 1) 0%,
+    rgba(100, 100, 100, 0.6) 62%,
+    oklch(0.7 0.16 239 / 1) 100%
   );
 }
