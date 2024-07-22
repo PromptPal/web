@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { ActionIcon, Card, HoverCard, Text, Title } from '@mantine/core'
+import { ActionIcon, Badge, Card, HoverCard, Text, Title } from '@mantine/core'
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -32,6 +32,7 @@ const q = graphql(`
           createdAt
           costInCents
           userAgent
+          cached
         }
       }
     }
@@ -46,11 +47,18 @@ const columnHelper =
 const columns = [
   columnHelper.accessor('id', {
     header: 'ID',
+
     cell: (info) => {
+      const cached = info.row.original.cached
       return (
-        <div>
+        <div className='flex flex-row items-center'>
           <span>{info.getValue()}</span>
           <UABadge userAgent={info.row.original.userAgent} className='ml-2' />
+          {cached && (
+            <Badge color='green' className='ml-2'>
+              Cached
+            </Badge>
+          )}
         </div>
       )
     },
@@ -123,7 +131,7 @@ const columns = [
           transitionProps={{ transition: 'pop', duration: 150 }}
         >
           <HoverCard.Dropdown>
-            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
+            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto text-sm'>
               {content}
             </Text>
           </HoverCard.Dropdown>
@@ -140,9 +148,7 @@ const columns = [
     header: 'Created At',
     cell: (info) => {
       const date = dayjs(info.getValue())
-
       let result = date.format('YYYY-MM-DD HH:mm')
-
       if (date.diff(dayjs(), 'D') < 1) {
         result = date.fromNow()
       }
@@ -153,12 +159,12 @@ const columns = [
           transitionProps={{ transition: 'pop', duration: 150 }}
         >
           <HoverCard.Dropdown>
-            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
+            <Text className='max-w-96 max-h-80 overflow-y-auto text-nowrap'>
               {date.format('YYYY-MM-DD HH:mm:ss')}
             </Text>
           </HoverCard.Dropdown>
           <HoverCard.Target>
-            <Text>{result}</Text>
+            <Text className='text-nowrap'>{result}</Text>
           </HoverCard.Target>
         </HoverCard>
       )

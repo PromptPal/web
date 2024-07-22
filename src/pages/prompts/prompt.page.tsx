@@ -14,6 +14,8 @@ import { useDisclosure } from '@mantine/hooks'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { Link, useParams } from 'react-router-dom'
+import ButtonGlow from '../../components/Button/ButtonGlow'
+import LinkGlow from '../../components/Button/LinkGlow'
 import PromptCallMetric from '../../components/Calls/Metrics'
 import PromptCalls from '../../components/Calls/PromptCalls'
 import PromptReadonly from '../../components/Prompt/PromptReadonly'
@@ -126,23 +128,20 @@ function PromptPage() {
             <span className='text-gray-400'>{promptDetail?.description}</span>
           </div>
           <div className='flex gap-4 items-center'>
-            <Button
-              variant='filled'
-              color='teal'
+            <ButtonGlow
+              className='px-4 py-2 rounded font-bold text-sm cursor-pointer'
               onClick={() => {
                 historyHandlers.open()
               }}
             >
               Versions
-            </Button>
-            <Button
-              variant='filled'
-              color='teal'
-              component={Link}
+            </ButtonGlow>
+            <LinkGlow
+              className='px-6 py-2 rounded font-bold text-sm cursor-pointer'
               to={`/${pjId}/prompts/${promptDetail?.id}/edit`}
             >
               Edit
-            </Button>
+            </LinkGlow>
             <Button
               component='a'
               target='_blank'
