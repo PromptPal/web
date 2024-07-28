@@ -6,10 +6,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import toast from 'react-hot-toast'
 import { OpenToken } from '../../gql/graphql'
 import ButtonGlow from '../Button/ButtonGlow'
 import SimpleTable from '../Table/SimpleTable'
+import AdvancedValidationCell from './AdvancedValidationCell'
 import CreateOpenTokenModal from './CreateOpenTokenModal'
 
 type OpenTokenListOfProjectProps = {
@@ -56,29 +56,12 @@ const columns = [
     cell: (info) => {
       const enabled = info.getValue()
       const validatePath = info.row.original.apiValidatePath
-
       return (
-        <div>
-          <span>{validatePath}</span>
-          {enabled && (
-            <ButtonGlow
-              className='px-4 py-2 rounded font-bold text-sm cursor-pointer'
-              onClick={() => {
-                toast.error('not implemented yet')
-              }}
-            >
-              Edit
-            </ButtonGlow>
-          )}
-          {
-            <Switch
-              checked={enabled}
-              onChange={() => {
-                toast.error('not implemented yet')
-              }}
-            />
-          }
-        </div>
+        <AdvancedValidationCell
+          id={info.row.original.id}
+          validatePath={validatePath}
+          enabled={enabled}
+        />
       )
     },
   }),

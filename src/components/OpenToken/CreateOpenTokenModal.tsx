@@ -1,5 +1,5 @@
 import { useMutation as useGraphQLMutation } from '@apollo/client'
-import { Button, Input, Modal, TextInput } from '@mantine/core'
+import { Button, Input, Modal, Switch, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import dayjs from 'dayjs'
@@ -44,9 +44,7 @@ const m = graphql(`
 function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
   const { projectId, isOpen, onClose } = props
 
-  const n = useMemo(() => {
-    return dayjs()
-  }, [])
+  const n = useMemo(() => dayjs(), [])
 
   const f = useForm<OpenTokenInputForm>({
     validate: zodResolver(schema),
@@ -112,6 +110,23 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
             {...f.getInputProps('expireAt')}
           />
         </Input.Wrapper>
+        <Input.Wrapper
+          label='Enable Advanced Validation'
+          {...f.getInputProps('apiValidateEnabled')}
+        >
+          <Switch
+            className='w-full'
+            {...f.getInputProps('apiValidateEnabled')}
+          />
+        </Input.Wrapper>
+        {f.values.apiValidateEnabled && (
+          <TextInput
+            label='Advanced Validation API Path'
+            placeholder='the API path for advanced API validation, for example https://annatarhe.com/api/validate'
+            type='url'
+            {...f.getInputProps('apiValidatePath')}
+          />
+        )}
 
         <div className='flex justify-end items-center gap-4 mt-4'>
           <Button color='blue' mr={3} onClick={onClose} variant='outline'>
