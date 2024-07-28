@@ -1,18 +1,9 @@
 import { graphql } from '@/gql'
-import { OpenToken } from '@/gql/graphql'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Button, Card, Stack, Title } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
 import { Link, useParams } from 'react-router-dom'
-import ButtonGlow from '../../components/Button/ButtonGlow'
-import CreateOpenTokenModal from '../../components/OpenToken/CreateOpenTokenModal'
+import OpenTokenListOfProject from '../../components/OpenToken/List'
 import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
-import SimpleTable from '../../components/Table/SimpleTable'
 
 const q = graphql(`
   query fetchProject($id: Int!) {
@@ -29,6 +20,8 @@ const q = graphql(`
           id
           name
           description
+          apiValidateEnabled
+          apiValidatePath
           expireAt
         }
       }
@@ -45,23 +38,6 @@ const q = graphql(`
   }
 `)
 
-const columnHelper = createColumnHelper<OpenToken>()
-const columns = [
-  columnHelper.accessor('id', {
-    header: 'ID',
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('name', {
-    header: 'Name',
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.display({
-    id: 'token',
-    header: 'Token',
-    cell: '-',
-  }),
-]
-
 function ProjectPage() {
   const pid = useParams().pid ?? '0'
 
@@ -72,14 +48,6 @@ function ProjectPage() {
   })
   const project = projectData?.project
   const openTokens = project?.openTokens.edges ?? []
-
-  const table = useReactTable({
-    data: openTokens,
-    getCoreRowModel: getCoreRowModel(),
-    columns,
-  })
-
-  const [isOpen, { close: onClose, open: onOpen }] = useDisclosure()
 
   return (
     <Stack className='w-full'>
@@ -105,27 +73,7 @@ function ProjectPage() {
         </div>
       </Card>
 
-      <Stack>
-        <div className='w-full flex justify-between items-center'>
-          <Title order={4} size='xl'>
-            Open Tokens
-          </Title>
-          <ButtonGlow
-            className=' px-4 py-2 rounded font-bold text-sm cursor-pointer'
-            disabled={(openTokens?.length ?? 0) >= 20}
-            onClick={onOpen}
-          >
-            New Token
-          </ButtonGlow>
-        </div>
-        <SimpleTable table={table} />
-      </Stack>
-
-      <CreateOpenTokenModal
-        isOpen={isOpen}
-        onClose={onClose}
-        projectId={~~pid}
-      />
+      <OpenTokenListOfProject pid={~~pid} openTokens={openTokens} />
     </Stack>
   )
 }
