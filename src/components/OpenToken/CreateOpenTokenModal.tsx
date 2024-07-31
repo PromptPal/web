@@ -54,7 +54,7 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
       description: '',
       expireAt: n.add(1, 'year').toDate(),
       apiValidateEnabled: false,
-      apiValidatePath: '/api/v1/validate',
+      apiValidatePath: 'http://localhost:8080/api/v1/validate',
     },
   })
 

@@ -40,6 +40,7 @@
     "@tanstack/react-table": "^8.19.2",
     "@uidotdev/usehooks": "^2.4.1",
     "bignumber.js": "^9.1.2",
+    "classnames": "^2.5.1",
     "dayjs": "^1.11.11",
     "diff": "^5.2.0",
     "echarts": "^5.5.0",

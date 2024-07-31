@@ -5,6 +5,15 @@
   backdrop-filter: blur(2px);
 }
 
+.red {
+  background: linear-gradient(
+    to bottom right,
+    rgba(0, 0, 0, 0) 12%,
+    rgba(156, 26, 26, 0.6) 50%,
+    rgba(0, 0, 0, 0) 88%
+  );
+}
+
 .glow::before {
   content: "";
   position: absolute;

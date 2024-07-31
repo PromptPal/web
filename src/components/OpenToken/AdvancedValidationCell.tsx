@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { Input, Modal, Switch, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { graphql } from '../../gql'
 import { OpenTokenUpdate } from '../../gql/graphql'
@@ -27,9 +27,19 @@ const updateMuataion = graphql(`
   }
 `)
 
+const delMuataion = graphql(`
+  mutation deleteOpenToken($id: Int!) {
+    deleteOpenToken(id: $id)
+  }
+`)
+
 function AdvancedValidationCell(props: AdvancedValidationCellProps) {
   const { id, validatePath, enabled } = props
   const [updateOpenToken, { loading }] = useMutation(updateMuataion, {
+    refetchQueries: ['fetchProject'],
+  })
+  const [doDel, { loading: deleting }] = useMutation(delMuataion, {
+    variables: { id },
     refetchQueries: ['fetchProject'],
   })
   const [isOpen, { open, close: onClose }] = useDisclosure(false)
@@ -52,10 +62,16 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
     },
     [id],
   )
+  const renderPath = useMemo(() => {
+    if (!enabled) {
+      return ''
+    }
+    return validatePath
+  }, [validatePath, enabled])
 
   return (
-    <div>
-      <span>{validatePath}</span>
+    <div className='flex items-center gap-4 w-full'>
+      <span className='w-full flex-1'>{renderPath}</span>
       {enabled && (
         <ButtonGlow
           className='px-4 py-2 rounded font-bold text-sm cursor-pointer'
@@ -71,6 +87,18 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
           checked={enabled}
           onChange={() => doUpdate({ apiValidateEnabled: !enabled })}
         />
+      }
+      {
+        <ButtonGlow
+          loading={deleting}
+          className='px-4 py-2 rounded font-bold text-sm cursor-pointer'
+          onClick={() => {
+            doDel()
+          }}
+          color='red'
+        >
+          Delete
+        </ButtonGlow>
       }
       <Modal
         opened={isOpen}

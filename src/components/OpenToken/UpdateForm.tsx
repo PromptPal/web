@@ -38,13 +38,16 @@ function OpenTokenUpdateForm(props: OpenTokenUpdateFormProps) {
         label='Enable Advanced Validation'
         {...f.getInputProps('apiValidateEnabled')}
       >
-        <Switch className='w-full' {...f.getInputProps('apiValidateEnabled')} />
+        <Switch
+          className='w-full'
+          checked={f.values.apiValidateEnabled}
+          {...f.getInputProps('apiValidateEnabled')}
+        />
       </Input.Wrapper>
       <TextInput
         label='Advanced API Validate Path'
         placeholder='the API path for advanced API validation, for example https://annatarhe.com/api/validate'
         type='url'
-        description='just remind you what you are doing'
         {...f.getInputProps('apiValidatePath')}
       />
       <div className='flex justify-end items-center gap-4 mt-4'>

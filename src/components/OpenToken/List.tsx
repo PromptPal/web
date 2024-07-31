@@ -36,6 +36,8 @@ const columns = [
     // add a tooltip
     header: () => (
       <Tooltip
+        withArrow
+        transitionProps={{ transition: 'pop', duration: 150 }}
         label={
           <div>
             <span>Advanced Validation Path read more:</span>
@@ -49,8 +51,10 @@ const columns = [
           </div>
         }
       >
-        <Text>Advanced Validation Path</Text>
-        <QuestionMarkCircleIcon className='w-4 h-4 ml-2' />
+        <div className='flex justify-center items-center flex-row'>
+          <Text>Advanced Validation Path</Text>
+          <QuestionMarkCircleIcon className='w-4 h-4 ml-2' />
+        </div>
       </Tooltip>
     ),
     cell: (info) => {
