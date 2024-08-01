@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.11.0](https://github.com/PromptPal/web/compare/v1.10.2...v1.11.0) (2024-08-01)
+
+
+### Features
+
+* **button:** add new experimental style of button ([8f2cd76](https://github.com/PromptPal/web/commit/8f2cd76795fc582780ef7c2a4d53e0e079cd54a1))
+* **button:** use new style of button ([43481ae](https://github.com/PromptPal/web/commit/43481ae232743f74a519d30ae6b02fdcae59e139))
+* **openToken:** add delete button ([67c96d0](https://github.com/PromptPal/web/commit/67c96d06c4ca7268a72c590ad8100575dcedb2e8))
+* **openToken:** add openToken advanced api security support ([dd7701b](https://github.com/PromptPal/web/commit/dd7701b9eb4cbbbdb11ef9793a1b99c974a8ffdb))
+* **prompt:** update styles in prompt page ([fece29b](https://github.com/PromptPal/web/commit/fece29bc5f9fc5cd713757f28d456201e51405a6))
+
+
+### Bug Fixes
+
+* **ci:** upgrade to new release-pls bot ([77d62b6](https://github.com/PromptPal/web/commit/77d62b62a0f259d303385d83bbcbb62d062ca0bd))
+* **project:** remove useless debug code ([467098d](https://github.com/PromptPal/web/commit/467098dc05e3c70f23a44a07febf69f1b4d810ea))
+
 ## [1.10.2](https://github.com/PromptPal/web/compare/v1.10.1...v1.10.2) (2024-07-19)
 
 
