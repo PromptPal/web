@@ -1,6 +1,8 @@
 import { Tooltip } from '@mantine/core'
+import cls from 'classnames'
 import React, { useMemo } from 'react'
 import styles from './ButtonGlow.module.css'
+import LoadingIcon from './loading'
 
 type ButtonGlowProps = React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -8,27 +10,44 @@ type ButtonGlowProps = React.DetailedHTMLProps<
 > & {
   tooltip?: string
   disabledTooltip?: string
+  loading?: boolean
+  color?: 'red'
 }
 
 // https://theodorusclarence.com/blog/gradient-border-is-hard
 function ButtonGlow(props: ButtonGlowProps) {
-  const { tooltip, disabledTooltip, disabled, className, onClick, ...rest } =
-    props
+  const {
+    tooltip,
+    disabledTooltip,
+    disabled,
+    className,
+    loading,
+    onClick,
+    color,
+    children,
+    ...rest
+  } = props
 
   const realTooltip = useMemo(() => {
     if (disabled) {
       return disabledTooltip ?? 'Disabled'
     }
     return tooltip
-  }, [])
-
+  }, [disabled, disabledTooltip, tooltip])
   return (
     <Tooltip label={realTooltip} disabled={!realTooltip}>
       <button
-        className={className + ' ' + styles.glow}
-        disabled={disabled}
+        className={cls(
+          className,
+          styles.glow,
+          ' flex items-center justify-center gap-2',
+          {
+            [styles.red]: color === 'red',
+          },
+        )}
+        disabled={disabled || loading}
         onClick={(e) => {
-          if (disabled) {
+          if (disabled || loading) {
             e.preventDefault()
             e.stopPropagation()
             return
@@ -36,7 +55,10 @@ function ButtonGlow(props: ButtonGlowProps) {
           onClick?.(e)
         }}
         {...rest}
-      />
+      >
+        {loading && <LoadingIcon className='w-4 h-4 with-fade-in' />}
+        {children}
+      </button>
     </Tooltip>
   )
 }

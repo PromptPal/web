@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
 import { BarChart } from '@mantine/charts'
+import { useMemo } from 'react'
 import { GetOverallProjectDataQuery } from '../../gql/graphql'
 
 type ProjectTopPromptsChartProps = {
@@ -19,20 +19,20 @@ function ProjectTopPromptsCount(props: ProjectTopPromptsChartProps) {
     }, [])
   }, [recentCounts])
 
-  console.log('chartdata', chartData)
-
   return (
     <div>
       <BarChart
         h={300}
         data={chartData ?? []}
         dataKey='name'
-        series={[{
-          name: 'count',
-          color: 'violet.6'
-        }]}
+        series={[
+          {
+            name: 'count',
+            color: 'violet.6',
+          },
+        ]}
         tooltipAnimationDuration={150}
-        tickLine="y"
+        tickLine='y'
         yAxisProps={{
           allowDecimals: false,
         }}
