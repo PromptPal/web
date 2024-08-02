@@ -1,5 +1,5 @@
 import { Badge } from '@mantine/core'
-import React, { useMemo } from 'react'
+import React, { ForwardedRef, forwardRef, useMemo } from 'react'
 
 type UABadgeProps = {
   className?: string
@@ -15,10 +15,10 @@ const visualMap = {
   },
   web: {
     color: 'orange',
-  }
+  },
 }
 
-function UABadge(props: UABadgeProps) {
+function UABadge(props: UABadgeProps, ref: ForwardedRef<HTMLDivElement>) {
   const { userAgent, className } = props
 
   const kind = useMemo(() => {
@@ -33,10 +33,15 @@ function UABadge(props: UABadgeProps) {
   }, [userAgent])
 
   return (
-    <Badge color={visualMap[kind].color} size='xs' className={className}>
+    <Badge
+      ref={ref}
+      color={visualMap[kind].color}
+      size='xs'
+      className={className}
+    >
       {kind}
     </Badge>
   )
 }
 
-export default UABadge
+export default forwardRef(UABadge)

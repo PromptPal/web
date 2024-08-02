@@ -1,6 +1,14 @@
 import { useQuery } from '@apollo/client'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { ActionIcon, Badge, Card, HoverCard, Text, Title } from '@mantine/core'
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  HoverCard,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core'
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -33,6 +41,7 @@ const q = graphql(`
           costInCents
           userAgent
           cached
+          ip
         }
       }
     }
@@ -50,10 +59,17 @@ const columns = [
 
     cell: (info) => {
       const cached = info.row.original.cached
+      const ip = info.row.original.ip || 'No Data exists'
       return (
         <div className='flex flex-row items-center'>
           <span>{info.getValue()}</span>
-          <UABadge userAgent={info.row.original.userAgent} className='ml-2' />
+          <Tooltip
+            withArrow
+            label={ip}
+            transitionProps={{ transition: 'pop', duration: 150 }}
+          >
+            <UABadge userAgent={info.row.original.userAgent} className='ml-2' />
+          </Tooltip>
           {cached && (
             <Badge color='green' className='ml-2'>
               Cached
