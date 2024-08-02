@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/PromptPal/web/compare/v1.11.0...v1.12.0) (2024-08-02)
+
+
+### Features
+
+* **ip:** add ip display on prompt calls ([826cac4](https://github.com/PromptPal/web/commit/826cac4e80dff277b33b4095f73b8e6b20b35829))
+
 ## [1.11.0](https://github.com/PromptPal/web/compare/v1.10.2...v1.11.0) (2024-08-01)
 
 
