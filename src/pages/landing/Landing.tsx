@@ -1,5 +1,5 @@
+import { Navigate } from '@tanstack/react-router'
 import { useAtomValue } from 'jotai'
-import { Navigate } from 'react-router-dom'
 import { tokenAtom } from '../../stats/profile'
 
 function LandingPage() {

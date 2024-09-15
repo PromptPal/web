@@ -1,6 +1,6 @@
 import { Badge } from '@mantine/core'
+import { Link } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Link } from 'react-router-dom'
 import { Prompt } from '../../gql/graphql'
 import { useProjectId } from '../../hooks/route'
 

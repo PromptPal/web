@@ -17,10 +17,10 @@ import {
   Tooltip,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useNavigate, useParams } from 'react-router-dom'
 import Zod from 'zod'
 import PromptTestButton from '../../components/PromptTestButton/PromptTestButton'
 import PromptTestPreview from '../../components/PromptTestPreview'
@@ -146,7 +146,7 @@ type PromptCreatePageProps = {
 
 function PromptCreatePage(props: PromptCreatePageProps) {
   const { isUpdate } = props
-  const id = isUpdate ? ~~(useParams().id ?? '0') : 0
+  const id = isUpdate ? ~~(useParams({ strict: false }).id ?? '0') : 0
   const pid = useProjectId()
 
   const ac = useApolloClient()
@@ -156,7 +156,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     onCompleted(data) {
       toast.success('Prompt updated')
       ac.resetStore()
-      navigate(`/${pid}/prompts/` + data.updatePrompt.id)
+      navigate({ to: `/${pid}/prompts/` + data.updatePrompt.id })
     },
   })
   const [createPrompt, { loading: creating }] = useGraphQLMutation(cm, {
@@ -164,7 +164,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     onCompleted() {
       toast.success('Prompt created')
       ac.resetStore()
-      navigate(`/${pid}/prompts`)
+      navigate({ to: `/${pid}/prompts` })
     },
   })
 

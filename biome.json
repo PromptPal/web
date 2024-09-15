@@ -16,7 +16,7 @@
   },
   "linter": {
     "enabled": true,
-    "ignore": ["src/gql/**/*.ts", "*.d.ts"],
+    "ignore": ["src/routeTree.gen.ts", "src/gql/**/*.ts", "*.d.ts"],
     "rules": {
       "recommended": false,
       "a11y": {

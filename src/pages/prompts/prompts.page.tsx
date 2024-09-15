@@ -1,7 +1,7 @@
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Title as Heading } from '@mantine/core'
+import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import PromptCardItem from '../../components/Prompt/CardItem'
 import { graphql } from '../../gql'
 import { useProjectId } from '../../hooks/route'

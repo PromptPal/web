@@ -1,11 +1,11 @@
+import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
+import { Button, Divider, HoverCard } from '@mantine/core'
 import { useQueryClient } from '@tanstack/react-query'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
 import { MetaMaskAvatar } from 'react-metamask-avatar'
-import { tokenAtom } from '../../stats/profile'
-import { Button, Divider, HoverCard } from '@mantine/core'
-import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { graphql } from '../../gql'
-import { Link, useNavigate } from 'react-router-dom'
+import { tokenAtom } from '../../stats/profile'
 import UserAvatar from '../User/UserAvatar'
 
 const q = graphql(`
@@ -27,9 +27,9 @@ function Profile() {
   const client = useApolloClient()
   const { data } = useGraphQLQuery(q, {
     variables: {
-      id: -1
+      id: -1,
     },
-    skip: !loggedIn
+    skip: !loggedIn,
   })
 
   const myProfile = data?.user
@@ -41,18 +41,10 @@ function Profile() {
   return (
     <HoverCard withArrow transitionProps={{ transition: 'pop' }}>
       <HoverCard.Target>
-        <UserAvatar
-          addr={myProfile?.addr}
-          name={myProfile?.name ?? ''}
-        />
+        <UserAvatar addr={myProfile?.addr} name={myProfile?.name ?? ''} />
       </HoverCard.Target>
       <HoverCard.Dropdown className=' min-w-48'>
-        <Button
-          component={Link}
-          to={'/projects'}
-          fullWidth
-          variant='filled'
-        >
+        <Button component={Link} to={'/projects'} fullWidth variant='filled'>
           Projects
         </Button>
         <Divider className='my-4' />
@@ -65,8 +57,9 @@ function Profile() {
             qc.clear()
             client.resetStore()
             // TODO: redirect to overall page
-            nav('/auth')
-          }}>
+            nav({ to: '/auth' })
+          }}
+        >
           Logout
         </Button>
       </HoverCard.Dropdown>

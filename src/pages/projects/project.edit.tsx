@@ -18,10 +18,10 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
 import { isEmpty, omitBy } from 'lodash'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
 import Zod from 'zod'
 import { OpenAIModels } from '../../constants'
 import { graphql } from '../../gql'
@@ -127,7 +127,7 @@ function ProjectEditPage() {
       qc.invalidateQueries({
         queryKey: ['project', res.id],
       })
-      nav(`/${res.id}/view`)
+      nav({ to: `/${res.id}/view` })
       toast.success('Project updated')
     },
   })
@@ -150,26 +150,26 @@ function ProjectEditPage() {
   return (
     <form onSubmit={f.onSubmit(onSubmit)}>
       <Box>
-        <div className="w-full flex justify-between items-center">
+        <div className='w-full flex justify-between items-center'>
           <Title>Editing {pjName}</Title>
-          <Tooltip label="Enable/Disable Project" withArrow refProp="rootRef">
+          <Tooltip label='Enable/Disable Project' withArrow refProp='rootRef'>
             <Switch
-              onLabel="Enabled"
-              offLabel="Disabled"
-              size="lg"
+              onLabel='Enabled'
+              offLabel='Disabled'
+              size='lg'
               {...f.getInputProps('enabled')}
             />
           </Tooltip>
         </div>
         <Divider my={6} />
       </Box>
-      <div className="container flex flex-col gap-4">
-        <Stack className="w-full flex-row items-center">
+      <div className='container flex flex-col gap-4'>
+        <Stack className='w-full flex-row items-center'>
           <TextInput
             disabled
-            label="Project Name"
-            className="w-full"
-            placeholder="Project Name"
+            label='Project Name'
+            className='w-full'
+            placeholder='Project Name'
             {...f.getInputProps('name')}
           />
         </Stack>
@@ -180,13 +180,13 @@ function ProjectEditPage() {
             <div>
               Find more models
               <a
-                href="https://platform.openai.com/docs/models/overview"
-                className="inline-flex ml-1"
-                target="_blank"
-                rel="noreferrer"
+                href='https://platform.openai.com/docs/models/overview'
+                className='inline-flex ml-1'
+                target='_blank'
+                rel='noreferrer'
               >
                 Here
-                <ExternalLinkIcon className="ml-1" />
+                <ExternalLinkIcon className='ml-1' />
               </a>
             </div>
           }
@@ -199,11 +199,11 @@ function ProjectEditPage() {
             <>
               <TextInput
                 key={1}
-                label="OpenAI Base URL"
+                label='OpenAI Base URL'
                 labelProps={{
                   className: 'pb-4',
                 }}
-                placeholder="OpenAI Base URL"
+                placeholder='OpenAI Base URL'
                 {...f.getInputProps('openAIBaseURL')}
               />
               <TextInput
@@ -213,17 +213,17 @@ function ProjectEditPage() {
                   <div>
                     Create your own API key
                     <a
-                      href="https://platform.openai.com/account/api-keys"
-                      target="_blank"
-                      className="inline-flex ml-1"
-                      rel="noreferrer"
+                      href='https://platform.openai.com/account/api-keys'
+                      target='_blank'
+                      className='inline-flex ml-1'
+                      rel='noreferrer'
                     >
                       Here
-                      <ExternalLinkIcon className="ml-1" />
+                      <ExternalLinkIcon className='ml-1' />
                     </a>
                   </div>
                 }
-                placeholder="OpenAI Token"
+                placeholder='OpenAI Token'
                 {...f.getInputProps('openAIToken')}
               />
             </>
@@ -232,27 +232,27 @@ function ProjectEditPage() {
             <>
               <TextInput
                 key={3}
-                label="Gemini Base URL"
+                label='Gemini Base URL'
                 labelProps={{
                   className: 'pb-4',
                 }}
-                placeholder="Gemini Base URL"
+                placeholder='Gemini Base URL'
                 {...f.getInputProps('geminiBaseURL')}
               />
               <TextInput
                 key={4}
-                label="Gemini Token"
-                placeholder="Gemini Token"
+                label='Gemini Token'
+                placeholder='Gemini Token'
                 {...f.getInputProps('geminiToken')}
               />
             </>
           )}
         </div>
 
-        <Fieldset legend="Basic Settings">
+        <Fieldset legend='Basic Settings'>
           <Input.Wrapper
-            label="Temperature"
-            className="w-full"
+            label='Temperature'
+            className='w-full'
             {...f.getInputProps('openAITemperature')}
           >
             <Slider
@@ -264,8 +264,8 @@ function ProjectEditPage() {
           </Input.Wrapper>
 
           <Input.Wrapper
-            label="TopP"
-            className="w-full"
+            label='TopP'
+            className='w-full'
             {...f.getInputProps('openAITopP')}
           >
             <Slider
@@ -277,28 +277,28 @@ function ProjectEditPage() {
           </Input.Wrapper>
 
           <NumberInput
-            label="Max Tokens"
+            label='Max Tokens'
             {...f.getInputProps('openAIMaxTokens')}
           />
         </Fieldset>
       </div>
-      <div className="flex w-full items-center justify-end gap-4 mt-8">
+      <div className='flex w-full items-center justify-end gap-4 mt-8'>
         <Button
-          variant="outline"
+          variant='outline'
           onClick={() => {
-            nav(`/${pid}/view`)
+            nav({ to: `/${pid}/view` })
           }}
         >
           Cancel
         </Button>
         <Button
-          variant="gradient"
+          variant='gradient'
           gradient={{ from: 'indigo', to: 'cyan' }}
           // variant='filled'
           // color='blue'
           disabled={!f.isValid()}
           loading={isLoading}
-          type="submit"
+          type='submit'
         >
           Update
         </Button>

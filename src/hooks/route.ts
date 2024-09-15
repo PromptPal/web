@@ -1,9 +1,10 @@
-import { useParams } from 'react-router-dom'
+import { useParams } from '@tanstack/react-router'
 
 export function useProjectId() {
-  const pid = useParams<{ pid: string }>().pid
+  const pid = useParams({ strict: false }).pid
   if (pid) {
     return ~~pid
   }
-  return null
+  // FIXME: use type safe params instead
+  return -1
 }

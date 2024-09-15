@@ -1,10 +1,10 @@
+import { graphql } from '@/gql'
+import { useQuery as useGraphQLQuery } from '@apollo/client'
+import { Center, Divider, Select } from '@mantine/core'
+import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
 import { tokenAtom } from '../../stats/profile'
-import { Center, Divider, Select } from '@mantine/core'
-import { useQuery as useGraphQLQuery } from '@apollo/client'
-import { graphql } from '@/gql'
-import { useLocation, useSearchParams } from 'react-router-dom'
 
 const q = graphql(`
   query allProjectsNameOnly($pagination: PaginationInput!) {
@@ -23,21 +23,28 @@ function ProjectSelector() {
   const logged = !!useAtomValue(tokenAtom)
   const location = useLocation()
 
-  const [sq, setSq] = useSearchParams()
-  const currentProject = sq.get('pjId')
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const sq = useSearch({ strict: false }) as any
+  const currentProject = sq.pjId
+  const nav = useNavigate()
 
-  const navigateToProject = useCallback((id?: number) => {
-    setSq({
-      pjId: id ? id.toString() : '',
-    })
-  }, [location.search, location.pathname])
+  const navigateToProject = useCallback(
+    (id?: number) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+      nav({ search: { pjId: id ? id.toString() : undefined } as any })
+      // setSq({
+      //   pjId: id ? id.toString() : '',
+      // })
+    },
+    [location.search, location.pathname],
+  )
 
   const { data: projectsData } = useGraphQLQuery(q, {
     variables: {
       pagination: {
         limit: 100,
-        offset: 0
-      }
+        offset: 0,
+      },
     },
     skip: !logged,
     onCompleted(data) {
@@ -75,7 +82,10 @@ function ProjectSelector() {
         className='w-36'
         value={currentProject?.toString()}
         onChange={onProjectChange}
-        data={projects.map((project) => ({ value: project.id.toString(), label: project.name }))}
+        data={projects.map((project) => ({
+          value: project.id.toString(),
+          label: project.name,
+        }))}
       />
     </div>
   )

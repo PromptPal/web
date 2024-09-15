@@ -1,7 +1,7 @@
 import { graphql } from '@/gql'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Button, Card, Stack, Title } from '@mantine/core'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from '@tanstack/react-router'
 import OpenTokenListOfProject from '../../components/OpenToken/List'
 import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
 
@@ -39,7 +39,7 @@ const q = graphql(`
 `)
 
 function ProjectPage() {
-  const pid = useParams().pid ?? '0'
+  const pid = useParams({ strict: false }).pid ?? '0'
 
   const { data: projectData } = useGraphQLQuery(q, {
     variables: {

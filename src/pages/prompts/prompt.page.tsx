@@ -11,9 +11,9 @@ import {
   Switch,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { Link, useParams } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
-import { Link, useParams } from 'react-router-dom'
 import ButtonGlow from '../../components/Button/ButtonGlow'
 import LinkGlow from '../../components/Button/LinkGlow'
 import PromptCallMetric from '../../components/Calls/Metrics'
@@ -69,7 +69,7 @@ const q = graphql(`
 `)
 
 function PromptPage() {
-  const params = useParams<{ id: string }>()
+  const params: { id: string } = useParams({ strict: false })
   const pid = ~~(params.id ?? '0')
   const { data } = useGraphQLQuery(q, {
     variables: {
@@ -138,7 +138,11 @@ function PromptPage() {
             </ButtonGlow>
             <LinkGlow
               className='px-6 py-2 rounded font-bold text-sm cursor-pointer'
-              to={`/${pjId}/prompts/${promptDetail?.id}/edit`}
+              to='/$pid/prompts/$id/edit'
+              params={{
+                pid: pjId.toString(),
+                id: (promptDetail?.id ?? -1).toString(),
+              }}
             >
               Edit
             </LinkGlow>

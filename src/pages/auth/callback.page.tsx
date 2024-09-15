@@ -1,24 +1,22 @@
+import { useSearch } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { tokenAtom } from '../../stats/profile'
 
 function AuthSSOCallbackPage() {
-  const [sp] = useSearchParams()
+  const sp: { token?: string } = useSearch({ strict: false })
   const [, setToken] = useAtom(tokenAtom)
 
   useEffect(() => {
-    if (!sp.has('token')) {
+    if (!sp.token) {
       return
     }
-    const token = sp.get('token')
+    const token = sp.token
     setToken(token)
   }, [sp])
 
   return (
-    <div className='flex justify-center items-center h-full'>
-      Loading...
-    </div>
+    <div className='flex justify-center items-center h-full'>Loading...</div>
   )
 }
 

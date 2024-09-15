@@ -1,5 +1,5 @@
+import { Link } from '@tanstack/react-router'
 import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { Project } from '../../gql/graphql'
 
 type ProjectCardItemProps = {
@@ -16,7 +16,7 @@ function ProjectCardItem(props: ProjectCardItemProps) {
   return (
     <Link
       to={`/${project.id}`}
-      className="w-full py-4 rounded-lg flex justify-center items-center flex-col"
+      className='w-full py-4 rounded-lg flex justify-center items-center flex-col'
       data-glow
       style={
         {
@@ -28,10 +28,10 @@ function ProjectCardItem(props: ProjectCardItemProps) {
         } as React.CSSProperties
       }
     >
-      <h3 className="text-2xl font-bold text-black dark:text-white">
+      <h3 className='text-2xl font-bold text-black dark:text-white'>
         #{project.id} {project.name}
       </h3>
-      <p className="text-sm text-slate-700 mt-4 dark:text-slate-200">
+      <p className='text-sm text-slate-700 mt-4 dark:text-slate-200'>
         {createdAt}
       </p>
     </Link>

@@ -1,7 +1,7 @@
 import { CubeIcon, HomeIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import { NavLink } from '@mantine/core'
+import { Link, useParams } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { Link, useParams } from 'react-router-dom'
 import { lastTag } from '~build/info'
 import buildTime from '~build/time'
 import LinkGlow from './Button/LinkGlow'
@@ -30,14 +30,15 @@ const menus = [
 ]
 
 function Menubar() {
-  const params = useParams<{ pid: string }>()
+  const params: { pid: string } = useParams({ strict: false })
   return (
     <nav className='py-2 w-40 hover:backdrop-blur-sm rounded-lg flex flex-col items-center justify-between'>
       <ul className='flex flex-col gap-4'>
         {menus.map((menu) => (
           <li key={menu.text}>
             <LinkGlow
-              to={menu.link(params?.pid ? ~~params.pid : 0)}
+              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+              to={menu.link(params?.pid ? ~~params.pid : 0) as any}
               className='flex items-center px-4 py-2 rounded font-bold text-sm cursor-pointer'
             >
               <div className='flex items-center'>
