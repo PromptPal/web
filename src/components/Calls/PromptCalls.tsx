@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/client'
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import {
   ActionIcon,
   Badge,
   Card,
+  CloseIcon,
   HoverCard,
+  Input,
   Text,
   Title,
   Tooltip,
@@ -16,8 +18,10 @@ import {
 } from '@tanstack/react-table'
 import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
+import { useCallback, useMemo, useState } from 'react'
 import { graphql } from '../../gql'
-import { FetchPromptCallsTableQuery } from '../../gql/graphql'
+import { FetchPromptCallsTableQuery, QueryPromptArgs } from '../../gql/graphql'
+import { calcId } from '../../utils/dep-check'
 import SimpleTable from '../Table/SimpleTable'
 import UABadge from './UABadge'
 
@@ -26,8 +30,8 @@ type PromptCallsProps = {
 }
 
 const q = graphql(`
-  query fetchPromptCallsTable($id: Int!) {
-    prompt(id: $id) {
+  query fetchPromptCallsTable($id: Int!, $filters: PromptSearchFilters) {
+    prompt(id: $id, filters: $filters) {
       id
       latestCalls {
         count
@@ -188,26 +192,48 @@ const columns = [
   }),
 ]
 
+const rm = getCoreRowModel()
+
 function PromptCalls(props: PromptCallsProps) {
   const { promptId } = props
+
+  const [searchingUserId, setSearchingUserId] = useState('')
+
+  const variables = useMemo<QueryPromptArgs>(() => {
+    return {
+      id: promptId,
+      filters: {
+        userId: searchingUserId === '' ? null : searchingUserId,
+      },
+    }
+  }, [searchingUserId, promptId])
+
+  const onSearchValueChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchingUserId(e.target.value)
+    },
+    [],
+  )
 
   const {
     data: promptData,
     loading,
     refetch,
   } = useQuery(q, {
-    variables: {
-      id: promptId,
-    },
+    variables,
     pollInterval: 20_000,
   })
 
   const latestCalls = promptData?.prompt?.latestCalls
 
+  const renderCallsTableData = useMemo(() => {
+    return latestCalls?.edges ?? []
+  }, [calcId(latestCalls?.edges)])
+
   const promptCallsTable = useReactTable({
-    data: latestCalls?.edges ?? [],
+    data: renderCallsTableData,
     columns,
-    getCoreRowModel: getCoreRowModel(),
+    getCoreRowModel: rm,
   })
   return (
     <Card>
@@ -219,9 +245,27 @@ function PromptCalls(props: PromptCallsProps) {
               ({latestCalls?.count ?? 0})
             </i>
           </Title>
-          <ActionIcon onClick={() => refetch()} disabled={loading}>
-            <ArrowPathIcon className='w-4 h-4' />
-          </ActionIcon>
+          <div className='flex gap-4 items-center'>
+            <Input
+              className='hidden'
+              type='search'
+              value={searchingUserId}
+              placeholder='User ID'
+              onChange={onSearchValueChange}
+              leftSection={<MagnifyingGlassIcon className='w-4 h-4' />}
+              rightSectionPointerEvents='all'
+              rightSection={
+                <CloseIcon
+                  onClick={() => {
+                    setSearchingUserId('')
+                  }}
+                />
+              }
+            />
+            <ActionIcon size='lg' onClick={() => refetch()} disabled={loading}>
+              <ArrowPathIcon className='w-4 h-4' />
+            </ActionIcon>
+          </div>
         </div>
       </Card.Section>
       <Card.Section className='p-4'>
