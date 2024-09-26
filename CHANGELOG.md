@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.12.1](https://github.com/PromptPal/web/compare/v1.12.0...v1.12.1) (2024-09-22)
+
+
+### Bug Fixes
+
+* **calls:** add search user id for calls ([aeca6a2](https://github.com/PromptPal/web/commit/aeca6a25cb4a4c4b33256173290c32a77e390c5c))
+* **ci:** support o1 ([8daed8a](https://github.com/PromptPal/web/commit/8daed8ab7c3ea8df904f542da9663aded254747e))
+* **deps:** update deps ([13df3c3](https://github.com/PromptPal/web/commit/13df3c3560200d6db2f52dc512c6613a26277885))
+* **routes:** fix edit route ([829808e](https://github.com/PromptPal/web/commit/829808e4f30bf2b5650787af7726df9fe9511792))
+
 ## [1.12.0](https://github.com/PromptPal/web/compare/v1.11.0...v1.12.0) (2024-08-02)
 
 
