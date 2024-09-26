@@ -11,6 +11,8 @@ export const OpenAIModels = [
   'o1',
   'o1-mini',
   'gemini-pro',
+  'gemini-1.5-flash',
+  'gemini-1.5-pro',
 ] as const
 
 export const SupportedVariableType = [
