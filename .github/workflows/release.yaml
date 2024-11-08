@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [23.x]
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -29,8 +29,6 @@ jobs:
           repository: PromptPal/PromptPal
           path: ./PromptPal
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9.1.0
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
