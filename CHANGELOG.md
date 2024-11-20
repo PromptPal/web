@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.12.1](https://github.com/PromptPal/web/compare/v1.12.0...v1.12.1) (2024-11-20)
+
+
+### Bug Fixes
+
+* **calls:** add search user id for calls ([aeca6a2](https://github.com/PromptPal/web/commit/aeca6a25cb4a4c4b33256173290c32a77e390c5c))
+* **ci:** support o1 ([8daed8a](https://github.com/PromptPal/web/commit/8daed8ab7c3ea8df904f542da9663aded254747e))
+* **ci:** upgrade node and pnpm to latest ([38c0b3d](https://github.com/PromptPal/web/commit/38c0b3d6596c8cb63d0280999c695e7a6c853197))
+* **ci:** upgrade to node 23 ([4731a6b](https://github.com/PromptPal/web/commit/4731a6bb0f772e14faee98adefed536c2c879e6f))
+* **deps:** update deps ([13df3c3](https://github.com/PromptPal/web/commit/13df3c3560200d6db2f52dc512c6613a26277885))
+* **deps:** upgrade deps ([ea6b6ca](https://github.com/PromptPal/web/commit/ea6b6ca732338236fa418fc08602c0ea3bc43ecc))
+* **gemini:** add more models of gemini ([a8c4bf0](https://github.com/PromptPal/web/commit/a8c4bf0d55018d99a7af3a277a93b9f5a3af1250))
+* **routes:** fix edit route ([829808e](https://github.com/PromptPal/web/commit/829808e4f30bf2b5650787af7726df9fe9511792))
+
 ## [1.12.0](https://github.com/PromptPal/web/compare/v1.11.0...v1.12.0) (2024-08-02)
 
 
