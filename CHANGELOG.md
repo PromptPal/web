@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.2](https://github.com/PromptPal/web/compare/v1.12.1...v1.12.2) (2024-11-20)
+
+
+### Bug Fixes
+
+* **debug:** remove router debug tool in dev ([0020abc](https://github.com/PromptPal/web/commit/0020abcd2cb78e5f709cb4000a2396f53e529597))
+* **http:** fix inifinte redirect to auth issue ([792b648](https://github.com/PromptPal/web/commit/792b64894bbaef7ff14ab58c99e8f27e1f635505))
+
 ## [1.12.1](https://github.com/PromptPal/web/compare/v1.12.0...v1.12.1) (2024-11-20)
 
 
