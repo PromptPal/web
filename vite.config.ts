@@ -14,7 +14,6 @@ export default defineConfig({
     TanStackRouterVite() as any,
     react(),
     BuildInfo(),
-
     isProduction && zipPack(),
     // ViteFaviconsPlugin('./src/assets/prompt-pal-logo.png')
   ].filter((x) => x),
