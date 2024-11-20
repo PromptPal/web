@@ -68,7 +68,9 @@ export function HttpRequest<T, I = undefined>(
           if (localStorage.getItem('pp:token')) {
             localStorage.removeItem('pp:token')
           }
-          window.location.href = '/auth'
+          if (!window.location.pathname.startsWith('/auth')) {
+            window.location.href = '/auth'
+          }
         }
       }
 
