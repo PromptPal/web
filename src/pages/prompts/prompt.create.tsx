@@ -4,9 +4,8 @@ import {
   useQuery as useGraphQLQuery,
   useQuery,
 } from '@apollo/client'
-import { AddIcon } from '@chakra-ui/icons'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import {
   Button,
   Divider,
@@ -399,7 +398,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
             )
           })}
           <Button
-            leftSection={<AddIcon />}
+            leftSection={<PlusIcon className='w-4 h-4' />}
             disabled={f.values.prompts.length >= 20}
             onClick={() =>
               f.insertListItem('prompts', { prompt: '', role: PromptRole.User })

@@ -1,6 +1,6 @@
 import { useMutation as useGraphQLMutation, useQuery } from '@apollo/client'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import {
   Box,
   Button,
@@ -186,7 +186,7 @@ function ProjectEditPage() {
                 rel='noreferrer'
               >
                 Here
-                <ExternalLinkIcon className='ml-1' />
+                <ArrowTopRightOnSquareIcon className='ml-1' />
               </a>
             </div>
           }
@@ -219,7 +219,7 @@ function ProjectEditPage() {
                       rel='noreferrer'
                     >
                       Here
-                      <ExternalLinkIcon className='ml-1' />
+                      <ArrowTopRightOnSquareIcon className='ml-1' />
                     </a>
                   </div>
                 }

@@ -2,9 +2,11 @@ import {
   useApolloClient,
   useMutation as useGraphQLMutation,
 } from '@apollo/client'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowTopRightOnSquareIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/24/outline'
 import { Button, Select, TextInput, Tooltip } from '@mantine/core'
 // import { useForm, SubmitHandler } from 'react-hook-form'
 import { useForm } from '@mantine/form'
@@ -107,7 +109,7 @@ function ProjectCreatePage() {
                 rel='noreferrer'
               >
                 Here
-                <ExternalLinkIcon className='ml-1' />
+                <ArrowTopRightOnSquareIcon className='ml-1' />
               </a>
             </div>
           }
