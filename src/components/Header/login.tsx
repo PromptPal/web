@@ -1,11 +1,11 @@
-import { useCallback } from 'react'
-import MetaMaskSDK from '@metamask/sdk'
-import { useAtom } from 'jotai'
-import { tokenAtom } from '../../stats/profile'
-import { toast } from 'react-hot-toast'
-import { graphql } from '../../gql'
 import { useLazyQuery } from '@apollo/client'
 import { Button } from '@mantine/core'
+import { useSDK } from '@metamask/sdk-react'
+import { useAtom } from 'jotai'
+import { useCallback } from 'react'
+import { toast } from 'react-hot-toast'
+import { graphql } from '../../gql'
+import { tokenAtom } from '../../stats/profile'
 
 const LoginWelcomeText = 'Welcome to the PromptPal~ \n It`s your nonce: '
 
@@ -30,19 +30,20 @@ function LoginButton(props: LoginButtonProps) {
   const { buttonText = 'Login' } = props
   const [t, setToken] = useAtom(tokenAtom)
 
-  const [doLoginMutation] = useLazyQuery(q, {
-  })
+  const [doLoginMutation] = useLazyQuery(q, {})
+
+  const { sdk } = useSDK()
 
   const web3Login = useCallback(async () => {
-    const m = new MetaMaskSDK()
-    await m.init()
-    const eth = m.getProvider()
-    if (!eth) {
-      throw new Error('MetaMask is not connected')
-    }
+    // const m = sdk
+    // await m.init()
+    // const eth = m.getProvider()
+    // if (!eth) {
+    //   throw new Error('MetaMask is not connected')
+    // }
 
-    const accounts = await eth.request<string[]>({ method: 'eth_requestAccounts', params: [] })
-
+    const accounts = await sdk?.connect()
+    // const accounts = await eth.request<string[]>({ method: 'eth_requestAccounts', params: [] })
     if (!accounts) {
       throw new Error('accounts not found')
     }
@@ -51,13 +52,18 @@ function LoginButton(props: LoginButtonProps) {
     if (!address) {
       throw new Error('address not found')
     }
+
+    // const address = sdk?.connect()
     const nonce = Date.now()
     const text = LoginWelcomeText + nonce
     const msg = text
-    const signature = await eth.request<string>({
-      method: 'personal_sign',
-      params: [msg, address],
+    const signature = await sdk?.connectAndSign({
+      msg,
     })
+    // const signature = await eth.request<string>({
+    //   method: 'personal_sign',
+    //   params: [msg, address],
+    // })
     if (!signature) {
       throw new Error('signature not found')
     }
@@ -66,9 +72,9 @@ function LoginButton(props: LoginButtonProps) {
         auth: {
           address,
           signature,
-          message: msg
-        }
-      }
+          message: msg,
+        },
+      },
     })
     if (!res.data?.auth) {
       throw new Error('token not found')
@@ -77,20 +83,15 @@ function LoginButton(props: LoginButtonProps) {
     return res.data.auth
   }, [doLoginMutation])
 
-  const doWeb3Login = useCallback(
-    () => {
-      return toast.promise(
-        web3Login(),
-        {
-          loading: 'Logging in...',
-          success: (data) => `Welcome ${data.user.addr}`,
-          error: (err) => {
-            return err.message ?? err.error ?? err.toString()
-          }
-        }
-      )
-    }
-    , [web3Login])
+  const doWeb3Login = useCallback(() => {
+    return toast.promise(web3Login(), {
+      loading: 'Logging in...',
+      success: (data) => `Welcome ${data.user.addr}`,
+      error: (err) => {
+        return err.message ?? err.error ?? err.toString()
+      },
+    })
+  }, [web3Login])
 
   if (t) {
     return null
