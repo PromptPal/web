@@ -1,11 +1,11 @@
+import { graphql } from '@/gql'
+import { tokenAtom } from '@/stats/profile'
 import { useLazyQuery } from '@apollo/client'
-import { Button } from '@mantine/core'
 import { useSDK } from '@metamask/sdk-react'
 import { useAtom } from 'jotai'
+import { LogIn } from 'lucide-react'
 import { useCallback } from 'react'
 import { toast } from 'react-hot-toast'
-import { graphql } from '../../gql'
-import { tokenAtom } from '../../stats/profile'
 
 const LoginWelcomeText = 'Welcome to the PromptPal~ \n It`s your nonce: '
 
@@ -73,8 +73,10 @@ function LoginButton(props: LoginButtonProps) {
   const doWeb3Login = useCallback(() => {
     return toast.promise(web3Login(), {
       loading: 'Logging in...',
-      success: (data) => `Welcome ${data.user.addr}`,
-      error: (err) => {
+      success: (data: Awaited<ReturnType<typeof web3Login>>) =>
+        `Welcome ${data.user.addr}`,
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+      error: (err: any) => {
         return err.message ?? err.error ?? err.toString()
       },
     })
@@ -84,16 +86,13 @@ function LoginButton(props: LoginButtonProps) {
     return null
   }
   return (
-    <Button
-      variant='gradient'
-      gradient={{
-        from: 'indigo',
-        to: 'cyan',
-      }}
+    <button
+      className='flex items-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition-colors'
       onClick={doWeb3Login}
     >
+      <LogIn size={18} className='mr-2' />
       {buttonText}
-    </Button>
+    </button>
   )
 }
 

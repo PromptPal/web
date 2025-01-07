@@ -3,7 +3,8 @@ import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Center, Divider, Select } from '@mantine/core'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { useAtomValue } from 'jotai'
-import { useCallback } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { useCallback, useState } from 'react'
 import { tokenAtom } from '../../stats/profile'
 
 const q = graphql(`
@@ -25,13 +26,14 @@ function ProjectSelector() {
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const sq = useSearch({ strict: false }) as any
-  const currentProject = sq.pjId
+  console.log('sq', sq)
+  const pjId = sq.pjId
   const nav = useNavigate()
 
   const navigateToProject = useCallback(
     (id?: number) => {
       // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-      nav({ search: { pjId: id ? id.toString() : undefined } as any })
+      nav({ search: { pjId: id ? id : undefined } as any })
       // setSq({
       //   pjId: id ? id.toString() : '',
       // })
@@ -58,35 +60,49 @@ function ProjectSelector() {
   })
 
   const projects = projectsData?.projects.edges ?? []
+  const currentProject = projects.find((x) => x.id === Number(pjId))
 
-  const onProjectChange = useCallback((val?: string | null) => {
+  const onProjectChange = useCallback((val: number) => {
     if (!val) {
       navigateToProject(undefined)
     } else {
-      const pjId = parseInt(val)
-      navigateToProject(pjId)
+      navigateToProject(val)
     }
   }, [])
+  const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false)
 
   if (projects.length === 0) {
     return null
   }
 
   return (
-    <div className='w-full flex items-center gap-4 ml-4'>
-      <Center h={'20px'} ml={2} mr={1}>
-        <Divider orientation='vertical' />
-      </Center>
-      <Select
-        size='xs'
-        className='w-36'
-        value={currentProject?.toString()}
-        onChange={onProjectChange}
-        data={projects.map((project) => ({
-          value: project.id.toString(),
-          label: project.name,
-        }))}
-      />
+    <div className='relative'>
+      <button
+        onClick={() => setIsProjectMenuOpen(!isProjectMenuOpen)}
+        className='flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-gray-200'
+      >
+        <span>{currentProject?.name}</span>
+        <ChevronDown size={16} />
+      </button>
+
+      {isProjectMenuOpen && (
+        <div className='absolute mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5'>
+          <div className='py-1' role='menu'>
+            {projects.map((project) => (
+              <button
+                key={project.id}
+                onClick={() => {
+                  onProjectChange(project.id)
+                  setIsProjectMenuOpen(false)
+                }}
+                className='block w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-600'
+              >
+                {project.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

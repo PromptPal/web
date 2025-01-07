@@ -56,7 +56,8 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
         {
           loading: 'Updating',
           success: 'Updated',
-          error: (e) => e.toString(),
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          error: (e: any) => e.toString(),
         },
       )
     },
