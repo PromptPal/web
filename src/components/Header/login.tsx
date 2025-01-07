@@ -35,15 +35,7 @@ function LoginButton(props: LoginButtonProps) {
   const { sdk } = useSDK()
 
   const web3Login = useCallback(async () => {
-    // const m = sdk
-    // await m.init()
-    // const eth = m.getProvider()
-    // if (!eth) {
-    //   throw new Error('MetaMask is not connected')
-    // }
-
     const accounts = await sdk?.connect()
-    // const accounts = await eth.request<string[]>({ method: 'eth_requestAccounts', params: [] })
     if (!accounts) {
       throw new Error('accounts not found')
     }
@@ -53,17 +45,12 @@ function LoginButton(props: LoginButtonProps) {
       throw new Error('address not found')
     }
 
-    // const address = sdk?.connect()
     const nonce = Date.now()
     const text = LoginWelcomeText + nonce
     const msg = text
     const signature = await sdk?.connectAndSign({
       msg,
     })
-    // const signature = await eth.request<string>({
-    //   method: 'personal_sign',
-    //   params: [msg, address],
-    // })
     if (!signature) {
       throw new Error('signature not found')
     }
