@@ -1,10 +1,14 @@
 import { graphql } from '@/gql'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
-import { Center, Divider, Select } from '@mantine/core'
-import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
+import {
+  Link,
+  useLocation,
+  useMatch,
+  useNavigate,
+} from '@tanstack/react-router'
 import { useAtomValue } from 'jotai'
-import { ChevronDown } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { Folders } from 'lucide-react'
+import { useCallback } from 'react'
 import { tokenAtom } from '../../stats/profile'
 
 const q = graphql(`
@@ -22,21 +26,13 @@ const q = graphql(`
 
 function ProjectSelector() {
   const logged = !!useAtomValue(tokenAtom)
+  const m = useMatch({ from: '/projects/', shouldThrow: false })
   const location = useLocation()
-
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const sq = useSearch({ strict: false }) as any
-  console.log('sq', sq)
-  const pjId = sq.pjId
   const nav = useNavigate()
 
   const navigateToProject = useCallback(
     (id?: number) => {
-      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-      nav({ search: { pjId: id ? id : undefined } as any })
-      // setSq({
-      //   pjId: id ? id.toString() : '',
-      // })
+      nav({ to: `/${id}/view` })
     },
     [location.search, location.pathname],
   )
@@ -60,50 +56,29 @@ function ProjectSelector() {
   })
 
   const projects = projectsData?.projects.edges ?? []
-  const currentProject = projects.find((x) => x.id === Number(pjId))
-
-  const onProjectChange = useCallback((val: number) => {
-    if (!val) {
-      navigateToProject(undefined)
-    } else {
-      navigateToProject(val)
-    }
-  }, [])
-  const [isProjectMenuOpen, setIsProjectMenuOpen] = useState(false)
-
   if (projects.length === 0) {
     return null
   }
 
   return (
-    <div className='relative'>
-      <button
-        onClick={() => setIsProjectMenuOpen(!isProjectMenuOpen)}
-        className='flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-gray-200'
-      >
-        <span>{currentProject?.name}</span>
-        <ChevronDown size={16} />
-      </button>
-
-      {isProjectMenuOpen && (
-        <div className='absolute mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5'>
-          <div className='py-1' role='menu'>
-            {projects.map((project) => (
-              <button
-                key={project.id}
-                onClick={() => {
-                  onProjectChange(project.id)
-                  setIsProjectMenuOpen(false)
-                }}
-                className='block w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-600'
-              >
-                {project.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+    <Link
+      to='/projects'
+      className={`
+        group relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all
+        ring-primary-500/20 hover:ring-2
+        hover:bg-gradient-to-r hover:from-primary-50/80 hover:to-primary-100/80
+        dark:hover:from-primary-950/50 dark:hover:to-primary-900/50
+        hover:text-primary-500 dark:hover:text-primary-400
+        ${
+          m
+            ? 'bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 text-primary-600 dark:text-primary-400 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-gradient-to-r after:from-primary-500 after:to-primary-600 dark:text-primary-300'
+            : 'text-gray-600 dark:text-gray-400'
+        }
+      `}
+    >
+      <Folders className='h-4 w-4 transition-all group-hover:scale-110 group-hover:rotate-3' />
+      <span>Projects</span>
+    </Link>
   )
 }
 
