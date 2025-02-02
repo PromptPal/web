@@ -41,6 +41,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "bignumber.js": "^9.1.2",
     "classnames": "^2.5.1",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "diff": "^7.0.0",
     "echarts": "^5.6.0",
@@ -59,6 +60,7 @@
     "react-metamask-avatar": "^2.0.10",
     "react-youtube": "^10.1.0",
     "recharts": "^2.15.0",
+    "tailwind-merge": "^3.0.1",
     "web3": "^4.16.0",
     "zod": "^3.24.1"
   },

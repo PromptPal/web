@@ -1,7 +1,7 @@
 import { graphql } from '@/gql'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Link, useParams } from '@tanstack/react-router'
-import { Pencil } from 'lucide-react'
+import { Bot, ExternalLink, Gauge, Pencil, Thermometer } from 'lucide-react'
 import OpenTokenListOfProject from '../../components/OpenToken/List'
 import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
 
@@ -71,8 +71,44 @@ function ProjectPage() {
               Edit
             </Link>
           </div>
+
+          <div className='mt-6 grid grid-cols-1 md:grid-cols-3 gap-4'>
+            <div className='flex items-center gap-3 p-4 rounded-lg bg-gray-800/50 border border-gray-700/50'>
+              <Bot className='w-5 h-5 text-blue-400' />
+              <div>
+                <p className='text-sm text-gray-400'>Model</p>
+                <p className='text-base font-medium text-gray-200'>
+                  {project?.openAIModel || 'Not Set'}
+                </p>
+              </div>
+            </div>
+
+            <div className='flex items-center gap-3 p-4 rounded-lg bg-gray-800/50 border border-gray-700/50'>
+              <ExternalLink className='w-5 h-5 text-purple-400' />
+              <div>
+                <p className='text-sm text-gray-400'>Base URL</p>
+                <p className='text-base font-medium text-gray-200 truncate max-w-[200px]'>
+                  {project?.openAIBaseURL || 'Default'}
+                </p>
+              </div>
+            </div>
+
+            <div className='flex items-center gap-3 p-4 rounded-lg bg-gray-800/50 border border-gray-700/50'>
+              <Thermometer className='w-5 h-5 text-red-400' />
+              <div>
+                <p className='text-sm text-gray-400'>Temperature</p>
+                <p className='text-base font-medium text-gray-200'>
+                  {project?.openAITemperature || '0'}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className='p-6'>
+
+        <div className='p-6 border-t border-gray-700/50'>
+          <h2 className='text-lg font-semibold text-gray-200 mb-4'>
+            Usage Metrics
+          </h2>
           <ProjectTopPromptsCount
             recentCounts={project?.promptMetrics.recentCounts}
           />
