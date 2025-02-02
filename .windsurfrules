@@ -4,4 +4,4 @@ based on react, tailwindcss, @tanstack/react-router, graphql, @apollo/client.
 
 use `recharts` to display charts.
 
-the website should support dark mode. the UI style should be bold and simple. with aggressive gradient colors and grate blur effect. use icons from `lucide-react`.
+the website should support dark mode. the UI style should be bold and simple. with aggressive gradient colors and grate blur effect, no borders, use icons from `lucide-react`.

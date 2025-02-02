@@ -65,15 +65,15 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
 
   if (loading) {
     return (
-      <div className='rounded-lg border border-border bg-gradient-to-br from-background/50 to-background p-6 backdrop-blur-xl'>
+      <div className='rounded-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl backdrop-blur-sm p-6'>
         <div className='flex items-center gap-2 mb-4'>
-          <LineChartIcon className='w-5 h-5' />
-          <h3 className='text-lg font-bold'>Prompt Usage Trends</h3>
+          <LineChartIcon className='w-5 h-5 text-blue-400' />
+          <h3 className='text-lg font-bold text-gray-200'>
+            Prompt Usage Trends
+          </h3>
         </div>
         <div className='h-[300px] w-full flex items-center justify-center'>
-          <div className='animate-pulse text-muted-foreground'>
-            Loading data...
-          </div>
+          <div className='animate-pulse text-gray-500'>Loading data...</div>
         </div>
       </div>
     )
@@ -81,27 +81,27 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
 
   if (!recentCounts || recentCounts.length === 0 || chartData.length === 0) {
     return (
-      <div className='rounded-lg border border-border bg-gradient-to-br from-background/50 to-background p-6 backdrop-blur-xl'>
+      <div className='rounded-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl backdrop-blur-sm p-6'>
         <div className='flex items-center gap-2 mb-4'>
-          <LineChartIcon className='w-5 h-5' />
-          <h3 className='text-lg font-bold'>Prompt Usage Trends</h3>
+          <LineChartIcon className='w-5 h-5 text-blue-400' />
+          <h3 className='text-lg font-bold text-gray-200'>
+            Prompt Usage Trends
+          </h3>
         </div>
         <div className='h-[300px] w-full flex items-center justify-center'>
-          <p className='text-muted-foreground'>
-            No data available for the last 7 days
-          </p>
+          <p className='text-gray-500'>No data available for the last 7 days</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className='rounded-lg border border-border bg-gradient-to-br from-background/50 to-background p-6 backdrop-blur-xl'>
+    <div className='rounded-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6'>
       <div className='flex items-center gap-2 mb-4'>
-        <LineChartIcon className='w-5 h-5' />
-        <h3 className='text-lg font-bold'>Prompt Usage Trends</h3>
+        <LineChartIcon className='w-5 h-5 text-blue-400' />
+        <h3 className='text-lg font-bold text-gray-200'>Prompt Usage Trends</h3>
       </div>
-      <p className='text-sm text-muted-foreground mb-6'>
+      <p className='text-sm text-gray-500 mb-6'>
         Usage patterns of your prompts over the last 7 days
       </p>
       <div className='w-full h-[300px]'>
