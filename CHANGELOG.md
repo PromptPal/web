@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.12.4](https://github.com/PromptPal/web/compare/v1.12.3...v1.12.4) (2025-02-02)
+
+
+### Bug Fixes
+
+* **overall:** update overall page ([307bfd3](https://github.com/PromptPal/web/commit/307bfd38bab091dd4cfed1dda0fcb91ab8915ec7))
+* **project:** update styless in project and prompts page ([40a7409](https://github.com/PromptPal/web/commit/40a7409ce3c2f9405b1064ec438152964610d7de))
+* **project:** update UI in project and prompt card ([02ca816](https://github.com/PromptPal/web/commit/02ca8167dd520c628a92487e667b79682f51d1c3))
+* **project:** update view of project creation page ([724d47e](https://github.com/PromptPal/web/commit/724d47e5a5642c8af0ea4b5f4356aaf95cd3b596))
+* **prompt:** update prompt create page ([fecb279](https://github.com/PromptPal/web/commit/fecb279aa7db2464dcaca52c61f9fa749b10391b))
+
 ## [1.12.3](https://github.com/PromptPal/web/compare/v1.12.2...v1.12.3) (2025-02-02)
 
 
