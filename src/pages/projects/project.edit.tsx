@@ -195,7 +195,8 @@ function ProjectEditPage() {
         ></Select>
 
         <div ref={settingAreaRef}>
-          {f.values.openAIModel?.startsWith('gpt') && (
+          {(f.values.openAIModel?.startsWith('gpt') ||
+            f.values.openAIModel?.startsWith('o3')) && (
             <>
               <TextInput
                 key={1}

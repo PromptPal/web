@@ -10,6 +10,8 @@ export const OpenAIModels = [
   'gpt-4o-mini',
   'o1',
   'o1-mini',
+  'o3',
+  'o3-mini',
   'gemini-pro',
   'gemini-1.5-flash',
   'gemini-1.5-pro',
