@@ -1,11 +1,11 @@
 import { Outlet } from '@tanstack/react-router'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
-import { usePointerUpdate } from '../../hooks/glow'
+// import { usePointerUpdate } from '../../hooks/glow'
 import Header from '../Header/Header.modern'
 
 function BaseLayout() {
-  usePointerUpdate()
+  // usePointerUpdate()
   return (
     <div className='min-h-screen bg-gray-900'>
       <Header />

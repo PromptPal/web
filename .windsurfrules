@@ -2,4 +2,6 @@ this website named PromptPal is a tool for managing prompts for the LLM.
 
 based on react, tailwindcss, @tanstack/react-router, graphql, @apollo/client.
 
+use `recharts` to display charts.
+
 the website should support dark mode. the UI style should be bold and simple. with aggressive gradient colors and grate blur effect. use icons from `lucide-react`.
