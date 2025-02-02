@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.12.3](https://github.com/PromptPal/web/compare/v1.12.2...v1.12.3) (2025-02-02)
+
+
+### Bug Fixes
+
+* **deps:** update deps ([eee9176](https://github.com/PromptPal/web/commit/eee9176d15bd94fb4902fb5ae19799d5d014050b))
+* **header:** change the header to make project selection into path based ([17dd6c7](https://github.com/PromptPal/web/commit/17dd6c77e7eb84ac79c445413331febb3dfdc8d8))
+* **layout:** update style in layout ([5662d31](https://github.com/PromptPal/web/commit/5662d31aa1af5c574a88987fa1e1b999c269eea9))
+* **metamask:** remove unused code ([8275cff](https://github.com/PromptPal/web/commit/8275cffdb8ee073cbc7b15ea82ef5d75652c2584))
+* **metamask:** update metamask package ([c188612](https://github.com/PromptPal/web/commit/c18861274cd40469c52ba0dbe3198fbafb67d2f4))
+* **projects:** update styles in projects ([d564749](https://github.com/PromptPal/web/commit/d564749370b712d3f27f41a91babd8009fe57182))
+* **project:** update project UI ([ac37999](https://github.com/PromptPal/web/commit/ac37999dc38a9a1d9d30b7dcfc5469cfae4bed4e))
+* **prompt:** update styles of prompt page ([b23944e](https://github.com/PromptPal/web/commit/b23944e0705a7a7df828fdbde154929900d5a750))
+* **ui:** update ui in prompt ([4a7b7f5](https://github.com/PromptPal/web/commit/4a7b7f55c8495842f72eab7ce8b2c7488d77af33))
+
 ## [1.12.2](https://github.com/PromptPal/web/compare/v1.12.1...v1.12.2) (2024-11-20)
 
 
