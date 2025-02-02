@@ -1,13 +1,12 @@
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
-import { Button, Stack, Switch, Text, Title, Tooltip } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import * as Tooltip from '@radix-ui/react-tooltip'
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { HelpCircle, Plus } from 'lucide-react'
 import { OpenToken } from '../../gql/graphql'
-import ButtonGlow from '../Button/ButtonGlow'
 import SimpleTable from '../Table/SimpleTable'
 import AdvancedValidationCell from './AdvancedValidationCell'
 import CreateOpenTokenModal from './CreateOpenTokenModal'
@@ -35,27 +34,35 @@ const columns = [
   columnHelper.accessor('apiValidateEnabled', {
     // add a tooltip
     header: () => (
-      <Tooltip
-        withArrow
-        transitionProps={{ transition: 'pop', duration: 150 }}
-        label={
-          <div>
-            <span>Advanced Validation Path read more:</span>
-            <a
-              href='https://promptpal.github.io/docs/developer-tools/security'
-              target='_blank'
-              rel='noreferrer'
+      <Tooltip.Provider>
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+            <div className='flex justify-center items-center flex-row text-gray-300'>
+              <span>Advanced Validation Path</span>
+              <HelpCircle className='w-4 h-4 ml-2' />
+            </div>
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Content
+              className='rounded-lg bg-gray-800/90 backdrop-blur-sm px-4 py-3 text-sm text-gray-200 shadow-xl border border-gray-700/50 max-w-xs'
+              sideOffset={5}
             >
-              Advanced API Security
-            </a>
-          </div>
-        }
-      >
-        <div className='flex justify-center items-center flex-row'>
-          <Text>Advanced Validation Path</Text>
-          <QuestionMarkCircleIcon className='w-4 h-4 ml-2' />
-        </div>
-      </Tooltip>
+              <div className='space-y-2'>
+                <p>Advanced Validation Path read more:</p>
+                <a
+                  href='https://promptpal.github.io/docs/developer-tools/security'
+                  target='_blank'
+                  rel='noreferrer'
+                  className='text-blue-400 hover:text-blue-300 transition-colors'
+                >
+                  Advanced API Security
+                </a>
+              </div>
+              <Tooltip.Arrow className='fill-gray-800/90' />
+            </Tooltip.Content>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+      </Tooltip.Provider>
     ),
     cell: (info) => {
       const enabled = info.getValue()
@@ -83,21 +90,26 @@ function OpenTokenListOfProject(props: OpenTokenListOfProjectProps) {
 
   return (
     <>
-      <Stack>
-        <div className='w-full flex justify-between items-center'>
-          <Title order={4} size='xl'>
-            Open Tokens
-          </Title>
-          <ButtonGlow
-            className=' px-4 py-2 rounded font-bold text-sm cursor-pointer'
-            disabled={(openTokens?.length ?? 0) >= 20}
-            onClick={onOpen}
-          >
-            New Token
-          </ButtonGlow>
+      <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl overflow-hidden'>
+        <div className='p-6 border-b border-gray-700/50'>
+          <div className='flex justify-between items-center'>
+            <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+              Open Tokens
+            </h2>
+            <button
+              onClick={onOpen}
+              disabled={(openTokens?.length ?? 0) >= 20}
+              className='inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200 shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-500'
+            >
+              <Plus className='w-4 h-4' />
+              New Token
+            </button>
+          </div>
         </div>
-        <SimpleTable table={table} />
-      </Stack>
+        <div className='p-6'>
+          <SimpleTable table={table} />
+        </div>
+      </section>
 
       <CreateOpenTokenModal
         isOpen={isOpen}
