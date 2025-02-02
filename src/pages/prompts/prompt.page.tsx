@@ -116,7 +116,8 @@ function PromptPage() {
         promptDetail={promptDetail}
         pjId={pjId}
         isPromptUpdating={isPromptUpdating}
-        onDebugChange={onDebugChange}
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        onDebugChange={onDebugChange as any}
         historyHandlers={historyHandlers}
       />
 

@@ -8,12 +8,9 @@ import Menubar from '../Menubar'
 function ProjectLayout() {
   const token = useAtomValue(tokenAtom)
   return (
-    <div className='flex h-full mt-4 flex-1'>
+    <div className='flex h-full mt-4 flex-1 gap-4'>
       <Menubar />
-      <section
-        className='py-2 flex-1'
-        style={{ maxWidth: 'var(--body-width)' }}
-      >
+      <section className='flex-1' style={{ maxWidth: 'var(--body-width)' }}>
         {token ? (
           <Suspense fallback={<div>Loading...</div>}>
             <Outlet />
