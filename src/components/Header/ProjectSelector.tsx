@@ -48,8 +48,7 @@ function ProjectSelector() {
     onCompleted(data) {
       // init project if not set before
       const projects = data?.projects.edges ?? []
-      const pjId = new URLSearchParams(location.search).get('pjId')
-      if (!pjId && projects.length > 0) {
+      if (location.pathname === '/' && projects.length > 0) {
         navigateToProject(projects[0].id)
       }
     },

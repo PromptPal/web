@@ -1,16 +1,6 @@
 import { useQuery } from '@apollo/client'
-import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  CloseIcon,
-  HoverCard,
-  Input,
-  Text,
-  Title,
-  Tooltip,
-} from '@mantine/core'
+import * as Popover from '@radix-ui/react-popover'
+import * as Tooltip from '@radix-ui/react-tooltip'
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -18,6 +8,7 @@ import {
 } from '@tanstack/react-table'
 import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
+import { RotateCw, Search, X } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { graphql } from '../../gql'
 import { FetchPromptCallsTableQuery, QueryPromptArgs } from '../../gql/graphql'
@@ -67,17 +58,31 @@ const columns = [
       return (
         <div className='flex flex-row items-center'>
           <span>{info.getValue()}</span>
-          <Tooltip
-            withArrow
-            label={ip}
-            transitionProps={{ transition: 'pop', duration: 150 }}
-          >
-            <UABadge userAgent={info.row.original.userAgent} className='ml-2' />
-          </Tooltip>
+          <Tooltip.Provider>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <span>
+                  <UABadge
+                    userAgent={info.row.original.userAgent}
+                    className='ml-2'
+                  />
+                </span>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  className='rounded-lg bg-gray-800 px-3 py-2 text-sm text-white shadow-lg'
+                  sideOffset={5}
+                >
+                  {ip}
+                  <Tooltip.Arrow className='fill-gray-800' />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
           {cached && (
-            <Badge color='green' className='ml-2'>
+            <span className='ml-2 px-2 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-emerald-400 border border-emerald-500/20'>
               Cached
-            </Badge>
+            </span>
           )}
         </div>
       )
@@ -118,21 +123,22 @@ const columns = [
 
       // TODO: compose the variables with the prompt
       return (
-        <HoverCard
-          withArrow
-          transitionProps={{ transition: 'pop', duration: 150 }}
-        >
-          <HoverCard.Dropdown>
-            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto'>
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <button className='text-left line-clamp-4 whitespace-break-spaces w-fit hover:text-blue-400 transition-colors'>
               {dataset}
-            </Text>
-          </HoverCard.Dropdown>
-          <HoverCard.Target>
-            <Text className='line-clamp-4 whitespace-break-spaces w-fit'>
-              {dataset}
-            </Text>
-          </HoverCard.Target>
-        </HoverCard>
+            </button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content
+              className='rounded-lg bg-gray-800/90 backdrop-blur-sm p-4 text-white shadow-xl border border-gray-700/50 max-w-96 max-h-80 overflow-y-auto'
+              sideOffset={5}
+            >
+              <div className='text-sm whitespace-pre-wrap'>{dataset}</div>
+              <Popover.Arrow className='fill-gray-800/90' />
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
       )
     },
   }),
@@ -146,21 +152,22 @@ const columns = [
       }
 
       return (
-        <HoverCard
-          withArrow
-          transitionProps={{ transition: 'pop', duration: 150 }}
-        >
-          <HoverCard.Dropdown>
-            <Text className='max-w-96 text-wrap max-h-80 overflow-y-auto text-sm'>
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <button className='text-left line-clamp-4 whitespace-normal w-fit hover:text-blue-400 transition-colors'>
               {content}
-            </Text>
-          </HoverCard.Dropdown>
-          <HoverCard.Target>
-            <Text className='line-clamp-4 whitespace-normal w-fit'>
-              {content}
-            </Text>
-          </HoverCard.Target>
-        </HoverCard>
+            </button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content
+              className='rounded-lg bg-gray-800/90 backdrop-blur-sm p-4 text-white shadow-xl border border-gray-700/50 max-w-96 max-h-80 overflow-y-auto'
+              sideOffset={5}
+            >
+              <div className='text-sm whitespace-pre-wrap'>{content}</div>
+              <Popover.Arrow className='fill-gray-800/90' />
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
       )
     },
   }),
@@ -173,20 +180,26 @@ const columns = [
         result = date.fromNow()
       }
       return (
-        <HoverCard
-          withArrow
-          position='top'
-          transitionProps={{ transition: 'pop', duration: 150 }}
-        >
-          <HoverCard.Dropdown>
-            <Text className='max-w-96 max-h-80 overflow-y-auto text-nowrap'>
-              {date.format('YYYY-MM-DD HH:mm:ss')}
-            </Text>
-          </HoverCard.Dropdown>
-          <HoverCard.Target>
-            <Text className='text-nowrap'>{result}</Text>
-          </HoverCard.Target>
-        </HoverCard>
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <button className='text-nowrap hover:text-blue-400 transition-colors'>
+              {result}
+            </button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content
+              className='rounded-lg bg-gray-800/90 backdrop-blur-sm px-3 py-2 text-white shadow-xl border border-gray-700/50'
+              side='top'
+              sideOffset={5}
+              align='end'
+            >
+              <div className='text-sm text-nowrap'>
+                {date.format('YYYY-MM-DD HH:mm:ss')}
+              </div>
+              <Popover.Arrow className='fill-gray-800/90' />
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
       )
     },
   }),
@@ -236,42 +249,48 @@ function PromptCalls(props: PromptCallsProps) {
     getCoreRowModel: rm,
   })
   return (
-    <Card>
-      <Card.Section className='p-4'>
+    <section className=' w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
+      <div className='p-6 border-b border-gray-700/50'>
         <div className='flex items-center justify-between'>
-          <Title>
+          <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
             Prompt Calls
-            <i className='ml-2 text-gray-400 text-sm'>
+            <span className='ml-2 text-gray-400 text-sm font-normal'>
               ({latestCalls?.count ?? 0})
-            </i>
-          </Title>
+            </span>
+          </h2>
           <div className='flex gap-4 items-center'>
-            <Input
-              className='hidden'
-              type='search'
-              value={searchingUserId}
-              placeholder='User ID'
-              onChange={onSearchValueChange}
-              leftSection={<MagnifyingGlassIcon className='w-4 h-4' />}
-              rightSectionPointerEvents='all'
-              rightSection={
-                <CloseIcon
-                  onClick={() => {
-                    setSearchingUserId('')
-                  }}
-                />
-              }
-            />
-            <ActionIcon size='lg' onClick={() => refetch()} disabled={loading}>
-              <ArrowPathIcon className='w-4 h-4' />
-            </ActionIcon>
+            <div className='relative'>
+              <input
+                type='search'
+                className='pl-10 pr-10 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all'
+                value={searchingUserId}
+                placeholder='User ID'
+                onChange={onSearchValueChange}
+              />
+              <Search className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+              {searchingUserId && (
+                <button
+                  onClick={() => setSearchingUserId('')}
+                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors'
+                >
+                  <X className='w-4 h-4' />
+                </button>
+              )}
+            </div>
+            <button
+              onClick={() => refetch()}
+              disabled={loading}
+              className='p-2 rounded-lg bg-gray-800/50 border border-gray-700/50 hover:bg-gray-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+            >
+              <RotateCw className='w-4 h-4' />
+            </button>
           </div>
         </div>
-      </Card.Section>
-      <Card.Section className='p-4'>
+      </div>
+      <div className='p-6'>
         <SimpleTable loading={loading} table={promptCallsTable} />
-      </Card.Section>
-    </Card>
+      </div>
+    </section>
   )
 }
 

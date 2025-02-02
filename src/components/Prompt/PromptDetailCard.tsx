@@ -45,7 +45,7 @@ export function PromptDetailCard({
   historyHandlers,
 }: PromptDetailCardProps) {
   return (
-    <section className='backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
+    <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
       <div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-6'>
         <div className='flex items-start flex-col space-y-2'>
           <h1 className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600'>

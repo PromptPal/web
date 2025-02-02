@@ -111,7 +111,7 @@ function PromptPage() {
   const [historyOpened, historyHandlers] = useDisclosure()
 
   return (
-    <div>
+    <div className='flex justify-center items-center flex-col gap-4'>
       <PromptDetailCard
         promptDetail={promptDetail}
         pjId={pjId}
@@ -119,8 +119,6 @@ function PromptPage() {
         onDebugChange={onDebugChange}
         historyHandlers={historyHandlers}
       />
-
-      <Divider my={8} />
 
       <PromptCallMetric promptId={pid} />
 
