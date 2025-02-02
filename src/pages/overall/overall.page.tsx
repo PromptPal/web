@@ -1,10 +1,11 @@
 import { useQuery as useGraphQLQuery } from '@apollo/client'
-import { Box, Button, Card, Title } from '@mantine/core'
 import { Link } from '@tanstack/react-router'
+import { BarChart3, CalendarDays, Loader2, PlusCircle } from 'lucide-react'
 import HelpIntegration from '../../components/Helps/Intergation'
 import ProjectTopPromptsByDate from '../../components/Project/TopPromptsByDate'
 import { graphql } from '../../gql'
 import { useProjectId } from '../../hooks/route'
+import { cn } from '../../utils'
 
 const q = graphql(`
   query getOverallProjectData($id: Int!) {
@@ -36,7 +37,7 @@ const q = graphql(`
 
 function OverallPage() {
   const p = useProjectId()
-  const { data } = useGraphQLQuery(q, {
+  const { data, loading } = useGraphQLQuery(q, {
     variables: {
       id: p ?? -1,
     },
@@ -45,36 +46,66 @@ function OverallPage() {
 
   const pj = data?.project
 
-  if (!p) {
+  if (!p || !pj) {
     return (
-      <Box className='flex items-center justify-center flex-col' mt={4}>
-        <Title>😔</Title>
-        <Title>No existing project found</Title>
-        <Button component={Link} to='/projects/new' color='teal' mt={4}>
-          Create new project
-        </Button>
-      </Box>
+      <div className='flex items-center justify-center flex-col min-h-[50vh] gap-4'>
+        <div className='p-4 rounded-full bg-primary/10'>
+          <BarChart3 className='w-12 h-12 text-primary' />
+        </div>
+        <h1 className='text-2xl font-bold'>No Project Selected</h1>
+        <p className='text-muted-foreground mb-4'>
+          Create a new project to get started
+        </p>
+        <Link
+          to='/projects/new'
+          className={cn(
+            'inline-flex items-center gap-2 px-4 py-2 rounded-lg',
+            'bg-primary text-primary-foreground hover:bg-primary/90',
+            'font-medium transition-colors',
+          )}
+        >
+          <PlusCircle className='w-4 h-4' />
+          Create New Project
+        </Link>
+      </div>
     )
   }
 
   return (
-    <Card>
-      <div className='flex flex-row items-end mb-4'>
-        <Title size='lg'>{pj?.name}</Title>
-        <span className='ml-2 text-gray-500 text-xs'>recent 7 days</span>
-      </div>
-      <div className='flex flex-col gap-12'>
-        {pj?.promptMetrics.recentCounts.length === 0 && <HelpIntegration />}
-        {/* {pj && pj?.promptMetrics.recentCounts.length > 0 && (
-          <ProjectTopPromptsCount
-            recentCounts={pj?.promptMetrics.recentCounts}
-          />
-        )} */}
-        {pj && pj?.promptMetrics.last7Days.length > 0 && (
-          <ProjectTopPromptsByDate recentCounts={pj?.promptMetrics.last7Days} />
+    <div className='space-y-8'>
+      <div className='flex items-center justify-between'>
+        <div className='space-y-1'>
+          <h1 className='text-2xl font-bold tracking-tight'>{pj?.name}</h1>
+          <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+            <CalendarDays className='w-4 h-4' />
+            <span>Last 7 days overview</span>
+          </div>
+        </div>
+
+        {loading && (
+          <div className='flex items-center gap-2 text-muted-foreground'>
+            <Loader2 className='w-4 h-4 animate-spin' />
+            <span>Loading data...</span>
+          </div>
         )}
       </div>
-    </Card>
+
+      <div className='grid gap-8'>
+        {(!pj?.promptMetrics.recentCounts.length ||
+          !pj?.promptMetrics.last7Days.length) && (
+          <div className='rounded-xl border border-border bg-gradient-to-br from-background/50 to-background p-8 backdrop-blur-xl'>
+            <HelpIntegration />
+          </div>
+        )}
+
+        {pj?.promptMetrics.last7Days.length > 0 && (
+          <ProjectTopPromptsByDate
+            recentCounts={pj?.promptMetrics.last7Days}
+            loading={loading}
+          />
+        )}
+      </div>
+    </div>
   )
 }
 
