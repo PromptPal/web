@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.12.6](https://github.com/PromptPal/web/compare/v1.12.5...v1.12.6) (2025-02-09)
+
+
+### Bug Fixes
+
+* **build:** do convert the missing gql ([9f2b30c](https://github.com/PromptPal/web/commit/9f2b30c0b0c87f3caa943df7cc129477c449dccc))
+* **build:** fix build info ([bdf68ef](https://github.com/PromptPal/web/commit/bdf68eff83dfa91125e83f83de031d724bf8c93c))
+* **models:** add deepseek support, but not open ([bff252c](https://github.com/PromptPal/web/commit/bff252cd4e80360e40c72d636f336d3abf439c94))
+
 ## [1.12.5](https://github.com/PromptPal/web/compare/v1.12.4...v1.12.5) (2025-02-09)
 
 
