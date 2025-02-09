@@ -74,11 +74,10 @@ function PromptPage() {
   const [doPromptUpdate, { loading: isPromptUpdating }] = useMutation(pm)
 
   const onDebugChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (checked: boolean) => {
       if (!promptDetail) {
         return
       }
-      const n = event.target.checked
       toast.promise(
         doPromptUpdate({
           variables: {
@@ -92,7 +91,7 @@ function PromptPage() {
               projectId: promptDetail.project.id,
               prompts: promptDetail.prompts,
               variables: promptDetail.variables,
-              debug: n,
+              debug: checked,
             },
           },
         }),
@@ -116,8 +115,7 @@ function PromptPage() {
         promptDetail={promptDetail}
         pjId={pjId}
         isPromptUpdating={isPromptUpdating}
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        onDebugChange={onDebugChange as any}
+        onDebugChange={onDebugChange}
         historyHandlers={historyHandlers}
       />
 
