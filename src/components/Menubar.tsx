@@ -1,9 +1,8 @@
 import { Link, useParams } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { Box, Clock, GitBranch, Home, Sparkles } from 'lucide-react'
-import { lastTag } from '~build/info'
+import { lastTag } from '~build/git'
 import buildTime from '~build/time'
-import LinkGlow from './Button/LinkGlow'
 
 const menus = [
   {

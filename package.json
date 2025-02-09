@@ -61,6 +61,7 @@
     "react-youtube": "^10.1.0",
     "recharts": "^2.15.0",
     "tailwind-merge": "^3.0.1",
+    "unplugin-info": "^1.2.1",
     "web3": "^4.16.0",
     "zod": "^3.24.1"
   },
@@ -103,7 +104,6 @@
     "typescript": "^5.7.2",
     "vite": "^6.0.7",
     "vite-plugin-favicon": "^1.0.8",
-    "vite-plugin-info": "^0.4.1",
     "vite-plugin-zip-pack": "^1.2.4"
   },
   "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
