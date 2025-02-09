@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.7](https://github.com/PromptPal/web/compare/v1.12.6...v1.12.7) (2025-02-09)
+
+
+### Bug Fixes
+
+* **ci:** add missing vite config ([0a43616](https://github.com/PromptPal/web/commit/0a43616713a6442113b7668efd9ac18613cf812b))
+
 ## [1.12.6](https://github.com/PromptPal/web/compare/v1.12.5...v1.12.6) (2025-02-09)
 
 
