@@ -15,6 +15,7 @@ export const OpenAIModels = [
   'gemini-pro',
   'gemini-1.5-flash',
   'gemini-1.5-pro',
+  'deepseek-chat',
 ] as const
 
 export const SupportedVariableType = [
