@@ -1,8 +1,8 @@
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
+import BuildInfo from 'unplugin-info/vite'
 import { defineConfig } from 'vite'
 import { ViteFaviconsPlugin } from 'vite-plugin-favicon'
-import BuildInfo from 'vite-plugin-info'
 import zipPack from 'vite-plugin-zip-pack'
 
 const isProduction = process.env.NODE_ENV === 'production'
