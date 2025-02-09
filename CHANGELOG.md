@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.5](https://github.com/PromptPal/web/compare/v1.12.4...v1.12.5) (2025-02-09)
+
+
+### Bug Fixes
+
+* **prompt:** fix debug enable button ([2c28ea0](https://github.com/PromptPal/web/commit/2c28ea08396d41d671a6bc172450847dc7c4ffd1))
+
 ## [1.12.4](https://github.com/PromptPal/web/compare/v1.12.3...v1.12.4) (2025-02-02)
 
 
