@@ -1,11 +1,4 @@
-import {
-  Button,
-  FileInput,
-  Modal,
-  NumberInput,
-  Switch,
-  Textarea,
-} from '@mantine/core'
+import { Button, FileInput, Modal, Switch } from '@mantine/core'
 import { useForm as useMantineForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
 import { useMutation } from '@tanstack/react-query'
@@ -48,13 +41,6 @@ const variablesSchema = Zod.object({
 })
 
 type variableFormType = Zod.infer<typeof variablesSchema>
-// type variableFormType = {
-//   variables: {
-//     name: string
-//     type: PromptVariableTypes
-//     value: string | number | boolean
-//   }[]
-// }
 
 function PromptTestButton(props: PromptTestButtonProps) {
   const { testable, data, onTested } = props
@@ -110,18 +96,43 @@ function PromptTestButton(props: PromptTestButtonProps) {
 
   return (
     <>
-      <Button
-        disabled={!testable}
-        loading={testing}
-        // loadingText='Testing'
+      <button
+        type='button'
+        disabled={!testable || testing}
         onClick={onOpen}
+        className='px-6 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
       >
-        Test
-      </Button>
+        <span
+          className={`flex items-center justify-center ${testing ? 'opacity-0' : 'opacity-100'}`}
+        >
+          Test
+        </span>
+        {testing && (
+          <span className='absolute inset-0 flex items-center justify-center'>
+            <svg className='animate-spin h-5 w-5' viewBox='0 0 24 24'>
+              <circle
+                className='opacity-25'
+                cx='12'
+                cy='12'
+                r='10'
+                stroke='currentColor'
+                strokeWidth='4'
+                fill='none'
+              />
+              <path
+                className='opacity-75'
+                fill='currentColor'
+                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+              />
+            </svg>
+          </span>
+        )}
+      </button>
       <Modal
         opened={isOpen}
         onClose={onClose}
         centered
+        size='xl'
         title='Test Prompt'
         overlayProps={{ backgroundOpacity: 0.5, blur: 8 }}
       >
@@ -154,44 +165,89 @@ function PromptTestButton(props: PromptTestButtonProps) {
                   )
                 case PromptVariableTypes.Number:
                   return (
-                    <NumberInput
-                      label={field.name}
-                      id='name'
+                    <div
+                      className='space-y-2'
                       key={f.key(`variables.${index}.value`)}
-                      placeholder='Value'
-                      {...f.getInputProps(`variables.${index}.value`)}
-                    />
+                    >
+                      <label
+                        htmlFor={`var-${index}`}
+                        className='block text-sm font-medium text-gray-700 dark:text-gray-200'
+                      >
+                        {field.name}
+                      </label>
+                      <input
+                        type='number'
+                        id={`var-${index}`}
+                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none transition-all dark:text-white'
+                        placeholder='Value'
+                        {...f.getInputProps(`variables.${index}.value`)}
+                      />
+                    </div>
                   )
                 case PromptVariableTypes.String:
                   return (
-                    <Textarea
-                      label={field.name}
-                      id='name'
+                    <div
+                      className='space-y-2'
                       key={f.key(`variables.${index}.value`)}
-                      cols={8}
-                      rows={8}
-                      placeholder='Value'
-                      {...f.getInputProps(`variables.${index}.value`)}
-                    />
+                    >
+                      <label
+                        htmlFor={`var-${index}`}
+                        className='block text-sm font-medium text-gray-700 dark:text-gray-200'
+                      >
+                        {field.name}
+                      </label>
+                      <textarea
+                        id={`var-${index}`}
+                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none transition-all resize-y min-h-[200px] dark:text-white'
+                        placeholder='Value'
+                        {...f.getInputProps(`variables.${index}.value`)}
+                      />
+                    </div>
                   )
               }
             })}
           </div>
           <div className='flex justify-end items-center gap-4 mt-4'>
-            <Button mr={3} onClick={onClose} variant='outline'>
-              Close
-            </Button>
-            <Button
-              color='teal'
-              loading={testing}
-              disabled={!f.validate}
-              onClick={
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                f.onSubmit(onSubmit) as any
-              }
+            <button
+              type='button'
+              onClick={onClose}
+              className='mr-3 px-6 py-2 bg-white/5 hover:bg-white/10 backdrop-blur-xl rounded-lg border border-gray-200/10 text-gray-700 dark:text-gray-200 transition-all duration-200 hover:scale-105 active:scale-95'
             >
-              Test
-            </Button>
+              Close
+            </button>
+            <button
+              type='button'
+              disabled={!f.validate || testing}
+              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+              onClick={f.onSubmit(onSubmit) as any}
+              className='px-6 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
+            >
+              <span
+                className={`flex items-center justify-center ${testing ? 'opacity-0' : 'opacity-100'}`}
+              >
+                Test
+              </span>
+              {testing && (
+                <span className='absolute inset-0 flex items-center justify-center'>
+                  <svg className='animate-spin h-5 w-5' viewBox='0 0 24 24'>
+                    <circle
+                      className='opacity-25'
+                      cx='12'
+                      cy='12'
+                      r='10'
+                      stroke='currentColor'
+                      strokeWidth='4'
+                      fill='none'
+                    />
+                    <path
+                      className='opacity-75'
+                      fill='currentColor'
+                      d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                    />
+                  </svg>
+                </span>
+              )}
+            </button>
           </div>
         </form>
       </Modal>

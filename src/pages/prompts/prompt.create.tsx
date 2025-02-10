@@ -1,12 +1,6 @@
 import PromptTestButton from '@/components/PromptTestButton/PromptTestButton'
 import PromptTestPreview from '@/components/PromptTestPreview'
-import { SupportedVariableType } from '@/constants'
-import {
-  PromptPayload,
-  PromptRole,
-  PromptVariableTypes,
-  PublicLevel,
-} from '@/gql/graphql'
+import { PromptRole, PromptVariableTypes, PublicLevel } from '@/gql/graphql'
 import { useProjectId } from '@/hooks/route'
 import { testPromptResponse } from '@/service/prompt'
 import { PromptVariable } from '@/service/types'
@@ -29,7 +23,9 @@ import {
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
+import { VariablesSection } from './components/VariablesSection'
 import { cm, q, qd, um } from './prompt.create.query'
+import { mutatePromptType } from './types'
 
 function findPlaceholderValues(sentence: string): string[] {
   const regex = /{{\s*([a-zA-Z][a-zA-Z0-9]*)\s*}}/g
@@ -44,17 +40,8 @@ function findPlaceholderValues(sentence: string): string[] {
   return values
 }
 
-type mutatePromptType = Omit<
-  PromptPayload,
-  'projectId' | 'description' | 'tokenCount'
-> & {
-  projectId?: string
-  description?: string
-  tokenCount?: number
-}
-
 const schema: Zod.ZodType<mutatePromptType> = Zod.object({
-  projectId: Zod.string(),
+  projectId: Zod.number(),
   name: Zod.string(),
   description: Zod.string(),
   tokenCount: Zod.number(),
@@ -125,7 +112,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
       resolver: hookFormZodResolver(schema),
       defaultValues: async () => {
         const def = {
-          projectId: pid?.toString(),
+          projectId: pid ?? -1,
           name: '',
           description: undefined,
           tokenCount: undefined,
@@ -146,8 +133,11 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         }
 
         const resp = await fetchPrompt({ variables: { id } })
-        const prompt = resp.data?.prompt ?? def
-        return structuredClone(prompt)
+        const prompt = structuredClone(
+          resp.data?.prompt ?? def,
+        ) as mutatePromptType
+        prompt.projectId = pid
+        return prompt
       },
     })
 
@@ -255,7 +245,6 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   }
 
   const [promptsAnimateParent] = useAutoAnimate()
-  const [variablesAnimateParent] = useAutoAnimate()
 
   const testable = prompts.length > 0
 
@@ -294,13 +283,13 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               <Controller
                 name='projectId'
                 control={control}
+                disabled
                 render={({ field }) => (
                   <div className='flex flex-col gap-2'>
                     <label className='text-sm font-medium text-gray-200'>
                       Project
                     </label>
                     <select
-                      disabled
                       {...field}
                       className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 disabled:opacity-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
                     >
@@ -430,55 +419,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
           </div>
         </section>
 
-        <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
-          <div className='flex flex-col gap-6'>
-            <h3 className='text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
-              Variables
-            </h3>
-            <div
-              className='grid grid-cols-4 gap-4'
-              ref={variablesAnimateParent}
-            >
-              {variablesFields.map((field, index) => {
-                return (
-                  <div
-                    key={field.id}
-                    className='flex flex-col gap-2 w-full justify-center p-4 rounded-xl bg-gradient-to-br from-gray-800/40 via-gray-800/20 to-gray-800/40 backdrop-blur-xl border border-gray-700/50 hover:border-blue-500/50 transition-all'
-                  >
-                    <Controller
-                      control={control}
-                      name={`variables.${index}.name`}
-                      render={({ field }) => (
-                        <input
-                          type='text'
-                          {...field}
-                          disabled
-                          className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 disabled:opacity-50'
-                        />
-                      )}
-                    />
-                    <Controller
-                      control={control}
-                      name={`variables.${index}.type`}
-                      render={({ field }) => (
-                        <select
-                          {...field}
-                          className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200'
-                        >
-                          {SupportedVariableType.map((x) => (
-                            <option key={x} value={x.toLowerCase()}>
-                              {x}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </section>
+        <VariablesSection control={control} variablesFields={variablesFields} />
 
         {testResult && (
           <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
@@ -492,7 +433,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               testable={testable}
               data={{
                 ...getValues(),
-                projectId: parseInt(getValues('projectId')!),
+                projectId: getValues('projectId')!,
               }}
               onTested={onTestPassed}
             />
