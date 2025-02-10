@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.8](https://github.com/PromptPal/web/compare/v1.12.7...v1.12.8) (2025-02-10)
+
+
+### Bug Fixes
+
+* **prompt:** update prompt edit page ([ae80a2a](https://github.com/PromptPal/web/commit/ae80a2a38dae1a042c092f06a9c1db7589a35917))
+
 ## [1.12.7](https://github.com/PromptPal/web/compare/v1.12.6...v1.12.7) (2025-02-09)
 
 
