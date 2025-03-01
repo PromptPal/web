@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.12.9](https://github.com/PromptPal/web/compare/v1.12.8...v1.12.9) (2025-03-01)
+
+
+### Bug Fixes
+
+* **css:** upgrade tailwindcss to latest 4 ([995179c](https://github.com/PromptPal/web/commit/995179c28d64504f19b6617f37eccb9f7e5ee47b))
+* **deps:** update deps ([e2c464b](https://github.com/PromptPal/web/commit/e2c464b1271992cfbf2a56fded3c7bfd72bbaa54))
+* **OpenToken:** update style in OpenToken ([04710c5](https://github.com/PromptPal/web/commit/04710c54ac3a5cd739cbc2a6e7839c3a162c9fbb))
+* **project:** update styles in project ([74080c5](https://github.com/PromptPal/web/commit/74080c5d5711814ef4a480a9526b7f48f970c32b))
+* **prompt:** update lake modal on prompt test button ([5895248](https://github.com/PromptPal/web/commit/58952487dc3bc6c3dbbdaa36b469fd5d8623b134))
+
 ## [1.12.8](https://github.com/PromptPal/web/compare/v1.12.7...v1.12.8) (2025-02-10)
 
 
