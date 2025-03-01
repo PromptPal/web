@@ -1,3 +1,4 @@
+import { Modal as LakeModal } from '@annatarhe/lake-ui'
 import { Button, FileInput, Modal, Switch } from '@mantine/core'
 import { useForm as useMantineForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
