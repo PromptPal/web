@@ -16,6 +16,7 @@ function BaseLayout() {
       </main>
       <Toaster />
       <div data-st-role='modal' />
+      <div data-st-role='tooltip' />
     </div>
   )
   return (

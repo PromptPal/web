@@ -53,3 +53,7 @@
     }
   }
 }
+
+:root {
+  interpolate-size: allow-keywords; /* 👈 */
+}

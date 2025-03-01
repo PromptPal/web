@@ -1,5 +1,5 @@
 import LakeModal from '@annatarhe/lake-ui/modal'
-import { Button, FileInput, Modal, Switch } from '@mantine/core'
+import { FileInput, Switch } from '@mantine/core'
 import { useForm as useMantineForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
 import { useMutation } from '@tanstack/react-query'

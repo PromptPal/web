@@ -1,11 +1,11 @@
+import LakeModal from '@annatarhe/lake-ui/modal'
 import { useMutation } from '@apollo/client'
-import { Input, Modal, Switch, TextInput } from '@mantine/core'
+import { Switch, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import React, { useCallback, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { graphql } from '../../gql'
 import { OpenTokenUpdate } from '../../gql/graphql'
-import ButtonGlow from '../Button/ButtonGlow'
 import OpenTokenUpdateForm from './UpdateForm'
 
 type AdvancedValidationCellProps = {
@@ -72,44 +72,51 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
 
   return (
     <div className='flex items-center gap-4 w-full'>
-      <span className='w-full flex-1'>{renderPath}</span>
+      <span className='w-full flex-1 text-gray-200'>{renderPath}</span>
       {enabled && (
-        <ButtonGlow
-          className='px-4 py-2 rounded-sm font-bold text-sm cursor-pointer'
+        <button
+          className='px-4 py-2 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-blue-500/90 to-indigo-600/90 hover:from-blue-400 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all duration-200 transform hover:scale-105'
           onClick={() => {
             open()
           }}
         >
           Edit
-        </ButtonGlow>
+        </button>
       )}
       {
         <Switch
           checked={enabled}
+          size='md'
+          color='teal'
+          classNames={{
+            track: 'backdrop-blur-md',
+            thumb: enabled
+              ? 'bg-gradient-to-r from-teal-400 to-blue-500'
+              : 'bg-gradient-to-r from-gray-400 to-gray-500',
+          }}
           onChange={() => doUpdate({ apiValidateEnabled: !enabled })}
         />
       }
       {
-        <ButtonGlow
-          loading={deleting}
-          className='px-4 py-2 rounded-sm font-bold text-sm cursor-pointer'
+        <button
+          disabled={deleting}
+          className='px-4 py-2 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-red-500/90 to-rose-600/90 hover:from-red-400 hover:to-rose-500 text-white shadow-lg shadow-red-500/20 transition-all duration-200 transform hover:scale-105'
           onClick={() => {
             doDel()
           }}
           color='red'
         >
           Delete
-        </ButtonGlow>
+        </button>
       }
-      <Modal
-        opened={isOpen}
+      <LakeModal
+        isOpen={isOpen}
         onClose={onClose}
-        centered
-        title='Update Open Token'
-        overlayProps={{
-          backgroundOpacity: 0.5,
-          blur: 8,
-        }}
+        title={
+          <span className='text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+            Update Open Token
+          </span>
+        }
       >
         <OpenTokenUpdateForm
           validatePath={validatePath}
@@ -118,7 +125,7 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
           onSubmit={(data) => doUpdate(data)}
           isSubmitting={loading}
         />
-      </Modal>
+      </LakeModal>
     </div>
   )
 }

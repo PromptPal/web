@@ -1,5 +1,5 @@
+import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { useDisclosure } from '@mantine/hooks'
-import * as Tooltip from '@radix-ui/react-tooltip'
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -32,37 +32,27 @@ const columns = [
     cell: '-',
   }),
   columnHelper.accessor('apiValidateEnabled', {
-    // add a tooltip
     header: () => (
-      <Tooltip.Provider>
-        <Tooltip.Root>
-          <Tooltip.Trigger asChild>
-            <div className='flex justify-center items-center flex-row text-gray-300'>
-              <span>Advanced Validation Path</span>
-              <HelpCircle className='w-4 h-4 ml-2' />
-            </div>
-          </Tooltip.Trigger>
-          <Tooltip.Portal>
-            <Tooltip.Content
-              className='rounded-lg bg-gray-800/90 backdrop-blur-xs px-4 py-3 text-sm text-gray-200 shadow-xl border border-gray-700/50 max-w-xs'
-              sideOffset={5}
+      <Tooltip
+        content={
+          <div className='space-y-2'>
+            <p>Advanced Validation Path read more:</p>
+            <a
+              href='https://promptpal.github.io/docs/developer-tools/security'
+              target='_blank'
+              rel='noreferrer'
+              className='text-blue-400 hover:text-blue-300 transition-colors'
             >
-              <div className='space-y-2'>
-                <p>Advanced Validation Path read more:</p>
-                <a
-                  href='https://promptpal.github.io/docs/developer-tools/security'
-                  target='_blank'
-                  rel='noreferrer'
-                  className='text-blue-400 hover:text-blue-300 transition-colors'
-                >
-                  Advanced API Security
-                </a>
-              </div>
-              <Tooltip.Arrow className='fill-gray-800/90' />
-            </Tooltip.Content>
-          </Tooltip.Portal>
-        </Tooltip.Root>
-      </Tooltip.Provider>
+              Advanced API Security
+            </a>
+          </div>
+        }
+      >
+        <div className='flex justify-center items-center flex-row text-gray-300'>
+          <span>Advanced Validation Path</span>
+          <HelpCircle className='w-4 h-4 ml-2' />
+        </div>
+      </Tooltip>
     ),
     cell: (info) => {
       const enabled = info.getValue()
