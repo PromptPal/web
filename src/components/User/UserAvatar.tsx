@@ -9,7 +9,7 @@ type UserAvatarProps = {
 function UserAvatar(props: UserAvatarProps) {
   const { addr, name } = props
   return (
-    <div className='flex items-center px-2 py-1 rounded gap-2'>
+    <div className='flex items-center px-2 py-1 rounded-sm gap-2'>
       <MetaMaskAvatar address={addr ?? ''} />
       <Tooltip
         withArrow

@@ -65,7 +65,7 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
 
   if (loading) {
     return (
-      <div className='rounded-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl backdrop-blur-sm p-6'>
+      <div className='rounded-xl bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl backdrop-blur-xs p-6'>
         <div className='flex items-center gap-2 mb-4'>
           <LineChartIcon className='w-5 h-5 text-blue-400' />
           <h3 className='text-lg font-bold text-gray-200'>
@@ -81,7 +81,7 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
 
   if (!recentCounts || recentCounts.length === 0 || chartData.length === 0) {
     return (
-      <div className='rounded-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl backdrop-blur-sm p-6'>
+      <div className='rounded-xl bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl backdrop-blur-xs p-6'>
         <div className='flex items-center gap-2 mb-4'>
           <LineChartIcon className='w-5 h-5 text-blue-400' />
           <h3 className='text-lg font-bold text-gray-200'>
@@ -96,7 +96,7 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
   }
 
   return (
-    <div className='rounded-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6'>
+    <div className='rounded-xl bg-linear-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xs p-6'>
       <div className='flex items-center gap-2 mb-4'>
         <LineChartIcon className='w-5 h-5 text-blue-400' />
         <h3 className='text-lg font-bold text-gray-200'>Prompt Usage Trends</h3>

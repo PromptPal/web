@@ -75,7 +75,7 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
       <span className='w-full flex-1'>{renderPath}</span>
       {enabled && (
         <ButtonGlow
-          className='px-4 py-2 rounded font-bold text-sm cursor-pointer'
+          className='px-4 py-2 rounded-sm font-bold text-sm cursor-pointer'
           onClick={() => {
             open()
           }}
@@ -92,7 +92,7 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
       {
         <ButtonGlow
           loading={deleting}
-          className='px-4 py-2 rounded font-bold text-sm cursor-pointer'
+          className='px-4 py-2 rounded-sm font-bold text-sm cursor-pointer'
           onClick={() => {
             doDel()
           }}

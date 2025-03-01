@@ -18,12 +18,12 @@ function ProjectCardItem(props: ProjectCardItemProps) {
     <Link
       to='/$pid'
       params={{ pid: project.id.toString() }}
-      className='group w-full p-6 rounded-xl backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl hover:shadow-2xl hover:from-gray-800/80 hover:to-gray-700/80 transition-all duration-300'
+      className='group w-full p-6 rounded-xl backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl hover:shadow-2xl hover:from-gray-800/80 hover:to-gray-700/80 transition-all duration-300'
     >
       <div className='flex items-start justify-between'>
         <div className='space-y-2'>
           <div className='flex items-center gap-3'>
-            <h3 className='text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+            <h3 className='text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
               {project.name}
             </h3>
             <span className='text-xs text-gray-500 px-2 py-1 rounded-full bg-gray-800/50 border border-gray-700/50'>

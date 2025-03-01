@@ -44,7 +44,7 @@ const columns = [
           </Tooltip.Trigger>
           <Tooltip.Portal>
             <Tooltip.Content
-              className='rounded-lg bg-gray-800/90 backdrop-blur-sm px-4 py-3 text-sm text-gray-200 shadow-xl border border-gray-700/50 max-w-xs'
+              className='rounded-lg bg-gray-800/90 backdrop-blur-xs px-4 py-3 text-sm text-gray-200 shadow-xl border border-gray-700/50 max-w-xs'
               sideOffset={5}
             >
               <div className='space-y-2'>
@@ -90,10 +90,10 @@ function OpenTokenListOfProject(props: OpenTokenListOfProjectProps) {
 
   return (
     <>
-      <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl overflow-hidden'>
+      <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl overflow-hidden'>
         <div className='p-6 border-b border-gray-700/50'>
           <div className='flex justify-between items-center'>
-            <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+            <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
               Open Tokens
             </h2>
             <button

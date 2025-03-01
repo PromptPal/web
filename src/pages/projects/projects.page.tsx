@@ -35,11 +35,11 @@ function ProjectsPage() {
 
   return (
     <div className='w-full space-y-6'>
-      <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl overflow-hidden'>
+      <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl overflow-hidden'>
         <div className='p-6'>
           <div className='flex items-center justify-between'>
             <div className='space-y-1'>
-              <h1 className='text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+              <h1 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
                 Projects
               </h1>
               <p className='text-sm text-gray-400'>
@@ -62,7 +62,7 @@ function ProjectsPage() {
           <ProjectCardItem key={row.id} project={row} />
         ))}
         {tableData.length === 0 && (
-          <div className='col-span-full flex flex-col items-center justify-center p-12 rounded-xl backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50'>
+          <div className='col-span-full flex flex-col items-center justify-center p-12 rounded-xl backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50'>
             <p className='text-lg text-gray-400 text-center'>
               No projects yet. Create your first project to get started!
             </p>

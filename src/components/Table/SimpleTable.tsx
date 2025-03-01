@@ -15,7 +15,7 @@ function SimpleTable<T>(props: SimpleTableProps<T>) {
   return (
     <div className='relative min-h-[200px] overflow-x-auto'>
       {loading && (
-        <div className='absolute inset-0 flex items-center justify-center bg-gray-900/20 backdrop-blur-sm z-10'>
+        <div className='absolute inset-0 flex items-center justify-center bg-gray-900/20 backdrop-blur-xs z-10'>
           <Loader2 className='w-6 h-6 text-blue-400 animate-spin' />
         </div>
       )}

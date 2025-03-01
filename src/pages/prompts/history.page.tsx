@@ -1,9 +1,9 @@
+import { useQuery } from '@apollo/client'
 import { Accordion, Divider, Pill } from '@mantine/core'
 import dayjs from 'dayjs'
-import { graphql } from '../../gql'
-import { useQuery } from '@apollo/client'
-import UserAvatar from '../../components/User/UserAvatar'
 import PromptDiffView from '../../components/Prompt/PromptDiffView'
+import UserAvatar from '../../components/User/UserAvatar'
+import { graphql } from '../../gql'
 
 type PromptHistoriesPageProps = {
   promptId: number
@@ -57,8 +57,8 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
 
   const { data, loading } = useQuery(q, {
     variables: {
-      id: promptId
-    }
+      id: promptId,
+    },
   })
 
   if (loading && !data) {
@@ -67,7 +67,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
         {Array.from({ length: 3 }).map((_, idx) => (
           <div
             key={idx}
-            className='w-full h-10 bg-slate-700 animate-pulse rounded'
+            className='w-full h-10 bg-slate-700 animate-pulse rounded-sm'
           />
         ))}
       </div>
@@ -76,9 +76,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
 
   if (data?.prompt.histories.count === 0) {
     return (
-      <div className='flex items-center justify-center py-10'>
-        No History
-      </div>
+      <div className='flex items-center justify-center py-10'>No History</div>
     )
   }
 
@@ -87,10 +85,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
       <Accordion>
         {data!.prompt.histories.edges.map((x, idx) => {
           return (
-            <Accordion.Item
-              key={idx}
-              value={`History ${idx + 1}`}
-            >
+            <Accordion.Item key={idx} value={`History ${idx + 1}`}>
               <Accordion.Control>
                 {dayjs(x.createdAt).fromNow()}
               </Accordion.Control>
@@ -101,9 +96,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
                       addr={x.modifiedBy?.addr}
                       name={x.modifiedBy?.name ?? ''}
                     />
-                    <Pill>
-                      {x.createdAt}
-                    </Pill>
+                    <Pill>{x.createdAt}</Pill>
                   </div>
                   <Divider className='my-4' />
                   <div className='grid gap-4'>
@@ -116,8 +109,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
               </Accordion.Panel>
             </Accordion.Item>
           )
-        })
-        }
+        })}
       </Accordion>
     </div>
   )

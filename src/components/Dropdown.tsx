@@ -37,14 +37,11 @@ function Dropdown(props: DropdownProps) {
   const [ref, hovering] = useHover()
 
   return (
-    <div
-      ref={ref}
-      className='relative'
-    >
+    <div ref={ref} className='relative'>
       {props.children}
       {hovering && (
         <div className='absolute top-full left-0 right-0'>
-          <div className='mt-1 p-2 rounded bg-black bg-opacity-30'>
+          <div className='mt-1 p-2 rounded-sm bg-black bg-opacity-30'>
             {props.content}
           </div>
         </div>

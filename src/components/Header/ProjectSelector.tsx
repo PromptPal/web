@@ -65,12 +65,12 @@ function ProjectSelector() {
       className={`
         group relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all
         ring-primary-500/20 hover:ring-2
-        hover:bg-gradient-to-r hover:from-primary-50/80 hover:to-primary-100/80
+        hover:bg-linear-to-r hover:from-primary-50/80 hover:to-primary-100/80
         dark:hover:from-primary-950/50 dark:hover:to-primary-900/50
         hover:text-primary-500 dark:hover:text-primary-400
         ${
           m
-            ? 'bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 text-primary-600 dark:text-primary-400 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-gradient-to-r after:from-primary-500 after:to-primary-600 dark:text-primary-300'
+            ? 'bg-linear-to-r from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 text-primary-600 dark:text-primary-400 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-primary-500 after:to-primary-600 dark:text-primary-300'
             : 'text-gray-600 dark:text-gray-400'
         }
       `}

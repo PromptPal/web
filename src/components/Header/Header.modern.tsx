@@ -21,7 +21,7 @@ export function Header() {
         <div className='flex justify-between items-center h-16'>
           <div className='flex items-center space-x-8'>
             <div className='flex items-center'>
-              <div className='bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-lg'>
+              <div className='bg-linear-to-r from-purple-500 to-pink-500 p-2 rounded-lg'>
                 <BookText className='h-6 w-6 text-white' />
               </div>
               <span className='ml-2 text-xl font-bold text-white'>
@@ -67,7 +67,7 @@ function NavItem({ icon, label, active, to }: NavItemProps) {
     <Link
       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
         active
-          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400'
+          ? 'bg-linear-to-r from-purple-500/20 to-pink-500/20 text-purple-400'
           : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
       }`}
       to={to}

@@ -87,7 +87,7 @@ function LoginButton(props: LoginButtonProps) {
   }
   return (
     <button
-      className='flex items-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition-colors'
+      className='flex items-center px-4 py-2 rounded-md text-sm font-medium bg-linear-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition-colors'
       onClick={doWeb3Login}
     >
       <LogIn size={18} className='mr-2' />

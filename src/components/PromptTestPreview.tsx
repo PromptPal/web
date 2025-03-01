@@ -10,7 +10,7 @@ function PromptTestPreview(props: PromptTestPreviewProps) {
   const { data } = props
   if (!data) {
     return (
-      <div className='p-8 rounded-lg bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl'>
+      <div className='p-8 rounded-lg bg-linear-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl'>
         <h2 className='text-xl font-bold text-gray-200'>
           No Preview Available
         </h2>
@@ -27,7 +27,7 @@ function PromptTestPreview(props: PromptTestPreviewProps) {
         animate={{ opacity: 1, y: 0 }}
         className='flex-1'
       >
-        <div className='p-6 rounded-lg bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-xl shadow-lg'>
+        <div className='p-6 rounded-lg bg-linear-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-xl shadow-lg'>
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               <MessageSquare size={20} className='text-blue-400' />
@@ -46,13 +46,13 @@ function PromptTestPreview(props: PromptTestPreviewProps) {
                     type='text'
                     disabled
                     value={choice.message.role}
-                    className='w-[150px] px-3 py-2 rounded bg-gray-800/50 text-gray-200 outline-none'
+                    className='w-[150px] px-3 py-2 rounded-sm bg-gray-800/50 text-gray-200 outline-hidden'
                   />
                   <textarea
                     value={choice.message.content}
                     rows={8}
                     disabled
-                    className='w-full px-3 py-2 rounded bg-gray-800/50 text-gray-200 font-mono text-sm outline-none resize-none'
+                    className='w-full px-3 py-2 rounded-sm bg-gray-800/50 text-gray-200 font-mono text-sm outline-hidden resize-none'
                   />
                 </motion.div>
               ))}
@@ -67,7 +67,7 @@ function PromptTestPreview(props: PromptTestPreviewProps) {
         transition={{ delay: 0.2 }}
         className='flex-1'
       >
-        <div className='p-6 rounded-lg bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 backdrop-blur-xl shadow-lg'>
+        <div className='p-6 rounded-lg bg-linear-to-br from-emerald-500/10 to-cyan-500/10 backdrop-blur-xl shadow-lg'>
           <div className='space-y-6'>
             <div className='flex items-center gap-2'>
               <Zap size={20} className='text-emerald-400' />
@@ -89,7 +89,7 @@ function PromptTestPreview(props: PromptTestPreviewProps) {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className='bg-gray-800/30 backdrop-blur-sm rounded-lg p-4'
+                  className='bg-gray-800/30 backdrop-blur-xs rounded-lg p-4'
                 >
                   <h3 className='text-sm font-semibold uppercase text-gray-400 mb-2'>
                     {item.label}

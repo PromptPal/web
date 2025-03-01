@@ -101,7 +101,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
         type='button'
         disabled={!testable || testing}
         onClick={onOpen}
-        className='px-6 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
+        className='px-6 py-2 bg-linear-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
       >
         <span
           className={`flex items-center justify-center ${testing ? 'opacity-0' : 'opacity-100'}`}
@@ -172,7 +172,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
                       <input
                         type='number'
                         id={`var-${index}`}
-                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none transition-all dark:text-white'
+                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-hidden transition-all dark:text-white'
                         placeholder='Value'
                         {...f.getInputProps(`variables.${index}.value`)}
                       />
@@ -192,7 +192,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
                       </label>
                       <textarea
                         id={`var-${index}`}
-                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none transition-all resize-y min-h-[200px] dark:text-white'
+                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-hidden transition-all resize-y min-h-[200px] dark:text-white'
                         placeholder='Value'
                         {...f.getInputProps(`variables.${index}.value`)}
                       />
@@ -214,7 +214,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
               disabled={!f.validate || testing}
               // biome-ignore lint/suspicious/noExplicitAny: <explanation>
               onClick={f.onSubmit(onSubmit) as any}
-              className='px-6 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
+              className='px-6 py-2 bg-linear-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
             >
               <span
                 className={`flex items-center justify-center ${testing ? 'opacity-0' : 'opacity-100'}`}

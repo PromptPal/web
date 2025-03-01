@@ -135,7 +135,7 @@ function ProjectCreatePage() {
             </div>
           </div>
 
-          <div className='rounded-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 py-6 backdrop-blur-xl space-y-6'>
+          <div className='rounded-xl bg-linear-to-br from-background/30 via-background/50 to-background/30 py-6 backdrop-blur-xl space-y-6'>
             <div className='space-y-2'>
               <label className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
                 Project Name
@@ -146,9 +146,9 @@ function ProjectCreatePage() {
                   'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
                   'text-sm ring-offset-background file:border-0 file:bg-transparent',
                   'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                  'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                   'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-sm transition-all duration-200 ease-in-out',
+                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
                   'hover:bg-background/70',
                 )}
                 placeholder='My Awesome Project'
@@ -181,10 +181,10 @@ function ProjectCreatePage() {
               <select
                 className={cn(
                   'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-none',
+                  'text-sm ring-offset-background focus-visible:outline-hidden',
                   'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                   'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-sm transition-all duration-200 ease-in-out',
+                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
                   'hover:bg-background/70',
                 )}
                 {...register('openAIModel')}
@@ -228,10 +228,10 @@ function ProjectCreatePage() {
                       type='text'
                       className={cn(
                         'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-none',
+                        'text-sm ring-offset-background focus-visible:outline-hidden',
                         'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                         'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-sm transition-all duration-200 ease-in-out',
+                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
                         'hover:bg-background/70',
                       )}
                       {...register('openAIBaseURL')}
@@ -252,10 +252,10 @@ function ProjectCreatePage() {
                       type='password'
                       className={cn(
                         'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-none',
+                        'text-sm ring-offset-background focus-visible:outline-hidden',
                         'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                         'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-sm transition-all duration-200 ease-in-out',
+                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
                         'hover:bg-background/70',
                       )}
                       {...register('openAIToken')}
@@ -294,10 +294,10 @@ function ProjectCreatePage() {
                       type='text'
                       className={cn(
                         'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-none',
+                        'text-sm ring-offset-background focus-visible:outline-hidden',
                         'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                         'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-sm transition-all duration-200 ease-in-out',
+                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
                         'hover:bg-background/70',
                       )}
                       {...register('geminiBaseURL')}
@@ -318,10 +318,10 @@ function ProjectCreatePage() {
                       type='password'
                       className={cn(
                         'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-none',
+                        'text-sm ring-offset-background focus-visible:outline-hidden',
                         'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                         'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-sm transition-all duration-200 ease-in-out',
+                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
                         'hover:bg-background/70',
                       )}
                       {...register('geminiToken')}
@@ -347,9 +347,9 @@ function ProjectCreatePage() {
                 'inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2',
                 'bg-background/50 hover:bg-background/80',
                 'text-sm font-medium transition-all duration-200 ease-in-out',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                 'disabled:pointer-events-none disabled:opacity-50',
-                'backdrop-blur-sm shadow-lg hover:shadow-xl',
+                'backdrop-blur-xs shadow-lg hover:shadow-xl',
               )}
             >
               <X className='w-4 h-4' />
@@ -360,11 +360,11 @@ function ProjectCreatePage() {
               disabled={isSubmitting || isLoading}
               className={cn(
                 'inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2',
-                'bg-gradient-to-r from-primary to-primary/80 text-slate-600 hover:brightness-110',
+                'bg-linear-to-r from-primary to-primary/80 text-slate-600 hover:brightness-110',
                 'text-sm font-medium transition-all duration-200 ease-in-out',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                 'disabled:pointer-events-none disabled:opacity-50',
-                'backdrop-blur-sm shadow-lg hover:shadow-xl',
+                'backdrop-blur-xs shadow-lg hover:shadow-xl',
               )}
             >
               {isSubmitting || isLoading ? (

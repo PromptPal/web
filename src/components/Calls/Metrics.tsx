@@ -46,16 +46,16 @@ function MetricCard(props: {
   return (
     <div
       data-glow
-      className='relative overflow-hidden backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl group'
+      className='relative overflow-hidden backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl group'
     >
-      <div className='absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+      <div className='absolute inset-0 bg-linear-to-br from-blue-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
 
       <div className='relative flex flex-col justify-center items-center p-8 z-10'>
         <div className='mb-4'>
           {Icon && <Icon className='w-6 h-6 text-blue-400' />}
         </div>
 
-        <h3 className='text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
+        <h3 className='text-4xl font-bold bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
           {displayValue}
           <span className='text-sm ml-2 text-gray-400 font-normal'>{unit}</span>
         </h3>

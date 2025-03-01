@@ -80,7 +80,7 @@ const columns = [
             </Tooltip.Root>
           </Tooltip.Provider>
           {cached && (
-            <span className='ml-2 px-2 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-emerald-400 border border-emerald-500/20'>
+            <span className='ml-2 px-2 py-1 text-xs font-medium rounded-full bg-linear-to-r from-green-500/20 to-emerald-500/20 text-emerald-400 border border-emerald-500/20'>
               Cached
             </span>
           )}
@@ -131,7 +131,7 @@ const columns = [
           </Popover.Trigger>
           <Popover.Portal>
             <Popover.Content
-              className='rounded-lg bg-gray-800/90 backdrop-blur-sm p-4 text-white shadow-xl border border-gray-700/50 max-w-96 max-h-80 overflow-y-auto'
+              className='rounded-lg bg-gray-800/90 backdrop-blur-xs p-4 text-white shadow-xl border border-gray-700/50 max-w-96 max-h-80 overflow-y-auto'
               sideOffset={5}
             >
               <div className='text-sm whitespace-pre-wrap'>{dataset}</div>
@@ -160,7 +160,7 @@ const columns = [
           </Popover.Trigger>
           <Popover.Portal>
             <Popover.Content
-              className='rounded-lg bg-gray-800/90 backdrop-blur-sm p-4 text-white shadow-xl border border-gray-700/50 max-w-96 max-h-80 overflow-y-auto'
+              className='rounded-lg bg-gray-800/90 backdrop-blur-xs p-4 text-white shadow-xl border border-gray-700/50 max-w-96 max-h-80 overflow-y-auto'
               sideOffset={5}
             >
               <div className='text-sm whitespace-pre-wrap'>{content}</div>
@@ -188,7 +188,7 @@ const columns = [
           </Popover.Trigger>
           <Popover.Portal>
             <Popover.Content
-              className='rounded-lg bg-gray-800/90 backdrop-blur-sm px-3 py-2 text-white shadow-xl border border-gray-700/50'
+              className='rounded-lg bg-gray-800/90 backdrop-blur-xs px-3 py-2 text-white shadow-xl border border-gray-700/50'
               side='top'
               sideOffset={5}
               align='end'
@@ -249,10 +249,10 @@ function PromptCalls(props: PromptCallsProps) {
     getCoreRowModel: rm,
   })
   return (
-    <section className=' w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
+    <section className=' w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
       <div className='p-6 border-b border-gray-700/50'>
         <div className='flex items-center justify-between'>
-          <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+          <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
             Prompt Calls
             <span className='ml-2 text-gray-400 text-sm font-normal'>
               ({latestCalls?.count ?? 0})
@@ -262,7 +262,7 @@ function PromptCalls(props: PromptCallsProps) {
             <div className='relative'>
               <input
                 type='search'
-                className='pl-10 pr-10 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all'
+                className='pl-10 pr-10 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 transition-all'
                 value={searchingUserId}
                 placeholder='User ID'
                 onChange={onSearchValueChange}

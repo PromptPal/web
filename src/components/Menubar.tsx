@@ -25,7 +25,7 @@ const menus = [
 function Menubar() {
   const params: { pid: string } = useParams({ strict: false })
   return (
-    <nav className='py-4 w-48 backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl flex flex-col items-center justify-between transition-all duration-300 hover:shadow-2xl hover:from-gray-900/90 hover:to-gray-800/90'>
+    <nav className='py-4 w-48 backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl flex flex-col items-center justify-between transition-all duration-300 hover:shadow-2xl hover:from-gray-900/90 hover:to-gray-800/90'>
       <ul className='w-full flex flex-col gap-2 px-2'>
         {menus.map((menu) => {
           const Icon = menu.icon
@@ -46,7 +46,7 @@ function Menubar() {
         })}
       </ul>
       <div className='w-full px-4 pb-2'>
-        <div className='h-px bg-gradient-to-r from-transparent via-gray-700/50 to-transparent my-4' />
+        <div className='h-px bg-linear-to-r from-transparent via-gray-700/50 to-transparent my-4' />
         <div className='text-xs text-gray-500 flex flex-col gap-2'>
           <div className='flex items-center gap-2'>
             <GitBranch className='w-3 h-3' />

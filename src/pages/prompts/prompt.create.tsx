@@ -264,11 +264,11 @@ function PromptCreatePage(props: PromptCreatePageProps) {
 
   return (
     <div className='w-full flex flex-col gap-6'>
-      <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden'>
+      <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden'>
         <div className='p-6'>
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-3'>
-              <h1 className='text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+              <h1 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
                 {isUpdate ? 'Update Prompt' : 'Create New Prompt'}
               </h1>
             </div>
@@ -277,7 +277,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
       </section>
 
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6'>
-        <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
+        <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
           <div className='flex flex-col gap-6'>
             <div className='grid grid-cols-2 gap-6'>
               <Controller
@@ -342,9 +342,9 @@ function PromptCreatePage(props: PromptCreatePageProps) {
           )}
         />
 
-        <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
+        <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
           <div className='flex flex-col gap-6'>
-            <h3 className='text-xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
+            <h3 className='text-xl font-bold tracking-tight bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
               Prompts
             </h3>
             <div className='flex flex-col gap-4' ref={promptsAnimateParent}>
@@ -352,7 +352,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                 return (
                   <div
                     key={field.id}
-                    className='flex flex-row gap-4 p-4 rounded-xl bg-gradient-to-br from-gray-800/40 via-gray-800/20 to-gray-800/40 backdrop-blur-xl border border-gray-700/50 hover:border-blue-500/50 transition-all'
+                    className='flex flex-row gap-4 p-4 rounded-xl bg-linear-to-br from-gray-800/40 via-gray-800/20 to-gray-800/40 backdrop-blur-xl border border-gray-700/50 hover:border-blue-500/50 transition-all'
                   >
                     <Controller
                       control={control}
@@ -388,7 +388,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                       <button
                         type='button'
                         className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-medium transition-all',
+                          'flex items-center gap-2 px-4 py-2 rounded-lg bg-linear-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-medium transition-all',
                           index === 0 && 'opacity-50 cursor-not-allowed',
                         )}
                         disabled={index === 0}
@@ -404,7 +404,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               <button
                 type='button'
                 className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transition-all',
+                  'flex items-center gap-2 px-4 py-2 rounded-lg bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transition-all',
                   promptsFields.length >= 20 && 'opacity-50 cursor-not-allowed',
                 )}
                 disabled={promptsFields.length >= 20}
@@ -422,12 +422,12 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         <VariablesSection control={control} variablesFields={variablesFields} />
 
         {testResult && (
-          <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
+          <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
             <PromptTestPreview data={testResult} />
           </section>
         )}
 
-        <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
+        <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
           <div className='flex items-center justify-end gap-4'>
             <PromptTestButton
               testable={testable}
@@ -441,7 +441,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               <button
                 type='submit'
                 className={cn(
-                  'flex items-center gap-2 px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transition-all',
+                  'flex items-center gap-2 px-6 py-2 rounded-lg bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transition-all',
                   !testResult && 'opacity-50 cursor-not-allowed',
                 )}
                 disabled={!testResult}
@@ -452,7 +452,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                 Save
               </button>
               {!testResult && (
-                <div className='absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded bg-gray-800 text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity'>
+                <div className='absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-sm bg-gray-800 text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity'>
                   Please test it first to make sure it can work
                   <div className='absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45' />
                 </div>

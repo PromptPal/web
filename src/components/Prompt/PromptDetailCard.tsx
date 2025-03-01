@@ -45,10 +45,10 @@ export function PromptDetailCard({
   historyHandlers,
 }: PromptDetailCardProps) {
   return (
-    <section className='w-full backdrop-blur-sm bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
+    <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
       <div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-6'>
         <div className='flex items-start flex-col space-y-2'>
-          <h1 className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600'>
+          <h1 className='text-2xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-600'>
             {promptDetail?.name}
           </h1>
           <span className='text-gray-400 font-medium'>
@@ -57,7 +57,7 @@ export function PromptDetailCard({
         </div>
         <div className='flex flex-wrap gap-3 items-center'>
           <button
-            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-bold text-sm cursor-pointer bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-indigo-500/25'
+            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-bold text-sm cursor-pointer bg-linear-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-indigo-500/25'
             onClick={() => {
               historyHandlers.open()
             }}
@@ -66,7 +66,7 @@ export function PromptDetailCard({
             Versions
           </button>
           <Link
-            className='px-6 py-2.5 flex items-center gap-2 rounded-lg font-bold text-sm cursor-pointer bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/25'
+            className='px-6 py-2.5 flex items-center gap-2 rounded-lg font-bold text-sm cursor-pointer bg-linear-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/25'
             to='/$pid/prompts/$id/edit'
             params={{
               pid: pjId.toString(),
@@ -107,7 +107,7 @@ export function PromptDetailCard({
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-6'>
-          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-sm'>
+          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
               <CalendarDays className='w-4 h-4' /> Create Time
             </div>
@@ -120,16 +120,16 @@ export function PromptDetailCard({
             </div>
           </div>
 
-          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-sm'>
+          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
               <Eye className='w-4 h-4' /> Visibility
             </div>
-            <span className='px-2 py-1 text-sm rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white'>
+            <span className='px-2 py-1 text-sm rounded-full bg-linear-to-r from-green-500 to-emerald-600 text-white'>
               {promptDetail?.publicLevel}
             </span>
           </div>
 
-          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-sm'>
+          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
               <Power className='w-4 h-4' /> Enabled
             </div>
@@ -140,11 +140,11 @@ export function PromptDetailCard({
                 checked={promptDetail?.enabled}
                 readOnly
               />
-              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-gradient-to-r after:from-blue-500 after:to-purple-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
+              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:rtl:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-linear-to-r after:from-blue-500 after:to-purple-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
             </label>
           </div>
 
-          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-sm'>
+          <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
               <Bug className='w-4 h-4' /> Debug
             </div>
@@ -156,7 +156,7 @@ export function PromptDetailCard({
                 onChange={(e) => onDebugChange(e.target.checked)}
                 disabled={isPromptUpdating}
               />
-              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-gradient-to-r after:from-blue-500 after:to-purple-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
+              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:rtl:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-linear-to-r after:from-blue-500 after:to-purple-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
             </label>
           </div>
         </div>
