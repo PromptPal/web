@@ -1,4 +1,4 @@
-import { Modal as LakeModal } from '@annatarhe/lake-ui'
+import LakeModal from '@annatarhe/lake-ui/modal'
 import { Button, FileInput, Modal, Switch } from '@mantine/core'
 import { useForm as useMantineForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
@@ -129,14 +129,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
           </span>
         )}
       </button>
-      <Modal
-        opened={isOpen}
-        onClose={onClose}
-        centered
-        size='xl'
-        title='Test Prompt'
-        overlayProps={{ backgroundOpacity: 0.5, blur: 8 }}
-      >
+      <LakeModal isOpen={isOpen} onClose={onClose} title='Test Prompt'>
         <form>
           <div>
             {fields.map((field, index) => {
@@ -251,7 +244,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
             </button>
           </div>
         </form>
-      </Modal>
+      </LakeModal>
     </>
   )
 }
