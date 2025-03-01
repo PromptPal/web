@@ -57,7 +57,7 @@ export function PromptDetailCard({
         </div>
         <div className='flex flex-wrap gap-3 items-center'>
           <button
-            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-bold text-sm cursor-pointer bg-linear-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-indigo-500/25'
+            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-purple-500/90 to-indigo-600/90 hover:from-purple-400 hover:to-indigo-500 text-white shadow-lg shadow-purple-500/20 transition-all duration-200 transform hover:scale-105'
             onClick={() => {
               historyHandlers.open()
             }}
@@ -66,7 +66,7 @@ export function PromptDetailCard({
             Versions
           </button>
           <Link
-            className='px-6 py-2.5 flex items-center gap-2 rounded-lg font-bold text-sm cursor-pointer bg-linear-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/25'
+            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-blue-500/90 to-cyan-600/90 hover:from-blue-400 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20 transition-all duration-200 transform hover:scale-105'
             to='/$pid/prompts/$id/edit'
             params={{
               pid: pjId.toString(),
@@ -79,7 +79,7 @@ export function PromptDetailCard({
           <a
             href='https://promptpal.github.io/docs/intro'
             target='_blank'
-            className='inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-200'
+            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-gray-700/90 to-gray-800/90 hover:from-gray-600/90 hover:to-gray-700/90 text-white shadow-lg shadow-gray-500/20 transition-all duration-200 transform hover:scale-105 border border-gray-700/50'
             onClick={() => {
               toast.success('Help coming soon...')
             }}
