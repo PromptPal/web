@@ -3,7 +3,7 @@ import { Button, Divider, HoverCard } from '@mantine/core'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
-import { FolderKanban, LogOut } from 'lucide-react'
+import { FolderKanban, LogOut, Server } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { graphql } from '../../gql'
 import { tokenAtom } from '../../stats/profile'
@@ -76,13 +76,20 @@ function Profile() {
 
           {/* Menu Items */}
           <div className='p-2'>
-            <a
-              href='/projects'
+            <Link
+              to='/projects'
               className='flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md'
             >
               <FolderKanban className='mr-3 h-5 w-5 text-gray-400' />
               Projects
-            </a>
+            </Link>
+            <Link
+              to='/providers'
+              className='flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md'
+            >
+              <Server className='mr-3 h-5 w-5 text-gray-400' />
+              Providers
+            </Link>
             <button
               onClick={onLogout}
               className='flex w-full items-center px-4 py-2 text-sm text-red-400 hover:bg-gray-700 rounded-md'
