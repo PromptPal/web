@@ -1,11 +1,13 @@
 import { cn } from '@/utils'
 import InputField from '@annatarhe/lake-ui/form-input-field'
+import SelectField from '@annatarhe/lake-ui/form-select-field'
+import SwitchField from '@annatarhe/lake-ui/form-switch-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Info, Loader2, Save, X } from 'lucide-react'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import * as z from 'zod'
 
@@ -92,6 +94,7 @@ function ProviderForm({
     register,
     handleSubmit,
     formState: { errors },
+    control,
     setValue,
   } = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
@@ -99,8 +102,8 @@ function ProviderForm({
       name: '',
       description: '',
       enabled: true,
-      source: '',
-      endpoint: '',
+      source: 'openai',
+      endpoint: 'https://api.openai.com',
       organizationId: '',
       defaultModel: '',
       temperature: 0.7,
@@ -140,25 +143,19 @@ function ProviderForm({
       className='space-y-8'
       ref={formRef}
     >
-      <div className='rounded-xl bg-linear-to-br from-background/30 via-background/50 to-background/30 py-6 px-6 backdrop-blur-xl space-y-6'>
+      <div className='rounded-xl bg-linear-to-br from-background/30 via-background/50 to-background/30 py-6 backdrop-blur-xl space-y-6'>
         {/* Basic Information */}
         <div className='space-y-4'>
           <h3 className='text-lg font-medium'>Basic Information</h3>
 
           <div className='space-y-2'>
-            <label className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-              Provider Name
-            </label>
             <InputField
+              label='Provider Name'
               {...register('name')}
               aria-invalid={errors.name ? 'true' : 'false'}
               placeholder='My Provider'
+              error={errors.name?.message}
             />
-            {errors.name && (
-              <p className='text-sm text-destructive mt-1'>
-                {errors.name.message}
-              </p>
-            )}
           </div>
 
           <div className='space-y-2'>
@@ -187,18 +184,13 @@ function ProviderForm({
           </div>
 
           <div className='flex items-center gap-2'>
-            <input
-              type='checkbox'
-              id='enabled'
-              className='rounded border-gray-300 text-primary focus:ring-primary'
-              {...register('enabled')}
+            <Controller
+              name='enabled'
+              control={control}
+              render={({ field }) => (
+                <SwitchField label='Enabled' {...field}></SwitchField>
+              )}
             />
-            <label
-              htmlFor='enabled'
-              className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-            >
-              Enabled
-            </label>
           </div>
         </div>
 
@@ -207,151 +199,99 @@ function ProviderForm({
           <h3 className='text-lg font-medium'>Provider Configuration</h3>
 
           <div className='space-y-2'>
-            <div className='flex items-center gap-1'>
-              <label className='text-sm font-medium leading-none'>Source</label>
-              <Tooltip content='The source of the provider (e.g., OpenAI, Anthropic, etc.)'>
-                <Info className='w-4 h-4 text-muted-foreground' />
-              </Tooltip>
-            </div>
-            <input
-              type='text'
-              className={cn(
-                'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                'disabled:cursor-not-allowed disabled:opacity-50',
-                'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                'hover:bg-background/70',
-              )}
-              placeholder='OpenAI'
+            <SelectField
+              label={
+                <div className='flex items-center gap-1'>
+                  <label className='text-sm font-medium leading-none'>
+                    Source
+                  </label>
+                  <Tooltip content='The source of the provider (e.g., OpenAI, Anthropic, etc.)'>
+                    <Info className='w-4 h-4 text-muted-foreground' />
+                  </Tooltip>
+                </div>
+              }
               {...register('source')}
               aria-invalid={errors.source ? 'true' : 'false'}
+              error={errors.source?.message}
+              options={[{ value: 'openai', label: 'OpenAI' }]}
             />
-            {errors.source && (
-              <p className='text-sm text-destructive mt-1'>
-                {errors.source.message}
-              </p>
-            )}
           </div>
 
           <div className='space-y-2'>
-            <div className='flex items-center gap-1'>
-              <label className='text-sm font-medium leading-none'>
-                Endpoint URL
-              </label>
-              <Tooltip content='The API endpoint URL for the provider'>
-                <Info className='w-4 h-4 text-muted-foreground' />
-              </Tooltip>
-            </div>
-            <input
-              type='text'
-              className={cn(
-                'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                'disabled:cursor-not-allowed disabled:opacity-50',
-                'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                'hover:bg-background/70',
-              )}
-              placeholder='https://api.openai.com/v1'
+            <InputField
+              label={
+                <div className='flex items-center gap-1'>
+                  <label className='text-sm font-medium leading-none'>
+                    Endpoint URL
+                  </label>
+                  <Tooltip content='The API endpoint URL for the provider'>
+                    <Info className='w-4 h-4 text-muted-foreground' />
+                  </Tooltip>
+                </div>
+              }
+              type='url'
               {...register('endpoint')}
               aria-invalid={errors.endpoint ? 'true' : 'false'}
+              placeholder='https://api.openai.com'
+              error={errors.endpoint?.message}
             />
-            {errors.endpoint && (
-              <p className='text-sm text-destructive mt-1'>
-                {errors.endpoint.message}
-              </p>
-            )}
           </div>
 
           <div className='space-y-2'>
-            <div className='flex items-center gap-1'>
-              <label className='text-sm font-medium leading-none'>
-                API Key
-              </label>
-              <Tooltip content='API Key for authentication with the provider'>
-                <Info className='w-4 h-4 text-muted-foreground' />
-              </Tooltip>
-            </div>
-            <input
-              type='password'
-              className={cn(
-                'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                'disabled:cursor-not-allowed disabled:opacity-50',
-                'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                'hover:bg-background/70',
-              )}
-              placeholder='sk-...'
+            <InputField
+              label={
+                <div className='flex items-center gap-1'>
+                  <label className='text-sm font-medium leading-none'>
+                    API Key
+                  </label>
+                  <Tooltip content='API Key for authentication with the provider'>
+                    <Info className='w-4 h-4 text-muted-foreground' />
+                  </Tooltip>
+                </div>
+              }
               {...register('apiKey')}
               aria-invalid={errors.apiKey ? 'true' : 'false'}
+              placeholder='sk-...'
+              error={errors.apiKey?.message}
             />
-            {errors.apiKey && (
-              <p className='text-sm text-destructive mt-1'>
-                {errors.apiKey.message}
-              </p>
-            )}
           </div>
 
           <div className='space-y-2'>
-            <div className='flex items-center gap-1'>
-              <label className='text-sm font-medium leading-none'>
-                Organization ID
-              </label>
-              <Tooltip content='Optional organization ID for the provider'>
-                <Info className='w-4 h-4 text-muted-foreground' />
-              </Tooltip>
-            </div>
-            <input
-              type='text'
-              className={cn(
-                'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                'disabled:cursor-not-allowed disabled:opacity-50',
-                'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                'hover:bg-background/70',
-              )}
-              placeholder='org-123456'
+            <InputField
+              label={
+                <div className='flex items-center gap-1'>
+                  <label className='text-sm font-medium leading-none'>
+                    Organization ID
+                  </label>
+                  <Tooltip content='Optional organization ID for the provider'>
+                    <Info className='w-4 h-4 text-muted-foreground' />
+                  </Tooltip>
+                </div>
+              }
               {...register('organizationId')}
               aria-invalid={errors.organizationId ? 'true' : 'false'}
+              placeholder='org-...'
+              error={errors.organizationId?.message}
             />
-            {errors.organizationId && (
-              <p className='text-sm text-destructive mt-1'>
-                {errors.organizationId.message}
-              </p>
-            )}
           </div>
 
           <div className='space-y-2'>
-            <label className='text-sm font-medium leading-none'>
-              Default Model
-            </label>
-            <input
-              type='text'
-              className={cn(
-                'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                'disabled:cursor-not-allowed disabled:opacity-50',
-                'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                'hover:bg-background/70',
-              )}
-              placeholder='gpt-4'
+            <InputField
+              label={
+                <div className='flex items-center gap-1'>
+                  <label className='text-sm font-medium leading-none'>
+                    Default Model
+                  </label>
+                  <Tooltip content='Default model for the provider'>
+                    <Info className='w-4 h-4 text-muted-foreground' />
+                  </Tooltip>
+                </div>
+              }
               {...register('defaultModel')}
               aria-invalid={errors.defaultModel ? 'true' : 'false'}
+              placeholder='gpt-4'
+              error={errors.defaultModel?.message}
             />
-            {errors.defaultModel && (
-              <p className='text-sm text-destructive mt-1'>
-                {errors.defaultModel.message}
-              </p>
-            )}
           </div>
         </div>
 
@@ -361,98 +301,65 @@ function ProviderForm({
 
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div className='space-y-2'>
-              <div className='flex items-center gap-1'>
-                <label className='text-sm font-medium leading-none'>
-                  Temperature
-                </label>
-                <Tooltip content='Controls randomness: 0 is deterministic, higher values increase randomness'>
-                  <Info className='w-4 h-4 text-muted-foreground' />
-                </Tooltip>
-              </div>
-              <input
+              <InputField
+                label={
+                  <div className='flex items-center gap-1'>
+                    <label className='text-sm font-medium leading-none'>
+                      Temperature
+                    </label>
+                    <Tooltip content='Controls randomness: 0 is deterministic, higher values increase randomness'>
+                      <Info className='w-4 h-4 text-muted-foreground' />
+                    </Tooltip>
+                  </div>
+                }
                 type='number'
                 step='0.1'
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                  'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                  'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70',
-                )}
                 placeholder='0.7'
                 {...register('temperature', { valueAsNumber: true })}
                 aria-invalid={errors.temperature ? 'true' : 'false'}
+                error={errors.temperature?.message}
               />
-              {errors.temperature && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.temperature.message}
-                </p>
-              )}
             </div>
 
             <div className='space-y-2'>
-              <div className='flex items-center gap-1'>
-                <label className='text-sm font-medium leading-none'>
-                  Top P
-                </label>
-                <Tooltip content='Controls diversity: 0.1 means only 10% most likely tokens are considered'>
-                  <Info className='w-4 h-4 text-muted-foreground' />
-                </Tooltip>
-              </div>
-              <input
+              <InputField
+                label={
+                  <div className='flex items-center gap-1'>
+                    <label className='text-sm font-medium leading-none'>
+                      Top P
+                    </label>
+                    <Tooltip content='Controls diversity: 0.1 means only 10% most likely tokens are considered'>
+                      <Info className='w-4 h-4 text-muted-foreground' />
+                    </Tooltip>
+                  </div>
+                }
                 type='number'
                 step='0.1'
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                  'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                  'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70',
-                )}
                 placeholder='1'
                 {...register('topP', { valueAsNumber: true })}
                 aria-invalid={errors.topP ? 'true' : 'false'}
+                error={errors.topP?.message}
               />
-              {errors.topP && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.topP.message}
-                </p>
-              )}
             </div>
 
             <div className='space-y-2'>
-              <div className='flex items-center gap-1'>
-                <label className='text-sm font-medium leading-none'>
-                  Max Tokens
-                </label>
-                <Tooltip content='Maximum number of tokens to generate in the response'>
-                  <Info className='w-4 h-4 text-muted-foreground' />
-                </Tooltip>
-              </div>
-              <input
+              <InputField
+                label={
+                  <div className='flex items-center gap-1'>
+                    <label className='text-sm font-medium leading-none'>
+                      Max Tokens
+                    </label>
+                    <Tooltip content='Maximum number of tokens to generate in the response'>
+                      <Info className='w-4 h-4 text-muted-foreground' />
+                    </Tooltip>
+                  </div>
+                }
                 type='number'
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                  'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                  'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70',
-                )}
                 placeholder='2048'
                 {...register('maxTokens', { valueAsNumber: true })}
                 aria-invalid={errors.maxTokens ? 'true' : 'false'}
+                error={errors.maxTokens?.message}
               />
-              {errors.maxTokens && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.maxTokens.message}
-                </p>
-              )}
             </div>
           </div>
 

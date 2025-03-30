@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import ProviderPage from '../pages/providers/provider.page'
+import ProviderPage from '../pages/providers/provider.page/provider.page'
 
 export const Route = createLazyFileRoute('/providers/$id/')({
   component: ProviderPage,

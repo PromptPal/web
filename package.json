@@ -17,7 +17,7 @@
     "test:storybook": "test-storybook"
   },
   "dependencies": {
-    "@annatarhe/lake-ui": "^0.0.20",
+    "@annatarhe/lake-ui": "^0.0.23",
     "@apollo/client": "^3.13.5",
     "@formkit/auto-animate": "^0.8.2",
     "@heroicons/react": "^2.2.0",
@@ -87,7 +87,7 @@
     "@swc-jotai/react-refresh": "^0.3.0",
     "@tailwindcss/postcss": "^4.0.17",
     "@tanstack/router-devtools": "^1.114.29",
-    "@tanstack/router-plugin": "^1.114.29",
+    "@tanstack/router-plugin": "^1.114.30",
     "@types/diff": "^7.0.2",
     "@types/lodash": "^4.17.16",
     "@types/react": "^19.0.12",
