@@ -2,11 +2,12 @@ import AdvancedSettings from '@/components/Project/EditForm/AdvancedSettings'
 import FormActions from '@/components/Project/EditForm/FormActions'
 import ModelSettings from '@/components/Project/EditForm/ModelSettings'
 import ProjectHeader from '@/components/Project/EditForm/ProjectHeader'
+import ProvidersSelector from '@/components/Providers/Selector'
 import { cn } from '@/utils'
 import { useMutation as useGraphQLMutation, useQuery } from '@apollo/client'
 import { useForm } from '@mantine/form'
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { isEmpty, omitBy } from 'lodash'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import toast from 'react-hot-toast'
@@ -37,6 +38,7 @@ const schema: Zod.ZodType<localUpdateProject> = Zod.object({
   openAITemperature: Zod.number().min(0).max(2).optional(),
   openAITopP: Zod.number().min(0).max(1),
   openAIMaxTokens: Zod.number().min(0).optional(),
+  providerId: Zod.number(),
 })
 
 const projectQuery = graphql(`
@@ -52,6 +54,11 @@ const projectQuery = graphql(`
       openAITemperature
       openAITopP
       openAIMaxTokens
+
+      provider {
+        id
+        name
+      }
     }
   }
 `)
@@ -102,6 +109,7 @@ function ProjectEditPage() {
         openAITemperature: project.openAITemperature,
         openAITopP: project.openAITopP,
         openAIMaxTokens: project.openAIMaxTokens,
+        providerId: project.provider?.id ?? undefined,
       })
     },
   })
@@ -133,7 +141,7 @@ function ProjectEditPage() {
 
   const onSubmit = (data: ProjectPayload) => {
     // Remove empty values except for maxTokens which can be 0
-    const payload: ProjectPayload = omitBy(data, isEmpty)
+    const payload = omitBy(data, isEmpty) as ProjectPayload
     payload.openAIMaxTokens = data.openAIMaxTokens
 
     return updateProject({
@@ -182,52 +190,24 @@ function ProjectEditPage() {
             />
           </div>
 
-          {/* Model Settings */}
-          <div className='space-y-10'>
-            <ModelSettings
-              model={form.values.openAIModel}
-              openAIBaseURL={form.values.openAIBaseURL}
-              openAIToken={form.values.openAIToken}
-              geminiBaseURL={form.values.geminiBaseURL}
-              geminiToken={form.values.geminiToken}
-              onModelChange={(value) =>
-                form.setFieldValue('openAIModel', value)
-              }
-              onOpenAIBaseURLChange={(value) =>
-                form.setFieldValue('openAIBaseURL', value)
-              }
-              onOpenAITokenChange={(value) =>
-                form.setFieldValue('openAIToken', value)
-              }
-              onGeminiBaseURLChange={(value) =>
-                form.setFieldValue('geminiBaseURL', value)
-              }
-              onGeminiTokenChange={(value) =>
-                form.setFieldValue('geminiToken', value)
-              }
-              errors={form.errors}
-            />
+          <ProvidersSelector
+            name='providerId'
+            label={
+              <div className='flex items-center gap-2 justify-between'>
+                <span className='text-sm font-medium leading-none bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent'>
+                  Model Provider
+                </span>
 
-            {/* Advanced Settings */}
-            <AdvancedSettings
-              temperature={form.values.openAITemperature ?? 0}
-              topP={form.values.openAITopP ?? 0}
-              maxTokens={form.values.openAIMaxTokens}
-              onTemperatureChange={(value) =>
-                form.setFieldValue('openAITemperature', value)
-              }
-              onTopPChange={(value) => form.setFieldValue('openAITopP', value)}
-              onMaxTokensChange={(value) =>
-                form.setFieldValue('openAIMaxTokens', value)
-              }
-              errors={{
-                openAITemperature:
-                  form.getInputProps('openAITemperature').error,
-                openAITopP: form.getInputProps('openAITopP').error,
-                openAIMaxTokens: form.getInputProps('openAIMaxTokens').error,
-              }}
-            />
-          </div>
+                <Link to='/providers' className='text-sm '>
+                  Go to providers
+                </Link>
+              </div>
+            }
+            value={form.values.providerId?.toString()}
+            onChange={(e) =>
+              form.setFieldValue('providerId', Number(e.target.value))
+            }
+          />
         </div>
 
         {/* Form Actions */}

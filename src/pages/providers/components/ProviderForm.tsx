@@ -5,8 +5,8 @@ import SwitchField from '@annatarhe/lake-ui/form-switch-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Info, Loader2, Save, X } from 'lucide-react'
-import { useEffect } from 'react'
+import { ExternalLink, Info, Loader2, Save, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import * as z from 'zod'
@@ -89,6 +89,7 @@ function ProviderForm({
   submitButtonText,
 }: ProviderFormProps) {
   const [formRef] = useAutoAnimate()
+  const [configSectionRef] = useAutoAnimate()
 
   const {
     register,
@@ -96,6 +97,7 @@ function ProviderForm({
     formState: { errors },
     control,
     setValue,
+    watch,
   } = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
     defaultValues: {
@@ -113,6 +115,9 @@ function ProviderForm({
       ...initialValues,
     },
   })
+
+  // Watch source value for conditional rendering
+  const source = watch('source')
 
   // Update form when initialValues change (for edit mode)
   useEffect(() => {
@@ -143,11 +148,13 @@ function ProviderForm({
       className='space-y-8'
       ref={formRef}
     >
-      <div className='rounded-xl bg-linear-to-br from-background/30 via-background/50 to-background/30 py-6 backdrop-blur-xl space-y-6'>
-        {/* Basic Information */}
-        <div className='space-y-4'>
-          <h3 className='text-lg font-medium'>Basic Information</h3>
+      {/* Basic Information Section */}
+      <div className='space-y-6 rounded-xl bg-gradient-to-br from-blue-500/20 via-indigo-500/15 to-purple-500/20 p-6 backdrop-blur-xl shadow-lg'>
+        <h3 className='text-base font-semibold text-foreground bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent'>
+          Basic Information
+        </h3>
 
+        <div className='space-y-4'>
           <div className='space-y-2'>
             <InputField
               label='Provider Name'
@@ -155,6 +162,15 @@ function ProviderForm({
               aria-invalid={errors.name ? 'true' : 'false'}
               placeholder='My Provider'
               error={errors.name?.message}
+              className={cn(
+                'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
+                'text-sm ring-offset-background focus-visible:outline-hidden',
+                'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out',
+                'hover:bg-background/50 border-none shadow-md',
+                'bg-gradient-to-r from-background/40 to-background/20',
+              )}
             />
           </div>
 
@@ -164,13 +180,14 @@ function ProviderForm({
             </label>
             <textarea
               className={cn(
-                'flex w-full rounded-lg bg-background/50 px-4 py-2',
+                'flex w-full rounded-xl bg-background/30 px-4 py-2',
                 'text-sm ring-offset-background file:border-0 file:bg-transparent',
                 'file:text-sm file:font-medium placeholder:text-muted-foreground',
                 'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                 'disabled:cursor-not-allowed disabled:opacity-50',
-                'backdrop-blur-xs transition-all duration-200 ease-in-out min-h-[80px]',
-                'hover:bg-background/70',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out min-h-[80px]',
+                'hover:bg-background/50 border-none shadow-md',
+                'bg-gradient-to-r from-background/40 to-background/20',
               )}
               placeholder='Description of the provider'
               {...register('description')}
@@ -193,194 +210,358 @@ function ProviderForm({
             />
           </div>
         </div>
+      </div>
 
-        {/* Provider Configuration */}
-        <div className='space-y-4 pt-4 border-t border-border/30'>
-          <h3 className='text-lg font-medium'>Provider Configuration</h3>
+      {/* Provider Configuration Section */}
+      <div
+        ref={configSectionRef}
+        className='space-y-6 rounded-xl bg-gradient-to-br from-purple-500/20 via-pink-500/15 to-orange-500/20 p-6 backdrop-blur-xl shadow-lg'
+      >
+        <h3 className='text-base font-semibold text-foreground bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent'>
+          Provider Configuration
+        </h3>
 
+        <div className='space-y-4'>
           <div className='space-y-2'>
-            <SelectField
-              label={
-                <div className='flex items-center gap-1'>
-                  <label className='text-sm font-medium leading-none'>
-                    Source
-                  </label>
-                  <Tooltip content='The source of the provider (e.g., OpenAI, Anthropic, etc.)'>
-                    <Info className='w-4 h-4 text-muted-foreground' />
-                  </Tooltip>
-                </div>
-              }
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-1'>
+                <label className='text-sm font-medium leading-none'>
+                  Source
+                </label>
+                <Tooltip content='The source of the provider (e.g., OpenAI, Anthropic, etc.)'>
+                  <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+                </Tooltip>
+              </div>
+              <a
+                href='https://platform.openai.com/docs/models/overview'
+                className='inline-flex items-center gap-1.5 text-primary hover:text-primary/80 text-xs group transition-all duration-200'
+                target='_blank'
+                rel='noreferrer'
+              >
+                View providers
+                <ExternalLink className='w-3 h-3 group-hover:translate-x-0.5 transition-transform' />
+              </a>
+            </div>
+            <select
+              className={cn(
+                'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
+                'text-sm ring-offset-background focus-visible:outline-hidden',
+                'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out',
+                'hover:bg-background/50 border-none shadow-lg',
+                'bg-gradient-to-r from-background/40 to-background/20',
+              )}
               {...register('source')}
               aria-invalid={errors.source ? 'true' : 'false'}
-              error={errors.source?.message}
-              options={[{ value: 'openai', label: 'OpenAI' }]}
-            />
+            >
+              <option value='openai'>OpenAI</option>
+              <option value='anthropic'>Anthropic</option>
+              <option value='custom'>Custom</option>
+            </select>
+            {errors.source && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.source.message}
+              </p>
+            )}
           </div>
 
           <div className='space-y-2'>
-            <InputField
-              label={
-                <div className='flex items-center gap-1'>
-                  <label className='text-sm font-medium leading-none'>
-                    Endpoint URL
-                  </label>
-                  <Tooltip content='The API endpoint URL for the provider'>
-                    <Info className='w-4 h-4 text-muted-foreground' />
-                  </Tooltip>
-                </div>
-              }
+            <div className='flex items-center gap-1'>
+              <label className='text-sm font-medium leading-none'>
+                Endpoint URL
+              </label>
+              <Tooltip content='Endpoint URL for the provider'>
+                <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+              </Tooltip>
+            </div>
+            <input
               type='url'
+              className={cn(
+                'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
+                'text-sm ring-offset-background focus-visible:outline-hidden',
+                'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out',
+                'hover:bg-background/50 border-none shadow-md',
+                'bg-gradient-to-r from-background/40 to-background/20',
+              )}
               {...register('endpoint')}
               aria-invalid={errors.endpoint ? 'true' : 'false'}
               placeholder='https://api.openai.com'
-              error={errors.endpoint?.message}
             />
+            {errors.endpoint && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.endpoint.message}
+              </p>
+            )}
           </div>
 
           <div className='space-y-2'>
-            <InputField
-              label={
-                <div className='flex items-center gap-1'>
-                  <label className='text-sm font-medium leading-none'>
-                    API Key
-                  </label>
-                  <Tooltip content='API Key for authentication with the provider'>
-                    <Info className='w-4 h-4 text-muted-foreground' />
-                  </Tooltip>
-                </div>
-              }
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-1'>
+                <label className='text-sm font-medium leading-none'>
+                  API Key
+                </label>
+                <Tooltip content='API Key for authentication with the provider'>
+                  <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+                </Tooltip>
+              </div>
+              {source === 'openai' && (
+                <a
+                  href='https://platform.openai.com/account/api-keys'
+                  className='inline-flex items-center gap-1 text-primary hover:underline text-xs'
+                  target='_blank'
+                  rel='noreferrer'
+                >
+                  Create API key
+                  <ExternalLink className='w-3 h-3' />
+                </a>
+              )}
+            </div>
+            <input
+              type='password'
+              className={cn(
+                'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
+                'text-sm ring-offset-background focus-visible:outline-hidden',
+                'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out',
+                'hover:bg-background/50 border-none shadow-md',
+                'bg-gradient-to-r from-background/40 to-background/20',
+              )}
               {...register('apiKey')}
               aria-invalid={errors.apiKey ? 'true' : 'false'}
               placeholder='sk-...'
-              error={errors.apiKey?.message}
             />
+            {errors.apiKey && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.apiKey.message}
+              </p>
+            )}
           </div>
 
           <div className='space-y-2'>
-            <InputField
-              label={
-                <div className='flex items-center gap-1'>
-                  <label className='text-sm font-medium leading-none'>
-                    Organization ID
-                  </label>
-                  <Tooltip content='Optional organization ID for the provider'>
-                    <Info className='w-4 h-4 text-muted-foreground' />
-                  </Tooltip>
-                </div>
-              }
+            <div className='flex items-center gap-1'>
+              <label className='text-sm font-medium leading-none'>
+                Organization ID
+              </label>
+              <Tooltip content='Optional organization ID for the provider'>
+                <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+              </Tooltip>
+            </div>
+            <input
+              type='text'
+              className={cn(
+                'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
+                'text-sm ring-offset-background focus-visible:outline-hidden',
+                'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out',
+                'hover:bg-background/50 border-none shadow-md',
+                'bg-gradient-to-r from-background/40 to-background/20',
+              )}
               {...register('organizationId')}
               aria-invalid={errors.organizationId ? 'true' : 'false'}
               placeholder='org-...'
-              error={errors.organizationId?.message}
             />
+            {errors.organizationId && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.organizationId.message}
+              </p>
+            )}
           </div>
 
           <div className='space-y-2'>
-            <InputField
-              label={
-                <div className='flex items-center gap-1'>
-                  <label className='text-sm font-medium leading-none'>
-                    Default Model
-                  </label>
-                  <Tooltip content='Default model for the provider'>
-                    <Info className='w-4 h-4 text-muted-foreground' />
-                  </Tooltip>
-                </div>
-              }
+            <div className='flex items-center gap-1'>
+              <label className='text-sm font-medium leading-none'>
+                Default Model
+              </label>
+              <Tooltip content='Default model for the provider'>
+                <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+              </Tooltip>
+            </div>
+            <input
+              type='text'
+              className={cn(
+                'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
+                'text-sm ring-offset-background focus-visible:outline-hidden',
+                'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out',
+                'hover:bg-background/50 border-none shadow-md',
+                'bg-gradient-to-r from-background/40 to-background/20',
+              )}
               {...register('defaultModel')}
               aria-invalid={errors.defaultModel ? 'true' : 'false'}
               placeholder='gpt-4'
-              error={errors.defaultModel?.message}
             />
+            {errors.defaultModel && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.defaultModel.message}
+              </p>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* Model Parameters */}
-        <div className='space-y-4 pt-4 border-t border-border/30'>
-          <h3 className='text-lg font-medium'>Model Parameters</h3>
+      {/* Model Parameters Section */}
+      <div className='space-y-6 rounded-xl bg-gradient-to-br from-emerald-500/20 via-teal-500/15 to-cyan-500/20 p-6 backdrop-blur-xl shadow-lg'>
+        <h3 className='text-base font-semibold text-foreground bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent'>
+          Model Parameters
+        </h3>
 
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-            <div className='space-y-2'>
-              <InputField
-                label={
-                  <div className='flex items-center gap-1'>
-                    <label className='text-sm font-medium leading-none'>
-                      Temperature
-                    </label>
-                    <Tooltip content='Controls randomness: 0 is deterministic, higher values increase randomness'>
-                      <Info className='w-4 h-4 text-muted-foreground' />
-                    </Tooltip>
-                  </div>
-                }
-                type='number'
+        <div className='space-y-6'>
+          {/* Temperature Slider */}
+          <div className='space-y-2'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-1'>
+                <label className='text-sm font-medium leading-none'>
+                  Temperature
+                </label>
+                <Tooltip content='Controls randomness: lower values make the output more deterministic, higher values make it more creative.'>
+                  <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+                </Tooltip>
+              </div>
+              <span className='text-sm font-medium'>
+                {watch('temperature').toFixed(1)}
+              </span>
+            </div>
+
+            <div className='relative pt-1'>
+              <input
+                type='range'
+                min='0'
+                max='2'
                 step='0.1'
-                placeholder='0.7'
-                {...register('temperature', { valueAsNumber: true })}
-                aria-invalid={errors.temperature ? 'true' : 'false'}
-                error={errors.temperature?.message}
+                value={watch('temperature')}
+                onChange={(e) =>
+                  setValue('temperature', parseFloat(e.target.value))
+                }
+                className={cn(
+                  'w-full h-3 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-lg appearance-none cursor-pointer',
+                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                  'transition-all duration-300 ease-in-out',
+                )}
               />
+              <div className='flex justify-between text-xs text-muted-foreground mt-2'>
+                <span>0</span>
+                <span>1</span>
+                <span>2</span>
+              </div>
             </div>
 
-            <div className='space-y-2'>
-              <InputField
-                label={
-                  <div className='flex items-center gap-1'>
-                    <label className='text-sm font-medium leading-none'>
-                      Top P
-                    </label>
-                    <Tooltip content='Controls diversity: 0.1 means only 10% most likely tokens are considered'>
-                      <Info className='w-4 h-4 text-muted-foreground' />
-                    </Tooltip>
-                  </div>
-                }
-                type='number'
-                step='0.1'
-                placeholder='1'
-                {...register('topP', { valueAsNumber: true })}
-                aria-invalid={errors.topP ? 'true' : 'false'}
-                error={errors.topP?.message}
-              />
-            </div>
-
-            <div className='space-y-2'>
-              <InputField
-                label={
-                  <div className='flex items-center gap-1'>
-                    <label className='text-sm font-medium leading-none'>
-                      Max Tokens
-                    </label>
-                    <Tooltip content='Maximum number of tokens to generate in the response'>
-                      <Info className='w-4 h-4 text-muted-foreground' />
-                    </Tooltip>
-                  </div>
-                }
-                type='number'
-                placeholder='2048'
-                {...register('maxTokens', { valueAsNumber: true })}
-                aria-invalid={errors.maxTokens ? 'true' : 'false'}
-                error={errors.maxTokens?.message}
-              />
-            </div>
+            {errors.temperature && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.temperature.message}
+              </p>
+            )}
           </div>
 
+          {/* Top P Slider */}
+          <div className='space-y-2'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-1'>
+                <label className='text-sm font-medium leading-none'>
+                  Top P
+                </label>
+                <Tooltip content='Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered.'>
+                  <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+                </Tooltip>
+              </div>
+              <span className='text-sm font-medium'>
+                {watch('topP').toFixed(1)}
+              </span>
+            </div>
+
+            <div className='relative pt-1'>
+              <input
+                type='range'
+                min='0'
+                max='1'
+                step='0.1'
+                value={watch('topP')}
+                onChange={(e) => setValue('topP', parseFloat(e.target.value))}
+                className={cn(
+                  'w-full h-3 bg-gradient-to-r from-pink-400/30 to-orange-400/30 rounded-lg appearance-none cursor-pointer',
+                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                  'transition-all duration-300 ease-in-out',
+                )}
+              />
+              <div className='flex justify-between text-xs text-muted-foreground mt-2'>
+                <span>0</span>
+                <span>0.5</span>
+                <span>1</span>
+              </div>
+            </div>
+
+            {errors.topP && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.topP.message}
+              </p>
+            )}
+          </div>
+
+          {/* Max Tokens */}
+          <div className='space-y-2'>
+            <div className='flex items-center gap-1'>
+              <label className='text-sm font-medium leading-none'>
+                Max Tokens
+              </label>
+              <Tooltip content='The maximum number of tokens to generate in the response.'>
+                <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
+              </Tooltip>
+            </div>
+
+            <input
+              type='number'
+              className={cn(
+                'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
+                'text-sm ring-offset-background focus-visible:outline-hidden',
+                'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
+                'disabled:cursor-not-allowed disabled:opacity-50',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out',
+                'hover:bg-background/50 border-none shadow-md',
+                'bg-gradient-to-r from-background/40 to-background/20',
+              )}
+              value={watch('maxTokens')}
+              onChange={(e) =>
+                setValue(
+                  'maxTokens',
+                  e.target.value ? parseInt(e.target.value) : 0,
+                )
+              }
+              placeholder='2048'
+              min='0'
+            />
+
+            {errors.maxTokens && (
+              <p className='text-sm text-destructive mt-1'>
+                {errors.maxTokens.message}
+              </p>
+            )}
+          </div>
+
+          {/* Additional Configuration */}
           <div className='space-y-2'>
             <div className='flex items-center gap-1'>
               <label className='text-sm font-medium leading-none'>
                 Additional Configuration
               </label>
               <Tooltip content='Additional JSON configuration for the provider (optional)'>
-                <Info className='w-4 h-4 text-muted-foreground' />
+                <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
               </Tooltip>
             </div>
             <textarea
               className={cn(
-                'flex w-full rounded-lg bg-background/50 px-4 py-2',
+                'flex w-full rounded-xl bg-background/30 px-4 py-2',
                 'text-sm ring-offset-background file:border-0 file:bg-transparent',
                 'file:text-sm file:font-medium placeholder:text-muted-foreground',
                 'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
                 'disabled:cursor-not-allowed disabled:opacity-50',
-                'backdrop-blur-xs transition-all duration-200 ease-in-out min-h-[120px]',
-                'hover:bg-background/70 font-mono',
+                'backdrop-blur-lg transition-all duration-300 ease-in-out min-h-[120px]',
+                'hover:bg-background/50 border-none shadow-md font-mono',
+                'bg-gradient-to-r from-background/40 to-background/20',
               )}
               placeholder='{"key": "value"}'
               {...register('config')}
@@ -395,18 +576,19 @@ function ProviderForm({
         </div>
       </div>
 
-      <div className='flex items-center justify-end gap-4'>
+      <div className='flex items-center justify-end gap-4 mt-8'>
         <button
           type='button'
           onClick={onCancel}
           disabled={isSubmitting}
           className={cn(
-            'inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2',
+            'inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3',
             'bg-background/50 hover:bg-background/80',
-            'text-sm font-medium transition-all duration-200 ease-in-out',
+            'text-sm font-medium transition-all duration-300 ease-in-out',
             'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
             'disabled:pointer-events-none disabled:opacity-50',
-            'backdrop-blur-xs shadow-lg hover:shadow-xl',
+            'backdrop-blur-lg shadow-lg hover:shadow-xl',
+            'border border-border/20',
           )}
         >
           <X className='w-4 h-4' />
@@ -416,12 +598,12 @@ function ProviderForm({
           type='submit'
           disabled={isSubmitting}
           className={cn(
-            'inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2',
-            'bg-linear-to-r from-primary to-primary/80 text-slate-600 hover:brightness-110',
-            'text-sm font-medium transition-all duration-200 ease-in-out',
+            'inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3',
+            'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:brightness-110',
+            'text-sm font-medium transition-all duration-300 ease-in-out',
             'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
             'disabled:pointer-events-none disabled:opacity-50',
-            'backdrop-blur-xs shadow-lg hover:shadow-xl',
+            'backdrop-blur-lg shadow-lg hover:shadow-xl',
           )}
         >
           {isSubmitting ? (
