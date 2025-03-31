@@ -6,6 +6,8 @@ export type testPromptResponse = {
   id: string
   object: string
   created: number
+  model: string
+  system_fingerprint?: string
   choices: {
     index: number
     message: {
@@ -13,15 +15,27 @@ export type testPromptResponse = {
       content: string
     }
     finish_reason: string
-    delta: {
+    delta?: {
       role: string
       content: string
     }
+    content_filter_results: Record<
+      string,
+      { filtered: boolean; detected?: boolean }
+    >
   }[]
   usage: {
     prompt_tokens: number
     completion_tokens: number
     total_tokens: number
+    prompt_tokens_details?: {
+      audio_tokens: number
+      cached_tokens: number
+    }
+    completion_tokens_details?: {
+      audio_tokens: number
+      reasoning_tokens: number
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 import Button from '@/components/Button/Button'
+import PromptTestPreview from '@/components/PromptResultPreview'
 import PromptTestButton from '@/components/PromptTestButton/PromptTestButton'
-import PromptTestPreview from '@/components/PromptTestPreview'
 import ProvidersSelector from '@/components/Providers/Selector'
 import { PromptRole, PromptVariableTypes, PublicLevel } from '@/gql/graphql'
 import { useProjectId } from '@/hooks/route'
@@ -171,6 +171,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   const projects = pjs?.projects.edges ?? []
 
   const prompts = watch('prompts') ?? []
+  const providerId = watch('providerId')
 
   useEffect(() => {
     // only prompt change
@@ -472,7 +473,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               testable={testable}
               data={{
                 ...getValues(),
-                providerId: getValues('providerId')!,
+                providerId: providerId!,
                 projectId: getValues('projectId')!,
               }}
               onTested={onTestPassed}
