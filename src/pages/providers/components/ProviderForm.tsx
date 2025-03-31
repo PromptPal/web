@@ -258,6 +258,8 @@ function ProviderForm({
             >
               <option value='openai'>OpenAI</option>
               <option value='anthropic'>Anthropic</option>
+              <option value='gemini'>Gemini</option>
+              <option value='deepseek'>DeepSeek</option>
               <option value='custom'>Custom</option>
             </select>
             {errors.source && (
@@ -272,7 +274,7 @@ function ProviderForm({
               <label className='text-sm font-medium leading-none'>
                 Endpoint URL
               </label>
-              <Tooltip content='Endpoint URL for the provider'>
+              <Tooltip content='Endpoint URL for the provider.'>
                 <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
               </Tooltip>
             </div>

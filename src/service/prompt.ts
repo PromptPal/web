@@ -30,6 +30,7 @@ export type testPromptPayload = {
   name: string
   prompts: PromptRow[]
   variables: Record<string, string | number | boolean | File>
+  providerId: number
 }
 
 export function testPrompt(

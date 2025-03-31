@@ -472,6 +472,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               testable={testable}
               data={{
                 ...getValues(),
+                providerId: getValues('providerId')!,
                 projectId: getValues('projectId')!,
               }}
               onTested={onTestPassed}
