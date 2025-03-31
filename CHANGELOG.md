@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.13.0](https://github.com/PromptPal/web/compare/v1.12.8...v1.13.0) (2025-03-31)
+
+
+### Features
+
+* **prompt:** support svg preview on prompt test ([2a9e5e3](https://github.com/PromptPal/web/commit/2a9e5e3dcdff13acfff6f217fd5a31006e5bf406))
+* **provider:** add provider pages ([49b3ffe](https://github.com/PromptPal/web/commit/49b3ffed0075b07b8bd3c32cf52a828e86e3ab7c))
+* **provider:** update provider config ([3bc08de](https://github.com/PromptPal/web/commit/3bc08dee1adb62e6c76b7485da71d3c31bbf19b5))
+
+
+### Bug Fixes
+
+* **css:** upgrade tailwindcss to latest 4 ([995179c](https://github.com/PromptPal/web/commit/995179c28d64504f19b6617f37eccb9f7e5ee47b))
+* **deps:** update deps ([e2c464b](https://github.com/PromptPal/web/commit/e2c464b1271992cfbf2a56fded3c7bfd72bbaa54))
+* **OpenToken:** update style in OpenToken ([04710c5](https://github.com/PromptPal/web/commit/04710c54ac3a5cd739cbc2a6e7839c3a162c9fbb))
+* **project:** update styles in project ([74080c5](https://github.com/PromptPal/web/commit/74080c5d5711814ef4a480a9526b7f48f970c32b))
+* **prompt:** update lake modal on prompt test button ([5895248](https://github.com/PromptPal/web/commit/58952487dc3bc6c3dbbdaa36b469fd5d8623b134))
+* **prompt:** update providers ([45f0566](https://github.com/PromptPal/web/commit/45f0566a41f72236b08c223870cc663900a23009))
+* **provider:** update provider ([47595b9](https://github.com/PromptPal/web/commit/47595b9abce76675f7f5a924cc8ce9c82740e8cd))
+* **provider:** update provider styles ([90b1310](https://github.com/PromptPal/web/commit/90b131087f0d2bc58f17ef70cbd73c2a8e34ecdc))
+
 ## [1.12.8](https://github.com/PromptPal/web/compare/v1.12.7...v1.12.8) (2025-02-10)
 
 
