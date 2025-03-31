@@ -1,4 +1,4 @@
-import { PromptRow, PromptVariable } from '@/gql/graphql'
+import { PromptRow, PromptVariable, Provider } from '@/gql/graphql'
 import { Link } from '@tanstack/react-router'
 import {
   Bug,
@@ -14,6 +14,7 @@ import {
 import toast from 'react-hot-toast'
 import ButtonGlow from '../Button/ButtonGlow'
 import LinkGlow from '../Button/LinkGlow'
+import { ProviderCard } from '../Providers/ProviderCard'
 import PromptReadonly from './PromptReadonly'
 
 interface PromptDetailCardProps {
@@ -26,6 +27,7 @@ interface PromptDetailCardProps {
     publicLevel: string
     enabled: boolean
     debug: boolean
+    provider?: Omit<Provider, 'projects' | 'creator' | 'prompts'> | null
     prompts: PromptRow[]
     variables: PromptVariable[]
   } | null
@@ -160,6 +162,8 @@ export function PromptDetailCard({
             </label>
           </div>
         </div>
+
+        <ProviderCard provider={promptDetail?.provider} />
 
         <div className='mt-6 flex flex-col gap-4'>
           {promptDetail?.prompts.map((prompt, idx) => (

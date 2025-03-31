@@ -6,7 +6,7 @@ import { Control, Controller } from 'react-hook-form'
 import { mutatePromptType } from '../types'
 
 interface VariablesSectionProps {
-  control: Control<mutatePromptType>
+  control: Control<Pick<mutatePromptType, 'variables'>>
   variablesFields: Array<{ id: string }>
 }
 

@@ -130,7 +130,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
         )}
       </button>
       <LakeModal isOpen={isOpen} onClose={onClose} title='Test Prompt'>
-        <form>
+        <form className='p-6'>
           <div>
             {fields.map((field, index) => {
               switch (field.type) {

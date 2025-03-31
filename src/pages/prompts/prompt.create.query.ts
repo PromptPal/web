@@ -32,6 +32,11 @@ export const qd = graphql(`
       publicLevel
       createdAt
       updatedAt
+
+      provider {
+        id
+        name
+      }
     }
   }
 `)

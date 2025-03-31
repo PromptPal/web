@@ -1,7 +1,10 @@
+import Button from '@/components/Button/Button'
+import ProvidersSelector from '@/components/Providers/Selector'
 import { OpenAIModels } from '@/constants'
 import { graphql } from '@/gql'
 import { ProjectPayload } from '@/gql/graphql'
 import { cn } from '@/utils'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import {
   useApolloClient,
   useMutation as useGraphQLMutation,
@@ -11,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ExternalLink, Info, Loader2, Plus, X } from 'lucide-react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import * as z from 'zod'
 
@@ -21,35 +24,7 @@ const schema = z.object({
     .trim()
     .min(2, 'Name must be at least 2 characters')
     .max(100, 'Name cannot exceed 100 characters'),
-  openAIModel: z
-    .enum(OpenAIModels, {
-      required_error: 'Please select a model',
-      invalid_type_error: 'Please select a valid model',
-    })
-    .default('gpt-3.5-turbo'),
-  openAIBaseURL: z
-    .string()
-    .trim()
-    .url('Please enter a valid URL')
-    .max(255, 'URL cannot exceed 255 characters')
-    .default('https://api.openai.com/v1'),
-  openAIToken: z
-    .string()
-    .trim()
-    .min(3, 'Token must be at least 3 characters')
-    .max(255, 'Token cannot exceed 255 characters'),
-  geminiBaseURL: z
-    .string()
-    .trim()
-    .url('Please enter a valid URL')
-    .max(255, 'URL cannot exceed 255 characters')
-    .default('https://generativelanguage.googleapis.com'),
-  geminiToken: z
-    .string()
-    .trim()
-    .min(3, 'Token must be at least 3 characters')
-    .max(255, 'Token cannot exceed 255 characters')
-    .optional(),
+  providerId: z.number(),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -92,26 +67,15 @@ function ProjectCreatePage() {
   })
 
   const {
-    register,
     handleSubmit,
-    watch,
-    formState: { errors, isSubmitting },
+    control,
+    formState: { isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      openAIModel: 'gpt-3.5-turbo',
-      openAIBaseURL: 'https://api.openai.com/v1',
-      openAIToken: '',
-      geminiBaseURL: 'https://generativelanguage.googleapis.com',
-      geminiToken: '',
-    },
+    defaultValues: {},
   })
 
-  const selectedModel = watch('openAIModel')
-
   const qc = useQueryClient()
-  const [settingAreaRef] = useAutoAnimate()
-
   const onSubmit = async (data: FormValues) => {
     await mutateAsync({
       variables: {
@@ -123,7 +87,12 @@ function ProjectCreatePage() {
   return (
     <>
       <div className='container max-w-2xl mx-auto px-4 py-8'>
-        <form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
+        <form
+          onSubmit={handleSubmit(onSubmit, (errors) => {
+            console.log('errors', errors)
+          })}
+          className='space-y-8'
+        >
           <div className='flex items-center justify-between'>
             <div className='space-y-1'>
               <h1 className='text-2xl font-bold tracking-tight'>
@@ -137,243 +106,58 @@ function ProjectCreatePage() {
 
           <div className='rounded-xl bg-linear-to-br from-background/30 via-background/50 to-background/30 py-6 backdrop-blur-xl space-y-6'>
             <div className='space-y-2'>
-              <label className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Project Name
-              </label>
-              <input
-                type='text'
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background file:border-0 file:bg-transparent',
-                  'file:text-sm file:font-medium placeholder:text-muted-foreground',
-                  'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70',
+              <Controller
+                control={control}
+                name='name'
+                render={({ field, fieldState }) => (
+                  <InputField
+                    label='Project Name'
+                    className='w-full'
+                    {...field}
+                    error={fieldState.error?.message}
+                  />
                 )}
-                placeholder='My Awesome Project'
-                {...register('name')}
-                aria-invalid={errors.name ? 'true' : 'false'}
               />
-              {errors.name && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.name.message}
-                </p>
-              )}
             </div>
 
-            <div className='space-y-2'>
-              <label className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Model Provider
-              </label>
-              <div className='text-sm text-muted-foreground flex items-center gap-1 mb-2'>
-                Find more models
-                <a
-                  href='https://platform.openai.com/docs/models/overview'
-                  className='inline-flex items-center gap-1 text-primary hover:underline'
-                  target='_blank'
-                  rel='noreferrer'
-                >
-                  here
-                  <ExternalLink className='w-3 h-3' />
-                </a>
-              </div>
-              <select
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-hidden',
-                  'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70',
-                )}
-                {...register('openAIModel')}
-                aria-invalid={errors.openAIModel ? 'true' : 'false'}
-              >
-                <option value=''>Select a model</option>
-                {OpenAIModels.map((model) => (
-                  <option key={model} value={model}>
-                    {model}
-                  </option>
-                ))}
-              </select>
-              {errors.openAIModel && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.openAIModel.message}
-                </p>
-              )}
-            </div>
-
-            <div ref={settingAreaRef} className='space-y-6'>
-              {selectedModel?.startsWith('gpt') && (
-                <>
-                  <div className='space-y-2'>
-                    <div className='flex items-center gap-1'>
-                      <label className='text-sm font-medium leading-none'>
-                        Base URL
-                      </label>
-                      <div className='group relative'>
-                        <Info className='w-4 h-4 text-muted-foreground' />
-                        <div
-                          className='absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 rounded-lg
-                        bg-popover text-popover-foreground border border-border text-sm min-w-[16rem] hidden
-                        group-hover:block shadow-lg'
-                        >
-                          The base URL of the OpenAI API. You can set this for
-                          proxy (大陆项目可以用此字段设置转发服务器代理)
-                        </div>
-                      </div>
+            <Controller
+              name='providerId'
+              control={control}
+              render={({ field, fieldState }) => (
+                <ProvidersSelector
+                  label={
+                    <div className='flex items-center gap-2 justify-between'>
+                      <span className='text-sm'>Provider</span>
+                      {fieldState.error && (
+                        <span className='text-xs text-red-500'>
+                          {fieldState.error.message}
+                        </span>
+                      )}
                     </div>
-                    <input
-                      type='text'
-                      className={cn(
-                        'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-hidden',
-                        'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                        'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                        'hover:bg-background/70',
-                      )}
-                      {...register('openAIBaseURL')}
-                      aria-invalid={errors.openAIBaseURL ? 'true' : 'false'}
-                    />
-                    {errors.openAIBaseURL && (
-                      <p className='text-sm text-destructive mt-1'>
-                        {errors.openAIBaseURL.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className='space-y-2'>
-                    <label className='text-sm font-medium leading-none'>
-                      OpenAI Token
-                    </label>
-                    <input
-                      type='password'
-                      className={cn(
-                        'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-hidden',
-                        'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                        'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                        'hover:bg-background/70',
-                      )}
-                      {...register('openAIToken')}
-                      aria-invalid={errors.openAIToken ? 'true' : 'false'}
-                    />
-                    {errors.openAIToken && (
-                      <p className='text-sm text-destructive mt-1'>
-                        {errors.openAIToken.message}
-                      </p>
-                    )}
-                  </div>
-                </>
+                  }
+                  {...field}
+                />
               )}
-
-              {selectedModel?.startsWith('gemini') && (
-                <>
-                  <div className='space-y-2'>
-                    <div className='flex items-center gap-1'>
-                      <label className='text-sm font-medium leading-none'>
-                        Base URL
-                      </label>
-                      <div className='group relative'>
-                        <Info className='w-4 h-4 text-muted-foreground' />
-                        <div
-                          className='absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 rounded-lg
-                        bg-popover text-popover-foreground border border-border text-sm min-w-[16rem] hidden
-                        group-hover:block shadow-lg'
-                        >
-                          The base URL of the Google Gemini API. You can set
-                          this for proxy
-                          (大陆项目可以用此字段设置转发服务器代理)
-                        </div>
-                      </div>
-                    </div>
-                    <input
-                      type='text'
-                      className={cn(
-                        'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-hidden',
-                        'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                        'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                        'hover:bg-background/70',
-                      )}
-                      {...register('geminiBaseURL')}
-                      aria-invalid={errors.geminiBaseURL ? 'true' : 'false'}
-                    />
-                    {errors.geminiBaseURL && (
-                      <p className='text-sm text-destructive mt-1'>
-                        {errors.geminiBaseURL.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className='space-y-2'>
-                    <label className='text-sm font-medium leading-none'>
-                      Gemini Token
-                    </label>
-                    <input
-                      type='password'
-                      className={cn(
-                        'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                        'text-sm ring-offset-background focus-visible:outline-hidden',
-                        'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                        'disabled:cursor-not-allowed disabled:opacity-50',
-                        'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                        'hover:bg-background/70',
-                      )}
-                      {...register('geminiToken')}
-                      aria-invalid={errors.geminiToken ? 'true' : 'false'}
-                    />
-                    {errors.geminiToken && (
-                      <p className='text-sm text-destructive mt-1'>
-                        {errors.geminiToken.message}
-                      </p>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
+            />
           </div>
 
           <div className='flex items-center justify-end gap-4'>
-            <button
+            <Button
               type='button'
               onClick={() => nav({ to: '/projects' })}
               disabled={isSubmitting}
-              className={cn(
-                'inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2',
-                'bg-background/50 hover:bg-background/80',
-                'text-sm font-medium transition-all duration-200 ease-in-out',
-                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                'disabled:pointer-events-none disabled:opacity-50',
-                'backdrop-blur-xs shadow-lg hover:shadow-xl',
-              )}
+              variant='ghost'
+              icon={X}
             >
-              <X className='w-4 h-4' />
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type='submit'
               disabled={isSubmitting || isLoading}
-              className={cn(
-                'inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2',
-                'bg-linear-to-r from-primary to-primary/80 text-slate-600 hover:brightness-110',
-                'text-sm font-medium transition-all duration-200 ease-in-out',
-                'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                'disabled:pointer-events-none disabled:opacity-50',
-                'backdrop-blur-xs shadow-lg hover:shadow-xl',
-              )}
+              icon={Plus}
             >
-              {isSubmitting || isLoading ? (
-                <Loader2 className='w-4 h-4 animate-spin' />
-              ) : (
-                <Plus className='w-4 h-4' />
-              )}
               Create Project
-            </button>
+            </Button>
           </div>
         </form>
       </div>

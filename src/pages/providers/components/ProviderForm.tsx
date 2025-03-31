@@ -1,3 +1,4 @@
+import Button from '@/components/Button/Button'
 import { cn } from '@/utils'
 import InputField from '@annatarhe/lake-ui/form-input-field'
 import SelectField from '@annatarhe/lake-ui/form-select-field'
@@ -577,42 +578,17 @@ function ProviderForm({
       </div>
 
       <div className='flex items-center justify-end gap-4 mt-8'>
-        <button
+        <Button
           type='button'
           onClick={onCancel}
-          disabled={isSubmitting}
-          className={cn(
-            'inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3',
-            'bg-background/50 hover:bg-background/80',
-            'text-sm font-medium transition-all duration-300 ease-in-out',
-            'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-            'disabled:pointer-events-none disabled:opacity-50',
-            'backdrop-blur-lg shadow-lg hover:shadow-xl',
-            'border border-border/20',
-          )}
+          isLoading={isSubmitting}
+          icon={X}
         >
-          <X className='w-4 h-4' />
           Cancel
-        </button>
-        <button
-          type='submit'
-          disabled={isSubmitting}
-          className={cn(
-            'inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3',
-            'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:brightness-110',
-            'text-sm font-medium transition-all duration-300 ease-in-out',
-            'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-            'disabled:pointer-events-none disabled:opacity-50',
-            'backdrop-blur-lg shadow-lg hover:shadow-xl',
-          )}
-        >
-          {isSubmitting ? (
-            <Loader2 className='w-4 h-4 animate-spin' />
-          ) : (
-            <Save className='w-4 h-4' />
-          )}
+        </Button>
+        <Button type='submit' isLoading={isSubmitting} icon={Save}>
           {submitButtonText}
-        </button>
+        </Button>
       </div>
     </form>
   )

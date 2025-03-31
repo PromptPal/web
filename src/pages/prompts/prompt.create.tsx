@@ -1,10 +1,13 @@
+import Button from '@/components/Button/Button'
 import PromptTestButton from '@/components/PromptTestButton/PromptTestButton'
 import PromptTestPreview from '@/components/PromptTestPreview'
+import ProvidersSelector from '@/components/Providers/Selector'
 import { PromptRole, PromptVariableTypes, PublicLevel } from '@/gql/graphql'
 import { useProjectId } from '@/hooks/route'
 import { testPromptResponse } from '@/service/prompt'
 import { PromptVariable } from '@/service/types'
 import { cn } from '@/utils'
+import Tooltip from '@annatarhe/lake-ui/tooltip'
 import {
   useApolloClient,
   useMutation as useGraphQLMutation,
@@ -17,6 +20,7 @@ import { zodResolver as hookFormZodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
 import {
+  Control,
   Controller,
   useFieldArray,
   useForm as useReactHookForm,
@@ -68,6 +72,7 @@ const schema: Zod.ZodType<mutatePromptType> = Zod.object({
     PublicLevel.Public,
     PublicLevel.Protected,
   ]),
+  providerId: Zod.number().optional(),
 })
 
 type PromptCreatePageProps = {
@@ -126,6 +131,8 @@ function PromptCreatePage(props: PromptCreatePageProps) {
             },
           ],
           variables: [],
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          providerId: undefined as any,
         }
 
         if (!isUpdate) {
@@ -135,9 +142,14 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         const resp = await fetchPrompt({ variables: { id } })
         const prompt = structuredClone(
           resp.data?.prompt ?? def,
-        ) as mutatePromptType
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        ) as any
+
+        prompt.providerId = prompt.provider?.id ?? undefined
+        delete prompt.provider
+
         prompt.projectId = pid
-        return prompt
+        return prompt as mutatePromptType
       },
     })
 
@@ -214,13 +226,19 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         return updatePrompt({
           variables: {
             id,
-            data: payload,
+            data: {
+              ...payload,
+              providerId: payload.providerId ?? -1,
+            },
           },
         })
       }
       return createPrompt({
         variables: {
-          data: payload,
+          data: {
+            ...payload,
+            providerId: payload.providerId ?? -1,
+          },
         },
       })
     },
@@ -232,6 +250,10 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     if (data.tokenCount === undefined) {
       toast.error('please test it first to make sure it works')
       return
+    }
+    data.projectId = pid
+    if (!data.providerId) {
+      data.providerId = -1
     }
     return mutateAsync(data)
   }
@@ -276,7 +298,12 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         </div>
       </section>
 
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6'>
+      <form
+        onSubmit={handleSubmit(onSubmit, (err) => {
+          console.error(err)
+        })}
+        className='flex flex-col gap-6'
+      >
         <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
           <div className='flex flex-col gap-6'>
             <div className='grid grid-cols-2 gap-6'>
@@ -419,7 +446,19 @@ function PromptCreatePage(props: PromptCreatePageProps) {
           </div>
         </section>
 
-        <VariablesSection control={control} variablesFields={variablesFields} />
+        <VariablesSection
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          control={control as any}
+          variablesFields={variablesFields}
+        />
+
+        <Controller
+          name='providerId'
+          control={control}
+          render={({ field }) => {
+            return <ProvidersSelector label='Provider' {...field} />
+          }}
+        />
 
         {testResult && (
           <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
@@ -438,25 +477,18 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               onTested={onTestPassed}
             />
             <div className='relative group'>
-              <button
-                type='submit'
-                className={cn(
-                  'flex items-center gap-2 px-6 py-2 rounded-lg bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transition-all',
-                  !testResult && 'opacity-50 cursor-not-allowed',
-                )}
-                disabled={!testResult}
+              <Tooltip
+                content='Please test it first to make sure it can work'
+                disabled={!!testResult}
               >
-                {isLoading ? (
-                  <div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin' />
-                ) : null}
-                Save
-              </button>
-              {!testResult && (
-                <div className='absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-sm bg-gray-800 text-sm text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity'>
-                  Please test it first to make sure it can work
-                  <div className='absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45' />
-                </div>
-              )}
+                <Button
+                  type='submit'
+                  isLoading={isLoading}
+                  disabled={!testResult}
+                >
+                  Save
+                </Button>
+              </Tooltip>
             </div>
           </div>
         </section>

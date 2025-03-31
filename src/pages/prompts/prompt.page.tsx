@@ -40,6 +40,22 @@ const q = graphql(`
         id
         name
       }
+      provider {
+        id
+        name
+        description
+        enabled
+        source
+        endpoint
+        organizationId
+        defaultModel
+        temperature
+        topP
+        maxTokens
+        config
+        createdAt
+        updatedAt
+      }
       creator {
         id
         name
@@ -89,6 +105,7 @@ function PromptPage() {
               prompts: promptDetail.prompts,
               variables: promptDetail.variables,
               debug: checked,
+              providerId: promptDetail.provider?.id ?? -1,
             },
           },
         }),
