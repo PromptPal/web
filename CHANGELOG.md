@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/PromptPal/web/compare/v1.13.0...v1.13.1) (2025-04-01)
+
+
+### Bug Fixes
+
+* **provider:** fix svg preview ([49e1c7d](https://github.com/PromptPal/web/commit/49e1c7dc8ca022638a69c301b41414d8da654788))
+
 ## [1.13.0](https://github.com/PromptPal/web/compare/v1.12.8...v1.13.0) (2025-03-31)
 
 
