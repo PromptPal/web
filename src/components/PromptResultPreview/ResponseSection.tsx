@@ -16,9 +16,9 @@ type ResponseSectionProps = {
  */
 function ResponseSection({ choices }: ResponseSectionProps) {
   const isSvg =
-    choices.length === 1 &&
+    choices.length > 0 &&
     choices[0].message.content.startsWith('<svg') &&
-    choices[0].message.content.endsWith('</svg>')
+    choices[choices.length - 1].message.content.endsWith('</svg>')
 
   const [isFullScreen, setIsFullScreen] = useState(false)
 
@@ -48,7 +48,9 @@ function ResponseSection({ choices }: ResponseSectionProps) {
           </div>
           <div className='space-y-4'>
             {isSvg ? (
-              <SVGPreview svg={choices[0].message.content} />
+              <SVGPreview
+                svg={choices.map((c) => c.message.content).join('')}
+              />
             ) : (
               choices.map((choice, i) => (
                 <ResponseChoiceItem key={i} choice={choice} index={i} />
@@ -65,7 +67,9 @@ function ResponseSection({ choices }: ResponseSectionProps) {
         <div className='p-6 rounded-lg bg-linear-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-xl shadow-lg'>
           <div className='space-y-4'>
             {isSvg ? (
-              <SVGPreview svg={choices[0].message.content} />
+              <SVGPreview
+                svg={choices.map((c) => c.message.content).join('')}
+              />
             ) : (
               choices.map((choice, i) => (
                 <ResponseChoiceItem key={i} choice={choice} index={i} />
