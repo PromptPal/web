@@ -2,7 +2,9 @@ import { cp } from '@/pages/providers/provider.query'
 import { useApolloClient, useMutation } from '@apollo/client'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'react-hot-toast'
-import ProviderForm, { ProviderFormValues } from './components/ProviderForm'
+import ProviderForm, {
+  ProviderFormValues,
+} from './components/provider-form/ProviderForm'
 
 function ProvidersCreatePage() {
   const navigate = useNavigate()

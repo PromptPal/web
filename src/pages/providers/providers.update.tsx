@@ -3,7 +3,9 @@ import { useApolloClient, useMutation, useQuery } from '@apollo/client'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-import ProviderForm, { ProviderFormValues } from './components/ProviderForm'
+import ProviderForm, {
+  ProviderFormValues,
+} from './components/provider-form/ProviderForm'
 
 function ProvidersUpdatePage() {
   const { id } = useParams({ strict: false })
