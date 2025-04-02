@@ -24,6 +24,17 @@ function ProvidersCreatePage() {
   })
 
   const handleSubmit = async (data: ProviderFormValues) => {
+    if (!data.apiKey) {
+      toast.error('API Key is required')
+      return
+    }
+
+    const headers: Record<string, string> = {}
+    if (data.headers) {
+      data.headers.forEach((header) => {
+        headers[header.key] = header.value
+      })
+    }
     await createProvider({
       variables: {
         data: {
@@ -39,7 +50,7 @@ function ProvidersCreatePage() {
           topP: data.topP,
           maxTokens: data.maxTokens,
           config: data.config || '',
-          headers: data.headers ? JSON.stringify(data.headers) : '[]',
+          headers: JSON.stringify(headers),
         },
       },
     })

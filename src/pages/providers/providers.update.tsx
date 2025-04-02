@@ -22,23 +22,37 @@ function ProvidersUpdatePage() {
     },
     skip: !providerId,
     onCompleted(data) {
-      if (data?.provider) {
-        const provider = data.provider
-        setInitialValues({
-          name: provider.name,
-          description: provider.description || undefined,
-          enabled: provider.enabled,
-          source: provider.source,
-          endpoint: provider.endpoint,
-          organizationId: provider.organizationId || undefined,
-          defaultModel: provider.defaultModel,
-          temperature: provider.temperature,
-          topP: provider.topP,
-          maxTokens: provider.maxTokens,
-          config: provider.config || undefined,
-          headers: provider.headers ? JSON.parse(provider.headers) : [],
-        })
+      if (!data.provider) {
+        toast.error('Provider not found')
+        return
       }
+      const headersObj: Record<string, string> = data.provider.headers
+        ? JSON.parse(data.provider.headers)
+        : {}
+      const headers: { key: string; value: string }[] = Object.entries(
+        headersObj,
+      ).reduce(
+        (acc, [key, value]) => {
+          acc.push({ key, value })
+          return acc
+        },
+        [] as { key: string; value: string }[],
+      )
+      const provider = data.provider
+      setInitialValues({
+        name: provider.name,
+        description: provider.description || undefined,
+        enabled: provider.enabled,
+        source: provider.source,
+        endpoint: provider.endpoint,
+        organizationId: provider.organizationId || undefined,
+        defaultModel: provider.defaultModel,
+        temperature: provider.temperature,
+        topP: provider.topP,
+        maxTokens: provider.maxTokens,
+        config: provider.config || undefined,
+        headers,
+      })
     },
   })
 
@@ -56,6 +70,10 @@ function ProvidersUpdatePage() {
   })
 
   const handleSubmit = async (data: ProviderFormValues) => {
+    const headers: Record<string, string> = {}
+    data.headers?.forEach((header) => {
+      headers[header.key] = header.value
+    })
     await updateProvider({
       variables: {
         id: providerId,
@@ -72,7 +90,7 @@ function ProvidersUpdatePage() {
           topP: data.topP,
           maxTokens: data.maxTokens,
           config: data.config || '',
-          headers: data.headers ? JSON.stringify(data.headers) : '[]',
+          headers: JSON.stringify(headers),
         },
       },
     })
