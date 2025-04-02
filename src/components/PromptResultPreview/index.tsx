@@ -10,7 +10,7 @@ import { PromptTestPreviewProps, ResponseChoice } from './types'
 function PromptTestPreview(props: PromptTestPreviewProps) {
   const { data } = props
 
-  if (!data) {
+  if (!data || !data.choices) {
     return <NoPreviewAvailable />
   }
 

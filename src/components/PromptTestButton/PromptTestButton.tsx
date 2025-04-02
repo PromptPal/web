@@ -135,7 +135,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
         title='Test Prompt'
       >
         <form
-          className='p-6'
+          className='p-6 overflow-y-scroll'
           style={{
             maxHeight: '80vh',
           }}
