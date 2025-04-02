@@ -1,5 +1,4 @@
 import { Outlet } from '@tanstack/react-router'
-import React from 'react'
 import { Toaster } from 'react-hot-toast'
 // import { usePointerUpdate } from '../../hooks/glow'
 import Header from '../Header/Header.modern'
@@ -17,21 +16,6 @@ function BaseLayout() {
       <Toaster />
       <div data-st-role='modal' />
       <div data-st-role='tooltip' />
-    </div>
-  )
-  return (
-    <div
-      className='container mx-auto flex flex-col h-full min-h-screen'
-      style={
-        {
-          '--menu-width': '150px',
-          '--body-width': 'calc(100% - var(--menu-width))',
-        } as React.CSSProperties
-      }
-    >
-      <Header />
-      <Outlet />
-      <Toaster />
     </div>
   )
 }

@@ -51,7 +51,7 @@ function App() {
       <JotaiProvider>
         <ApolloProvider client={apolloClient}>
           <QueryClientProvider client={queryClient}>
-            <MantineProvider>
+            <MantineProvider forceColorScheme='dark'>
               <RouterProvider router={router} />
             </MantineProvider>
             <ReactQueryDevtools initialIsOpen={false} />

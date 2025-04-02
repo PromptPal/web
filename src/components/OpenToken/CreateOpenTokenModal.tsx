@@ -1,23 +1,28 @@
+import Switch from '@annatarhe/lake-ui/form-switch-field'
 import LakeModal from '@annatarhe/lake-ui/modal'
 import { useMutation as useGraphQLMutation } from '@apollo/client'
-import { Switch } from '@mantine/core'
-import { DateInput } from '@mantine/dates'
-import { useForm } from '@mantine/form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import {
   CalendarIcon,
   Clock,
+  HelpCircle,
+  InfoIcon,
   KeyIcon,
   MessageSquare,
+  Save,
   ShieldIcon,
 } from 'lucide-react'
-import { zodResolver } from 'mantine-form-zod-resolver'
 import { useMemo } from 'react'
 import 'react-datepicker/dist/react-datepicker.css'
+import InputField from '@annatarhe/lake-ui/form-input-field'
+import Tooltip from '@annatarhe/lake-ui/tooltip'
+import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
 import { graphql } from '../../gql'
 import { OpenTokenInput } from '../../gql/graphql'
+import Button from '../Button/Button'
 
 type CreateOpenTokenModalProps = {
   isOpen: boolean
@@ -55,8 +60,8 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
   const n = useMemo(() => dayjs(), [])
 
   const f = useForm<OpenTokenInputForm>({
-    validate: zodResolver(schema),
-    initialValues: {
+    resolver: zodResolver(schema),
+    defaultValues: {
       projectId,
       name: '',
       description: '',
@@ -87,6 +92,8 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     })
   }
 
+  const apiValidateEnabled = f.watch('apiValidateEnabled')
+
   return (
     <LakeModal
       isOpen={isOpen}
@@ -97,32 +104,26 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
         </span>
       }
     >
-      <form onSubmit={f.onSubmit(onSubmit)} className='space-y-5 p-1'>
+      <form onSubmit={f.handleSubmit(onSubmit)} className='space-y-5 p-1'>
         <div className='bg-gray-800/40 backdrop-blur-sm rounded-lg p-5'>
           <div className='space-y-5'>
             {/* Name Field */}
-            <div>
-              <label className='block text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2'>
-                Name
-              </label>
-              <div className='relative'>
-                <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500'>
-                  <KeyIcon className='h-5 w-5' />
+            <InputField
+              label={
+                <div>
+                  <span className='text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+                    Name
+                  </span>
+                  <Tooltip content='A name to help you identify this token'>
+                    <InfoIcon className='w-4 h-4 ml-2' />
+                  </Tooltip>
                 </div>
-                <input
-                  type='text'
-                  className='pl-10 w-full bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg py-3 px-4 text-gray-200 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:outline-none transition duration-200'
-                  placeholder='My API Token'
-                  {...f.getInputProps('name')}
-                />
-              </div>
-              {f.errors.name && (
-                <p className='mt-2 text-sm text-red-400'>{f.errors.name}</p>
-              )}
-              <p className='mt-1 text-xs text-gray-400'>
-                A name to help you identify this token
-              </p>
-            </div>
+              }
+              placeholder='My API Token'
+              // icon={<KeyIcon />}
+              {...f.register('name')}
+              error={f.formState.errors.name?.message}
+            />
 
             {/* Description Field */}
             <div>
@@ -136,12 +137,12 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
                 <textarea
                   className='pl-10 w-full bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg py-3 px-4 text-gray-200 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:outline-none transition duration-200 min-h-[80px]'
                   placeholder='Describe the purpose of this token'
-                  {...f.getInputProps('description')}
+                  {...f.register('description')}
                 />
               </div>
-              {f.errors.description && (
+              {f.formState.errors.description && (
                 <p className='mt-2 text-sm text-red-400'>
-                  {f.errors.description}
+                  {f.formState.errors.description?.message}
                 </p>
               )}
               <p className='mt-1 text-xs text-gray-400'>
@@ -158,18 +159,16 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
                 <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500'>
                   <CalendarIcon className='h-5 w-5' />
                 </div>
-                <DateInput
-                  placeholder='Select expiration date'
-                  classNames={{
-                    root: 'w-full',
-                    input:
-                      'pl-10 w-full bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg py-3 px-4 text-gray-200 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:outline-none transition duration-200',
-                  }}
-                  {...f.getInputProps('expireAt')}
+                <input
+                  type='date'
+                  className='pl-10 w-full bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg py-3 px-4 text-gray-200 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:outline-none transition duration-200'
+                  {...f.register('expireAt')}
                 />
               </div>
-              {f.errors.expireAt && (
-                <p className='mt-2 text-sm text-red-400'>{f.errors.expireAt}</p>
+              {f.formState.errors.expireAt && (
+                <p className='mt-2 text-sm text-red-400'>
+                  {f.formState.errors.expireAt?.message}
+                </p>
               )}
               <p className='mt-1 text-xs text-gray-400'>
                 When this token will expire (maximum 3 years from now)
@@ -182,21 +181,19 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
                 Advanced Validation
               </label>
               <div className='flex items-center space-x-3'>
-                <Switch
-                  size='lg'
-                  color='teal'
-                  checked={f.values.apiValidateEnabled}
-                  classNames={{
-                    track: 'backdrop-blur-md',
-                    thumb: f.values.apiValidateEnabled
-                      ? 'bg-gradient-to-r from-teal-400 to-blue-500'
-                      : 'bg-gradient-to-r from-gray-400 to-gray-500',
-                  }}
-                  {...f.getInputProps('apiValidateEnabled')}
+                <Controller
+                  control={f.control}
+                  name='apiValidateEnabled'
+                  render={({ field }) => (
+                    <Switch
+                      label='Enable'
+                      {...field}
+                      error={f.formState.errors.apiValidateEnabled?.message}
+                    >
+                      {field.value ? 'Enabled' : 'Disabled'}
+                    </Switch>
+                  )}
                 />
-                <span className='text-gray-300'>
-                  {f.values.apiValidateEnabled ? 'Enabled' : 'Disabled'}
-                </span>
               </div>
               <p className='mt-1 text-xs text-gray-400'>
                 Enable additional validation for API requests
@@ -206,78 +203,46 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
             {/* Validate Path Field - conditionally rendered */}
             <div
               style={{
-                height: f.values.apiValidateEnabled ? 'auto' : 0,
-                display: f.values.apiValidateEnabled ? 'block' : 'none',
+                height: apiValidateEnabled ? 'auto' : 0,
+                display: apiValidateEnabled ? 'block' : 'none',
                 transition: 'height 0.2s ease-in-out',
               }}
             >
-              <label className='block text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2'>
-                Validation Path
-              </label>
-              <div className='relative'>
-                <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500'>
-                  <ShieldIcon className='h-5 w-5' />
-                </div>
-                <input
-                  type='url'
-                  className='pl-10 w-full bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg py-3 px-4 text-gray-200 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:outline-none transition duration-200'
-                  placeholder='https://example.com/api/validate'
-                  {...f.getInputProps('apiValidatePath')}
-                />
-              </div>
-              {f.errors.apiValidatePath && (
-                <p className='mt-2 text-sm text-red-400'>
-                  {f.errors.apiValidatePath}
-                </p>
-              )}
-              <p className='mt-1 text-xs text-gray-400'>
-                URL that will be called to validate requests
-              </p>
+              <InputField
+                label={
+                  <div>
+                    <span>Validation Path</span>
+                    <Tooltip
+                      content={
+                        <span className='text-xs text-gray-400'>
+                          URL to validate API requests
+                        </span>
+                      }
+                    >
+                      <HelpCircle className='w-4 h-4 ml-2' />
+                    </Tooltip>
+                  </div>
+                }
+                type='url'
+                {...f.register('apiValidatePath')}
+                error={f.formState.errors.apiValidatePath?.message}
+              />
             </div>
           </div>
         </div>
 
-        <div className='flex justify-end items-center gap-4 mt-6'>
-          <button
-            type='button'
-            onClick={onClose}
-            className='px-6 py-2.5 rounded-lg font-medium text-sm backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 border border-gray-700/50 shadow-lg transition-all duration-200'
-          >
+        <div className='flex justify-end items-center gap-4 mt-6 p-5'>
+          <Button variant='ghost' onClick={onClose}>
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
+            icon={Save}
             type='submit'
             disabled={isLoading}
-            className='px-6 py-2.5 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-blue-500/90 to-purple-600/90 hover:from-blue-400 hover:to-purple-500 text-white shadow-lg shadow-purple-500/20 transition-all duration-200 transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:from-blue-500/90 disabled:hover:to-purple-600/90'
+            isLoading={isLoading}
           >
-            {isLoading ? (
-              <span className='flex items-center justify-center'>
-                <svg
-                  className='animate-spin -ml-1 mr-2 h-4 w-4 text-white'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                >
-                  <circle
-                    className='opacity-25'
-                    cx='12'
-                    cy='12'
-                    r='10'
-                    stroke='currentColor'
-                    strokeWidth='4'
-                  ></circle>
-                  <path
-                    className='opacity-75'
-                    fill='currentColor'
-                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                  ></path>
-                </svg>
-                Creating...
-              </span>
-            ) : (
-              'Create Token'
-            )}
-          </button>
+            Create
+          </Button>
         </div>
       </form>
     </LakeModal>
