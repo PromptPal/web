@@ -1,4 +1,4 @@
-import { Tooltip } from '@mantine/core'
+import Tooltip from '@annatarhe/lake-ui/tooltip'
 import cls from 'classnames'
 import React, { useMemo } from 'react'
 import styles from './ButtonGlow.module.css'
@@ -35,7 +35,7 @@ function ButtonGlow(props: ButtonGlowProps) {
     return tooltip
   }, [disabled, disabledTooltip, tooltip])
   return (
-    <Tooltip label={realTooltip} disabled={!realTooltip}>
+    <Tooltip content={realTooltip} disabled={!realTooltip}>
       <button
         className={cls(
           className,

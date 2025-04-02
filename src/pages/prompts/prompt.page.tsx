@@ -1,8 +1,7 @@
+import Modal from '@annatarhe/lake-ui/modal'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
-import { Modal } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import { useParams } from '@tanstack/react-router'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import PromptCallMetric from '../../components/Calls/Metrics'
 import PromptCalls from '../../components/Calls/PromptCalls'
@@ -121,7 +120,13 @@ function PromptPage() {
 
   const pjId = useProjectId()
 
-  const [historyOpened, historyHandlers] = useDisclosure()
+  // const [historyOpened, historyHandlers] = useDisclosure()
+  const [historyOpened, setHistoryOpened] = useState(false)
+
+  const historyHandlers = {
+    open: () => setHistoryOpened(true),
+    close: () => setHistoryOpened(false),
+  }
 
   return (
     <div className='flex justify-center items-center flex-col gap-4'>
@@ -138,11 +143,8 @@ function PromptPage() {
       <PromptCalls promptId={pid} />
 
       <Modal
-        opened={historyOpened}
-        centered
-        size='xl'
+        isOpen={historyOpened}
         title='Versions'
-        withCloseButton
         onClose={historyHandlers.close}
       >
         <PromptHistoriesPage promptId={pid} />

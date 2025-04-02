@@ -1,11 +1,10 @@
 import LakeModal from '@annatarhe/lake-ui/modal'
 import { FileInput, Switch } from '@mantine/core'
 import { useForm as useMantineForm } from '@mantine/form'
-import { useDisclosure } from '@mantine/hooks'
 import { useMutation } from '@tanstack/react-query'
 import omit from 'lodash/omit'
 import { zodResolver } from 'mantine-form-zod-resolver'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
 import { SupportedVariableType } from '../../constants'
@@ -45,7 +44,8 @@ type variableFormType = Zod.infer<typeof variablesSchema>
 
 function PromptTestButton(props: PromptTestButtonProps) {
   const { testable, data, onTested } = props
-  const [isOpen, { open: onOpen, close: onClose }] = useDisclosure()
+  const [isOpen, setIsOpen] = useState(false)
+  // const [isOpen, { open: onOpen, close: onClose }] = useDisclosure()
 
   const f = useMantineForm<variableFormType>({
     validate: zodResolver(variablesSchema),
@@ -85,7 +85,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
       return testPrompt(vs)
     },
     onSuccess(res) {
-      onClose()
+      setIsOpen(false)
       toast.success('Test Passed!')
       onTested(res)
     },
@@ -100,7 +100,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
       <button
         type='button'
         disabled={!testable || testing}
-        onClick={onOpen}
+        onClick={() => setIsOpen(true)}
         className='px-6 py-2 bg-linear-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
       >
         <span
@@ -129,8 +129,17 @@ function PromptTestButton(props: PromptTestButtonProps) {
           </span>
         )}
       </button>
-      <LakeModal isOpen={isOpen} onClose={onClose} title='Test Prompt'>
-        <form className='p-6'>
+      <LakeModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title='Test Prompt'
+      >
+        <form
+          className='p-6'
+          style={{
+            maxHeight: '80vh',
+          }}
+        >
           <div>
             {fields.map((field, index) => {
               switch (field.type) {
@@ -204,7 +213,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
           <div className='flex justify-end items-center gap-4 mt-4'>
             <button
               type='button'
-              onClick={onClose}
+              onClick={() => setIsOpen(false)}
               className='mr-3 px-6 py-2 bg-white/5 hover:bg-white/10 backdrop-blur-xl rounded-lg border border-gray-200/10 text-gray-700 dark:text-gray-200 transition-all duration-200 hover:scale-105 active:scale-95'
             >
               Close
