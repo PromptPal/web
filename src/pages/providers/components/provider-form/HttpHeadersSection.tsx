@@ -1,4 +1,4 @@
-import { cn } from '@/utils'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { Info, Plus, Trash2 } from 'lucide-react'
 import { UseFormReturn, useFieldArray } from 'react-hook-form'
@@ -58,58 +58,31 @@ export const HttpHeadersSection = ({ form }: HttpHeadersSectionProps) => {
         {fields.map((field, index) => (
           <div
             key={field.id}
-            className='grid grid-cols-[1fr,1fr,auto] gap-2 items-start'
+            className='flex items-center gap-3 p-3 rounded-lg bg-background/10 hover:bg-background/20 transition-all duration-200 backdrop-blur-sm mb-2'
           >
-            <div>
-              <input
-                type='text'
-                className={cn(
-                  'flex h-10 w-full rounded-xl bg-background/30 px-3 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-hidden',
-                  'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-lg transition-all duration-300 ease-in-out',
-                  'hover:bg-background/50 border-none shadow-sm',
-                  'bg-gradient-to-r from-background/40 to-background/20',
-                  errors.headers?.[index]?.key ? 'ring-2 ring-destructive' : '',
-                )}
-                placeholder='Header Key'
+            <div className='flex-1'>
+              <InputField
+                // name={`headers.${index}.key`}
                 {...register(`headers.${index}.key`)}
+                placeholder='Header Key'
+                className='w-full'
+                error={errors.headers?.[index]?.key?.message}
               />
-              {errors.headers?.[index]?.key && (
-                <p className='text-xs text-destructive mt-1'>
-                  {errors.headers[index].key?.message}
-                </p>
-              )}
             </div>
-            <div>
-              <input
-                type='text'
-                className={cn(
-                  'flex h-10 w-full rounded-xl bg-background/30 px-3 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-hidden',
-                  'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-lg transition-all duration-300 ease-in-out',
-                  'hover:bg-background/50 border-none shadow-sm',
-                  'bg-gradient-to-r from-background/40 to-background/20',
-                  errors.headers?.[index]?.value
-                    ? 'ring-2 ring-destructive'
-                    : '',
-                )}
-                placeholder='Header Value'
+            <div className='flex-1'>
+              <InputField
+                // name={`headers.${index}.value`}
                 {...register(`headers.${index}.value`)}
+                placeholder='Header Value'
+                className='w-full'
+                error={errors.headers?.[index]?.value?.message}
               />
-              {errors.headers?.[index]?.value && (
-                <p className='text-xs text-destructive mt-1'>
-                  {errors.headers[index].value?.message}
-                </p>
-              )}
             </div>
             <button
               type='button'
               onClick={() => remove(index)}
-              className='p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors duration-200 mt-1'
+              className='p-2 h-10 w-10 flex items-center justify-center rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors duration-200'
+              aria-label='Remove header'
             >
               <Trash2 className='w-4 h-4' />
             </button>

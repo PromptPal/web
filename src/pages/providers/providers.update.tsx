@@ -36,8 +36,7 @@ function ProvidersUpdatePage() {
           topP: provider.topP,
           maxTokens: provider.maxTokens,
           config: provider.config || undefined,
-          // Note: API key is not returned from the server for security reasons
-          // User will need to re-enter it if they want to change it
+          headers: provider.headers ? JSON.parse(provider.headers) : [],
         })
       }
     },
@@ -73,6 +72,7 @@ function ProvidersUpdatePage() {
           topP: data.topP,
           maxTokens: data.maxTokens,
           config: data.config || '',
+          headers: data.headers ? JSON.stringify(data.headers) : '[]',
         },
       },
     })

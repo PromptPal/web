@@ -28,6 +28,7 @@ export const p = graphql(`
       topP
       maxTokens
       config
+      headers
 
       projects {
         count

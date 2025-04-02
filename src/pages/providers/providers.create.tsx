@@ -39,6 +39,7 @@ function ProvidersCreatePage() {
           topP: data.topP,
           maxTokens: data.maxTokens,
           config: data.config || '',
+          headers: data.headers ? JSON.stringify(data.headers) : '[]',
         },
       },
     })
