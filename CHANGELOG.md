@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.3](https://github.com/PromptPal/web/compare/v1.13.2...v1.13.3) (2025-04-02)
+
+
+### Bug Fixes
+
+* **prompt:** update preview ([9406c11](https://github.com/PromptPal/web/commit/9406c11167c6f352c5e003dff9e31c81323be8e0))
+
 ## [1.13.2](https://github.com/PromptPal/web/compare/v1.13.1...v1.13.2) (2025-04-02)
 
 
