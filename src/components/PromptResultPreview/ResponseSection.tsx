@@ -22,6 +22,14 @@ function ResponseSection({ choices }: ResponseSectionProps) {
 
   const [isFullScreen, setIsFullScreen] = useState(false)
 
+  if (choices.length === 0) {
+    return (
+      <div className='col-span-full flex flex-col items-center justify-center p-12 rounded-xl backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl shadow-gray-700/50'>
+        No response
+      </div>
+    )
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
