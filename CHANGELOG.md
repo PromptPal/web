@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.2](https://github.com/PromptPal/web/compare/v1.13.1...v1.13.2) (2025-04-02)
+
+
+### Bug Fixes
+
+* **prompt:** add empty state for prompt response ([84da8e0](https://github.com/PromptPal/web/commit/84da8e07f18fa82d86c07f51bde0866f7a812715))
+* **providers:** support http headers ([bcdb1f2](https://github.com/PromptPal/web/commit/bcdb1f25a3166398eb8d97d6ef6d16dc034684a6))
+* **provider:** support custom headers ([8cff5c6](https://github.com/PromptPal/web/commit/8cff5c69289595959395be1e0abbe32dfd063fc2))
+* **provider:** update provider ([275ca02](https://github.com/PromptPal/web/commit/275ca02e60eb2a8184d05e57d99dcbb252a7d671))
+* **ui:** remove components from mantine ([a1bbacc](https://github.com/PromptPal/web/commit/a1bbacc381ec9377aa159e8a07e25227c4c8ee80))
+* **ui:** remove mantine ui ([5ff17e2](https://github.com/PromptPal/web/commit/5ff17e2869969ed3d213eda3a693a491ae978217))
+
 ## [1.13.1](https://github.com/PromptPal/web/compare/v1.13.0...v1.13.1) (2025-04-01)
 
 
