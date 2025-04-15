@@ -23,11 +23,7 @@ export const providerSchema = z.object({
     .trim()
     .url('Please enter a valid URL')
     .max(255, 'Endpoint URL cannot exceed 255 characters'),
-  apiKey: z
-    .string()
-    .trim()
-    .min(3, 'API Key must be at least 3 characters')
-    .max(255, 'API Key cannot exceed 255 characters'),
+  apiKey: z.string().trim().optional(),
   organizationId: z
     .string()
     .trim()
