@@ -7,6 +7,7 @@ import { useProjectId } from '@/hooks/route'
 import { testPromptResponse } from '@/service/prompt'
 import { PromptVariable } from '@/service/types'
 import { cn } from '@/utils'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import {
   useApolloClient,
@@ -14,13 +15,11 @@ import {
   useQuery as useGraphQLQuery,
   useLazyQuery,
 } from '@apollo/client'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { zodResolver as hookFormZodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
 import {
-  Control,
   Controller,
   useFieldArray,
   useForm as useReactHookForm,
@@ -46,7 +45,13 @@ function findPlaceholderValues(sentence: string): string[] {
 
 const schema: Zod.ZodType<mutatePromptType> = Zod.object({
   projectId: Zod.number(),
-  name: Zod.string(),
+  name: Zod.string()
+    .regex(
+      /^[a-zA-Z0-9_]+$/,
+      'Name must be alphanumeric and contain underscores',
+    )
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name cannot exceed 100 characters'),
   description: Zod.string(),
   tokenCount: Zod.number(),
   enabled: Zod.boolean(),
@@ -267,8 +272,6 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     setTestResult(testRes)
   }
 
-  const [promptsAnimateParent] = useAutoAnimate()
-
   const testable = prompts.length > 0
 
   const {
@@ -334,18 +337,9 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               <Controller
                 control={control}
                 name='name'
+                disabled={isUpdate}
                 render={({ field }) => (
-                  <div className='flex flex-col gap-2'>
-                    <label className='text-sm font-medium text-gray-200'>
-                      Name
-                    </label>
-                    <input
-                      type='text'
-                      placeholder='Name'
-                      {...field}
-                      className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
-                    />
-                  </div>
+                  <InputField label='Name' placeholder='Name' {...field} />
                 )}
               />
             </div>
@@ -375,7 +369,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
             <h3 className='text-xl font-bold tracking-tight bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
               Prompts
             </h3>
-            <div className='flex flex-col gap-4' ref={promptsAnimateParent}>
+            <div className='flex flex-col gap-4'>
               {promptsFields.map((field, index) => {
                 return (
                   <div

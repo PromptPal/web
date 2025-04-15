@@ -1,7 +1,6 @@
 import { SupportedVariableType } from '@/constants'
 import { cn } from '@/utils'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { Settings2, Variable } from 'lucide-react'
+import { Variable } from 'lucide-react'
 import { Control, Controller } from 'react-hook-form'
 import { mutatePromptType } from '../types'
 
@@ -14,7 +13,6 @@ export function VariablesSection({
   control,
   variablesFields,
 }: VariablesSectionProps) {
-  const [variablesAnimateParent] = useAutoAnimate()
   return (
     <section className='relative w-full backdrop-blur-xl bg-linear-to-br from-gray-900/90 via-gray-800/90 to-gray-900/90 rounded-2xl overflow-hidden'>
       {/* Background blur effect */}
@@ -34,10 +32,7 @@ export function VariablesSection({
           </div>
 
           {/* Variables Grid */}
-          <div
-            className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'
-            ref={variablesAnimateParent}
-          >
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
             {variablesFields.map((field, index) => {
               return (
                 <div

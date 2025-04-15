@@ -1,5 +1,4 @@
 import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
-import { Button, Divider, HoverCard } from '@mantine/core'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
@@ -54,14 +53,6 @@ function Profile() {
         onClick={() => setIsOpen(!isOpen)}
         className='flex items-center space-x-3 p-2 rounded-md hover:bg-gray-700 transition-colors'
       >
-        {/* <span className='text-gray-300 text-sm max-w-[150px] truncate'>
-          {user?.name}
-        </span> */}
-        {/* <img
-        src={avatarUrl}
-        alt={`${user.name}'s avatar`}
-        className="h-8 w-8 rounded-full ring-2 ring-purple-500"
-      /> */}
         <UserAvatar addr={user?.addr} name={user?.name ?? ''} />
       </button>
 
@@ -101,43 +92,6 @@ function Profile() {
         </div>
       )}
     </div>
-  )
-
-  return (
-    <HoverCard withArrow transitionProps={{ transition: 'pop' }}>
-      <HoverCard.Target>
-        {/* <UserAvatar addr={myProfile?.addr} name={myProfile?.name ?? ''} /> */}
-        <div className='flex items-center space-x-3'>
-          <span className='text-gray-300 text-sm'>{user?.name}</span>
-          {/* <img
-                  src={user?.avatar}
-                  alt='User avatar'
-                  className='h-8 w-8 rounded-full ring-2 ring-purple-500'
-                /> */}
-          <UserAvatar addr={user?.addr} name={user?.name ?? ''} />
-        </div>
-      </HoverCard.Target>
-      <HoverCard.Dropdown className=' min-w-48'>
-        <Button component={Link} to={'/projects'} fullWidth variant='filled'>
-          Projects
-        </Button>
-        <Divider className='my-4' />
-        <Button
-          fullWidth
-          bg='red'
-          className='min-w-24'
-          onClick={() => {
-            setToken(null)
-            qc.clear()
-            client.resetStore()
-            // TODO: redirect to overall page
-            nav({ to: '/auth' })
-          }}
-        >
-          Logout
-        </Button>
-      </HoverCard.Dropdown>
-    </HoverCard>
   )
 }
 
