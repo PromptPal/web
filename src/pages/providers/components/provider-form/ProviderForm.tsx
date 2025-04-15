@@ -97,9 +97,6 @@ function ProviderForm({
   onCancel,
   submitButtonText,
 }: ProviderFormProps) {
-  const [formRef] = useAutoAnimate()
-  const [configSectionRef] = useAutoAnimate()
-
   const form = useForm<ProviderFormValues>({
     resolver: zodResolver(providerSchema),
     defaultValues: {
@@ -146,13 +143,12 @@ function ProviderForm({
         toast.error('Failed to submit form')
       })}
       className='space-y-8'
-      ref={formRef}
     >
       {/* Basic Information Section */}
       <BasicInfoSection form={form} />
 
       {/* Provider Configuration Section */}
-      <ProviderConfigSection form={form} configSectionRef={configSectionRef} />
+      <ProviderConfigSection form={form} />
 
       {/* Model Parameters Section */}
       <ModelParametersSection form={form} />

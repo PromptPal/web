@@ -6,13 +6,9 @@ import { ProviderFormValues } from './schema'
 
 type ProviderConfigSectionProps = {
   form: UseFormReturn<ProviderFormValues>
-  configSectionRef: React.RefCallback<HTMLDivElement>
 }
 
-export const ProviderConfigSection = ({
-  form,
-  configSectionRef,
-}: ProviderConfigSectionProps) => {
+export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
   const {
     register,
     formState: { errors },
@@ -23,10 +19,7 @@ export const ProviderConfigSection = ({
   const source = watch('source')
 
   return (
-    <div
-      ref={configSectionRef}
-      className='space-y-6 rounded-xl bg-gradient-to-br from-purple-500/20 via-pink-500/15 to-orange-500/20 p-6 backdrop-blur-xl shadow-lg'
-    >
+    <div className='space-y-6 rounded-xl bg-gradient-to-br from-purple-500/20 via-pink-500/15 to-orange-500/20 p-6 backdrop-blur-xl shadow-lg'>
       <h3 className='text-base font-semibold text-foreground bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent'>
         Provider Configuration
       </h3>
@@ -184,9 +177,7 @@ export const ProviderConfigSection = ({
 
         <div className='space-y-2'>
           <div className='flex items-center gap-1'>
-            <label className='text-sm font-medium leading-none'>
-              Default Model
-            </label>
+            <label className='text-sm font-medium leading-none'>Model</label>
             <Tooltip content='Default model for the provider'>
               <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
             </Tooltip>
