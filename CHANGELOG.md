@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.4](https://github.com/PromptPal/web/compare/v1.13.3...v1.13.4) (2025-04-17)
+
+
+### Bug Fixes
+
+* **lake:** Replace select with SelectField component and update dependencies ([b38f1da](https://github.com/PromptPal/web/commit/b38f1da3541a798c1d9e70e7318cde3a66b5e873))
+
 ## [1.13.3](https://github.com/PromptPal/web/compare/v1.13.2...v1.13.3) (2025-04-15)
 
 
