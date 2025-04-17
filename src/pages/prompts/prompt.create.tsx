@@ -8,6 +8,7 @@ import { testPromptResponse } from '@/service/prompt'
 import { PromptVariable } from '@/service/types'
 import { cn } from '@/utils'
 import InputField from '@annatarhe/lake-ui/form-input-field'
+import SelectField from '@annatarhe/lake-ui/form-select-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import {
   useApolloClient,
@@ -316,22 +317,14 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                 control={control}
                 disabled
                 render={({ field }) => (
-                  <div className='flex flex-col gap-2'>
-                    <label className='text-sm font-medium text-gray-200'>
-                      Project
-                    </label>
-                    <select
-                      {...field}
-                      className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 disabled:opacity-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
-                    >
-                      <option value=''>Select Project</option>
-                      {projects.map((p) => (
-                        <option key={p.id} value={p.id.toString()}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <SelectField
+                    label='Project'
+                    options={projects.map((p) => ({
+                      value: p.id.toString(),
+                      label: p.name,
+                    }))}
+                    {...field}
+                  />
                 )}
               />
               <Controller
