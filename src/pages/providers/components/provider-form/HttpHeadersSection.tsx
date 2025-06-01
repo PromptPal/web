@@ -49,7 +49,7 @@ export const HttpHeadersSection = ({ form }: HttpHeadersSectionProps) => {
         {fields.length === 0 && (
           <div className='p-4 rounded-lg border border-dashed border-muted-foreground/30 bg-background/20 backdrop-blur-sm'>
             <p className='text-sm text-center text-muted-foreground'>
-              No headers added yet. Click 'Add Header' to start adding custom
+              No headers added yet. Click &apos;Add Header&apos; to start adding custom
               HTTP headers.
             </p>
           </div>

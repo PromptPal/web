@@ -1,9 +1,9 @@
-import js from '@eslint/js';
-import stylistic from '@stylistic/eslint-plugin';
-import pluginReact from 'eslint-plugin-react';
-import { defineConfig } from 'eslint/config';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import js from '@eslint/js'
+import stylistic from '@stylistic/eslint-plugin'
+import pluginReact from 'eslint-plugin-react'
+import { defineConfig } from 'eslint/config'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default defineConfig([
   {
@@ -25,9 +25,9 @@ export default defineConfig([
       },
     },
     rules: {
-      '@stylistic/semi': [0],
+      '@stylistic/semi': [2, 'never'],
       '@stylistic/jsx-quotes': [2, 'prefer-single'],
       'react/react-in-jsx-scope': 'off',
     },
   },
-]);
+])

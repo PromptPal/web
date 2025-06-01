@@ -4,6 +4,7 @@ import { Plus } from 'lucide-react'
 import { useMemo } from 'react'
 import ProjectCardItem from '../../components/Project/CardItem'
 import { graphql } from '../../gql'
+import { ProjectEmptyState } from './components/ProjectEmptyState'
 
 const q = graphql(`
   query projects($pagination: PaginationInput!) {
@@ -61,13 +62,7 @@ function ProjectsPage() {
         {tableData.map(row => (
           <ProjectCardItem key={row.id} project={row} />
         ))}
-        {tableData.length === 0 && (
-          <div className='col-span-full flex flex-col items-center justify-center p-12 rounded-xl backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50'>
-            <p className='text-lg text-gray-400 text-center'>
-              No projects yet. Create your first project to get started!
-            </p>
-          </div>
-        )}
+        {tableData.length === 0 && <ProjectEmptyState />}
       </div>
     </div>
   )

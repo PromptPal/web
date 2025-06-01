@@ -3,8 +3,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
 import { FolderKanban, LogOut, Server } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { graphql } from '../../gql'
+import { useClickOutside } from '../../hooks/useClickOutside'
 import { tokenAtom } from '../../stats/profile'
 import UserAvatar from '../User/UserAvatar'
 
@@ -19,11 +20,18 @@ const q = graphql(`
 `)
 
 function Profile() {
+  const profileRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false)
   const [token, setToken] = useAtom(tokenAtom)
   const loggedIn = !!token
   const qc = useQueryClient()
   const nav = useNavigate()
+
+  useClickOutside(profileRef, () => {
+    if (isOpen) {
+      setIsOpen(false)
+    }
+  });
 
   const client = useApolloClient()
   const { data } = useGraphQLQuery(q, {
@@ -51,41 +59,41 @@ function Profile() {
     <div className='relative'>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className='flex items-center space-x-3 p-2 rounded-md hover:bg-gray-700 transition-colors'
+        className='flex items-center space-x-3 p-2 rounded-full hover:bg-purple-500/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-opacity-75'
       >
         <UserAvatar addr={user?.addr} name={user?.name ?? ''} />
       </button>
 
       {isOpen && (
-        <div className='absolute right-0 mt-2 w-72 bg-gray-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-10'>
-          {/* User Info Section */}
-          <div className='p-4 border-b border-gray-700'>
+        <div ref={profileRef} className='absolute right-0 mt-2 w-72 bg-gradient-to-br from-purple-600 to-indigo-700 backdrop-blur-lg bg-opacity-80 rounded-xl shadow-2xl z-10 with-slide-in overflow-hidden'>
+          {/* User Info Section - No border, adjusted padding and text for new bg */}
+          <div className='p-4'>
             <div className='flex items-center space-x-3'>
               <UserAvatar addr={user?.addr} name={user?.name ?? ''} />
             </div>
           </div>
 
-          {/* Menu Items */}
+          {/* Menu Items - Updated text colors and hover effects */}
           <div className='p-2'>
             <Link
               to='/projects'
-              className='flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md'
+              className='flex items-center px-4 py-3 text-sm text-purple-100 hover:bg-white/10 hover:text-white rounded-md transition-colors'
             >
-              <FolderKanban className='mr-3 h-5 w-5 text-gray-400' />
+              <FolderKanban className='mr-3 h-5 w-5 text-purple-300' />
               Projects
             </Link>
             <Link
               to='/providers'
-              className='flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md'
+              className='flex items-center px-4 py-3 text-sm text-purple-100 hover:bg-white/10 hover:text-white rounded-md transition-colors'
             >
-              <Server className='mr-3 h-5 w-5 text-gray-400' />
+              <Server className='mr-3 h-5 w-5 text-purple-300' />
               Providers
             </Link>
             <button
               onClick={onLogout}
-              className='flex w-full items-center px-4 py-2 text-sm text-red-400 hover:bg-gray-700 rounded-md'
+              className='flex w-full items-center px-4 py-3 text-sm text-red-300 hover:bg-red-500/20 hover:text-red-200 rounded-md transition-colors'
             >
-              <LogOut className='mr-3 h-5 w-5' />
+              <LogOut className='mr-3 h-5 w-5 text-red-300' />
               Sign out
             </button>
           </div>

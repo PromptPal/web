@@ -1,3 +1,4 @@
+import { cn } from '@/utils';
 import { Link } from '@tanstack/react-router';
 import { PlusCircle } from 'lucide-react';
 
@@ -17,20 +18,26 @@ interface PageHeaderProps {
  */
 export function PageHeader({ isDisabled = false }: PageHeaderProps) {
   return (
-    <div className='flex items-center justify-between mb-8 bg-primary p-4 rounded-md'>
+    <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4'>
       <div className='space-y-1'>
-        <h1 className='text-2xl font-bold tracking-tight text-primary-foreground'>
+        <h1 className='text-2xl font-bold tracking-tight text-zinc-900 dark:text-white'>
           Providers
         </h1>
-        <p className='text-sm text-primary-foreground'>
+        <p className='text-sm text-zinc-600 dark:text-zinc-400'>
           Manage your LLM providers
         </p>
       </div>
-      <div className='flex items-center gap-2'>
+      <div className='flex items-center'>
         {isDisabled
           ? (
               <button
-                className='inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2'
+                className={cn(
+                  'inline-flex items-center justify-center rounded-lg text-sm font-medium',
+                  'h-10 px-4 py-2',
+                  'bg-zinc-100 text-zinc-400 dark:bg-zinc-800/80 dark:text-zinc-500',
+                  'cursor-not-allowed',
+                  'transition-all duration-200 ease-in-out',
+                )}
                 disabled
               >
                 <PlusCircle className='mr-2 h-4 w-4' />
@@ -40,7 +47,14 @@ export function PageHeader({ isDisabled = false }: PageHeaderProps) {
           : (
               <Link
                 to='/providers/new'
-                className='inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2'
+                className={cn(
+                  'inline-flex items-center justify-center rounded-lg text-sm font-medium',
+                  'h-10 px-4 py-2',
+                  'bg-indigo-600 text-white dark:bg-indigo-700',
+                  'hover:bg-indigo-700 dark:hover:bg-indigo-600',
+                  'transition-all duration-200 ease-in-out',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2',
+                )}
               >
                 <PlusCircle className='mr-2 h-4 w-4' />
                 New Provider

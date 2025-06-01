@@ -1,4 +1,5 @@
 import { cn } from '@/utils'
+import SelectField from '@annatarhe/lake-ui/form-select-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { ExternalLink, Info } from 'lucide-react'
 import { UseFormReturn } from 'react-hook-form'
@@ -43,30 +44,17 @@ export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
               <ExternalLink className='w-3 h-3 group-hover:translate-x-0.5 transition-transform' />
             </a>
           </div>
-          <select
-            className={cn(
-              'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
-              'text-sm ring-offset-background focus-visible:outline-hidden',
-              'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-              'disabled:cursor-not-allowed disabled:opacity-50',
-              'backdrop-blur-lg transition-all duration-300 ease-in-out',
-              'hover:bg-background/50 border-none shadow-lg',
-              'bg-gradient-to-r from-background/40 to-background/20',
-            )}
+          <SelectField
+            label={null}
             {...register('source')}
-            aria-invalid={errors.source ? 'true' : 'false'}
-          >
-            <option value='openai'>OpenAI</option>
-            <option value='anthropic'>Anthropic</option>
-            <option value='gemini'>Gemini</option>
-            <option value='deepseek'>DeepSeek</option>
-            <option value='custom'>Custom</option>
-          </select>
-          {errors.source && (
-            <p className='text-sm text-destructive mt-1'>
-              {errors.source.message}
-            </p>
-          )}
+            options={[
+              { value: 'openai', label: 'OpenAI' },
+              { value: 'anthropic', label: 'Anthropic' },
+              { value: 'gemini', label: 'Gemini' },
+              { value: 'deepseek', label: 'DeepSeek' },
+              { value: 'custom', label: 'Custom' },
+            ]}
+          />
         </div>
 
         <div className='space-y-2'>

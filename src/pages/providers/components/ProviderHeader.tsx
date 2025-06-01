@@ -21,117 +21,86 @@ export function ProviderHeader({
   return (
     <div
       className={cn(
-        'rounded-xl p-[2px] bg-gradient-to-br from-primary/30 via-secondary/20 to-primary/10 overflow-hidden mb-6',
-        'shadow-lg hover:shadow-primary/20 transition-all duration-500 ease-in-out',
-        'hover:scale-[1.005] hover:from-primary/40 hover:via-secondary/30 hover:to-primary/20',
+        'rounded-2xl overflow-hidden mb-8',
+        'bg-white dark:bg-zinc-900',
+        'shadow-md hover:shadow-xl transition-all duration-300',
+        'border border-zinc-100 dark:border-zinc-800',
         className,
       )}
     >
-      <div className='rounded-lg bg-card/80 p-6 backdrop-blur-xl h-full border-background/10'>
-        <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
-          <div className='space-y-2'>
-            <h1 className='text-2xl font-bold tracking-tight flex items-center gap-3'>
-              {provider.name}
+      <div className='relative p-6'>
+        {/* Subtle background gradient */}
+        <div className='absolute inset-0 bg-gradient-to-br from-zinc-50/30 to-transparent dark:from-indigo-950/5 dark:to-transparent pointer-events-none' />
+
+        <div className='flex flex-col md:flex-row md:items-center justify-between gap-6 relative'>
+          <div className='space-y-3'>
+            <div className='flex flex-wrap items-center gap-3'>
+              <h1 className='text-2xl font-bold tracking-tight text-zinc-900 dark:text-white'>
+                {provider.name}
+              </h1>
               <span
                 className={cn(
                   'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium',
-                  'transition-all duration-300 backdrop-blur-sm',
+                  'transition-all duration-200 backdrop-blur-sm',
+                  'shadow-sm',
                   provider.enabled
-                    ? 'bg-gradient-to-r from-emerald-500/30 to-green-500/30 text-emerald-400 dark:text-emerald-300'
-                    : 'bg-gradient-to-r from-red-500/30 to-rose-500/30 text-rose-400 dark:text-rose-300',
+                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300'
+                    : 'bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300',
                 )}
               >
                 {provider.enabled
                   ? (
                       <>
                         <Check className='h-3 w-3' />
-                        Enabled
+                        <span>Enabled</span>
                       </>
                     )
                   : (
                       <>
                         <X className='h-3 w-3' />
-                        Disabled
+                        <span>Disabled</span>
                       </>
                     )}
               </span>
-            </h1>
-            <p className='text-sm text-muted-foreground leading-relaxed max-w-2xl'>
+            </div>
+            <p className='text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl'>
               {provider.description || 'No description provided'}
             </p>
           </div>
-          <div className='flex items-center gap-3'>
+
+          <div className='flex items-center gap-3 md:self-end'>
             <Link
               to='/providers/$id/edit'
               params={{ id: provider.id.toString() }}
               className={cn(
-                'group relative inline-flex items-center justify-center rounded-lg text-sm font-medium',
-                'transition-all duration-300 ease-in-out',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+                'group inline-flex items-center justify-center rounded-lg text-sm font-medium',
+                'h-10 px-4 py-2',
+                'text-zinc-700 dark:text-zinc-300',
+                'bg-zinc-100 dark:bg-zinc-800/80',
+                'hover:bg-indigo-100 hover:text-indigo-700 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-300',
+                'transition-all duration-200 ease-in-out',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2',
                 'disabled:pointer-events-none disabled:opacity-50',
-                'h-10 px-5 py-2 overflow-hidden',
-                'text-primary dark:text-white hover:text-primary-foreground',
               )}
             >
-              {/* Gradient background with blur effect */}
-              <span
-                className={cn(
-                  'absolute inset-0 w-full h-full transition-all duration-300',
-                  'bg-gradient-to-r from-primary/20 via-secondary/30 to-primary/20 dark:from-primary/40 dark:via-secondary/60 dark:to-primary/40',
-                  'opacity-0 group-hover:opacity-100 blur-[2px] group-hover:blur-[1px]',
-                  'scale-110 group-hover:scale-100',
-                )}
-              />
-              {/* Button content */}
-              <span
-                className={cn(
-                  'relative flex items-center justify-center z-10',
-                  'transition-transform duration-300',
-                )}
-              >
-                <Edit
-                  className={cn(
-                    'mr-2 h-4 w-4 transition-all duration-300 group-hover:scale-110',
-                  )}
-                />
-                <span className='font-medium'>Edit</span>
-              </span>
+              <Edit className='mr-2 h-4 w-4 transition-all duration-200 group-hover:scale-110' />
+              <span>Edit</span>
             </Link>
             <button
               onClick={onDeleteClick}
               className={cn(
-                'group relative inline-flex items-center justify-center rounded-lg text-sm font-medium',
-                'transition-all duration-300 ease-in-out',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2',
+                'group inline-flex items-center justify-center rounded-lg text-sm font-medium',
+                'h-10 px-4 py-2',
+                'text-zinc-700 dark:text-zinc-300',
+                'bg-zinc-100 dark:bg-zinc-800/80',
+                'hover:bg-rose-100 hover:text-rose-700 dark:hover:bg-rose-900/30 dark:hover:text-rose-300',
+                'transition-all duration-200 ease-in-out',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2',
                 'disabled:pointer-events-none disabled:opacity-50',
-                'h-10 px-5 py-2 overflow-hidden',
-                'text-destructive dark:text-destructive hover:text-destructive-foreground',
               )}
             >
-              {/* Gradient background with blur effect */}
-              <span
-                className={cn(
-                  'absolute inset-0 w-full h-full transition-all duration-300',
-                  'bg-gradient-to-r from-destructive/20 via-destructive/30 to-destructive/20 dark:from-destructive/40 dark:via-destructive/60 dark:to-destructive/40',
-                  'opacity-0 group-hover:opacity-100 blur-[2px] group-hover:blur-[1px]',
-                  'scale-110 group-hover:scale-100',
-                )}
-              />
-              {/* Button content */}
-              <span
-                className={cn(
-                  'relative flex items-center justify-center z-10',
-                  'backdrop-blur-sm',
-                  'transition-transform duration-300',
-                )}
-              >
-                <Trash2
-                  className={cn(
-                    'mr-2 h-4 w-4 transition-all duration-300 group-hover:scale-110',
-                  )}
-                />
-                <span className='font-medium'>Delete</span>
-              </span>
+              <Trash2 className='mr-2 h-4 w-4 transition-all duration-200 group-hover:scale-110' />
+              <span>Delete</span>
             </button>
           </div>
         </div>
