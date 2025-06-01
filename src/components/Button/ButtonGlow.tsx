@@ -12,6 +12,9 @@ type ButtonGlowProps = React.DetailedHTMLProps<
   disabledTooltip?: string
   loading?: boolean
   color?: 'red'
+  disabled?: boolean
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  className?: string
 }
 
 // https://theodorusclarence.com/blog/gradient-border-is-hard

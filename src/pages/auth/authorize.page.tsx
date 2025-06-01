@@ -1,8 +1,8 @@
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { useQuery } from '@tanstack/react-query';
-import LoginButton from '../../components/Header/login'; // Assuming this component is already Tailwind-styled or will be handled separately
-import { HTTP_ENDPOINT } from '../../constants';
-import { fetchSSOSettings } from '../../service/sso';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { useQuery } from '@tanstack/react-query'
+import LoginButton from '../../components/Header/login' // Assuming this component is already Tailwind-styled or will be handled separately
+import { HTTP_ENDPOINT } from '../../constants'
+import { fetchSSOSettings } from '../../service/sso'
 
 function AuthorizePage() {
   const { data: settings } = useQuery({

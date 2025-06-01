@@ -1,6 +1,6 @@
-import { cn } from '@/utils';
-import { Link } from '@tanstack/react-router';
-import { PlusCircle } from 'lucide-react';
+import { cn } from '@/utils'
+import { Link } from '@tanstack/react-router'
+import { PlusCircle } from 'lucide-react'
 
 /**
  * Props for the PageHeader component
@@ -62,5 +62,5 @@ export function PageHeader({ isDisabled = false }: PageHeaderProps) {
             )}
       </div>
     </div>
-  );
+  )
 }

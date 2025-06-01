@@ -1,4 +1,3 @@
-import { Project } from '@/gql/graphql'
 import { Link, useMatch } from '@tanstack/react-router'
 import { BookText, Home, PlusCircle, Settings } from 'lucide-react'
 import React from 'react'

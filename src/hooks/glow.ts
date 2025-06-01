@@ -13,10 +13,9 @@ function syncPointer({ x, y }: PointerEvent) {
   )
 }
 
-// biome-ignore lint/correctness/noUnusedVariables: <explanation>
-function isTouchDevice() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
-}
+// function isTouchDevice() {
+//   return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+// }
 
 // https://codepen.io/jh3y/pen/oNVvQRo
 export function usePointerUpdate() {

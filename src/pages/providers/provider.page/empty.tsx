@@ -16,7 +16,7 @@ function Empty() {
             </div>
             <h2 className='text-xl font-semibold'>Provider Not Found</h2>
             <p className='text-center text-muted-foreground max-w-md'>
-              The provider you're looking for doesn't exist or has been deleted.
+              The provider you&apos;re looking for doesn&apos;t exist or has been deleted.
             </p>
             <a
               href='/providers'

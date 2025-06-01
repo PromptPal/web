@@ -75,7 +75,7 @@ function LoginButton(props: LoginButtonProps) {
       loading: 'Logging in...',
       success: (data: Awaited<ReturnType<typeof web3Login>>) =>
         `Welcome ${data.user.addr}`,
-      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       error: (err: any) => {
         return err.message ?? err.error ?? err.toString()
       },

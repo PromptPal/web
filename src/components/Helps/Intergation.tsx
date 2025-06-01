@@ -11,7 +11,7 @@ function HelpIntegration() {
         Getting Started with PromptPal
       </h2>
       <p className='text-muted-foreground max-w-[600px] mb-8'>
-        No data found yet. Let's set up your project with PromptPal CLI and
+        No data found yet. Let&apos;s set up your project with PromptPal CLI and
         start tracking your prompts.
       </p>
 

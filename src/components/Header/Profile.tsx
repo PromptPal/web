@@ -20,7 +20,7 @@ const q = graphql(`
 `)
 
 function Profile() {
-  const profileRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [token, setToken] = useAtom(tokenAtom)
   const loggedIn = !!token
@@ -31,7 +31,7 @@ function Profile() {
     if (isOpen) {
       setIsOpen(false)
     }
-  });
+  })
 
   const client = useApolloClient()
   const { data } = useGraphQLQuery(q, {

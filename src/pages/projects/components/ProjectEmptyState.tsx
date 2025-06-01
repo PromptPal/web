@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router';
-import { FolderKanban, PlusCircle } from 'lucide-react';
-import { cn } from '@/utils';
+import { Link } from '@tanstack/react-router'
+import { FolderKanban, PlusCircle } from 'lucide-react'
+import { cn } from '@/utils'
 
 /**
  * Empty state component for projects page
@@ -38,5 +38,5 @@ export function ProjectEmptyState() {
         Create New Project
       </Link>
     </div>
-  );
+  )
 }
