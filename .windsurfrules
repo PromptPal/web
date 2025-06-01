@@ -27,7 +27,8 @@ You are an expert full-stack developer proficient in TypeScript, React, and mode
 ### UI and Styling
 - Use modern UI frameworks (e.g., Tailwind CSS) for styling.
 - Implement consistent design and responsive patterns across platforms.
-- support dark mode. the UI style should be bold and simple. with aggressive gradient colors and grate blur effect, no borders
+- support dark mode. the UI style should be bold and simple. with aggressive colors and great blur effect, no borders
+- primary color is light purple
 - Use icons from `lucide-react`.
 - Use `recharts` to display charts.
 - Use `Tooltip` from `@annatarhe/lake-ui/tooltip`.

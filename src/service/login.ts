@@ -20,7 +20,7 @@ export type User = {
   email: string
   lang: string
   level: number
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   edges: any
 }
 
