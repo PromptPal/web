@@ -62,7 +62,7 @@ function AdvancedSettings({
               max='2'
               step='0.1'
               value={temperature}
-              onChange={(e) => onTemperatureChange(parseFloat(e.target.value))}
+              onChange={e => onTemperatureChange(parseFloat(e.target.value))}
               className={cn(
                 'w-full h-3 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-lg appearance-none cursor-pointer',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
@@ -109,7 +109,7 @@ function AdvancedSettings({
               max='1'
               step='0.1'
               value={topP}
-              onChange={(e) => onTopPChange(parseFloat(e.target.value))}
+              onChange={e => onTopPChange(parseFloat(e.target.value))}
               className={cn(
                 'w-full h-3 bg-gradient-to-r from-pink-400/30 to-orange-400/30 rounded-lg appearance-none cursor-pointer',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',

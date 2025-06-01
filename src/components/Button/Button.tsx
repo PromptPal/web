@@ -52,8 +52,8 @@ export function Button({
 }: ButtonProps) {
   const isDisabled = disabled || isLoading
 
-  const baseClasses =
-    'relative inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50 rounded-lg'
+  const baseClasses
+    = 'relative inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50 rounded-lg'
 
   const sizeClasses = {
     sm: 'text-xs px-3 py-1.5 space-x-1.5',

@@ -1,13 +1,8 @@
 import Button from '@/components/Button/Button'
-import { cn } from '@/utils'
-import InputField from '@annatarhe/lake-ui/form-input-field'
-import SwitchField from '@annatarhe/lake-ui/form-switch-field'
-import Tooltip from '@annatarhe/lake-ui/tooltip'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ExternalLink, Info, Plus, Save, Trash2, X } from 'lucide-react'
+import { Save, X } from 'lucide-react'
 import { useEffect } from 'react'
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import * as z from 'zod'
 import { BasicInfoSection } from './BasicInfoSection'
@@ -130,7 +125,8 @@ function ProviderForm({
   const handleFormSubmit = async (data: ProviderFormValues) => {
     try {
       await onSubmit(data)
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Form submission error:', error)
       toast.error('Failed to submit form')
     }

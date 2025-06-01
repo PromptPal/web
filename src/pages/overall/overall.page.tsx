@@ -1,6 +1,6 @@
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Link } from '@tanstack/react-router'
-import { BarChart3, CalendarDays, Loader2, PlusCircle } from 'lucide-react'
+import { BarChart3, Loader2, PlusCircle } from 'lucide-react'
 import HelpIntegration from '../../components/Helps/Intergation'
 import ProjectTopPromptsByDate from '../../components/Project/TopPromptsByDate'
 import { graphql } from '../../gql'
@@ -97,8 +97,8 @@ function OverallPage() {
         </div>
 
         <div className='grid gap-8'>
-          {(!pj?.promptMetrics.recentCounts.length ||
-            !pj?.promptMetrics.last7Days.length) && (
+          {(!pj?.promptMetrics.recentCounts.length
+            || !pj?.promptMetrics.last7Days.length) && (
             <div className='rounded-xl bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 p-8 backdrop-blur-xs shadow-xl'>
               <HelpIntegration />
             </div>

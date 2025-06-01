@@ -29,14 +29,14 @@ function ProvidersUpdatePage() {
       const headersObj: Record<string, string> = data.provider.headers
         ? JSON.parse(data.provider.headers)
         : {}
-      const headers: { key: string; value: string }[] = Object.entries(
+      const headers: { key: string, value: string }[] = Object.entries(
         headersObj,
       ).reduce(
         (acc, [key, value]) => {
           acc.push({ key, value })
           return acc
         },
-        [] as { key: string; value: string }[],
+        [] as { key: string, value: string }[],
       )
       const provider = data.provider
       setInitialValues({

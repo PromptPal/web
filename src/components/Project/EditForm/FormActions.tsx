@@ -40,11 +40,13 @@ function FormActions({ isLoading, isValid, onCancel }: FormActionsProps) {
           'border-none transform hover:-translate-y-0.5',
         )}
       >
-        {isLoading ? (
-          <Loader2 className='w-4 h-4 animate-spin' />
-        ) : (
-          <Save className='w-4 h-4' />
-        )}
+        {isLoading
+          ? (
+              <Loader2 className='w-4 h-4 animate-spin' />
+            )
+          : (
+              <Save className='w-4 h-4' />
+            )}
         Update Project
       </button>
     </div>

@@ -27,7 +27,7 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
     const now = dayjs()
     const result: Record<string, number | string>[] = []
     while (start.isBefore(now)) {
-      const dateData = recentCounts?.filter((d) =>
+      const dateData = recentCounts?.filter(d =>
         dayjs(d.date).isSame(start, 'day'),
       )
 
@@ -60,7 +60,7 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
         })
         return acc
       }, [])
-      .filter((k) => k !== 'date')
+      .filter(k => k !== 'date')
   }, [chartData])
 
   if (loading) {
@@ -137,7 +137,7 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
             <XAxis
               dataKey='date'
               className='text-xs text-muted-foreground'
-              tickFormatter={(value) => dayjs(value).format('MM-DD')}
+              tickFormatter={value => dayjs(value).format('MM-DD')}
             />
             <YAxis className='text-xs text-muted-foreground' />
             <Tooltip
@@ -146,7 +146,7 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
                 borderColor: 'hsl(var(--border))',
                 borderRadius: '0.5rem',
               }}
-              labelFormatter={(value) => dayjs(value).format('YYYY-MM-DD')}
+              labelFormatter={value => dayjs(value).format('YYYY-MM-DD')}
               formatter={(value: number) => [value.toLocaleString(), '']}
             />
             <Legend />

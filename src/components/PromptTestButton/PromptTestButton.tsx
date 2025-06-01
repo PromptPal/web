@@ -28,7 +28,7 @@ const variablesSchema = Zod.object({
     Zod.object({
       name: Zod.string().min(2).max(32),
       type: Zod.enum(
-        SupportedVariableType.map((x) => x.toLowerCase()) as [string, string],
+        SupportedVariableType.map(x => x.toLowerCase()) as [string, string],
       ),
       value: Zod.union([
         Zod.string().min(1),
@@ -59,7 +59,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
       return
     }
     f.setValues({
-      variables: data.variables.map((v) => ({
+      variables: data.variables.map(v => ({
         name: v.name,
         type: v.type,
         value: '',
@@ -221,7 +221,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
             <button
               type='button'
               disabled={!f.validate || testing}
-              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               onClick={f.onSubmit(onSubmit) as any}
               className='px-6 py-2 bg-linear-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
             >

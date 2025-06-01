@@ -13,14 +13,14 @@ function PromptReadonly(props: PromptReadonlyProps) {
   const { prompt, index, promptVariables } = props
 
   const highlightValues = useMemo(() => {
-    const variables = promptVariables.map((x) => x.name)
+    const variables = promptVariables.map(x => x.name)
     const withSpaces = variables.reduce<string[]>((acc, v) => {
       // left space and right space
       acc.push(v, ` ${v} `, `${v} `, ` ${v}`)
       return acc
     }, [])
 
-    return withSpaces.map((v) => `{{${v}}}`)
+    return withSpaces.map(v => `{{${v}}}`)
   }, [promptVariables])
 
   return (

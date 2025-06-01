@@ -41,17 +41,19 @@ export function ProviderHeader({
                     : 'bg-gradient-to-r from-red-500/30 to-rose-500/30 text-rose-400 dark:text-rose-300',
                 )}
               >
-                {provider.enabled ? (
-                  <>
-                    <Check className='h-3 w-3' />
-                    Enabled
-                  </>
-                ) : (
-                  <>
-                    <X className='h-3 w-3' />
-                    Disabled
-                  </>
-                )}
+                {provider.enabled
+                  ? (
+                      <>
+                        <Check className='h-3 w-3' />
+                        Enabled
+                      </>
+                    )
+                  : (
+                      <>
+                        <X className='h-3 w-3' />
+                        Disabled
+                      </>
+                    )}
               </span>
             </h1>
             <p className='text-sm text-muted-foreground leading-relaxed max-w-2xl'>

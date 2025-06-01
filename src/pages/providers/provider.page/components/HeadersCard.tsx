@@ -49,9 +49,9 @@ export function HeadersCard(props: HeadersCardProps) {
               <div className='flex-grow overflow-hidden rounded-md bg-gray-100 px-3 py-2 dark:bg-gray-800/70'>
                 <p className='text-sm font-mono text-gray-800 dark:text-gray-200 break-all'>
                   {/* Show masked value for authorization or sensitive headers */}
-                  {key.toLowerCase().includes('authorization') ||
-                  key.toLowerCase().includes('key') ||
-                  key.toLowerCase().includes('secret')
+                  {key.toLowerCase().includes('authorization')
+                    || key.toLowerCase().includes('key')
+                    || key.toLowerCase().includes('secret')
                     ? '••••••••••••••••••••••••••'
                     : value}
                 </p>

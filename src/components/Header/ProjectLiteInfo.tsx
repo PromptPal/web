@@ -16,9 +16,9 @@ function ProjectLiteInfo() {
 
   const { data } = useQuery(q, {
     variables: {
-      id: pid!
+      id: pid!,
     },
-    skip: !pid
+    skip: !pid,
   })
 
   if (!pid) {

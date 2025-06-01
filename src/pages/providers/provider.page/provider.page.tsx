@@ -1,7 +1,6 @@
 import { dp, p } from '@/pages/providers/provider.query'
 import { useApolloClient, useMutation, useQuery } from '@apollo/client'
-import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { AlertTriangle, ArrowLeft, Edit, Server, Trash2 } from 'lucide-react'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
@@ -56,7 +55,8 @@ function ProviderPage() {
           id: providerId,
         },
       })
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error deleting provider:', error)
     }
   }

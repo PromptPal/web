@@ -69,10 +69,10 @@ function ProjectSelector() {
         dark:hover:from-primary-950/50 dark:hover:to-primary-900/50
         hover:text-primary-500 dark:hover:text-primary-400
         ${
-          m
-            ? 'bg-linear-to-r from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 text-primary-600 dark:text-primary-400 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-primary-500 after:to-primary-600 dark:text-primary-300'
-            : 'text-gray-600 dark:text-gray-400'
-        }
+    m
+      ? 'bg-linear-to-r from-primary-50 to-primary-100 dark:from-primary-950/50 dark:to-primary-900/50 text-primary-600 dark:text-primary-400 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-primary-500 after:to-primary-600 dark:text-primary-300'
+      : 'text-gray-600 dark:text-gray-400'
+    }
       `}
     >
       <Folders className='h-4 w-4 transition-all group-hover:scale-110 group-hover:rotate-3' />

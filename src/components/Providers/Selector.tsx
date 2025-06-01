@@ -33,7 +33,7 @@ function ProviderCard({
   name,
   id,
 }: {
-  provider: { id: number; name: string; enabled: boolean }
+  provider: { id: number, name: string, enabled: boolean }
   isSelected: boolean
   isDisabled: boolean
   onClick: () => void
@@ -114,32 +114,36 @@ function ProvidersSelector({ name, label, value, onChange }: Props) {
         </label>
       )}
 
-      {loading ? (
-        <div className='flex justify-center py-6'>
-          <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary'></div>
-        </div>
-      ) : providers.length === 0 ? (
-        <div className='text-center py-4 text-muted-foreground'>
-          No providers available
-        </div>
-      ) : (
-        <div
-          role='radiogroup'
-          className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'
-        >
-          {providers.map((provider) => (
-            <ProviderCard
-              key={provider.id}
-              provider={provider}
-              isSelected={value === provider.id}
-              isDisabled={!provider.enabled}
-              onClick={() => handleProviderSelect(provider.id)}
-              name={name}
-              id={`${name}-${provider.id}`}
-            />
-          ))}
-        </div>
-      )}
+      {loading
+        ? (
+            <div className='flex justify-center py-6'>
+              <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary'></div>
+            </div>
+          )
+        : providers.length === 0
+          ? (
+              <div className='text-center py-4 text-muted-foreground'>
+                No providers available
+              </div>
+            )
+          : (
+              <div
+                role='radiogroup'
+                className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'
+              >
+                {providers.map(provider => (
+                  <ProviderCard
+                    key={provider.id}
+                    provider={provider}
+                    isSelected={value === provider.id}
+                    isDisabled={!provider.enabled}
+                    onClick={() => handleProviderSelect(provider.id)}
+                    name={name}
+                    id={`${name}-${provider.id}`}
+                  />
+                ))}
+              </div>
+            )}
     </div>
   )
 }

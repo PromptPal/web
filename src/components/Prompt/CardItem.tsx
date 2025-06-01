@@ -40,7 +40,9 @@ function PromptCardItem(props: PromptCardItemProps) {
           )}
         >
           <Hash className='w-3.5 h-3.5' />
-          {prompt.tokenCount} tokens
+          {prompt.tokenCount}
+          {' '}
+          tokens
         </div>
 
         <div

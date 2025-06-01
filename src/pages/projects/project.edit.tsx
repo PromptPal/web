@@ -1,15 +1,11 @@
-import AdvancedSettings from '@/components/Project/EditForm/AdvancedSettings'
 import FormActions from '@/components/Project/EditForm/FormActions'
-import ModelSettings from '@/components/Project/EditForm/ModelSettings'
 import ProjectHeader from '@/components/Project/EditForm/ProjectHeader'
 import ProvidersSelector from '@/components/Providers/Selector'
 import { cn } from '@/utils'
 import {
   useMutation as useGraphQLMutation,
   useLazyQuery,
-  useQuery,
 } from '@apollo/client'
-import { DevTool } from '@hookform/devtools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
@@ -96,8 +92,8 @@ function ProjectEditPage() {
     },
   })
 
-  const { control, watch, handleSubmit, formState } =
-    useForm<localUpdateProject>({
+  const { control, watch, handleSubmit, formState }
+    = useForm<localUpdateProject>({
       resolver: zodResolver(schema),
       defaultValues: async () => {
         const result = await fetchProject()
@@ -116,7 +112,7 @@ function ProjectEditPage() {
             openAITemperature: 0,
             openAITopP: 0.1,
             openAIMaxTokens: 1000,
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             providerId: undefined as any,
           }
 
@@ -131,7 +127,7 @@ function ProjectEditPage() {
           openAITemperature: project.openAITemperature,
           openAITopP: project.openAITopP,
           openAIMaxTokens: project.openAIMaxTokens,
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           providerId: project.provider?.id ?? (undefined as any),
         }
       },
@@ -190,7 +186,7 @@ function ProjectEditPage() {
               <ProjectHeader
                 projectName={projectName}
                 enabled={field.value ?? false}
-                onEnabledChange={(value) => field.onChange(value)}
+                onEnabledChange={value => field.onChange(value)}
               />
             )}
           />
@@ -233,7 +229,7 @@ function ProjectEditPage() {
               return (
                 <ProvidersSelector
                   name='providerId'
-                  label={
+                  label={(
                     <div className='flex items-center gap-2 justify-between'>
                       <span className='text-sm font-medium leading-none bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent'>
                         Model Provider
@@ -243,9 +239,9 @@ function ProjectEditPage() {
                         Go to providers
                       </Link>
                     </div>
-                  }
+                  )}
                   value={field.value}
-                  onChange={(providerId) => field.onChange(providerId)}
+                  onChange={providerId => field.onChange(providerId)}
                 />
               )
             }}

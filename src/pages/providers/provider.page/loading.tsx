@@ -33,7 +33,7 @@ function Loading() {
             <div className='rounded-lg bg-card/80 p-6 backdrop-blur-xl'>
               <div className='h-5 bg-background/20 rounded-md w-36 mb-4'></div>
               <div className='space-y-4 animate-pulse'>
-                {[1, 2, 3, 4].map((i) => (
+                {[1, 2, 3, 4].map(i => (
                   <div key={i} className='space-y-2'>
                     <div className='h-4 bg-background/20 rounded-md w-24'></div>
                     <div className='h-5 bg-background/20 rounded-md w-full'></div>

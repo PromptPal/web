@@ -6,7 +6,8 @@ function getToken() {
   if (!tk) return null
   try {
     return JSON.parse(tk)
-  } catch {
+  }
+  catch {
     return null
   }
 }
@@ -18,7 +19,7 @@ export type HttpErrorResponse = {
   error: string
 }
 
-// biome-ignore lint/correctness/noUnusedVariables: <explanation>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function HttpRequest<T, I = undefined>(
   input: RequestInfo | URL,
   init: HttpRequestInit<I> = {} as HttpRequestInit<I>,
@@ -49,7 +50,7 @@ export function HttpRequest<T, I = undefined>(
     Authorization: token ? `Bearer ${getToken()}` : '',
   }
   if (data.body && typeof data.body !== 'string') {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(data as any).body = JSON.stringify(data.body)
   }
 
@@ -57,7 +58,8 @@ export function HttpRequest<T, I = undefined>(
     .then((res) => {
       if (res.ok) {
         return res
-      } else {
+      }
+      else {
         throw res
       }
     })
@@ -75,14 +77,15 @@ export function HttpRequest<T, I = undefined>(
       }
 
       // let errorContent: HttpErrorResponse | Error
-      let errorContent: HttpErrorResponse & { message?: string; name?: string }
+      let errorContent: HttpErrorResponse & { message?: string, name?: string }
       if (err instanceof Response && !err.bodyUsed) {
         errorContent = (await err.json()) as HttpErrorResponse
-      } else {
+      }
+      else {
         errorContent = err as unknown as HttpErrorResponse
       }
-      const isAbortError =
-        err instanceof Error ? err.name === 'AbortError' : false
+      const isAbortError
+        = err instanceof Error ? err.name === 'AbortError' : false
 
       if (!options?.ignoreErrors && !isAbortError) {
         toast.error(

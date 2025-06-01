@@ -19,10 +19,10 @@ interface ProviderListProps {
 export function ProviderList({ providers }: ProviderListProps) {
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-      {providers.map((provider) => (
+      {providers.map(provider => (
         <Link
           key={provider.id}
-          to={`/providers/$id`}
+          to='/providers/$id'
           params={{ id: provider.id.toString() }}
           className='group rounded-lg p-0.5 bg-gradient-to-br from-primary/20 via-primary/10 to-background/5 overflow-hidden transition-all duration-300 hover:from-primary/40 hover:via-primary/20 hover:to-background/10 hover:shadow-lg hover:shadow-primary/10 cursor-pointer'
         >
@@ -32,7 +32,9 @@ export function ProviderList({ providers }: ProviderListProps) {
                 {provider.name}
               </h3>
               <p className='text-sm text-muted-foreground truncate'>
-                Provider ID: {provider.id}
+                Provider ID:
+                {' '}
+                {provider.id}
               </p>
             </div>
             <div className='flex justify-between items-center'>

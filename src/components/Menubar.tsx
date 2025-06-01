@@ -32,7 +32,7 @@ function Menubar() {
           return (
             <li key={menu.text}>
               <Link
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 to={menu.link(params?.pid ? ~~params.pid : 0) as any}
                 className='w-full flex items-center px-4 py-3 rounded-lg font-medium text-sm cursor-pointer transition-all duration-200 hover:bg-gray-700/30 group'
               >
@@ -50,7 +50,10 @@ function Menubar() {
         <div className='text-xs text-gray-500 flex flex-col gap-2'>
           <div className='flex items-center gap-2'>
             <GitBranch className='w-3 h-3' />
-            <span>Build: {lastTag}</span>
+            <span>
+              Build:
+              {lastTag}
+            </span>
           </div>
           <div className='flex items-center gap-2'>
             <Clock className='w-3 h-3' />

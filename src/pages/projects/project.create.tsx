@@ -1,19 +1,16 @@
 import Button from '@/components/Button/Button'
 import ProvidersSelector from '@/components/Providers/Selector'
-import { OpenAIModels } from '@/constants'
 import { graphql } from '@/gql'
 import { ProjectPayload } from '@/gql/graphql'
-import { cn } from '@/utils'
 import InputField from '@annatarhe/lake-ui/form-input-field'
 import {
   useApolloClient,
   useMutation as useGraphQLMutation,
 } from '@apollo/client'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { ExternalLink, Info, Loader2, Plus, X } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import * as z from 'zod'
@@ -125,7 +122,7 @@ function ProjectCreatePage() {
               control={control}
               render={({ field, fieldState }) => (
                 <ProvidersSelector
-                  label={
+                  label={(
                     <div className='flex items-center gap-2 justify-between'>
                       <span className='text-sm'>Provider</span>
                       {fieldState.error && (
@@ -134,7 +131,7 @@ function ProjectCreatePage() {
                         </span>
                       )}
                     </div>
-                  }
+                  )}
                   {...field}
                 />
               )}

@@ -43,8 +43,8 @@ const q = graphql(`
   }
 `)
 
-const columnHelper =
-  createColumnHelper<
+const columnHelper
+  = createColumnHelper<
     FetchPromptCallsTableQuery['prompt']['latestCalls']['edges'][0]
   >()
 
@@ -90,7 +90,7 @@ const columns = [
   }),
   columnHelper.accessor('duration', {
     header: 'Duration',
-    cell: (info) => info.getValue() + ' ms',
+    cell: info => info.getValue() + ' ms',
   }),
   columnHelper.accessor('totalToken', {
     header: 'Total Tokens(USD)',
@@ -101,7 +101,9 @@ const columns = [
         <div>
           <span>{info.getValue()}</span>
           <span className='ml-2 text-xs'>
-            (${costInCents.dividedBy(100).toFixed(8)})
+            ($
+            {costInCents.dividedBy(100).toFixed(8)}
+            )
           </span>
         </div>
       )
@@ -255,7 +257,9 @@ function PromptCalls(props: PromptCallsProps) {
           <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
             Prompt Calls
             <span className='ml-2 text-gray-400 text-sm font-normal'>
-              ({latestCalls?.count ?? 0})
+              (
+              {latestCalls?.count ?? 0}
+              )
             </span>
           </h2>
           <div className='flex gap-4 items-center'>

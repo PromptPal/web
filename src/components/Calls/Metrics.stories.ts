@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Primary: Story = {
   args: {
-    promptId: 8888
+    promptId: 8888,
   },
   parameters: {
     apolloClient: {
@@ -29,8 +29,8 @@ export const Primary: Story = {
           request: {
             query: q,
             variables: {
-              id: 8888
-            }
+              id: 8888,
+            },
           },
           result: {
             data: {
@@ -39,19 +39,19 @@ export const Primary: Story = {
                 metrics: {
                   p50: 50,
                   p90: 90,
-                  p99: 99
-                }
-              }
-            } as FetchPromptCallsMetricsOnlyQuery
-          }
-        }
-      ]
-    }
+                  p99: 99,
+                },
+              },
+            } as FetchPromptCallsMetricsOnlyQuery,
+          },
+        },
+      ],
+    },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await expect(await canvas.findByText('50')).toBeInTheDocument()
     await expect(await canvas.findByText('90')).toBeInTheDocument()
     await expect(await canvas.findByText('99')).toBeInTheDocument()
-  }
+  },
 }

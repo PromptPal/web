@@ -8,7 +8,7 @@ type PromptDiffViewProps = {
 }
 
 function stringifyPrompt(prompt: PromptRow[]) {
-  return prompt.map((x) => `${x.role}:\n${x.prompt}`).join('\n\n')
+  return prompt.map(x => `${x.role}:\n${x.prompt}`).join('\n\n')
 }
 
 function PromptDiffView(props: PromptDiffViewProps) {

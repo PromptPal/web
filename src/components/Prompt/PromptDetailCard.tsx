@@ -12,8 +12,6 @@ import {
   Power,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import ButtonGlow from '../Button/ButtonGlow'
-import LinkGlow from '../Button/LinkGlow'
 import { ProviderCard } from '../Providers/ProviderCard'
 import PromptReadonly from './PromptReadonly'
 
@@ -96,13 +94,17 @@ export function PromptDetailCard({
         <div className='flex items-center justify-around p-4 rounded-lg bg-gray-800/50 backdrop-blur-md'>
           <div className='text-center font-medium'>
             <span className='text-gray-400 inline-flex items-center gap-1.5'>
-              <Key className='w-4 h-4' /> ID:
+              <Key className='w-4 h-4' />
+              {' '}
+              ID:
             </span>
             <span className='ml-2 text-blue-400'>{promptDetail?.id}</span>
           </div>
           <div className='text-center font-medium'>
             <span className='text-gray-400 inline-flex items-center gap-1.5'>
-              <Hash className='w-4 h-4' /> Hash ID:
+              <Hash className='w-4 h-4' />
+              {' '}
+              Hash ID:
             </span>
             <span className='ml-2 text-blue-400'>{promptDetail?.hashId}</span>
           </div>
@@ -111,7 +113,9 @@ export function PromptDetailCard({
         <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-6'>
           <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
-              <CalendarDays className='w-4 h-4' /> Create Time
+              <CalendarDays className='w-4 h-4' />
+              {' '}
+              Create Time
             </div>
             <div className='font-bold text-white'>
               {promptDetail
@@ -124,7 +128,9 @@ export function PromptDetailCard({
 
           <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
-              <Eye className='w-4 h-4' /> Visibility
+              <Eye className='w-4 h-4' />
+              {' '}
+              Visibility
             </div>
             <span className='px-2 py-1 text-sm rounded-full bg-linear-to-r from-green-500 to-emerald-600 text-white'>
               {promptDetail?.publicLevel}
@@ -133,7 +139,9 @@ export function PromptDetailCard({
 
           <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
-              <Power className='w-4 h-4' /> Enabled
+              <Power className='w-4 h-4' />
+              {' '}
+              Enabled
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
               <input
@@ -148,14 +156,16 @@ export function PromptDetailCard({
 
           <div className='p-4 rounded-lg bg-gray-800/30 backdrop-blur-xs'>
             <div className='text-gray-400 font-medium mb-2 flex items-center gap-2'>
-              <Bug className='w-4 h-4' /> Debug
+              <Bug className='w-4 h-4' />
+              {' '}
+              Debug
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
               <input
                 type='checkbox'
                 className='sr-only peer'
                 checked={promptDetail?.debug}
-                onChange={(e) => onDebugChange(e.target.checked)}
+                onChange={e => onDebugChange(e.target.checked)}
                 disabled={isPromptUpdating}
               />
               <div className='w-11 h-6 bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:rtl:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-linear-to-r after:from-blue-500 after:to-purple-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>

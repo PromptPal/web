@@ -2,7 +2,7 @@ import { ProviderCard } from '@/components/Providers/ProviderCard'
 import { graphql } from '@/gql'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Link, useParams } from '@tanstack/react-router'
-import { Bot, ExternalLink, Gauge, Pencil, Thermometer } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import OpenTokenListOfProject from '../../components/OpenToken/List'
 import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
 
@@ -80,7 +80,7 @@ function ProjectPage() {
               </span>
             </div>
             <Link
-              to={'/$pid/edit'}
+              to='/$pid/edit'
               params={{ pid }}
               className='inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200 shadow-lg shadow-blue-500/20'
             >

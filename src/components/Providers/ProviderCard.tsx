@@ -4,7 +4,6 @@ import Tooltip from '@annatarhe/lake-ui/tooltip'
 import {
   Calendar,
   Cpu,
-  ExternalLink,
   Globe,
   Info,
   Power,
@@ -40,7 +39,10 @@ const DetailItem: React.FC<{
   return (
     <div className='flex items-center gap-2 text-sm'>
       <Icon className='h-4 w-4 flex-shrink-0 text-muted-foreground' />
-      <span className='font-medium text-muted-foreground'>{label}:</span>
+      <span className='font-medium text-muted-foreground'>
+        {label}
+        :
+      </span>
       <span
         className={cn('text-foreground break-words min-w-0', valueClassName)}
       >

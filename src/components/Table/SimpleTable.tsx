@@ -21,9 +21,9 @@ function SimpleTable<T>(props: SimpleTableProps<T>) {
       )}
       <table className='w-full border-separate border-spacing-0'>
         <thead>
-          {table.getHeaderGroups().map((hg) => (
+          {table.getHeaderGroups().map(hg => (
             <tr key={hg.id}>
-              {hg.headers.map((header) => (
+              {hg.headers.map(header => (
                 <th
                   key={header.id}
                   className='text-left py-3 px-4 text-sm font-medium text-gray-400 bg-gray-800/50 first:rounded-l-lg last:rounded-r-lg'
@@ -40,12 +40,12 @@ function SimpleTable<T>(props: SimpleTableProps<T>) {
           ))}
         </thead>
         <tbody ref={autoAnimateRef}>
-          {table.getRowModel().rows.map((row) => (
+          {table.getRowModel().rows.map(row => (
             <tr
               key={row.id}
               className='group transition-colors hover:bg-gray-800/30'
             >
-              {row.getVisibleCells().map((cell) => (
+              {row.getVisibleCells().map(cell => (
                 <td
                   key={cell.id}
                   className='py-3 px-4 text-sm border-b border-gray-700/50 group-last:border-0'

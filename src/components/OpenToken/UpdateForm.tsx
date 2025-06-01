@@ -2,7 +2,7 @@ import InputField from '@annatarhe/lake-ui/form-input-field'
 import Switch from '@annatarhe/lake-ui/form-switch-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { InfoIcon, Link, Save } from 'lucide-react'
+import { InfoIcon, Save } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import Zod from 'zod'
 import { OpenTokenUpdate } from '../../gql/graphql'
@@ -61,7 +61,7 @@ function OpenTokenUpdateForm(props: OpenTokenUpdateFormProps) {
             control={f.control}
             render={({ field, formState }) => (
               <InputField
-                label={
+                label={(
                   <div className='flex items-center'>
                     <span className='block text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500 mb-2'>
                       Advanced API Validate Path
@@ -70,7 +70,7 @@ function OpenTokenUpdateForm(props: OpenTokenUpdateFormProps) {
                       <InfoIcon className='w-4 h-4 ml-2' />
                     </Tooltip>
                   </div>
-                }
+                )}
                 type='url'
                 {...field}
                 value={field.value ?? ''}

@@ -38,7 +38,7 @@ function findPlaceholderValues(sentence: string): string[] {
   if (!matches) {
     return []
   }
-  const values = matches.map((match) =>
+  const values = matches.map(match =>
     match.replace(/{{\s*|\s*}}/g, '').trim(),
   )
   return values
@@ -118,8 +118,8 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     },
   })
 
-  const { watch, control, handleSubmit, getValues, setValue } =
-    useReactHookForm<mutatePromptType>({
+  const { watch, control, handleSubmit, getValues, setValue }
+    = useReactHookForm<mutatePromptType>({
       resolver: hookFormZodResolver(schema),
       defaultValues: async () => {
         const def = {
@@ -137,7 +137,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
             },
           ],
           variables: [],
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           providerId: undefined as any,
         }
 
@@ -148,7 +148,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         const resp = await fetchPrompt({ variables: { id } })
         const prompt = structuredClone(
           resp.data?.prompt ?? def,
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ) as any
 
         prompt.providerId = prompt.provider?.id ?? undefined
@@ -194,11 +194,11 @@ function PromptCreatePage(props: PromptCreatePageProps) {
     }, [])
 
     const prevVariables = getValues('variables') ?? []
-    const flattedPrevVariables = prevVariables.map((x) => x.name)
+    const flattedPrevVariables = prevVariables.map(x => x.name)
     const nextVariables = allPlaceholders
       .map((placeholder) => {
         if (flattedPrevVariables.includes(placeholder)) {
-          return prevVariables.find((z) => z.name === placeholder)!
+          return prevVariables.find(z => z.name === placeholder)!
         }
         return {
           name: placeholder,
@@ -206,7 +206,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         }
       })
       .reduce<PromptVariable[]>((acc, cur) => {
-        const has = acc.map((x) => x.name).includes(cur.name)
+        const has = acc.map(x => x.name).includes(cur.name)
         if (!has) {
           acc.push(cur)
         }
@@ -319,7 +319,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                 render={({ field }) => (
                   <SelectField
                     label='Project'
-                    options={projects.map((p) => ({
+                    options={projects.map(p => ({
                       value: p.id.toString(),
                       label: p.name,
                     }))}
@@ -424,8 +424,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                 )}
                 disabled={promptsFields.length >= 20}
                 onClick={() =>
-                  appendPromptField({ prompt: '', role: PromptRole.User })
-                }
+                  appendPromptField({ prompt: '', role: PromptRole.User })}
               >
                 <PlusIcon className='w-4 h-4' />
                 Add
@@ -435,7 +434,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         </section>
 
         <VariablesSection
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           control={control as any}
           variablesFields={variablesFields}
         />

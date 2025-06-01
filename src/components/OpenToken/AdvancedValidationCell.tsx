@@ -56,8 +56,7 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
         {
           loading: 'Updating',
           success: 'Updated',
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-          error: (e: any) => e.toString(),
+          error: (e: Error) => e.toString(),
         },
       )
     },
@@ -101,17 +100,17 @@ function AdvancedValidationCell(props: AdvancedValidationCellProps) {
       <LakeModal
         isOpen={isOpen}
         onClose={onClose}
-        title={
+        title={(
           <span className='text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
             Update Open Token
           </span>
-        }
+        )}
       >
         <OpenTokenUpdateForm
           validatePath={validatePath}
           enabled={enabled}
           onClose={onClose}
-          onSubmit={(data) => doUpdate(data)}
+          onSubmit={data => doUpdate(data)}
           isSubmitting={loading}
         />
       </LakeModal>

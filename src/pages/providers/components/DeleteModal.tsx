@@ -18,14 +18,14 @@ export function DeleteModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={
+      title={(
         <div className='flex items-center gap-3'>
           <div className='h-10 w-10 rounded-full bg-gradient-to-br from-destructive/20 to-destructive/10 flex items-center justify-center'>
             <AlertTriangle className='h-5 w-5 text-destructive' />
           </div>
           <h3 className='text-lg font-semibold'>Delete Provider</h3>
         </div>
-      }
+      )}
     >
       <div className='bg-card/90 rounded-xl shadow-lg w-full p-6 space-y-4 border border-primary/10 backdrop-blur-xl'>
         <p className='text-muted-foreground'>

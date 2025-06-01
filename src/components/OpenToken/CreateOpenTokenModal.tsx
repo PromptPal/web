@@ -1,22 +1,19 @@
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import Switch from '@annatarhe/lake-ui/form-switch-field'
 import LakeModal from '@annatarhe/lake-ui/modal'
+import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { useMutation as useGraphQLMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import {
   CalendarIcon,
-  Clock,
   HelpCircle,
   InfoIcon,
-  KeyIcon,
   MessageSquare,
   Save,
-  ShieldIcon,
 } from 'lucide-react'
 import { useMemo } from 'react'
 import 'react-datepicker/dist/react-datepicker.css'
-import InputField from '@annatarhe/lake-ui/form-input-field'
-import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
@@ -98,18 +95,18 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
     <LakeModal
       isOpen={isOpen}
       onClose={onClose}
-      title={
+      title={(
         <span className='text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
           Create Open Token
         </span>
-      }
+      )}
     >
       <form onSubmit={f.handleSubmit(onSubmit)} className='space-y-5 p-1'>
         <div className='bg-gray-800/40 backdrop-blur-sm rounded-lg p-5'>
           <div className='space-y-5'>
             {/* Name Field */}
             <InputField
-              label={
+              label={(
                 <div>
                   <span className='text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
                     Name
@@ -118,7 +115,7 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
                     <InfoIcon className='w-4 h-4 ml-2' />
                   </Tooltip>
                 </div>
-              }
+              )}
               placeholder='My API Token'
               // icon={<KeyIcon />}
               {...f.register('name')}
@@ -209,20 +206,20 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
               }}
             >
               <InputField
-                label={
+                label={(
                   <div>
                     <span>Validation Path</span>
                     <Tooltip
-                      content={
+                      content={(
                         <span className='text-xs text-gray-400'>
                           URL to validate API requests
                         </span>
-                      }
+                      )}
                     >
                       <HelpCircle className='w-4 h-4 ml-2' />
                     </Tooltip>
                   </div>
-                }
+                )}
                 type='url'
                 {...f.register('apiValidatePath')}
                 error={f.formState.errors.apiValidatePath?.message}

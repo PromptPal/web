@@ -48,9 +48,8 @@ export const ModelParametersSection = ({
               max='2'
               step='0.1'
               value={watch('temperature')}
-              onChange={(e) =>
-                setValue('temperature', parseFloat(e.target.value))
-              }
+              onChange={e =>
+                setValue('temperature', parseFloat(e.target.value))}
               className={cn(
                 'w-full h-3 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-lg appearance-none cursor-pointer',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
@@ -92,7 +91,7 @@ export const ModelParametersSection = ({
               max='1'
               step='0.1'
               value={watch('topP')}
-              onChange={(e) => setValue('topP', parseFloat(e.target.value))}
+              onChange={e => setValue('topP', parseFloat(e.target.value))}
               className={cn(
                 'w-full h-3 bg-gradient-to-r from-pink-400/30 to-orange-400/30 rounded-lg appearance-none cursor-pointer',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
@@ -136,12 +135,11 @@ export const ModelParametersSection = ({
               'bg-gradient-to-r from-background/40 to-background/20',
             )}
             value={watch('maxTokens')}
-            onChange={(e) =>
+            onChange={e =>
               setValue(
                 'maxTokens',
                 e.target.value ? parseInt(e.target.value) : 0,
-              )
-            }
+              )}
             placeholder='2048'
             min='0'
           />

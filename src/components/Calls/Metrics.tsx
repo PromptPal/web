@@ -61,15 +61,17 @@ function MetricCard(props: {
         </h3>
 
         <div className='mt-2 text-sm font-medium text-gray-400 uppercase tracking-wider'>
-          {title} Latency
+          {title}
+          {' '}
+          Latency
         </div>
       </div>
     </div>
   )
 }
 
-const metricKeys: (keyof FetchPromptCallsMetricsOnlyQuery['prompt']['metrics'])[] =
-  ['p50', 'p90', 'p99']
+const metricKeys: (keyof FetchPromptCallsMetricsOnlyQuery['prompt']['metrics'])[]
+  = ['p50', 'p90', 'p99']
 
 function PromptCallMetric(props: PromptCallMetricProps) {
   const { promptId } = props
@@ -83,8 +85,8 @@ function PromptCallMetric(props: PromptCallMetricProps) {
 
   return (
     <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-2'>
-      {metrics &&
-        metricKeys.map((key, idx) => {
+      {metrics
+        && metricKeys.map((key, idx) => {
           return (
             <MetricCard
               index={idx}

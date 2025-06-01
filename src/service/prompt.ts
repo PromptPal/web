@@ -21,7 +21,7 @@ export type testPromptResponse = {
     }
     content_filter_results: Record<
       string,
-      { filtered: boolean; detected?: boolean }
+      { filtered: boolean, detected?: boolean }
     >
   }[]
   usage: {
@@ -59,5 +59,5 @@ export function testPrompt(
       },
       body: payload,
     },
-  ).then((res) => res.json())
+  ).then(res => res.json())
 }

@@ -78,7 +78,7 @@ function ModelSettings({
           }}
         >
           <option value=''>Select a model</option>
-          {OpenAIModels.map((model) => (
+          {OpenAIModels.map(model => (
             <option key={model} value={model}>
               {model}
             </option>
@@ -92,8 +92,8 @@ function ModelSettings({
       </div>
 
       <div ref={settingAreaRef} className='space-y-8'>
-        {(selectedModel?.startsWith('gpt') ||
-          selectedModel?.startsWith('o3')) && (
+        {(selectedModel?.startsWith('gpt')
+          || selectedModel?.startsWith('o3')) && (
           <div className='space-y-6 rounded-xl bg-gradient-to-br from-blue-500/20 via-indigo-500/15 to-purple-500/20 p-6 backdrop-blur-xl shadow-lg'>
             <h3 className='text-base font-semibold text-foreground bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent'>
               OpenAI Configuration
@@ -128,7 +128,7 @@ function ModelSettings({
                   'bg-gradient-to-r from-background/40 to-background/20',
                 )}
                 value={openAIBaseURL}
-                onChange={(e) => onOpenAIBaseURLChange(e.target.value)}
+                onChange={e => onOpenAIBaseURLChange(e.target.value)}
                 placeholder='https://api.openai.com/v1'
               />
               {errors.openAIBaseURL && (
@@ -164,7 +164,7 @@ function ModelSettings({
                   'hover:bg-background/70 border border-border/20',
                 )}
                 value={openAIToken || ''}
-                onChange={(e) => onOpenAITokenChange(e.target.value)}
+                onChange={e => onOpenAITokenChange(e.target.value)}
                 placeholder='sk-...'
               />
               {errors.openAIToken && (
@@ -210,7 +210,7 @@ function ModelSettings({
                   'hover:bg-background/70 border border-border/20',
                 )}
                 value={geminiBaseURL}
-                onChange={(e) => onGeminiBaseURLChange(e.target.value)}
+                onChange={e => onGeminiBaseURLChange(e.target.value)}
                 placeholder='https://generativelanguage.googleapis.com'
               />
               {errors.geminiBaseURL && (
@@ -235,7 +235,7 @@ function ModelSettings({
                   'hover:bg-background/70 border border-border/20',
                 )}
                 value={geminiToken || ''}
-                onChange={(e) => onGeminiTokenChange(e.target.value)}
+                onChange={e => onGeminiTokenChange(e.target.value)}
                 placeholder='Your Gemini API token'
               />
               {errors.geminiToken && (

@@ -58,7 +58,7 @@ function ProjectsPage() {
       </section>
 
       <div className='grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'>
-        {tableData.map((row) => (
+        {tableData.map(row => (
           <ProjectCardItem key={row.id} project={row} />
         ))}
         {tableData.length === 0 && (

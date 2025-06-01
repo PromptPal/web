@@ -6,9 +6,8 @@ export function fetchSSOSettings({ signal }: { signal: AbortSignal }): Promise<{
   return HttpRequest(
     '/api/v1/sso/settings',
     {
-      signal
-    }
+      signal,
+    },
   )
-    .then((res) => res.json())
+    .then(res => res.json())
 }
-

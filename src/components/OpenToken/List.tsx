@@ -20,11 +20,11 @@ const columnHelper = createColumnHelper<OpenToken>()
 const columns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    cell: (info) => info.getValue(),
+    cell: info => info.getValue(),
   }),
   columnHelper.accessor('name', {
     header: 'Name',
-    cell: (info) => info.getValue(),
+    cell: info => info.getValue(),
   }),
   columnHelper.display({
     id: 'token',
@@ -34,7 +34,7 @@ const columns = [
   columnHelper.accessor('apiValidateEnabled', {
     header: () => (
       <Tooltip
-        content={
+        content={(
           <div className='space-y-2'>
             <p>Advanced Validation Path read more:</p>
             <a
@@ -46,7 +46,7 @@ const columns = [
               Advanced API Security
             </a>
           </div>
-        }
+        )}
       >
         <div className='flex justify-center items-center flex-row text-gray-300'>
           <span>Advanced Validation Path</span>

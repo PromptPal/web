@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { Calendar, ChevronRight, Power } from 'lucide-react'
-import React, { useMemo } from 'react'
+import { Calendar, ChevronRight } from 'lucide-react'
+import { useMemo } from 'react'
 import { Project } from '../../gql/graphql'
 import { cn } from '../../utils'
 type ProjectCardItemProps = {
@@ -27,7 +27,8 @@ function ProjectCardItem(props: ProjectCardItemProps) {
               {project.name}
             </h3>
             <span className='text-xs text-gray-500 px-2 py-1 rounded-full bg-gray-800/50 border border-gray-700/50'>
-              #{project.id}
+              #
+              {project.id}
             </span>
           </div>
           <div className='flex items-center gap-2 text-sm text-gray-400'>

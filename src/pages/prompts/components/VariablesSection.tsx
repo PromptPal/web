@@ -82,7 +82,7 @@ export function VariablesSection({
                           'hover:border-gray-600/50',
                         )}
                       >
-                        {SupportedVariableType.map((x) => (
+                        {SupportedVariableType.map(x => (
                           <option
                             key={x}
                             value={x.toLowerCase()}

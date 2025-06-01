@@ -15,10 +15,16 @@ export function UsageCard({ projects, prompts }: UsageCardProps) {
             Projects
           </div>
           <div className='flex items-center justify-between'>
-            <span className='font-medium'>{projects?.count || 0} projects</span>
+            <span className='font-medium'>
+              {projects?.count || 0}
+              {' '}
+              projects
+            </span>
             {projects?.count && projects.count > 0 && (
               <button className='text-sm text-primary hover:text-primary/80 hover:underline inline-flex items-center transition-colors'>
-                View All <ChevronRight className='h-4 w-4 ml-1' />
+                View All
+                {' '}
+                <ChevronRight className='h-4 w-4 ml-1' />
               </button>
             )}
           </div>
@@ -29,10 +35,16 @@ export function UsageCard({ projects, prompts }: UsageCardProps) {
             Prompts
           </div>
           <div className='flex items-center justify-between'>
-            <span className='font-medium'>{prompts?.count || 0} prompts</span>
+            <span className='font-medium'>
+              {prompts?.count || 0}
+              {' '}
+              prompts
+            </span>
             {prompts?.count && prompts.count > 0 && (
               <button className='text-sm text-primary hover:text-primary/80 hover:underline inline-flex items-center transition-colors'>
-                View All <ChevronRight className='h-4 w-4 ml-1' />
+                View All
+                {' '}
+                <ChevronRight className='h-4 w-4 ml-1' />
               </button>
             )}
           </div>
