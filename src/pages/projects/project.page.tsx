@@ -48,6 +48,7 @@ const q = graphql(`
         topP
         maxTokens
         config
+        headers
         createdAt
         updatedAt
       }

@@ -15,7 +15,7 @@ import {
 import React from 'react'
 
 interface ProviderCardProps {
-  provider?: Omit<Provider, 'projects' | 'prompts'> | null
+  provider?: Omit<Provider, 'projects' | 'prompts' | 'headers'> | null
   className?: string
 }
 
