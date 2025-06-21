@@ -1,6 +1,7 @@
 import { cn } from '@/utils'
 import { Link } from '@tanstack/react-router'
-import { PlusCircle } from 'lucide-react'
+import { PlusCircle, Server, Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 /**
  * Props for the PageHeader component
@@ -18,49 +19,59 @@ interface PageHeaderProps {
  */
 export function PageHeader({ isDisabled = false }: PageHeaderProps) {
   return (
-    <div className='flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4'>
-      <div className='space-y-1'>
-        <h1 className='text-2xl font-bold tracking-tight text-zinc-900 dark:text-white'>
-          Providers
-        </h1>
-        <p className='text-sm text-zinc-600 dark:text-zinc-400'>
-          Manage your LLM providers
-        </p>
+    <motion.section
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className='relative overflow-hidden mb-8'
+    >
+      <div className='absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-indigo-500/10 blur-3xl' />
+      <div className='relative backdrop-blur-md bg-gradient-to-br from-gray-900/90 to-gray-800/90 border border-gray-700/50 shadow-2xl rounded-2xl'>
+        <div className='p-8'>
+          <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-4'>
+            <div className='space-y-3'>
+              <div className='flex items-center gap-3'>
+                <div className='p-2 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-500'>
+                  <Server className='w-6 h-6 text-white' />
+                </div>
+                <h1 className='text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent'>
+                  Providers
+                </h1>
+              </div>
+              <p className='text-gray-300 max-w-xl'>
+                Configure and manage your AI providers with secure credential storage and real-time monitoring
+              </p>
+            </div>
+            <div className='flex items-center'>
+              {isDisabled
+                ? (
+                    <button
+                      className={cn(
+                        'inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm',
+                        'bg-gray-800/50 text-gray-500 cursor-not-allowed',
+                        'transition-all duration-200 ease-in-out',
+                      )}
+                      disabled
+                    >
+                      <PlusCircle className='w-4 h-4' />
+                      New Provider
+                    </button>
+                  )
+                : (
+                    <Link
+                      to='/providers/new'
+                      className='group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm text-white bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 shadow-xl shadow-purple-500/25 hover:shadow-2xl hover:shadow-purple-500/40'
+                    >
+                      <div className='absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-300' />
+                      <PlusCircle className='w-4 h-4 relative z-10' />
+                      <span className='relative z-10'>Add Provider</span>
+                      <Sparkles className='w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+                    </Link>
+                  )}
+            </div>
+          </div>
+        </div>
       </div>
-      <div className='flex items-center'>
-        {isDisabled
-          ? (
-              <button
-                className={cn(
-                  'inline-flex items-center justify-center rounded-lg text-sm font-medium',
-                  'h-10 px-4 py-2',
-                  'bg-zinc-100 text-zinc-400 dark:bg-zinc-800/80 dark:text-zinc-500',
-                  'cursor-not-allowed',
-                  'transition-all duration-200 ease-in-out',
-                )}
-                disabled
-              >
-                <PlusCircle className='mr-2 h-4 w-4' />
-                New Provider
-              </button>
-            )
-          : (
-              <Link
-                to='/providers/new'
-                className={cn(
-                  'inline-flex items-center justify-center rounded-lg text-sm font-medium',
-                  'h-10 px-4 py-2',
-                  'bg-indigo-600 text-white dark:bg-indigo-700',
-                  'hover:bg-indigo-700 dark:hover:bg-indigo-600',
-                  'transition-all duration-200 ease-in-out',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2',
-                )}
-              >
-                <PlusCircle className='mr-2 h-4 w-4' />
-                New Provider
-              </Link>
-            )}
-      </div>
-    </div>
+    </motion.section>
   )
 }

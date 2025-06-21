@@ -1,6 +1,7 @@
 import { pl } from '@/pages/providers/provider.query'
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 import { EmptyState } from './components/EmptyState'
 import { ErrorState } from './components/ErrorState'
@@ -39,12 +40,18 @@ function ProvidersPage() {
   const hasProviders = providers.length > 0
 
   return (
-    <div className='container mx-auto px-4 py-8'>
+    <div className='w-full space-y-8'>
       {/* Page header with title and action button */}
       <PageHeader isDisabled={false} />
 
       {/* Show empty state or provider list based on data */}
-      {!hasProviders ? <EmptyState /> : <ProviderList providers={providers} />}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        {!hasProviders ? <EmptyState /> : <ProviderList providers={providers} />}
+      </motion.div>
     </div>
   )
 }
