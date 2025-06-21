@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.14.0](https://github.com/PromptPal/web/compare/v1.13.3...v1.14.0) (2025-06-21)
+
+
+### Features
+
+* **ui:** modernize UI with enhanced design system and animations ([7d15478](https://github.com/PromptPal/web/commit/7d154788af78afdb24276541798895d30c65e601))
+
+
+### Bug Fixes
+
+* **app:** update style ([5e3e352](https://github.com/PromptPal/web/commit/5e3e352fb37ec851fc8c7c938e04730748c10218))
+* **lake:** Replace select with SelectField component and update dependencies ([b38f1da](https://github.com/PromptPal/web/commit/b38f1da3541a798c1d9e70e7318cde3a66b5e873))
+* **lint:** fix lint issue ([dd4cada](https://github.com/PromptPal/web/commit/dd4cada26c524c174e430303193b9e05f6946fcd))
+* **lint:** fix lint issues ([b102713](https://github.com/PromptPal/web/commit/b10271330a9422fa136582b758be7eb5540275b6))
+* **lint:** migrate from biome to eslint and update UI styles with primary color theme ([73b38c9](https://github.com/PromptPal/web/commit/73b38c93267fe0607cea6a77024f44b74f463c4c))
+* **provider:** enhance provider card UI with purple theme and improved hover effects ([ebfb2ab](https://github.com/PromptPal/web/commit/ebfb2ab314b3111f3f702a5522c1dda7eaefe2e0))
+
 ## [1.13.3](https://github.com/PromptPal/web/compare/v1.13.2...v1.13.3) (2025-04-15)
 
 
