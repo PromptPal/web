@@ -16,7 +16,7 @@ export function Header() {
   const pid = useMatch({ from: '/$pid', shouldThrow: false })?.params.pid
 
   return (
-    <header className='sticky top-0 z-50 w-full backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300'>
+    <header className='sticky top-0 z-50 w-full backdrop-blur-xl bg-slate-50/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-800/50 transition-all duration-300'>
       <div className='mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
           {/* Logo and Brand */}

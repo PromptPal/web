@@ -24,7 +24,7 @@ function UserAvatar(props: UserAvatarProps) {
       </div>
       {showName && (
         <Tooltip content={name}>
-          <span className='max-w-[120px] line-clamp-1 text-ellipsis overflow-hidden cursor-pointer'>
+          <span className='max-w-[120px] line-clamp-1 text-ellipsis overflow-hidden cursor-pointer dark:text-white'>
             {name}
           </span>
         </Tooltip>
