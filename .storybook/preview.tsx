@@ -1,14 +1,8 @@
-import type { Preview } from "@storybook/react"
-import { MantineProvider } from '@mantine/core'
 import { MockedProvider } from '@apollo/client/testing'
-
+import type { Preview } from '@storybook/react'
 
 import '../src/App.css'
 import '../src/styles/glow.css'
-import '@mantine/core/styles.css'
-import '@mantine/code-highlight/styles.css'
-import '@mantine/dates/styles.css'
-import '@mantine/charts/styles.css'
 
 const preview: Preview = {
   parameters: {
@@ -23,13 +17,11 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story) => (
-      <MantineProvider>
-        <Story />
-      </MantineProvider>
+    Story => (
+      <Story />
     ),
   ],
 
-};
+}
 
-export default preview;
+export default preview

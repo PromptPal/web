@@ -1,5 +1,4 @@
 import { ApolloProvider } from '@apollo/client'
-import { MantineProvider } from '@mantine/core'
 import { MetaMaskProvider } from '@metamask/sdk-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -23,10 +22,6 @@ declare module '@tanstack/react-router' {
 
 import './App.css'
 import './styles/glow.css'
-import '@mantine/core/styles.css'
-import '@mantine/code-highlight/styles.css'
-import '@mantine/dates/styles.css'
-import '@mantine/charts/styles.css'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,9 +46,7 @@ function App() {
       <JotaiProvider>
         <ApolloProvider client={apolloClient}>
           <QueryClientProvider client={queryClient}>
-            <MantineProvider forceColorScheme='dark'>
-              <RouterProvider router={router} />
-            </MantineProvider>
+            <RouterProvider router={router} />
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </ApolloProvider>
