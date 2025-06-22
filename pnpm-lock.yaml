@@ -130,8 +130,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(storybook@9.0.12(@testing-library/dom@10.4.0)(bufferutil@4.0.9)(prettier@3.5.3)(utf-8-validate@5.0.10))
       '@eslint/js':
-        specifier: ^9.28.0
-        version: 9.28.0
+        specifier: ^9.29.0
+        version: 9.29.0
       '@graphql-codegen/cli':
         specifier: ^5.0.7
         version: 5.0.7(@parcel/watcher@2.5.1)(@types/node@24.0.3)(bufferutil@4.0.9)(graphql-sock@1.0.1(graphql@16.11.0))(graphql@16.11.0)(typescript@5.8.3)(utf-8-validate@5.0.10)
@@ -1093,10 +1093,6 @@ packages:
 
   '@eslint/eslintrc@3.3.1':
     resolution: {integrity: sha512-gtF186CXhIl1p4pJNGZw8Yc6RlshoePRvE0X91oPGb3vZ8pM3qOS9W9NGPat9LziaBV7XrJWGylNQXkGcnM3IQ==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@eslint/js@9.28.0':
-    resolution: {integrity: sha512-fnqSjGWd/CoIp4EXIxWVK/sHA6DOHN4+8Ix2cX5ycOY7LG0UY8nHCU5pIp2eaE1Mc7Qd8kHspYNzYXT2ojPLzg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/js@9.29.0':
@@ -8765,8 +8761,6 @@ snapshots:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
-
-  '@eslint/js@9.28.0': {}
 
   '@eslint/js@9.29.0': {}
 
