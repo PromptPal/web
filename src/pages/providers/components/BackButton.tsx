@@ -13,43 +13,21 @@ export function BackButton({ disabled, onClick, className }: BackButtonProps) {
     <Link
       to='/providers'
       className={cn(
-        'group relative inline-flex items-center justify-center rounded-lg text-sm font-medium',
-        'transition-all duration-300 ease-in-out',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+        'group inline-flex items-center gap-2 px-4 py-2 rounded-xl',
+        'bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm',
+        'hover:bg-white/90 dark:hover:bg-gray-700/90',
+        'border border-gray-200/50 dark:border-gray-600/50',
+        'shadow-sm hover:shadow-md transition-all duration-200',
+        'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50',
         'disabled:pointer-events-none disabled:opacity-50',
-        'h-10 px-5 py-2 overflow-hidden',
-        'text-primary dark:text-white hover:text-primary-foreground',
         className,
       )}
       onClick={onClick}
       disabled={disabled}
     >
-      {/* Gradient background with blur effect */}
-      <span
-        className={cn(
-          'absolute inset-0 w-full h-full transition-all duration-300',
-          'bg-gradient-to-r from-primary/20 via-secondary/30 to-primary/20 dark:from-primary/40 dark:via-secondary/60 dark:to-primary/40',
-          'opacity-0 group-hover:opacity-100 blur-[2px] group-hover:blur-[1px]',
-          'scale-110 group-hover:scale-100',
-        )}
-      />
-
-      {/* Button content with backdrop blur */}
-      <span
-        className={cn(
-          'relative flex items-center justify-center z-10',
-          'backdrop-blur-sm',
-          'transition-transform duration-300 group-hover:translate-x-0.5',
-        )}
-      >
-        <ArrowLeft
-          className={cn(
-            'mr-2 h-4 w-4 transition-transform duration-300',
-            'group-hover:-translate-x-1',
-          )}
-        />
-        <span className='font-medium'>Back</span>
-      </span>
+      <ArrowLeft className='w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5' />
+      <span className='text-sm font-medium'>Back to Providers</span>
     </Link>
   )
 }

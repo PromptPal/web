@@ -1,4 +1,4 @@
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, FolderOpen, MessageSquare, TrendingUp } from 'lucide-react'
 import { DetailCard } from './DetailCard'
 
 type UsageCardProps = {
@@ -7,44 +7,66 @@ type UsageCardProps = {
 }
 
 export function UsageCard({ projects, prompts }: UsageCardProps) {
+  const projectCount = projects?.count || 0
+  const promptCount = prompts?.count || 0
+  const totalUsage = projectCount + promptCount
+
   return (
-    <DetailCard title='Usage'>
+    <DetailCard title='Usage Statistics'>
       <div className='space-y-4'>
-        <div className='p-3 rounded-lg bg-gradient-to-br from-primary/5 to-background/0'>
-          <div className='text-sm font-medium text-muted-foreground mb-1'>
-            Projects
+        {/* Summary Card */}
+        <div className='p-4 rounded-xl bg-gradient-to-r from-indigo-50/80 to-purple-50/80 dark:from-indigo-950/30 dark:to-purple-950/30 border border-indigo-200/50 dark:border-indigo-800/50'>
+          <div className='flex items-center gap-3 mb-2'>
+            <div className='p-2 rounded-lg bg-indigo-100/80 dark:bg-indigo-900/40'>
+              <TrendingUp className='h-4 w-4 text-indigo-600 dark:text-indigo-400' />
+            </div>
+            <div className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+              Total Items
+            </div>
           </div>
+          <div className='ml-11'>
+            <div className='text-2xl font-bold text-gray-900 dark:text-white'>{totalUsage}</div>
+            <div className='text-xs text-gray-500 dark:text-gray-500 mt-1'>Projects and prompts combined</div>
+          </div>
+        </div>
+
+        {/* Projects Card */}
+        <div className='p-4 rounded-xl bg-gradient-to-r from-blue-50/80 to-cyan-50/80 dark:from-blue-950/30 dark:to-cyan-950/30 border border-blue-200/50 dark:border-blue-800/50'>
           <div className='flex items-center justify-between'>
-            <span className='font-medium'>
-              {projects?.count || 0}
-              {' '}
-              projects
-            </span>
-            {projects?.count && projects.count > 0 && (
-              <button className='text-sm text-primary hover:text-primary/80 hover:underline inline-flex items-center transition-colors'>
+            <div className='flex items-center gap-3'>
+              <div className='p-2 rounded-lg bg-blue-100/80 dark:bg-blue-900/40'>
+                <FolderOpen className='h-4 w-4 text-blue-600 dark:text-blue-400' />
+              </div>
+              <div>
+                <div className='text-sm font-medium text-gray-600 dark:text-gray-400'>Projects</div>
+                <div className='text-lg font-bold text-gray-900 dark:text-white'>{projectCount}</div>
+              </div>
+            </div>
+            {projectCount > 0 && (
+              <button className='text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline inline-flex items-center transition-colors group'>
                 View All
-                {' '}
-                <ChevronRight className='h-4 w-4 ml-1' />
+                <ChevronRight className='h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5' />
               </button>
             )}
           </div>
         </div>
 
-        <div className='p-3 rounded-lg bg-gradient-to-br from-primary/5 to-background/0'>
-          <div className='text-sm font-medium text-muted-foreground mb-1'>
-            Prompts
-          </div>
+        {/* Prompts Card */}
+        <div className='p-4 rounded-xl bg-gradient-to-r from-emerald-50/80 to-teal-50/80 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200/50 dark:border-emerald-800/50'>
           <div className='flex items-center justify-between'>
-            <span className='font-medium'>
-              {prompts?.count || 0}
-              {' '}
-              prompts
-            </span>
-            {prompts?.count && prompts.count > 0 && (
-              <button className='text-sm text-primary hover:text-primary/80 hover:underline inline-flex items-center transition-colors'>
+            <div className='flex items-center gap-3'>
+              <div className='p-2 rounded-lg bg-emerald-100/80 dark:bg-emerald-900/40'>
+                <MessageSquare className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+              </div>
+              <div>
+                <div className='text-sm font-medium text-gray-600 dark:text-gray-400'>Prompts</div>
+                <div className='text-lg font-bold text-gray-900 dark:text-white'>{promptCount}</div>
+              </div>
+            </div>
+            {promptCount > 0 && (
+              <button className='text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 hover:underline inline-flex items-center transition-colors group'>
                 View All
-                {' '}
-                <ChevronRight className='h-4 w-4 ml-1' />
+                <ChevronRight className='h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5' />
               </button>
             )}
           </div>

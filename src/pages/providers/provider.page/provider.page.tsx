@@ -1,6 +1,7 @@
 import { dp, p } from '@/pages/providers/provider.query'
 import { useApolloClient, useMutation, useQuery } from '@apollo/client'
 import { useNavigate, useParams } from '@tanstack/react-router'
+import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
@@ -75,37 +76,97 @@ function ProviderPage() {
   }
 
   return (
-    <div className='container mx-auto px-4 py-8'>
-      <BackButton />
+    <div className='min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-950 dark:via-gray-900/95 dark:to-gray-800/90'>
+      {/* Background Pattern */}
+      <div className='absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10'></div>
+      <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10'></div>
+      <div className='relative z-10'>
+        <div className='container max-w-7xl mx-auto px-4 py-8'>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <BackButton />
+          </motion.div>
 
-      {/* Provider Header */}
-      <ProviderHeader
-        className='mt-6'
-        provider={provider}
-        onDeleteClick={() => setIsDeleteModalOpen(true)}
-      />
+          {/* Provider Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
+            <ProviderHeader
+              className='mt-6'
+              provider={provider}
+              onDeleteClick={() => setIsDeleteModalOpen(true)}
+            />
+          </motion.div>
 
-      {/* Provider Details */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-        {/* Left Column */}
-        <div className='space-y-6'>
-          <ProviderDetails provider={provider} />
+          {/* Provider Details */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className='grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8'
+          >
+            {/* Left Column */}
+            <div className='space-y-8'>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
+                <ProviderDetails provider={provider} />
+              </motion.div>
 
-          <ModelParameters provider={provider} />
-        </div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
+                <ModelParameters provider={provider} />
+              </motion.div>
+            </div>
 
-        {/* Right Column */}
-        <div className='space-y-6'>
-          <ConfigurationCard config={provider.config} />
+            {/* Right Column */}
+            <div className='space-y-8'>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
+                <ConfigurationCard config={provider.config} />
+              </motion.div>
 
-          <HeadersCard headers={provider.headers} />
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
+                <HeadersCard headers={provider.headers} />
+              </motion.div>
 
-          <UsageCard projects={provider.projects} prompts={provider.prompts} />
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
+                <UsageCard projects={provider.projects} prompts={provider.prompts} />
+              </motion.div>
 
-          <MetadataCard
-            createdAt={provider.createdAt}
-            updatedAt={provider.updatedAt}
-          />
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+              >
+                <MetadataCard
+                  createdAt={provider.createdAt}
+                  updatedAt={provider.updatedAt}
+                />
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
