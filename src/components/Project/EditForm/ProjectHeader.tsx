@@ -1,6 +1,6 @@
 import { cn } from '@/utils'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
-import { Switch } from '@mantine/core'
+import Switch from '@annatarhe/lake-ui/form-switch-field'
 import { Info } from 'lucide-react'
 
 interface ProjectHeaderProps {
@@ -56,11 +56,9 @@ function ProjectHeader({
           {enabled ? 'Enabled' : 'Disabled'}
         </span>
         <Switch
-          checked={enabled}
-          onChange={event => onEnabledChange(event.currentTarget.checked)}
-          size='md'
-          color={enabled ? 'teal' : 'red'}
-          className='ml-1'
+          value={enabled || false}
+          onChange={onEnabledChange}
+          label=''
         />
       </div>
     </div>

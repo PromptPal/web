@@ -57,3 +57,12 @@
 :root {
   interpolate-size: allow-keywords; /* 👈 */
 }
+
+/* Highlight styles for prompt variables */
+.prompt-content .highlight-variable {
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(168, 85, 247, 0.2));
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #93c5fd;
+  font-weight: 500;
+}

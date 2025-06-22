@@ -1,9 +1,10 @@
 import LakeModal from '@annatarhe/lake-ui/modal'
-import { FileInput, Switch } from '@mantine/core'
-import { useForm as useMantineForm } from '@mantine/form'
+import Switch from '@annatarhe/lake-ui/form-switch-field'
+import FileInput from '../FileInput'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import omit from 'lodash/omit'
-import { zodResolver } from 'mantine-form-zod-resolver'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import Zod from 'zod'
@@ -47,9 +48,16 @@ function PromptTestButton(props: PromptTestButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
   // const [isOpen, { open: onOpen, close: onClose }] = useDisclosure()
 
-  const f = useMantineForm<variableFormType>({
-    validate: zodResolver(variablesSchema),
-    initialValues: {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm<variableFormType>({
+    resolver: zodResolver(variablesSchema),
+    defaultValues: {
       variables: [],
     },
   })
@@ -58,16 +66,16 @@ function PromptTestButton(props: PromptTestButtonProps) {
     if (!data.variables) {
       return
     }
-    f.setValues({
+    reset({
       variables: data.variables.map(v => ({
         name: v.name,
         type: v.type,
         value: '',
       })),
     })
-  }, [data.variables])
+  }, [data.variables, reset])
 
-  const fields = f.values.variables
+  const fields = watch('variables') || []
 
   const { mutateAsync: doTestPrompt, isPending: testing } = useMutation({
     mutationKey: ['prompt', 'test', data],
@@ -91,9 +99,9 @@ function PromptTestButton(props: PromptTestButtonProps) {
     },
   })
 
-  const onSubmit = (data: variableFormType) => {
+  const onSubmit = handleSubmit((data: variableFormType) => {
     return doTestPrompt(data)
-  }
+  })
 
   return (
     <>
@@ -147,30 +155,33 @@ function PromptTestButton(props: PromptTestButtonProps) {
                 case PromptVariableTypes.Image:
                 case PromptVariableTypes.Video:
                   return (
-                    <FileInput
-                      label={field.name}
-                      id='name'
-                      key={f.key(`variables.${index}.value`)}
-                      placeholder='Value'
-                      {...f.getInputProps(`variables.${index}.value`)}
-                    />
+                    <div key={`file-${index}`} className='mb-4'>
+                      <FileInput
+                        label={field.name}
+                        id={`file-${index}`}
+                        placeholder='Choose file...'
+                        value={watch(`variables.${index}.value`) as File}
+                        onChange={file => file && setValue(`variables.${index}.value`, file)}
+                        error={errors.variables?.[index]?.value?.message}
+                        accept={field.type === PromptVariableTypes.Image ? 'image/*' : field.type === PromptVariableTypes.Audio ? 'audio/*' : 'video/*'}
+                      />
+                    </div>
                   )
                 case PromptVariableTypes.Boolean:
                   return (
-                    <Switch
-                      type='checkbox'
-                      label={field.name}
-                      id='name'
-                      key={f.key(`variables.${index}.value`)}
-                      placeholder='Value'
-                      {...f.getInputProps(`variables.${index}.value`)}
-                    />
+                    <div key={`switch-${index}`} className='mb-4'>
+                      <Switch
+                        label={field.name}
+                        value={watch(`variables.${index}.value`) as boolean}
+                        onChange={value => setValue(`variables.${index}.value`, value)}
+                      />
+                    </div>
                   )
                 case PromptVariableTypes.Number:
                   return (
                     <div
                       className='space-y-2'
-                      key={f.key(`variables.${index}.value`)}
+                      key={`number-${index}`}
                     >
                       <label
                         htmlFor={`var-${index}`}
@@ -183,7 +194,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
                         id={`var-${index}`}
                         className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-hidden transition-all dark:text-white'
                         placeholder='Value'
-                        {...f.getInputProps(`variables.${index}.value`)}
+                        {...register(`variables.${index}.value`, { valueAsNumber: true })}
                       />
                     </div>
                   )
@@ -191,7 +202,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
                   return (
                     <div
                       className='space-y-2'
-                      key={f.key(`variables.${index}.value`)}
+                      key={`string-${index}`}
                     >
                       <label
                         htmlFor={`var-${index}`}
@@ -203,7 +214,7 @@ function PromptTestButton(props: PromptTestButtonProps) {
                         id={`var-${index}`}
                         className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-hidden transition-all resize-y min-h-[200px] dark:text-white'
                         placeholder='Value'
-                        {...f.getInputProps(`variables.${index}.value`)}
+                        {...register(`variables.${index}.value`)}
                       />
                     </div>
                   )
@@ -220,9 +231,8 @@ function PromptTestButton(props: PromptTestButtonProps) {
             </button>
             <button
               type='button'
-              disabled={!f.validate || testing}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              onClick={f.onSubmit(onSubmit) as any}
+              disabled={testing}
+              onClick={onSubmit}
               className='px-6 py-2 bg-linear-to-r from-teal-500 to-emerald-500 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group'
             >
               <span
