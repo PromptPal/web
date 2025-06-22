@@ -2,7 +2,17 @@ import { ProviderCard } from '@/components/Providers/ProviderCard'
 import { graphql } from '@/gql'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Link, useParams } from '@tanstack/react-router'
-import { Pencil } from 'lucide-react'
+import {
+  BarChart3,
+  Zap,
+  TrendingUp,
+  Shield,
+  Settings,
+  Eye,
+  Clock,
+  Cpu,
+  Star,
+} from 'lucide-react'
 import OpenTokenListOfProject from '../../components/OpenToken/List'
 import ProjectTopPromptsCount from '../../components/Project/TopPromptsCount'
 
@@ -67,43 +77,144 @@ function ProjectPage() {
   const project = projectData?.project
   const openTokens = project?.openTokens.edges ?? []
 
+  if (!project) {
+    return (
+      <div className='w-full min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900 flex items-center justify-center'>
+        <div className='text-center space-y-4'>
+          <div className='w-12 h-12 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center mx-auto'>
+            <div className='w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin' />
+          </div>
+          <p className='text-gray-400'>Loading project...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className='w-full flex flex-col gap-6'>
-      <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl overflow-hidden'>
-        <div className='p-6 border-b border-gray-700/50'>
-          <div className='flex justify-between items-center'>
-            <div className='flex items-center gap-3'>
-              <h1 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
-                {project?.name}
-              </h1>
-              <span className='text-sm text-gray-500 px-3 py-1 rounded-full bg-gray-800/50 border border-gray-700/50'>
-                recent 7 days
-              </span>
+    <div className='w-full min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900'>
+      <div className='w-full flex flex-col gap-4 p-4 max-w-6xl mx-auto'>
+        {/* Compact Header */}
+        <div className='bg-white/[0.03] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300'>
+          <div className='flex flex-col lg:flex-row lg:justify-between lg:items-start gap-3'>
+            <div className='flex-1'>
+              <div className='flex items-center gap-3 mb-2'>
+                <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center border border-blue-500/30'>
+                  <Zap className='w-4 h-4 text-blue-400' />
+                </div>
+                <div>
+                  <h1 className='text-xl font-bold text-white leading-tight'>
+                    {project.name}
+                  </h1>
+                  <p className='text-xs text-gray-400'>AI Project Dashboard</p>
+                </div>
+              </div>
+              <div className='flex flex-wrap items-center gap-2'>
+                <span className='inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20'>
+                  <div className='w-1.5 h-1.5 bg-green-400 rounded-full' />
+                  Active
+                </span>
+                <span className='inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20'>
+                  <Clock className='w-3 h-3' />
+                  7 days
+                </span>
+                <span className='inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20'>
+                  <Star className='w-3 h-3' />
+                  Premium
+                </span>
+              </div>
             </div>
-            <Link
-              to='/$pid/edit'
-              params={{ pid }}
-              className='inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200 shadow-lg shadow-blue-500/20'
-            >
-              <Pencil className='w-4 h-4' />
-              Edit
-            </Link>
+
+            <div className='flex items-center gap-2'>
+              <Link
+                to='/$pid/prompts'
+                params={{ pid }}
+                className='inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-gray-300 bg-white/[0.05] border border-white/10 hover:bg-white/[0.08] hover:border-white/15 transition-all duration-200'
+              >
+                <Eye className='w-3 h-3' />
+                Prompts
+              </Link>
+              <Link
+                to='/$pid/edit'
+                params={{ pid }}
+                className='inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200'
+              >
+                <Settings className='w-3 h-3' />
+                Configure
+              </Link>
+            </div>
           </div>
 
-          <ProviderCard provider={project?.provider} />
+          {/* Compact Stats Grid */}
+          <div className='grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4'>
+            <div className='bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.03] transition-colors duration-200'>
+              <div className='flex items-center gap-2 mb-1'>
+                <TrendingUp className='w-4 h-4 text-emerald-400' />
+                <span className='text-xs font-medium text-gray-400'>Usage</span>
+              </div>
+              <p className='text-lg font-bold text-white'>
+                {project.promptMetrics.recentCounts?.reduce((acc, item) => acc + item.count, 0) || 0}
+              </p>
+              <p className='text-xs text-gray-500'>Executions</p>
+            </div>
+
+            <div className='bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.03] transition-colors duration-200'>
+              <div className='flex items-center gap-2 mb-1'>
+                <BarChart3 className='w-4 h-4 text-blue-400' />
+                <span className='text-xs font-medium text-gray-400'>Prompts</span>
+              </div>
+              <p className='text-lg font-bold text-white'>
+                {project.promptMetrics.recentCounts?.length || 0}
+              </p>
+              <p className='text-xs text-gray-500'>Active</p>
+            </div>
+
+            <div className='bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.03] transition-colors duration-200'>
+              <div className='flex items-center gap-2 mb-1'>
+                <Shield className='w-4 h-4 text-purple-400' />
+                <span className='text-xs font-medium text-gray-400'>Tokens</span>
+              </div>
+              <p className='text-lg font-bold text-white'>
+                {openTokens.length}
+              </p>
+              <p className='text-xs text-gray-500'>Configured</p>
+            </div>
+
+            <div className='bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.03] transition-colors duration-200'>
+              <div className='flex items-center gap-2 mb-1'>
+                <Cpu className='w-4 h-4 text-orange-400' />
+                <span className='text-xs font-medium text-gray-400'>Provider</span>
+              </div>
+              <p className='text-lg font-bold text-white'>
+                {project.provider ? '1' : '0'}
+              </p>
+              <p className='text-xs text-gray-500'>{project.provider?.enabled ? 'Active' : 'Inactive'}</p>
+            </div>
+          </div>
         </div>
 
-        <div className='p-6 border-t border-gray-700/50'>
-          <h2 className='text-lg font-semibold text-gray-200 mb-4'>
-            Usage Metrics
-          </h2>
-          <ProjectTopPromptsCount
-            recentCounts={project?.promptMetrics.recentCounts}
-          />
-        </div>
-      </section>
+        {/* Provider Card */}
+        <ProviderCard provider={project.provider} />
 
-      <OpenTokenListOfProject pid={~~pid} openTokens={openTokens} />
+        {/* Compact Metrics Section */}
+        <div className='bg-white/[0.03] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300'>
+          <div className='flex items-center gap-2 mb-4'>
+            <BarChart3 className='w-4 h-4 text-indigo-400' />
+            <h2 className='text-lg font-semibold text-white'>
+              Usage Analytics
+            </h2>
+            <span className='text-xs text-gray-400'>Last 7 days</span>
+          </div>
+
+          <div className='bg-white/[0.02] border border-white/5 rounded-lg p-4'>
+            <ProjectTopPromptsCount
+              recentCounts={project.promptMetrics.recentCounts}
+            />
+          </div>
+        </div>
+
+        {/* Token Management */}
+        <OpenTokenListOfProject pid={~~pid} openTokens={openTokens} />
+      </div>
     </div>
   )
 }

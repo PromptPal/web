@@ -1,6 +1,7 @@
 import { cn } from '@/utils'
 import { Link } from '@tanstack/react-router'
-import { PlusCircle, Server } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { PlusCircle, Server, Sparkles } from 'lucide-react'
 
 /**
  * Empty state component for providers page
@@ -8,37 +9,71 @@ import { PlusCircle, Server } from 'lucide-react'
  */
 export function EmptyState() {
   return (
-    <div className={cn(
-      'rounded-2xl border border-zinc-200 dark:border-zinc-800',
-      'bg-white dark:bg-zinc-900',
-      'p-8 sm:p-12 text-center shadow-lg',
-      'flex flex-col items-center justify-center space-y-6 min-h-[400px]',
-    )}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4 }}
+      className={cn(
+        'relative rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm',
+        'border border-gray-200/50 dark:border-gray-600/50',
+        'shadow-sm hover:shadow-md transition-all duration-300',
+        'p-8 sm:p-12 text-center',
+        'flex flex-col items-center justify-center space-y-8 min-h-[400px]',
+      )}
     >
-      <Server className='h-16 w-16 text-indigo-500 dark:text-indigo-400' />
-      <div className='space-y-2'>
-        <h2 className='text-2xl font-bold text-zinc-900 dark:text-white'>
-          No Providers Found
-        </h2>
-        <p className='text-zinc-600 dark:text-zinc-400 max-w-sm'>
-          It looks like you haven&apos;t added any LLM providers yet. Get started by creating your first one.
-        </p>
+      {/* Background gradient overlay */}
+      <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10 rounded-2xl pointer-events-none' />
+
+      <div className='relative z-10 space-y-8'>
+        {/* Icon */}
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className='flex justify-center'
+        >
+          <div className='p-6 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-400/30 dark:to-purple-400/30 backdrop-blur-sm border border-blue-500/20 dark:border-blue-400/30'>
+            <Server className='h-12 w-12 text-blue-600 dark:text-blue-400' />
+          </div>
+        </motion.div>
+
+        {/* Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className='space-y-4'
+        >
+          <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>
+            No Providers Found
+          </h2>
+          <p className='text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed'>
+            It looks like you haven&apos;t added any AI providers yet. Get started by creating your first one to begin managing your prompts.
+          </p>
+        </motion.div>
+
+        {/* Action Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+        >
+          <Link
+            to='/providers/new'
+            className={cn(
+              'group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium text-white',
+              'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600',
+              'transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50',
+            )}
+          >
+            <div className='absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-300' />
+            <PlusCircle className='w-4 h-4 relative z-10' />
+            <span className='relative z-10'>Create Your First Provider</span>
+            <Sparkles className='w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+          </Link>
+        </motion.div>
       </div>
-      <Link
-        to='/providers/new'
-        className={cn(
-          'inline-flex items-center justify-center rounded-lg text-sm font-medium',
-          'h-10 px-6 py-2 mt-4',
-          'bg-indigo-600 text-white dark:bg-indigo-700',
-          'hover:bg-indigo-700 dark:hover:bg-indigo-600',
-          'transition-all duration-200 ease-in-out',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900',
-          'shadow-md hover:shadow-lg',
-        )}
-      >
-        <PlusCircle className='mr-2 h-4 w-4' />
-        Create Your First Provider
-      </Link>
-    </div>
+    </motion.div>
   )
 }

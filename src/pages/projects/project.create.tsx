@@ -10,10 +10,10 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { Plus, X, Folder, Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Folder, Plus, Sparkles, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { motion } from 'framer-motion'
 import z from 'zod/v4'
 
 const schema = z.object({
@@ -118,9 +118,11 @@ function ProjectCreatePage() {
         className='container max-w-2xl mx-auto px-4'
       >
         <form
-          onSubmit={handleSubmit(onSubmit, (errors) => {
-            console.log('errors', errors)
-          })}
+          onSubmit={
+            handleSubmit(onSubmit, (errors) => {
+              console.log('errors', errors)
+            })
+          }
           className='space-y-8'
         >
           <div className='backdrop-blur-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 rounded-2xl p-8 shadow-2xl'>

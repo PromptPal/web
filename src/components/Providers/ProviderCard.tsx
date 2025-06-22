@@ -6,11 +6,16 @@ import {
   Cpu,
   Globe,
   Info,
-  Power,
   Server,
   Settings2,
   Thermometer,
   Zap,
+  Shield,
+  Sparkles,
+  Database,
+  Network,
+  Activity,
+  Clock,
 } from 'lucide-react'
 import React from 'react'
 
@@ -19,7 +24,7 @@ interface ProviderCardProps {
   className?: string
 }
 
-// Helper component for displaying details with icons
+// Compact detail item with subtle styling
 const DetailItem: React.FC<{
   icon: React.ElementType
   label: string
@@ -28,7 +33,7 @@ const DetailItem: React.FC<{
   tooltip?: string
 }> = ({ icon: Icon, label, value, valueClassName, tooltip }) => {
   if (value === null || value === undefined || value === '') {
-    return null // Don't render if value is not meaningful
+    return null
   }
 
   let displayValue: React.ReactNode = value
@@ -37,72 +42,69 @@ const DetailItem: React.FC<{
   }
 
   return (
-    <div className='flex items-center gap-2 text-sm'>
-      <Icon className='h-4 w-4 flex-shrink-0 text-muted-foreground' />
-      <span className='font-medium text-muted-foreground'>
-        {label}
-        :
-      </span>
-      <span
-        className={cn('text-foreground break-words min-w-0', valueClassName)}
-      >
-        {displayValue}
-      </span>
-      {tooltip && (
-        <Tooltip content={tooltip}>
-          <Info className='w-4 h-4 text-muted-foreground hover:text-primary transition-colors' />
-        </Tooltip>
-      )}
+    <div className='flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/[0.02] transition-colors duration-200'>
+      <Icon className='w-4 h-4 text-gray-400 flex-shrink-0' />
+      <div className='flex-1 min-w-0'>
+        <div className='flex items-center gap-2'>
+          <span className='text-xs font-medium text-gray-400 uppercase tracking-wide'>
+            {label}
+          </span>
+          {tooltip && (
+            <Tooltip content={tooltip}>
+              <Info className='w-3 h-3 text-gray-500 hover:text-gray-300 transition-colors cursor-help' />
+            </Tooltip>
+          )}
+        </div>
+        <span
+          className={cn('text-sm text-gray-200 break-words', valueClassName)}
+        >
+          {displayValue}
+        </span>
+      </div>
     </div>
   )
 }
 
-// Section component for grouping related details
+// Simplified section component with elegant styling
 const Section: React.FC<{
   title: string
   icon: React.ElementType
   children: React.ReactNode
   className?: string
-  gradientFrom?: string
-  gradientTo?: string
-}> = ({
-  title,
-  icon: Icon,
-  children,
-  className,
-  gradientFrom = 'from-blue-500/20',
-  gradientTo = 'to-purple-500/20',
-}) => {
+}> = ({ title, icon: Icon, children, className }) => {
   return (
-    <div
-      className={cn(
-        'space-y-4 rounded-xl bg-gradient-to-br p-5 backdrop-blur-xl shadow-lg border border-gray-700/30',
-        gradientFrom,
-        gradientTo,
-        className,
-      )}
-    >
-      <div className='flex items-center gap-2'>
-        <Icon className='h-5 w-5 text-primary' />
-        <h3 className='text-base font-semibold text-foreground bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent'>
+    <div className={cn('space-y-4', className)}>
+      {/* Simple section header */}
+      <div className='flex items-center gap-2 pb-2 border-b border-white/10'>
+        <Icon className='w-4 h-4 text-gray-400' />
+        <h3 className='text-sm font-semibold text-gray-300 uppercase tracking-wide'>
           {title}
         </h3>
       </div>
-      <div className='space-y-3'>{children}</div>
+
+      {/* Section content */}
+      <div className='space-y-1'>
+        {children}
+      </div>
     </div>
   )
 }
 
 /**
- * Displays the details of a specific provider in a visually appealing card using HTML tags and Tailwind CSS.
- * Features gradients, blur effects, and modern styling matching the project page design.
+ * Compact and elegant provider card with subtle styling
  */
 export const ProviderCard: React.FC<ProviderCardProps> = ({
   provider,
   className,
 }) => {
   if (!provider) {
-    return null
+    return (
+      <div className='bg-white/[0.02] border border-white/10 rounded-xl p-6 text-center'>
+        <Server className='w-8 h-8 text-gray-500 mx-auto mb-3' />
+        <h3 className='text-sm font-medium text-gray-400 mb-1'>No Provider Configured</h3>
+        <p className='text-xs text-gray-500'>Configure an AI provider to get started</p>
+      </div>
+    )
   }
 
   // Format dates for better display
@@ -114,132 +116,118 @@ export const ProviderCard: React.FC<ProviderCardProps> = ({
     : null
 
   return (
-    <div className={cn('mt-6 space-y-4', className)}>
-      {/* Header with name and status */}
-      <div className='flex items-start justify-between'>
-        <div>
-          <h2 className='text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500'>
-            Provider Details
-          </h2>
-          {provider.description && (
-            <p className='text-sm text-muted-foreground mt-1'>
-              {provider.description}
-            </p>
-          )}
-        </div>
-        <span
-          className={cn(
-            'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold',
-            provider.enabled
-              ? 'bg-green-500/20 text-green-300 border border-green-500/30'
-              : 'bg-red-500/20 text-red-300 border border-red-500/30',
-          )}
-        >
-          <Power className='h-3 w-3' />
-          <span>{provider.enabled ? 'Enabled' : 'Disabled'}</span>
-        </span>
-      </div>
-
-      {/* Main content grid */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        {/* Basic Information Section */}
-        <Section
-          title='Basic Information'
-          icon={Server}
-          gradientFrom='from-blue-500/20'
-          gradientTo='to-indigo-500/20'
-        >
-          <DetailItem
-            icon={Settings2}
-            label='ID'
-            value={provider.id}
-            valueClassName='font-mono text-xs'
-          />
-          <DetailItem
-            icon={Settings2}
-            label='Source'
-            value={provider.source}
-            tooltip='The provider service type (e.g., OpenAI, Azure, etc.)'
-          />
-          <DetailItem
-            icon={Cpu}
-            label='Default Model'
-            value={provider.defaultModel}
-            tooltip='The default AI model used by this provider'
-          />
-          <DetailItem
-            icon={Globe}
-            label='Endpoint'
-            value={provider.endpoint}
-            valueClassName='text-xs break-all'
-            tooltip='The API endpoint URL for this provider'
-          />
-          <DetailItem
-            icon={Globe}
-            label='Organization ID'
-            value={provider.organizationId}
-            valueClassName='font-mono text-xs'
-          />
-        </Section>
-
-        {/* Model Parameters Section */}
-        <Section
-          title='Model Parameters'
-          icon={Settings2}
-          gradientFrom='from-purple-500/20'
-          gradientTo='to-pink-500/20'
-        >
-          <DetailItem
-            icon={Thermometer}
-            label='Temperature'
-            value={provider.temperature}
-            tooltip='Controls randomness: Higher values make output more random, lower values make it more focused and deterministic'
-          />
-          <DetailItem
-            icon={Zap}
-            label='Top P'
-            value={provider.topP}
-            tooltip='Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered'
-          />
-          <DetailItem
-            icon={Settings2}
-            label='Max Tokens'
-            value={provider.maxTokens}
-            tooltip='The maximum number of tokens that can be generated in the completion'
-          />
-        </Section>
-
-        {/* Metadata Section */}
-        <Section
-          title='Metadata'
-          icon={Calendar}
-          gradientFrom='from-emerald-500/20'
-          gradientTo='to-teal-500/20'
-          className='md:col-span-2'
-        >
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
-            <DetailItem icon={Calendar} label='Created At' value={createdAt} />
-            <DetailItem icon={Calendar} label='Updated At' value={updatedAt} />
-            {provider.config && Object.keys(provider.config).length > 0 && (
-              <div className='col-span-full'>
-                <div className='flex items-center gap-2 text-sm'>
-                  <Settings2 className='h-4 w-4 flex-shrink-0 text-muted-foreground' />
-                  <span className='font-medium text-muted-foreground'>
-                    Additional Config:
-                  </span>
-                  <details className='text-xs'>
-                    <summary className='cursor-pointer text-primary hover:text-primary/80 transition-colors'>
-                      View Details
-                    </summary>
-                    <pre className='mt-2 p-3 bg-gray-800/50 rounded-lg overflow-x-auto text-xs'>
-                      {JSON.stringify(provider.config, null, 2)}
-                    </pre>
-                  </details>
-                </div>
-              </div>
-            )}
+    <div className={cn('mt-6', className)}>
+      {/* Compact header */}
+      <div className='bg-white/[0.03] border border-white/10 rounded-xl p-6 hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300'>
+        <div className='flex items-start justify-between mb-4'>
+          <div className='flex items-center gap-3'>
+            <div className='w-10 h-10 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center'>
+              <Shield className='w-5 h-5 text-gray-300' />
+            </div>
+            <div>
+              <h2 className='text-lg font-semibold text-white'>
+                {provider.name}
+              </h2>
+              <p className='text-sm text-gray-400'>{provider.source}</p>
+            </div>
           </div>
-        </Section>
+          <span
+            className={cn(
+              'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium',
+              provider.enabled
+                ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                : 'bg-gray-500/10 text-gray-400 border border-gray-500/20',
+            )}
+          >
+            <div className={cn('w-1.5 h-1.5 rounded-full', provider.enabled ? 'bg-green-400' : 'bg-gray-400')} />
+            {provider.enabled ? 'Active' : 'Inactive'}
+          </span>
+        </div>
+
+        {provider.description && (
+          <p className='text-sm text-gray-300 mb-4 leading-relaxed'>
+            {provider.description}
+          </p>
+        )}
+
+        {/* Compact content grid */}
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+          {/* Connection */}
+          <Section title='Connection' icon={Network}>
+            <DetailItem
+              icon={Database}
+              label='ID'
+              value={provider.id}
+              valueClassName='font-mono text-xs'
+            />
+            <DetailItem
+              icon={Globe}
+              label='Endpoint'
+              value={provider.endpoint}
+              valueClassName='text-xs break-all'
+              tooltip='The API endpoint URL for this provider'
+            />
+            <DetailItem
+              icon={Settings2}
+              label='Organization'
+              value={provider.organizationId}
+              valueClassName='font-mono text-xs'
+            />
+          </Section>
+
+          {/* Model Settings */}
+          <Section title='Model' icon={Cpu}>
+            <DetailItem
+              icon={Sparkles}
+              label='Default Model'
+              value={provider.defaultModel}
+              tooltip='The default AI model used by this provider'
+            />
+            <DetailItem
+              icon={Thermometer}
+              label='Temperature'
+              value={provider.temperature}
+              tooltip='Controls randomness in responses'
+            />
+            <DetailItem
+              icon={Zap}
+              label='Top P'
+              value={provider.topP}
+              tooltip='Controls diversity via nucleus sampling'
+            />
+            <DetailItem
+              icon={Activity}
+              label='Max Tokens'
+              value={provider.maxTokens}
+              tooltip='Maximum tokens in completion'
+            />
+          </Section>
+
+          {/* System Info */}
+          <Section title='System' icon={Clock}>
+            <DetailItem
+              icon={Calendar}
+              label='Created'
+              value={createdAt}
+            />
+            <DetailItem
+              icon={Calendar}
+              label='Updated'
+              value={updatedAt}
+            />
+            {provider.config && Object.keys(provider.config).length > 0 && (
+              <details className='mt-3'>
+                <summary className='cursor-pointer text-xs text-gray-400 hover:text-gray-300 transition-colors flex items-center gap-1'>
+                  <Settings2 className='w-3 h-3' />
+                  Config
+                </summary>
+                <pre className='mt-2 p-3 bg-black/10 rounded-lg text-xs text-gray-400 overflow-x-auto border border-white/5'>
+                  {JSON.stringify(provider.config, null, 2)}
+                </pre>
+              </details>
+            )}
+          </Section>
+        </div>
       </div>
     </div>
   )

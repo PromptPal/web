@@ -40,18 +40,34 @@ function ProvidersPage() {
   const hasProviders = providers.length > 0
 
   return (
-    <div className='w-full space-y-8'>
-      {/* Page header with title and action button */}
-      <PageHeader isDisabled={false} />
+    <div className='min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-950 dark:via-gray-900/95 dark:to-gray-800/90'>
+      {/* Background Pattern */}
+      <div className='absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10'></div>
+      <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10'></div>
 
-      {/* Show empty state or provider list based on data */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        {!hasProviders ? <EmptyState /> : <ProviderList providers={providers} />}
-      </motion.div>
+      <div className='relative z-10'>
+        <div className='container max-w-7xl mx-auto px-4 py-8'>
+          <div className='space-y-8'>
+            {/* Page header with title and action button */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <PageHeader isDisabled={false} />
+            </motion.div>
+
+            {/* Show empty state or provider list based on data */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              {!hasProviders ? <EmptyState /> : <ProviderList providers={providers} />}
+            </motion.div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

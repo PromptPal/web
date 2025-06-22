@@ -1,7 +1,7 @@
-import FormActions from '@/components/Project/EditForm/FormActions'
 import ProjectHeader from '@/components/Project/EditForm/ProjectHeader'
 import ProvidersSelector from '@/components/Providers/Selector'
 import { cn } from '@/utils'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import {
   useMutation as useGraphQLMutation,
   useLazyQuery,
@@ -10,9 +10,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { isEmpty, omitBy } from 'lodash'
+import { ArrowLeft, Save, Settings, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import Zod from 'zod'
+import z from 'zod/v4'
 import { OpenAIModels } from '../../constants'
 import { graphql } from '../../gql'
 import { ProjectPayload } from '../../gql/graphql'
@@ -20,26 +21,26 @@ import { useProjectId } from '../../hooks/route'
 
 type localUpdateProject = ProjectPayload
 
-const schema: Zod.ZodType<localUpdateProject> = Zod.object({
-  name: Zod.string().trim(),
-  enabled: Zod.boolean(),
-  openAIModel: Zod.enum(OpenAIModels),
-  openAIBaseURL: Zod.string()
+const schema = z.object({
+  name: z.string().trim(),
+  enabled: z.boolean(),
+  openAIModel: z.enum(OpenAIModels),
+  openAIBaseURL: z.string()
     .trim()
     .max(255)
     .optional()
     .default('https://api.openai.com'),
-  openAIToken: Zod.string().trim().max(255).optional(),
-  geminiBaseURL: Zod.string()
+  openAIToken: z.string().trim().max(255).optional(),
+  geminiBaseURL: z.string()
     .trim()
     .max(255)
     .optional()
     .default('https://generativelanguage.googleapis.com'),
-  geminiToken: Zod.string().trim().max(255).optional(),
-  openAITemperature: Zod.number().min(0).max(2).optional(),
-  openAITopP: Zod.number().min(0).max(1),
-  openAIMaxTokens: Zod.number().min(0).optional(),
-  providerId: Zod.number(),
+  geminiToken: z.string().trim().max(255).optional(),
+  openAITemperature: z.number().min(0).max(2).optional(),
+  openAITopP: z.number().min(0).max(1),
+  openAIMaxTokens: z.number().min(0).optional(),
+  providerId: z.number(),
 })
 
 const projectQuery = graphql(`
@@ -94,7 +95,8 @@ function ProjectEditPage() {
 
   const { control, watch, handleSubmit, formState }
     = useForm<localUpdateProject>({
-      resolver: zodResolver(schema),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      resolver: zodResolver(schema) as any,
       defaultValues: async () => {
         const result = await fetchProject()
 
@@ -175,86 +177,157 @@ function ProjectEditPage() {
   const projectName = watch('name')
 
   return (
-    <div className='container max-w-4xl mx-auto px-4 py-10'>
-      <form onSubmit={handleSubmit(onSubmit)} className='space-y-10'>
-        <div className='rounded-2xl bg-gradient-to-br from-background/20 via-background/30 to-background/20 p-8 backdrop-blur-xl shadow-xl'>
-          {/* Project Header */}
-          <Controller
-            control={control}
-            name='enabled'
-            render={({ field }) => (
-              <ProjectHeader
-                projectName={projectName}
-                enabled={field.value ?? false}
-                onEnabledChange={value => field.onChange(value)}
-              />
-            )}
-          />
-
-          {/* Project Name */}
-          <div className='space-y-3 mb-8'>
-            <label className='text-sm font-medium leading-none bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent'>
-              Project Name
-            </label>
-            <Controller
-              control={control}
-              name='name'
-              render={({ field }) => {
-                return (
-                  <input
-                    type='text'
-                    disabled
-                    className={cn(
-                      'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
-                      'text-sm ring-offset-background focus-visible:outline-hidden',
-                      'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                      'disabled:cursor-not-allowed disabled:opacity-50',
-                      'backdrop-blur-lg transition-all duration-300 ease-in-out',
-                      'hover:bg-background/50 border-none shadow-md',
-                      'bg-gradient-to-r from-background/40 to-background/20',
-                    )}
-                    placeholder='Project Name'
-                    value={field.value || ''}
-                    onChange={field.onChange}
-                  />
-                )
-              }}
-            />
+    <div className='min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/5 to-slate-900 p-4'>
+      <div className='max-w-4xl mx-auto space-y-6'>
+        {/* Enhanced Header */}
+        <div className='bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl shadow-black/20'>
+          <div className='flex items-center justify-between mb-4'>
+            <div className='flex items-center gap-4'>
+              <Link
+                to='/$pid/view'
+                params={{ pid: projectId.toString() }}
+                className='inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 bg-white/[0.05] border border-white/10 hover:bg-white/[0.08] hover:border-white/15 transition-all duration-200'
+              >
+                <ArrowLeft className='w-4 h-4' />
+                Back
+              </Link>
+              <div className='flex items-center gap-3'>
+                <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center border border-blue-500/30'>
+                  <Settings className='w-5 h-5 text-blue-400' />
+                </div>
+                <div>
+                  <h1 className='text-2xl font-bold text-white'>Edit Project</h1>
+                  <p className='text-sm text-gray-400'>Configure your AI project settings</p>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <Controller
-            control={control}
-            name='providerId'
-            render={({ field }) => {
-              return (
-                <ProvidersSelector
-                  name='providerId'
-                  label={(
-                    <div className='flex items-center gap-2 justify-between'>
-                      <span className='text-sm font-medium leading-none bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent'>
-                        Model Provider
-                      </span>
-
-                      <Link to='/providers' className='text-sm '>
-                        Go to providers
-                      </Link>
-                    </div>
-                  )}
-                  value={field.value}
-                  onChange={providerId => field.onChange(providerId)}
-                />
-              )
-            }}
-          />
         </div>
 
-        {/* Form Actions */}
-        <FormActions
-          isLoading={isLoading}
-          isValid={formState.isValid}
-          onCancel={() => navigate({ to: `/${projectId}/view` })}
-        />
-      </form>
+        {/* Form Container */}
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+          {/* Main Form Card */}
+          <div className='bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl shadow-black/20'>
+            {/* Project Header */}
+            <div className='mb-8'>
+              <Controller
+                control={control}
+                name='enabled'
+                render={({ field }) => (
+                  <ProjectHeader
+                    projectName={projectName}
+                    enabled={field.value ?? false}
+                    onEnabledChange={value => field.onChange(value)}
+                  />
+                )}
+              />
+            </div>
+
+            {/* Form Sections */}
+            <div className='space-y-8'>
+              {/* Project Details Section */}
+              <div className='space-y-6'>
+                <div className='flex items-center gap-2 pb-3 border-b border-white/10'>
+                  <h3 className='text-lg font-semibold text-white'>Project Details</h3>
+                </div>
+
+                {/* Project Name */}
+                <div className='space-y-3'>
+                  <Controller
+                    control={control}
+                    name='name'
+                    disabled
+                    render={({ field, fieldState }) => (
+                      <InputField
+                        label={(
+                          <label className='text-sm font-medium text-gray-300 flex items-center gap-2'>
+                            Project Name
+                            <span className='text-xs text-gray-500 bg-gray-500/10 px-2 py-1 rounded-md'>Required</span>
+                          </label>
+                        )}
+                        {...field}
+                        value={field.value || ''}
+                        placeholder='Enter project name'
+                        error={fieldState.error?.message}
+                      />
+
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* Provider Configuration Section */}
+              <div className='space-y-6'>
+                <div className='flex items-center justify-between pb-3 border-b border-white/10'>
+                  <h3 className='text-lg font-semibold text-white'>AI Provider</h3>
+                  <Link
+                    to='/providers'
+                    className='inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/15 hover:border-blue-500/30 transition-all duration-200'
+                  >
+                    Manage Providers
+                  </Link>
+                </div>
+
+                <Controller
+                  control={control}
+                  name='providerId'
+                  render={({ field }) => (
+                    <ProvidersSelector
+                      name='providerId'
+                      label={null}
+                      value={field.value}
+                      onChange={providerId => field.onChange(providerId)}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className='bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl shadow-black/20'>
+            <div className='flex items-center justify-between'>
+              <div className='text-sm text-gray-400'>
+                Changes will be saved immediately after submission
+              </div>
+              <div className='flex items-center gap-3'>
+                <button
+                  type='button'
+                  onClick={() => navigate({ to: `/${projectId}/view` })}
+                  className='inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-300 bg-white/[0.05] border border-white/10 hover:bg-white/[0.08] hover:border-white/15 transition-all duration-200'
+                >
+                  <X className='w-4 h-4' />
+                  Cancel
+                </button>
+                <button
+                  type='submit'
+                  disabled={!formState.isValid || isLoading}
+                  className={cn(
+                    'inline-flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                    formState.isValid && !isLoading
+                      ? 'text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25'
+                      : 'text-gray-400 bg-gray-600/50 cursor-not-allowed',
+                  )}
+                >
+                  {isLoading
+                    ? (
+                        <>
+                          <div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin' />
+                          Saving...
+                        </>
+                      )
+                    : (
+                        <>
+                          <Save className='w-4 h-4' />
+                          Save Changes
+                        </>
+                      )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
