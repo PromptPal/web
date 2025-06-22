@@ -25,8 +25,8 @@ export function PageHeader({ isDisabled = false }: PageHeaderProps) {
       transition={{ duration: 0.5 }}
       className='relative overflow-hidden mb-8'
     >
-      <div className='absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-indigo-500/10 blur-3xl' />
-      <div className='relative backdrop-blur-md bg-gradient-to-br from-gray-900/90 to-gray-800/90 border border-gray-700/50 shadow-2xl rounded-2xl'>
+      <div className='absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-indigo-500/10 dark:from-purple-400/15 dark:via-transparent dark:to-indigo-400/15 blur-3xl' />
+      <div className='relative backdrop-blur-md bg-gradient-to-br from-white/90 to-gray-50/90 dark:from-gray-900/90 dark:to-gray-800/90 border border-gray-200/50 dark:border-gray-700/50 shadow-2xl rounded-2xl'>
         <div className='p-8'>
           <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-4'>
             <div className='space-y-3'>
@@ -38,7 +38,7 @@ export function PageHeader({ isDisabled = false }: PageHeaderProps) {
                   Providers
                 </h1>
               </div>
-              <p className='text-gray-300 max-w-xl'>
+              <p className='text-gray-600 dark:text-gray-300 max-w-xl'>
                 Configure and manage your AI providers with secure credential storage and real-time monitoring
               </p>
             </div>
@@ -48,7 +48,7 @@ export function PageHeader({ isDisabled = false }: PageHeaderProps) {
                     <button
                       className={cn(
                         'inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm',
-                        'bg-gray-800/50 text-gray-500 cursor-not-allowed',
+                        'bg-gray-200/50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500 cursor-not-allowed',
                         'transition-all duration-200 ease-in-out',
                       )}
                       disabled

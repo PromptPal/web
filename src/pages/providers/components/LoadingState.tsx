@@ -9,8 +9,8 @@ export function LoadingState() {
     <div className='container mx-auto px-4 py-8'>
       <div className='flex items-center justify-between mb-8'>
         <div className='space-y-1'>
-          <h1 className='text-2xl font-bold tracking-tight'>Providers</h1>
-          <p className='text-sm text-muted-foreground'>
+          <h1 className='text-2xl font-bold tracking-tight text-foreground dark:text-white'>Providers</h1>
+          <p className='text-sm text-muted-foreground dark:text-gray-400'>
             Manage your LLM providers
           </p>
         </div>
@@ -33,12 +33,12 @@ export function LoadingState() {
           >
             <div className='h-40 rounded-lg bg-card p-6 flex flex-col justify-between backdrop-blur-md animate-pulse'>
               <div className='space-y-3'>
-                <div className='h-4 bg-background/20 rounded w-3/4'></div>
-                <div className='h-3 bg-background/20 rounded w-1/2'></div>
+                <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4'></div>
+                <div className='h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2'></div>
               </div>
               <div className='flex justify-between items-center'>
-                <div className='h-3 bg-background/20 rounded w-1/4'></div>
-                <div className='h-8 w-8 bg-background/20 rounded-full'></div>
+                <div className='h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4'></div>
+                <div className='h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-full'></div>
               </div>
             </div>
           </div>

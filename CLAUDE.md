@@ -234,9 +234,9 @@ function ExampleComponent({ id }: { id: number }) {
 4. Handle loading and error states
 
 ### Styling Guidelines
-- Use Tailwind utility classes
+- Use Tailwind v4 utility classes
 - Follow design system colors and spacing
-- Use Mantine components for complex UI
+- Use `lake-ui` for complex UI
 - Apply consistent hover and focus states
 - Support dark theme (forced in this app)
 
