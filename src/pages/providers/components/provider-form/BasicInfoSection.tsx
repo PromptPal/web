@@ -88,7 +88,7 @@ export const BasicInfoSection = ({ form }: BasicInfoSectionProps) => {
               name='enabled'
               control={control}
               render={({ field }) => (
-                <SwitchField label='Enabled' {...field} />
+                <SwitchField label={null} {...field} />
               )}
             />
           </motion.div>

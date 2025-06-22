@@ -1,6 +1,6 @@
 import { cn } from '@/utils'
-import Tooltip from '@annatarhe/lake-ui/tooltip'
 import Switch from '@annatarhe/lake-ui/form-switch-field'
+import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { Info } from 'lucide-react'
 
 interface ProjectHeaderProps {
@@ -14,6 +14,7 @@ function ProjectHeader({
   enabled,
   onEnabledChange,
 }: ProjectHeaderProps) {
+  console.log('enabled', projectName, enabled)
   return (
     <div className='flex flex-col md:flex-row md:items-center justify-between w-full mb-8 gap-4'>
       <div className='space-y-2'>
