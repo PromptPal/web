@@ -1,5 +1,5 @@
 import { Link, useMatch } from '@tanstack/react-router'
-import { BookText, Home, PlusCircle, Settings } from 'lucide-react'
+import { BookText, Home, PlusCircle, Settings, Sparkles } from 'lucide-react'
 import React from 'react'
 import Profile from './Profile'
 import ProjectSelector from './ProjectSelector'
@@ -14,46 +14,59 @@ interface NavItemProps {
 
 export function Header() {
   const pid = useMatch({ from: '/$pid', shouldThrow: false })?.params.pid
+
   return (
-    <header className='bg-gray-800 border-b border-gray-700'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+    <header className='sticky top-0 z-50 w-full backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300'>
+      <div className='mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
-          <div className='flex items-center space-x-8'>
-            <div className='flex items-center'>
-              <div className='bg-linear-to-r from-purple-500 to-pink-500 p-2 rounded-lg'>
-                <BookText className='h-6 w-6 text-white' />
+          {/* Logo and Brand */}
+          <div className='flex items-center gap-8'>
+            <Link to='/' className='flex items-center gap-3 group'>
+              <div className='relative'>
+                <div className='absolute inset-0 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl blur-lg opacity-75 group-hover:opacity-100 transition-opacity' />
+                <div className='relative bg-gradient-to-br from-violet-500 to-indigo-600 p-2.5 rounded-xl shadow-lg transform group-hover:scale-110 transition-all duration-300'>
+                  <BookText className='h-5 w-5 text-white' strokeWidth={2.5} />
+                </div>
               </div>
-              <span className='ml-2 text-xl font-bold text-white'>
-                PromptPal
-              </span>
-            </div>
+              <div className='flex items-center gap-1.5'>
+                <span className='text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent'>
+                  PromptPal
+                </span>
+                <Sparkles className='h-4 w-4 text-violet-500 dark:text-violet-400 animate-pulse' />
+              </div>
+            </Link>
+
+            <div className='hidden lg:block h-8 w-px bg-gray-200 dark:bg-gray-700' />
 
             <ProjectSelector />
           </div>
 
-          <div className='flex items-center space-x-4'>
+          {/* Navigation and Actions */}
+          <div className='flex items-center gap-2'>
             {pid && (
-              <nav className='flex space-x-2'>
+              <nav className='hidden md:flex items-center gap-1 mr-4'>
                 <NavItem
-                  icon={<Home size={20} />}
+                  icon={<Home size={18} strokeWidth={2} />}
                   to={`/${pid}`}
-                  label='Home'
+                  label='Dashboard'
                 />
                 <NavItem
-                  icon={<PlusCircle size={20} />}
+                  icon={<PlusCircle size={18} strokeWidth={2} />}
                   to={`/${pid}/prompts/new`}
                   label='New Prompt'
                 />
                 <NavItem
-                  icon={<Settings size={20} />}
+                  icon={<Settings size={18} strokeWidth={2} />}
                   to={`/${pid}/edit`}
                   label='Settings'
                 />
               </nav>
             )}
 
-            <Profile />
-            <LoginButton />
+            <div className='flex items-center gap-3'>
+              <Profile />
+              <LoginButton />
+            </div>
           </div>
         </div>
       </div>
@@ -64,15 +77,27 @@ export function Header() {
 function NavItem({ icon, label, active, to }: NavItemProps) {
   return (
     <Link
-      className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
-        active
-          ? 'bg-linear-to-r from-purple-500/20 to-pink-500/20 text-purple-400'
-          : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
-      }`}
       to={to}
+      className={`
+        relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
+        transition-all duration-200 group
+        ${
+    active
+      ? 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10'
+      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800/50'
+    }
+      `}
+      activeProps={{
+        className: 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10',
+      }}
     >
-      {icon}
-      <span className='ml-2'>{label}</span>
+      <span className='relative z-10 flex items-center gap-2'>
+        {icon}
+        <span className='hidden lg:inline'>{label}</span>
+      </span>
+      {active && (
+        <div className='absolute inset-0 bg-gradient-to-r from-violet-500/10 to-indigo-500/10 dark:from-violet-500/20 dark:to-indigo-500/20 rounded-lg' />
+      )}
     </Link>
   )
 }

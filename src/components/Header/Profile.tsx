@@ -2,7 +2,7 @@ import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
-import { FolderKanban, LogOut, Server } from 'lucide-react'
+import { FolderKanban, LogOut, Server, User, Settings, CreditCard } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { graphql } from '../../gql'
 import { useClickOutside } from '../../hooks/useClickOutside'
@@ -47,9 +47,8 @@ function Profile() {
     setToken(null)
     qc.clear()
     client.resetStore()
-    // TODO: redirect to overall page
     nav({ to: '/auth' })
-  }, [])
+  }, [setToken, qc, client, nav])
 
   if (!loggedIn) {
     return null
@@ -59,43 +58,112 @@ function Profile() {
     <div className='relative'>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className='flex items-center space-x-3 p-2 rounded-full hover:bg-purple-500/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-opacity-75'
+        className={`
+          relative group flex items-center p-1.5 rounded-lg transition-all duration-200
+          hover:bg-gray-100 dark:hover:bg-gray-800/50
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 dark:focus-visible:ring-violet-400
+          ${
+    isOpen
+      ? 'bg-gray-100 dark:bg-gray-800/50'
+      : ''
+    }
+        `}
+        aria-label='User menu'
       >
-        <UserAvatar addr={user?.addr} name={user?.name ?? ''} />
+        <div className='relative'>
+          <UserAvatar addr={user?.addr} name={user?.name ?? ''} showName={false} />
+          <div className='absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-gray-900' />
+        </div>
       </button>
 
       {isOpen && (
-        <div ref={profileRef} className='absolute right-0 mt-2 w-72 bg-gradient-to-br from-purple-600 to-indigo-700 backdrop-blur-lg bg-opacity-80 rounded-xl shadow-2xl z-10 with-slide-in overflow-hidden'>
-          {/* User Info Section - No border, adjusted padding and text for new bg */}
-          <div className='p-4'>
-            <div className='flex items-center space-x-3'>
-              <UserAvatar addr={user?.addr} name={user?.name ?? ''} />
+        <div
+          ref={profileRef}
+          className='absolute right-0 mt-2 w-80 origin-top-right animate-in fade-in slide-in-from-top-1 duration-200'
+        >
+          <div className='rounded-xl bg-white dark:bg-gray-900 shadow-lg ring-1 ring-black/5 dark:ring-white/10 overflow-hidden'>
+            {/* User Info Section */}
+            <div className='p-4 bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/30 dark:to-indigo-950/30'>
+              <div className='flex items-center gap-3'>
+                <UserAvatar addr={user?.addr} name={user?.name ?? ''} size='md' />
+                <div className='flex-1 min-w-0'>
+                  <p className='text-sm font-semibold text-gray-900 dark:text-gray-100 truncate'>
+                    {user?.name || 'Anonymous User'}
+                  </p>
+                  <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
+                    {user?.addr ? `${user.addr.slice(0, 6)}...${user.addr.slice(-4)}` : 'No address'}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Menu Items - Updated text colors and hover effects */}
-          <div className='p-2'>
-            <Link
-              to='/projects'
-              className='flex items-center px-4 py-3 text-sm text-purple-100 hover:bg-white/10 hover:text-white rounded-md transition-colors'
-            >
-              <FolderKanban className='mr-3 h-5 w-5 text-purple-300' />
-              Projects
-            </Link>
-            <Link
-              to='/providers'
-              className='flex items-center px-4 py-3 text-sm text-purple-100 hover:bg-white/10 hover:text-white rounded-md transition-colors'
-            >
-              <Server className='mr-3 h-5 w-5 text-purple-300' />
-              Providers
-            </Link>
-            <button
-              onClick={onLogout}
-              className='flex w-full items-center px-4 py-3 text-sm text-red-300 hover:bg-red-500/20 hover:text-red-200 rounded-md transition-colors'
-            >
-              <LogOut className='mr-3 h-5 w-5 text-red-300' />
-              Sign out
-            </button>
+            {/* Menu Items */}
+            <div className='p-1.5'>
+              <div className='px-2 py-1.5'>
+                <p className='text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider'>Account</p>
+              </div>
+
+              <Link
+                to='/profile'
+                onClick={() => setIsOpen(false)}
+                className='flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors group'
+              >
+                <User className='h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300' strokeWidth={2} />
+                <span>Profile Settings</span>
+              </Link>
+
+              <Link
+                to='/billing'
+                onClick={() => setIsOpen(false)}
+                className='flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors group'
+              >
+                <CreditCard className='h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300' strokeWidth={2} />
+                <span>Billing & Usage</span>
+              </Link>
+
+              <div className='my-1.5 h-px bg-gray-100 dark:bg-gray-800' />
+
+              <div className='px-2 py-1.5'>
+                <p className='text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider'>Workspace</p>
+              </div>
+
+              <Link
+                to='/projects'
+                onClick={() => setIsOpen(false)}
+                className='flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors group'
+              >
+                <FolderKanban className='h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300' strokeWidth={2} />
+                <span>All Projects</span>
+              </Link>
+
+              <Link
+                to='/providers'
+                onClick={() => setIsOpen(false)}
+                className='flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors group'
+              >
+                <Server className='h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300' strokeWidth={2} />
+                <span>API Providers</span>
+              </Link>
+
+              <Link
+                to='/settings'
+                onClick={() => setIsOpen(false)}
+                className='flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors group'
+              >
+                <Settings className='h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300' strokeWidth={2} />
+                <span>Settings</span>
+              </Link>
+
+              <div className='my-1.5 h-px bg-gray-100 dark:bg-gray-800' />
+
+              <button
+                onClick={onLogout}
+                className='flex w-full items-center gap-3 px-3 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors group'
+              >
+                <LogOut className='h-4 w-4' strokeWidth={2} />
+                <span>Sign out</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
