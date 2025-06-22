@@ -10,9 +10,10 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, Folder, Sparkles } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
+import { motion } from 'framer-motion'
 import z from 'zod/v4'
 
 const schema = z.object({
@@ -82,60 +83,83 @@ function ProjectCreatePage() {
   }
 
   return (
-    <>
-      <div className='container max-w-2xl mx-auto px-4 py-8'>
+    <div className='w-full space-y-8'>
+      {/* Header Section with Gradient Background */}
+      <motion.section
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className='relative overflow-hidden'
+      >
+        <div className='absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-indigo-500/10 blur-3xl' />
+        <div className='relative backdrop-blur-md bg-gradient-to-br from-gray-900/90 to-gray-800/90 border border-gray-700/50 shadow-2xl rounded-2xl'>
+          <div className='p-8'>
+            <div className='flex items-center gap-3 mb-4'>
+              <div className='p-2 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-500'>
+                <Folder className='w-6 h-6 text-white' />
+              </div>
+              <h1 className='text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent'>
+                Create New Project
+              </h1>
+              <Sparkles className='w-5 h-5 text-purple-400 animate-pulse' />
+            </div>
+            <p className='text-gray-300 max-w-xl'>
+              Set up a new project to organize your AI prompts, configure providers, and manage your workflow efficiently
+            </p>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Form Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className='container max-w-2xl mx-auto px-4'
+      >
         <form
           onSubmit={handleSubmit(onSubmit, (errors) => {
             console.log('errors', errors)
           })}
           className='space-y-8'
         >
-          <div className='flex items-center justify-between'>
-            <div className='space-y-1'>
-              <h1 className='text-2xl font-bold tracking-tight'>
-                Create New Project
-              </h1>
-              <p className='text-sm text-muted-foreground'>
-                Add a new project to manage your prompts and API settings
-              </p>
-            </div>
-          </div>
+          <div className='backdrop-blur-xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 rounded-2xl p-8 shadow-2xl'>
+            <div className='space-y-6'>
+              <div className='space-y-2'>
+                <Controller
+                  control={control}
+                  name='name'
+                  render={({ field, fieldState }) => (
+                    <InputField
+                      label='Project Name'
+                      className='w-full'
+                      {...field}
+                      error={fieldState.error?.message}
+                    />
+                  )}
+                />
+              </div>
 
-          <div className='rounded-xl bg-linear-to-br from-background/30 via-background/50 to-background/30 py-6 backdrop-blur-xl space-y-6'>
-            <div className='space-y-2'>
               <Controller
+                name='providerId'
                 control={control}
-                name='name'
                 render={({ field, fieldState }) => (
-                  <InputField
-                    label='Project Name'
-                    className='w-full'
+                  <ProvidersSelector
+                    label={(
+                      <div className='flex items-center gap-2 justify-between'>
+                        <span className='text-sm text-gray-300'>AI Provider</span>
+                        {fieldState.error && (
+                          <span className='text-xs text-red-400'>
+                            {fieldState.error.message}
+                          </span>
+                        )}
+                      </div>
+                    )}
                     {...field}
-                    error={fieldState.error?.message}
                   />
                 )}
               />
             </div>
-
-            <Controller
-              name='providerId'
-              control={control}
-              render={({ field, fieldState }) => (
-                <ProvidersSelector
-                  label={(
-                    <div className='flex items-center gap-2 justify-between'>
-                      <span className='text-sm'>Provider</span>
-                      {fieldState.error && (
-                        <span className='text-xs text-red-500'>
-                          {fieldState.error.message}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  {...field}
-                />
-              )}
-            />
           </div>
 
           <div className='flex items-center justify-end gap-4'>
@@ -145,6 +169,7 @@ function ProjectCreatePage() {
               disabled={isSubmitting}
               variant='ghost'
               icon={X}
+              className='hover:bg-gray-800/50 hover:border-gray-600 transition-all duration-200'
             >
               Cancel
             </Button>
@@ -152,13 +177,18 @@ function ProjectCreatePage() {
               type='submit'
               disabled={isSubmitting || isLoading}
               icon={Plus}
+              className='group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm text-white bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 shadow-xl shadow-purple-500/25 hover:shadow-2xl hover:shadow-purple-500/40 disabled:opacity-50 disabled:cursor-not-allowed'
             >
-              Create Project
+              <div className='absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-300' />
+              <span className='relative z-10'>
+                {isSubmitting || isLoading ? 'Creating...' : 'Create Project'}
+              </span>
+              <Sparkles className='w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
             </Button>
           </div>
         </form>
-      </div>
-    </>
+      </motion.div>
+    </div>
   )
 }
 

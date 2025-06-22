@@ -1,6 +1,7 @@
-import { createRootRoute } from '@tanstack/react-router'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { createLazyFileRoute, createRootRoute } from '@tanstack/react-router'
 import AuthLayout from '../pages/auth/layout'
 
-export const Route = createRootRoute({
+export const Route = createRootRoute('/auth')({
   component: AuthLayout,
 })
