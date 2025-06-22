@@ -13,7 +13,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { Plus, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import * as z from 'zod'
+import z from 'zod/v4'
 
 const schema = z.object({
   name: z
