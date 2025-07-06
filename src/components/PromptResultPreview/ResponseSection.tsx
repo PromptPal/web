@@ -17,8 +17,8 @@ type ResponseSectionProps = {
 function ResponseSection({ choices }: ResponseSectionProps) {
   const isSvg
     = choices.length > 0
-      && choices[0].message.content.startsWith('<svg')
-      && choices[choices.length - 1].message.content.endsWith('</svg>')
+      && choices[0].message.content?.startsWith('<svg')
+      && choices[choices.length - 1].message.content?.endsWith('</svg>')
 
   const [isFullScreen, setIsFullScreen] = useState(false)
 

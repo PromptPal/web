@@ -16,7 +16,7 @@ import { useMemo } from 'react'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import Zod from 'zod'
+import { z } from 'zod/v4'
 import { graphql } from '../../gql'
 import { OpenTokenInput } from '../../gql/graphql'
 import Button from '../Button/Button'
@@ -31,16 +31,16 @@ type CreateOpenTokenModalProps = {
 
 type OpenTokenInputForm = Omit<OpenTokenInput, 'ttl'> & { expireAt: Date }
 
-const schema: Zod.ZodType<OpenTokenInputForm> = Zod.object({
-  projectId: Zod.number(),
-  name: Zod.string().trim().max(100).min(2),
-  description: Zod.string().trim().max(255),
-  // ttl: Zod.number().min(1).max(secondsIn3Year),
-  expireAt: Zod.date()
+const schema = z.object({
+  projectId: z.number(),
+  name: z.string().trim().max(100).min(2),
+  description: z.string().trim().max(255),
+  // ttl: z.number().min(1).max(secondsIn3Year),
+  expireAt: z.coerce.date()
     .max(dayjs().add(3, 'year').toDate())
     .min(dayjs().toDate()),
-  apiValidateEnabled: Zod.boolean(),
-  apiValidatePath: Zod.string().url().trim().max(255),
+  apiValidateEnabled: z.boolean(),
+  apiValidatePath: z.string().url().trim().max(255),
 })
 
 const m = graphql(`
