@@ -26,7 +26,7 @@ import {
   useForm as useReactHookForm,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import Zod from 'zod'
+import { z } from 'zod/v4'
 import { VariablesSection } from './components/VariablesSection'
 import { cm, q, qd, um } from './prompt.create.query'
 import { mutatePromptType } from './types'
@@ -44,41 +44,41 @@ function findPlaceholderValues(sentence: string): string[] {
   return values
 }
 
-const schema: Zod.ZodType<mutatePromptType> = Zod.object({
-  projectId: Zod.number(),
-  name: Zod.string()
+const schema = z.object({
+  projectId: z.number(),
+  name: z.string()
     .regex(
       /^[a-zA-Z0-9_]+$/,
       'Name must be alphanumeric and contain underscores',
     )
     .min(2, 'Name must be at least 2 characters')
     .max(100, 'Name cannot exceed 100 characters'),
-  description: Zod.string(),
-  tokenCount: Zod.number(),
-  enabled: Zod.boolean(),
-  debug: Zod.boolean(),
-  prompts: Zod.array(
-    Zod.object({
-      prompt: Zod.string(),
-      role: Zod.enum([
+  description: z.string(),
+  tokenCount: z.number(),
+  enabled: z.boolean(),
+  debug: z.boolean(),
+  prompts: z.array(
+    z.object({
+      prompt: z.string(),
+      role: z.enum([
         PromptRole.Assistant,
         PromptRole.User,
         PromptRole.System,
       ]),
     }),
   ),
-  variables: Zod.array(
-    Zod.object({
-      name: Zod.string(),
-      type: Zod.nativeEnum(PromptVariableTypes),
+  variables: z.array(
+    z.object({
+      name: z.string(),
+      type: z.nativeEnum(PromptVariableTypes),
     }),
   ),
-  publicLevel: Zod.enum([
+  publicLevel: z.enum([
     PublicLevel.Private,
     PublicLevel.Public,
     PublicLevel.Protected,
   ]),
-  providerId: Zod.number().optional(),
+  providerId: z.number().optional(),
 })
 
 type PromptCreatePageProps = {
@@ -112,21 +112,21 @@ function PromptCreatePage(props: PromptCreatePageProps) {
   const navigate = useNavigate()
 
   const [testResult, setTestResult] = useState<testPromptResponse | null>(null)
-  const [fetchPrompt] = useLazyQuery(qd, {
+  const [fetchPrompt, { data: promptData }] = useLazyQuery(qd, {
     variables: {
       id,
     },
   })
 
   const { watch, control, handleSubmit, getValues, setValue }
-    = useReactHookForm<mutatePromptType>({
+    = useReactHookForm({
       resolver: hookFormZodResolver(schema),
       defaultValues: async () => {
         const def = {
           projectId: pid ?? -1,
           name: '',
-          description: undefined,
-          tokenCount: undefined,
+          description: undefined as unknown as string,
+          tokenCount: undefined as unknown as number,
           publicLevel: PublicLevel.Protected,
           enabled: true,
           debug: false,
@@ -155,7 +155,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         delete prompt.provider
 
         prompt.projectId = pid
-        return prompt as mutatePromptType
+        return prompt as z.infer<typeof schema>
       },
     })
 
@@ -176,7 +176,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
 
   const projects = pjs?.projects.edges ?? []
 
-  const prompts = watch('prompts') ?? []
+  const prompts: { prompt: string, role: PromptRole }[] = watch('prompts') ?? []
   const providerId = watch('providerId')
 
   useEffect(() => {
@@ -185,7 +185,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
       return
     }
 
-    const allPlaceholders = prompts.reduce<string[]>((acc, prompt) => {
+    const allPlaceholders: string[] = prompts.reduce<string[]>((acc, prompt) => {
       if (!prompt?.prompt) {
         return acc
       }
@@ -225,6 +225,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
       }
       const payload = {
         ...data,
+        name: promptData?.prompt.name ?? data.name,
         projectId: ~~data.projectId,
         description: data.description ?? '',
         tokenCount: data.tokenCount ?? 0,
@@ -249,7 +250,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         },
       })
     },
-    [id, isUpdate, createPrompt, updatePrompt],
+    [id, isUpdate, promptData?.prompt.name, createPrompt, updatePrompt],
   )
   const isLoading = updating || creating
 
