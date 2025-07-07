@@ -5,9 +5,8 @@ import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-import ProviderForm, {
-  ProviderFormValues,
-} from './components/provider-form/ProviderForm'
+import ProviderForm from './components/provider-form/ProviderForm'
+import { ProviderFormValues } from './components/provider-form/schema'
 
 function ProvidersUpdatePage() {
   const { id } = useParams({ strict: false })

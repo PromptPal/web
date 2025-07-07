@@ -1,13 +1,13 @@
+import PromptCallMetric from '@/components/Calls/Metrics'
+import PromptCalls from '@/components/Calls/PromptCalls'
+import { PromptDetailCard } from '@/components/Prompt/PromptDetailCard'
+import { graphql } from '@/gql'
+import { useProjectId } from '@/hooks/route'
 import Modal from '@annatarhe/lake-ui/modal'
 import { useQuery as useGraphQLQuery, useMutation } from '@apollo/client'
 import { useParams } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import PromptCallMetric from '../../components/Calls/Metrics'
-import PromptCalls from '../../components/Calls/PromptCalls'
-import { PromptDetailCard } from '../../components/Prompt/PromptDetailCard'
-import { graphql } from '../../gql'
-import { useProjectId } from '../../hooks/route'
 import PromptHistoriesPage from './history.page'
 
 const pm = graphql(`
@@ -54,6 +54,7 @@ const q = graphql(`
         config
         createdAt
         updatedAt
+        headers
       }
       creator {
         id

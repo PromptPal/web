@@ -2,6 +2,6 @@
 import { createLazyFileRoute, createRootRoute } from '@tanstack/react-router'
 import AuthLayout from '../pages/auth/layout'
 
-export const Route = createRootRoute('/auth')({
+export const Route = createLazyFileRoute('/auth')({
   component: AuthLayout,
 })
