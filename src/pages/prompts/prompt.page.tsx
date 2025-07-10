@@ -9,6 +9,7 @@ import { useParams } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import PromptHistoriesPage from './history.page'
+import { q } from './query'
 
 const pm = graphql(`
   mutation togglePrompt($id: Int!, $payload: PromptPayload!) {
@@ -22,60 +23,10 @@ const pm = graphql(`
   }
 `)
 
-const q = graphql(`
-  query fetchPromptDetail($id: Int!) {
-    prompt(id: $id) {
-      id
-      hashId
-      name
-      description
-      enabled
-      debug
-      tokenCount
-      publicLevel
-      createdAt
-      updatedAt
-      project {
-        id
-        name
-      }
-      provider {
-        id
-        name
-        description
-        enabled
-        source
-        endpoint
-        organizationId
-        defaultModel
-        temperature
-        topP
-        maxTokens
-        config
-        createdAt
-        updatedAt
-        headers
-      }
-      creator {
-        id
-        name
-      }
-      prompts {
-        prompt
-        role
-      }
-      variables {
-        name
-        type
-      }
-    }
-  }
-`)
-
 function PromptPage() {
   const params: { id: string } = useParams({ strict: false })
   const pid = ~~(params.id ?? '0')
-  const { data } = useGraphQLQuery(q, {
+  const { data, loading } = useGraphQLQuery(q, {
     variables: {
       id: pid,
     },
@@ -137,6 +88,7 @@ function PromptPage() {
         isPromptUpdating={isPromptUpdating}
         onDebugChange={onDebugChange}
         historyHandlers={historyHandlers}
+        loading={loading}
       />
 
       <PromptCallMetric promptId={pid} />

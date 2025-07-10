@@ -1,93 +1,31 @@
 import { Provider } from '@/gql/graphql'
 import { cn } from '@/utils'
-import Tooltip from '@annatarhe/lake-ui/tooltip'
 import {
+  Activity,
   Calendar,
+  Clock,
   Cpu,
+  Database,
   Globe,
-  Info,
+  Loader2,
+  Network,
   Server,
   Settings2,
-  Thermometer,
-  Zap,
   Shield,
   Sparkles,
-  Database,
-  Network,
-  Activity,
-  Clock,
+  Thermometer,
+  Zap,
 } from 'lucide-react'
 import React from 'react'
+
+import { DetailItem } from './DetailItem'
+import { ProviderSkeletonLoader } from './ProviderSkeletonLoader'
+import { Section } from './Section'
 
 interface ProviderCardProps {
   provider?: Omit<Provider, 'projects' | 'prompts' | 'headers'> | null
   className?: string
-}
-
-// Compact detail item with subtle styling
-const DetailItem: React.FC<{
-  icon: React.ElementType
-  label: string
-  value?: string | number | null | boolean
-  valueClassName?: string
-  tooltip?: string
-}> = ({ icon: Icon, label, value, valueClassName, tooltip }) => {
-  if (value === null || value === undefined || value === '') {
-    return null
-  }
-
-  let displayValue: React.ReactNode = value
-  if (typeof value === 'boolean') {
-    displayValue = value ? 'Yes' : 'No'
-  }
-
-  return (
-    <div className='flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/[0.02] transition-colors duration-200'>
-      <Icon className='w-4 h-4 text-gray-400 flex-shrink-0' />
-      <div className='flex-1 min-w-0'>
-        <div className='flex items-center gap-2'>
-          <span className='text-xs font-medium text-gray-400 uppercase tracking-wide'>
-            {label}
-          </span>
-          {tooltip && (
-            <Tooltip content={tooltip}>
-              <Info className='w-3 h-3 text-gray-500 hover:text-gray-300 transition-colors cursor-help' />
-            </Tooltip>
-          )}
-        </div>
-        <span
-          className={cn('text-sm text-gray-200 break-words', valueClassName)}
-        >
-          {displayValue}
-        </span>
-      </div>
-    </div>
-  )
-}
-
-// Simplified section component with elegant styling
-const Section: React.FC<{
-  title: string
-  icon: React.ElementType
-  children: React.ReactNode
-  className?: string
-}> = ({ title, icon: Icon, children, className }) => {
-  return (
-    <div className={cn('space-y-4', className)}>
-      {/* Simple section header */}
-      <div className='flex items-center gap-2 pb-2 border-b border-white/10'>
-        <Icon className='w-4 h-4 text-gray-400' />
-        <h3 className='text-sm font-semibold text-gray-300 uppercase tracking-wide'>
-          {title}
-        </h3>
-      </div>
-
-      {/* Section content */}
-      <div className='space-y-1'>
-        {children}
-      </div>
-    </div>
-  )
+  loading?: boolean
 }
 
 /**
@@ -96,7 +34,13 @@ const Section: React.FC<{
 export const ProviderCard: React.FC<ProviderCardProps> = ({
   provider,
   className,
+  loading,
 }) => {
+  // Show loading skeleton when loading and no provider data
+  if (loading && !provider) {
+    return <ProviderSkeletonLoader />
+  }
+
   if (!provider) {
     return (
       <div className='bg-white/[0.02] border border-white/10 rounded-xl p-6 text-center'>
@@ -118,7 +62,17 @@ export const ProviderCard: React.FC<ProviderCardProps> = ({
   return (
     <div className={cn('mt-6', className)}>
       {/* Compact header */}
-      <div className='bg-white/[0.03] border border-white/10 rounded-xl p-6 hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300'>
+      <div className='bg-white/[0.03] border border-white/10 rounded-xl p-6 hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 relative overflow-hidden'>
+        {/* Loading overlay for existing content */}
+        {loading && (
+          <div className='absolute inset-0 bg-gray-900/40 backdrop-blur-sm rounded-xl flex items-center justify-center z-10'>
+            <div className='bg-gray-800/80 backdrop-blur-md rounded-lg p-4 shadow-lg border border-gray-700/50 flex items-center gap-3'>
+              <Loader2 className='w-5 h-5 text-blue-400 animate-spin' />
+              <span className='text-sm text-gray-300 font-medium'>Updating provider...</span>
+            </div>
+          </div>
+        )}
+
         <div className='flex items-start justify-between mb-4'>
           <div className='flex items-center gap-3'>
             <div className='w-10 h-10 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center'>

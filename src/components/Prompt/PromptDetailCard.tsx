@@ -35,6 +35,7 @@ interface PromptDetailCardProps {
   historyHandlers: {
     open: () => void
   }
+  loading?: boolean
 }
 
 export function PromptDetailCard({
@@ -43,6 +44,7 @@ export function PromptDetailCard({
   isPromptUpdating,
   onDebugChange,
   historyHandlers,
+  loading,
 }: PromptDetailCardProps) {
   return (
     <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
@@ -173,7 +175,7 @@ export function PromptDetailCard({
           </div>
         </div>
 
-        <ProviderCard provider={promptDetail?.provider} />
+        <ProviderCard provider={promptDetail?.provider} loading={loading} />
 
         <div className='mt-6 flex flex-col gap-4'>
           {promptDetail?.prompts.map((prompt, idx) => (

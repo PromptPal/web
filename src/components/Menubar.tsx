@@ -1,17 +1,17 @@
-import { Link, useParams, useLocation } from '@tanstack/react-router'
+import { cn } from '@/utils'
+import { Link, useLocation, useParams } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import {
+  BarChart3,
+  ChevronRight,
   Clock,
   GitBranch,
   Home,
   Sparkles,
-  ChevronRight,
   Zap,
-  BarChart3,
 } from 'lucide-react'
 import { lastTag } from '~build/git'
 import buildTime from '~build/time'
-import { cn } from '@/utils'
 
 const menus = [
   {

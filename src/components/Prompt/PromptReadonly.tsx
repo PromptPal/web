@@ -33,15 +33,15 @@ function PromptReadonly(props: PromptReadonlyProps) {
   return (
     <div
       key={index}
-      className='flex flex-col sm:flex-row gap-2 sm:gap-4 w-full'
+      className='flex flex-col sm:flex-row gap-3 sm:gap-6 w-full group'
     >
-      <span className='font-medium w-full sm:w-48 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-500/20 to-purple-500/10 text-blue-300 backdrop-blur-sm border border-gray-700/30 shadow-sm shadow-blue-500/10 flex items-center justify-center sm:justify-start'>
+      <div className='font-semibold w-full sm:w-52 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500/25 to-purple-500/15 text-blue-200 backdrop-blur-md border border-gray-700/40 shadow-lg shadow-blue-500/10 flex items-center justify-center sm:justify-start transition-all duration-200 hover:shadow-blue-500/20 hover:from-blue-500/30 hover:to-purple-500/20'>
         {prompt.role}
-      </span>
-      <div className='whitespace-break-spaces bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/80 backdrop-blur-sm border border-gray-700/30 rounded-lg w-full p-4 shadow-lg'>
+      </div>
+      <div className='whitespace-break-spaces bg-gradient-to-br from-gray-900/70 via-gray-800/50 to-gray-900/70 backdrop-blur-md border border-gray-700/40 rounded-xl w-full p-6 shadow-xl transition-all duration-200 hover:shadow-2xl hover:bg-gradient-to-br hover:from-gray-900/80 hover:via-gray-800/60 hover:to-gray-900/80 hover:border-gray-600/50'>
         <div
           dangerouslySetInnerHTML={{ __html: highlightedContent }}
-          className='prompt-content'
+          className='prompt-content text-gray-200 leading-relaxed'
         />
       </div>
     </div>

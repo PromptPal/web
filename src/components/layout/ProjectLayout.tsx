@@ -37,7 +37,7 @@ function ProjectLayout() {
 
       <div className='z-10 flex min-h-screen'>
         {/* Sidebar */}
-        <div className='flex-shrink-0 p-4'>
+        <div className='flex-shrink-0 px-4'>
           <Menubar />
         </div>
 

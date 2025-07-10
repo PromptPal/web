@@ -3,6 +3,8 @@ import { createRootRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
 import BaseLayout from '../components/layout/Base'
 
+import { Inspector } from 'react-dev-inspector'
+
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null
   : lazy(() =>
@@ -14,6 +16,7 @@ const TanStackRouterDevtools = import.meta.env.PROD
 export const Route = createRootRoute({
   component: () => (
     <>
+      <Inspector />
       <BaseLayout />
       <TanStackRouterDevtools />
     </>

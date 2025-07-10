@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import "tw-animate-css";
 @config '../tailwind.config.js';
 
 @source '../node_modules/@annatarhe/lake-ui/dist/**/*.js';
@@ -64,11 +64,30 @@
 
 /* Highlight styles for prompt variables */
 .prompt-content .highlight-variable {
-  background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(168, 85, 247, 0.2));
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: #93c5fd;
-  font-weight: 500;
+  background: linear-gradient(
+    to right,
+    rgba(59, 130, 246, 0.3),
+    rgba(168, 85, 247, 0.25)
+  );
+  padding: 3px 8px;
+  border-radius: 8px;
+  color: #bfdbfe;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+  transition: all 0.2s ease;
+}
+
+.prompt-content .highlight-variable:hover {
+  background: linear-gradient(
+    to right,
+    rgba(59, 130, 246, 0.4),
+    rgba(168, 85, 247, 0.35)
+  );
+  color: #dbeafe;
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+  transform: translateY(-1px);
 }
 
 /* Enhanced form styling for better light/dark theme support */
@@ -80,7 +99,7 @@
   }
 
   .enhanced-form-section::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 rounded-2xl blur-xl transition-all duration-500 pointer-events-none;
     background: inherit;
     z-index: -1;
@@ -101,30 +120,40 @@
     -webkit-appearance: none;
     @apply h-5 w-5 rounded-full cursor-pointer transition-all duration-200;
     background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 4px 12px rgba(139, 92, 246, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.2);
   }
 
   .slider-thumb::-webkit-slider-thumb:hover {
     @apply scale-110;
-    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 6px 16px rgba(139, 92, 246, 0.6),
+      0 0 0 2px rgba(255, 255, 255, 0.2);
   }
 
   .slider-thumb::-moz-range-thumb {
     @apply h-5 w-5 rounded-full cursor-pointer transition-all duration-200 border-0;
     background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 4px 12px rgba(139, 92, 246, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
   }
 
   .slider-thumb::-moz-range-thumb:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 6px 16px rgba(139, 92, 246, 0.6),
+      0 0 0 2px rgba(255, 255, 255, 0.2);
   }
 
   /* Enhanced input focus states */
   .enhanced-input:focus-within {
     @apply ring-2 ring-offset-0;
-    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 0 0 2px rgba(139, 92, 246, 0.2),
+      0 8px 16px rgba(0, 0, 0, 0.1);
   }
 
   /* Dark theme adjustments */
@@ -134,7 +163,9 @@
     }
 
     .enhanced-input:focus-within {
-      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3), 0 8px 16px rgba(0, 0, 0, 0.3);
+      box-shadow:
+        0 0 0 2px rgba(139, 92, 246, 0.3),
+        0 8px 16px rgba(0, 0, 0, 0.3);
     }
   }
 
@@ -146,7 +177,9 @@
     }
 
     .enhanced-input:focus-within {
-      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2), 0 8px 16px rgba(0, 0, 0, 0.08);
+      box-shadow:
+        0 0 0 2px rgba(139, 92, 246, 0.2),
+        0 8px 16px rgba(0, 0, 0, 0.08);
     }
   }
 
@@ -181,13 +214,21 @@
 
   /* Background grid pattern */
   .bg-grid-pattern {
-    background-image: radial-gradient(circle, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.1) 1px,
+      transparent 1px
+    );
     background-size: 20px 20px;
   }
 
   @media (prefers-color-scheme: dark) {
     .bg-grid-pattern {
-      background-image: radial-gradient(circle, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
+      background-image: radial-gradient(
+        circle,
+        rgba(139, 92, 246, 0.15) 1px,
+        transparent 1px
+      );
     }
   }
 
