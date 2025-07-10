@@ -1,10 +1,11 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { Shield, Sparkles, ArrowRight } from 'lucide-react'
-import LoginButton from '../../components/Header/login'
+import { ArrowRight, Shield, Sparkles } from 'lucide-react'
+import React from 'react'
 import { HTTP_ENDPOINT } from '../../constants'
 import { fetchSSOSettings } from '../../service/sso'
+const LoginButtonContainer = React.lazy(() => import('@/components/Header/login-container'))
 
 function AuthorizePage() {
   const { data: settings } = useQuery({
@@ -72,7 +73,7 @@ function AuthorizePage() {
               ref={dom}
             >
               <div className='w-full'>
-                <LoginButton buttonText='Connect with Metamask' />
+                <LoginButtonContainer buttonText='Connect with Metamask' />
               </div>
 
               {settings?.enableSsoGoogle && (

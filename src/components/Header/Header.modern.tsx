@@ -3,7 +3,8 @@ import { BookText, Home, PlusCircle, Settings, Sparkles } from 'lucide-react'
 import React from 'react'
 import Profile from './Profile'
 import ProjectSelector from './ProjectSelector'
-import LoginButton from './login'
+
+const LoginButtonContainer = React.lazy(() => import('./login-container'))
 
 interface NavItemProps {
   icon: React.ReactNode
@@ -65,7 +66,7 @@ export function Header() {
 
             <div className='flex items-center gap-3'>
               <Profile />
-              <LoginButton />
+              <LoginButtonContainer />
             </div>
           </div>
         </div>

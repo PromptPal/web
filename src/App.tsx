@@ -1,5 +1,4 @@
 import { ApolloProvider } from '@apollo/client'
-import { MetaMaskProvider } from '@metamask/sdk-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Provider as JotaiProvider } from 'jotai'
@@ -33,25 +32,14 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <MetaMaskProvider
-      sdkOptions={{
-        dappMetadata: {
-          name: 'PromptPal',
-          url: window.location.href,
-        },
-        // infuraAPIKey: process.env.INFURA_API_KEY,
-        // Other options.
-      }}
-    >
-      <JotaiProvider>
-        <ApolloProvider client={apolloClient}>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
-        </ApolloProvider>
-      </JotaiProvider>
-    </MetaMaskProvider>
+    <JotaiProvider>
+      <ApolloProvider client={apolloClient}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ApolloProvider>
+    </JotaiProvider>
   )
 }
 
