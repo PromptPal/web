@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.14.0](https://github.com/PromptPal/web/compare/v1.13.3...v1.14.0) (2025-07-10)
+
+
+### Features
+
+* **providers:** enhance provider page with modern UI design ([90d672f](https://github.com/PromptPal/web/commit/90d672f652bec7dfac569c2f9c1c967cc865596d))
+* **providers:** modernize form components with lake-ui integration ([aca90bd](https://github.com/PromptPal/web/commit/aca90bd79b01fb3652ea61428044dd7652317edc))
+* **ui:** add file input component and improve UI consistency ([220033d](https://github.com/PromptPal/web/commit/220033db32c7262de2aa4f1c9ae17a6ea5c4e89b))
+* **ui:** enhance table and provider components with elegant design and modular architecture ([127169b](https://github.com/PromptPal/web/commit/127169b8ae438d3448f81d82feab44072f651978))
+* **ui:** modernize header components with elegant design system ([1b4cd37](https://github.com/PromptPal/web/commit/1b4cd37faefce45a3072106bb86a4a26154cfac8))
+* **ui:** modernize project interface with elegant glassmorphism design ([37904a2](https://github.com/PromptPal/web/commit/37904a2be347f176af00404c7ff6c1f3b2276cb1))
+* **ui:** modernize UI with enhanced design system and animations ([7d15478](https://github.com/PromptPal/web/commit/7d154788af78afdb24276541798895d30c65e601))
+
+
+### Bug Fixes
+
+* **app:** enhance project creation UI with animations and gradient styling ([e758538](https://github.com/PromptPal/web/commit/e7585382b1cc7764b2665166e4065af2e732800f))
+* **app:** update style ([5e3e352](https://github.com/PromptPal/web/commit/5e3e352fb37ec851fc8c7c938e04730748c10218))
+* **app:** upgrade dependencies and remove unused Mantine UI packages ([fc6430f](https://github.com/PromptPal/web/commit/fc6430f3eb740c9b85cde9924d88ed589ddf8d7e))
+* **lake:** Replace select with SelectField component and update dependencies ([b38f1da](https://github.com/PromptPal/web/commit/b38f1da3541a798c1d9e70e7318cde3a66b5e873))
+* **lint:** fix lint issue ([dd4cada](https://github.com/PromptPal/web/commit/dd4cada26c524c174e430303193b9e05f6946fcd))
+* **lint:** fix lint issues ([b102713](https://github.com/PromptPal/web/commit/b10271330a9422fa136582b758be7eb5540275b6))
+* **lint:** migrate from biome to eslint and update UI styles with primary color theme ([73b38c9](https://github.com/PromptPal/web/commit/73b38c93267fe0607cea6a77024f44b74f463c4c))
+* **mantine:** remove Mantine UI dependencies and simplify color types ([aa91e42](https://github.com/PromptPal/web/commit/aa91e421d56a6300df7063deaca019e95fa4fed4))
+* **prompts:** resolve zod import path and type safety issues ([bdaaccd](https://github.com/PromptPal/web/commit/bdaaccdf8416d83bdf842a68167d6fec10c526c2))
+* **provider:** enhance provider card UI with purple theme and improved hover effects ([ebfb2ab](https://github.com/PromptPal/web/commit/ebfb2ab314b3111f3f702a5522c1dda7eaefe2e0))
+* **provider:** remove label from provider form switch and reorder imports in project header ([fbd1e6d](https://github.com/PromptPal/web/commit/fbd1e6d3d6318f86ba8bfb09ab2a9720ce52ba0b))
+* **style:** update header and avatar color scheme for better dark mode contrast ([de85029](https://github.com/PromptPal/web/commit/de850296d8807d48dfd14a78bd7ad3e280be50e5))
+* update imports and improve type safety across components ([23a8c18](https://github.com/PromptPal/web/commit/23a8c184852c65491ed4610334a2051b75309f2b))
+* update zod import path and add optional chaining for SVG detection ([dcfaaf5](https://github.com/PromptPal/web/commit/dcfaaf5061d1c2cdeae50c1e02e8434b93cf25d1))
+
 ## [1.13.3](https://github.com/PromptPal/web/compare/v1.13.2...v1.13.3) (2025-04-15)
 
 
