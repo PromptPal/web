@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.14.1](https://github.com/PromptPal/web/compare/v1.14.0...v1.14.1) (2025-07-10)
+
+
+### Bug Fixes
+
+* **vite:** add analyzer for performance improve ([f53b71a](https://github.com/PromptPal/web/commit/f53b71a75c2b5002e9b29bd0f8eb8db492c5d340))
+
+
+### Performance Improvements
+
+* **app:** reduce bundle size in index page ([9ae6af3](https://github.com/PromptPal/web/commit/9ae6af3e0d0e1e4c70a30d06b6d0f39c80c6d6a1))
+
 ## [1.14.0](https://github.com/PromptPal/web/compare/v1.13.3...v1.14.0) (2025-07-10)
 
 
