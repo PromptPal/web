@@ -4,6 +4,8 @@ import BuildInfo from 'unplugin-info/vite'
 import { defineConfig } from 'vite'
 import zipPack from 'vite-plugin-zip-pack'
 
+import { analyzer } from 'vite-bundle-analyzer'
+
 import { inspectorServer } from '@react-dev-inspector/vite-plugin'
 
 const isProduction = process.env.NODE_ENV === 'production'
@@ -18,6 +20,9 @@ export default defineConfig({
     react(),
     BuildInfo(),
     isProduction && zipPack(),
+    analyzer({
+      enabled: !isProduction,
+    }),
     inspectorServer(),
     // ViteFaviconsPlugin('./src/assets/prompt-pal-logo.png')
   ].filter(x => x),
