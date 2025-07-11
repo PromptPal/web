@@ -54,7 +54,7 @@ function ProviderCard({
         'bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm',
         'border border-gray-200/50 dark:border-gray-600/50',
         'shadow-sm hover:shadow-lg',
-        isSelected && 'ring-2 ring-blue-500/50 border-blue-500/50 bg-blue-50/80 dark:bg-blue-950/30',
+        isSelected && 'ring-2 ring-sky-500/50 border-sky-500/50 bg-sky-50/80 dark:bg-sky-950/30',
         isDisabled && 'opacity-60 cursor-not-allowed hover:shadow-sm',
         !isDisabled && 'hover:scale-[1.02]',
       )}
@@ -66,8 +66,8 @@ function ProviderCard({
       {/* Background gradient overlay */}
       <div className={cn(
         'absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300',
-        'bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5',
-        'dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10',
+        'bg-gradient-to-br from-sky-500/5 via-transparent to-blue-500/5',
+        'dark:from-sky-400/10 dark:via-transparent dark:to-blue-400/10',
         isSelected && 'opacity-100',
         !isSelected && 'opacity-0 group-hover:opacity-100',
       )}
@@ -90,15 +90,15 @@ function ProviderCard({
             <div className={cn(
               'p-2.5 rounded-xl backdrop-blur-sm border transition-all duration-200',
               isSelected
-                ? 'bg-gradient-to-br from-blue-500/30 to-purple-500/30 dark:from-blue-400/40 dark:to-purple-400/40 border-blue-500/30 dark:border-blue-400/40'
-                : 'bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-400/30 dark:to-purple-400/30 border-blue-500/20 dark:border-blue-400/30',
+                ? 'bg-gradient-to-br from-sky-500/30 to-blue-500/30 dark:from-sky-400/40 dark:to-blue-400/40 border-sky-500/30 dark:border-sky-400/40'
+                : 'bg-gradient-to-br from-sky-500/20 to-blue-500/20 dark:from-sky-400/30 dark:to-blue-400/30 border-sky-500/20 dark:border-sky-400/30',
             )}
             >
               <Server className={cn(
                 'w-5 h-5 transition-colors duration-200',
                 isSelected
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-blue-600 dark:text-blue-400',
+                  ? 'text-sky-600 dark:text-sky-400'
+                  : 'text-sky-600 dark:text-sky-400',
               )}
               />
             </div>
@@ -107,7 +107,7 @@ function ProviderCard({
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.2 }}
-                className='flex items-center justify-center w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg'
+                className='flex items-center justify-center w-6 h-6 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full shadow-lg'
               >
                 <Check className='w-3.5 h-3.5 text-white' />
               </motion.div>
@@ -127,8 +127,8 @@ function ProviderCard({
             <h3 className={cn(
               'font-semibold text-base leading-tight transition-colors duration-200 max-w-36 text-ellipsis overflow-hidden whitespace-nowrap',
               isSelected
-                ? 'text-blue-700 dark:text-blue-300'
-                : 'text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400',
+                ? 'text-sky-700 dark:text-sky-300'
+                : 'text-gray-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400',
             )}
             >
               {provider.name}
@@ -146,8 +146,8 @@ function ProviderCard({
           <div className={cn(
             'text-xs font-medium transition-colors duration-200',
             isSelected
-              ? 'text-blue-600 dark:text-blue-400'
-              : 'text-gray-500 dark:text-gray-500 group-hover:text-blue-500',
+              ? 'text-sky-600 dark:text-sky-400'
+              : 'text-gray-500 dark:text-gray-500 group-hover:text-sky-500',
           )}
           >
             {isSelected ? '✓ Selected' : 'Click to select'}
@@ -159,7 +159,7 @@ function ProviderCard({
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className='absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 pointer-events-none'
+            className='absolute inset-0 rounded-2xl bg-gradient-to-r from-sky-500/10 to-blue-500/10 pointer-events-none'
           />
         )}
       </div>
@@ -188,8 +188,8 @@ function ProvidersSelector({ name, label, value, onChange }: Props) {
     <div className='space-y-6'>
       {label && (
         <div className='flex items-center gap-3'>
-          <div className='p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-400/30 dark:to-purple-400/30 backdrop-blur-sm border border-blue-500/20 dark:border-blue-400/30'>
-            <Sparkles className='w-4 h-4 text-blue-600 dark:text-blue-400' />
+          <div className='p-2 rounded-lg bg-gradient-to-br from-sky-500/20 to-blue-500/20 dark:from-sky-400/30 dark:to-blue-400/30 backdrop-blur-sm border border-sky-500/20 dark:border-sky-400/30'>
+            <Sparkles className='w-4 h-4 text-sky-600 dark:text-sky-400' />
           </div>
           <label className='text-lg font-semibold text-gray-900 dark:text-white'>
             {label}
@@ -205,8 +205,8 @@ function ProvidersSelector({ name, label, value, onChange }: Props) {
               className='flex flex-col items-center justify-center py-12 space-y-4'
             >
               <div className='relative'>
-                <div className='w-12 h-12 rounded-full border-4 border-blue-200 dark:border-blue-800'></div>
-                <Loader2 className='w-12 h-12 text-blue-500 animate-spin absolute top-0 left-0' />
+                <div className='w-12 h-12 rounded-full border-4 border-sky-200 dark:border-sky-800'></div>
+                <Loader2 className='w-12 h-12 text-sky-500 animate-spin absolute top-0 left-0' />
               </div>
               <p className='text-sm text-gray-600 dark:text-gray-400 font-medium'>
                 Loading providers...

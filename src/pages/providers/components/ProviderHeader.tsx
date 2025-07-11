@@ -33,14 +33,14 @@ export function ProviderHeader({
       )}
     >
       {/* Background gradient overlay */}
-      <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10 pointer-events-none' />
+      <div className='absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-blue-500/5 dark:from-sky-400/10 dark:via-transparent dark:to-blue-400/10 pointer-events-none' />
 
       <div className='relative p-6'>
         <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-6'>
           <div className='space-y-4'>
             <div className='flex items-center gap-4'>
-              <div className='p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-400/30 dark:to-purple-400/30 backdrop-blur-sm border border-blue-500/20 dark:border-blue-400/30'>
-                <Sparkles className='w-8 h-8 text-blue-600 dark:text-blue-400' />
+              <div className='p-3 rounded-2xl bg-gradient-to-br from-sky-500/20 to-blue-500/20 dark:from-sky-400/30 dark:to-blue-400/30 backdrop-blur-sm border border-sky-500/20 dark:border-sky-400/30'>
+                <Sparkles className='w-8 h-8 text-sky-600 dark:text-sky-400' />
               </div>
               <div className='space-y-2'>
                 <h1 className='text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent'>
@@ -86,11 +86,11 @@ export function ProviderHeader({
                 params={{ id: provider.id.toString() }}
                 className={cn(
                   'group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium',
-                  'bg-blue-50/80 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300',
-                  'hover:bg-blue-100/80 dark:hover:bg-blue-900/40',
-                  'border border-blue-200/50 dark:border-blue-800/50',
+                  'bg-sky-50/80 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300',
+                  'hover:bg-sky-100/80 dark:hover:bg-sky-900/40',
+                  'border border-sky-200/50 dark:border-sky-800/50',
                   'shadow-sm hover:shadow-md transition-all duration-200',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50',
                 )}
               >
                 <Edit className='w-4 h-4 transition-transform duration-200 group-hover:scale-110' />

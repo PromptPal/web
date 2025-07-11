@@ -79,10 +79,10 @@ function ProjectPage() {
 
   if (!project) {
     return (
-      <div className='w-full min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900 flex items-center justify-center'>
+      <div className='w-full min-h-screen bg-gradient-to-br from-slate-900 via-sky-900/10 to-slate-900 flex items-center justify-center'>
         <div className='text-center space-y-4'>
-          <div className='w-12 h-12 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center mx-auto'>
-            <div className='w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin' />
+          <div className='w-12 h-12 rounded-full bg-gradient-to-br from-sky-500/20 to-blue-600/20 flex items-center justify-center mx-auto'>
+            <div className='w-6 h-6 border-2 border-sky-400 border-t-transparent rounded-full animate-spin' />
           </div>
           <p className='text-gray-400'>Loading project...</p>
         </div>
@@ -91,15 +91,15 @@ function ProjectPage() {
   }
 
   return (
-    <div className='w-full min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900'>
+    <div className='w-full min-h-screen bg-gradient-to-br from-slate-900 via-sky-900/10 to-slate-900'>
       <div className='w-full flex flex-col gap-4 p-4 max-w-6xl mx-auto'>
         {/* Compact Header */}
         <div className='bg-white/[0.03] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300'>
           <div className='flex flex-col lg:flex-row lg:justify-between lg:items-start gap-3'>
             <div className='flex-1'>
               <div className='flex items-center gap-3 mb-2'>
-                <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center border border-blue-500/30'>
-                  <Zap className='w-4 h-4 text-blue-400' />
+                <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500/20 to-blue-600/20 flex items-center justify-center border border-sky-500/30'>
+                  <Zap className='w-4 h-4 text-sky-400' />
                 </div>
                 <div>
                   <h1 className='text-xl font-bold text-white leading-tight'>
@@ -117,7 +117,7 @@ function ProjectPage() {
                   <Clock className='w-3 h-3' />
                   7 days
                 </span>
-                <span className='inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20'>
+                <span className='inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20'>
                   <Star className='w-3 h-3' />
                   Premium
                 </span>
@@ -136,7 +136,7 @@ function ProjectPage() {
               <Link
                 to='/$pid/edit'
                 params={{ pid }}
-                className='inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200'
+                className='inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-white bg-orange-600 hover:bg-orange-700 transition-colors duration-200'
               >
                 <Settings className='w-3 h-3' />
                 Configure
@@ -159,7 +159,7 @@ function ProjectPage() {
 
             <div className='bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.03] transition-colors duration-200'>
               <div className='flex items-center gap-2 mb-1'>
-                <BarChart3 className='w-4 h-4 text-blue-400' />
+                <BarChart3 className='w-4 h-4 text-sky-400' />
                 <span className='text-xs font-medium text-gray-400'>Prompts</span>
               </div>
               <p className='text-lg font-bold text-white'>
@@ -170,7 +170,7 @@ function ProjectPage() {
 
             <div className='bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.03] transition-colors duration-200'>
               <div className='flex items-center gap-2 mb-1'>
-                <Shield className='w-4 h-4 text-purple-400' />
+                <Shield className='w-4 h-4 text-blue-400' />
                 <span className='text-xs font-medium text-gray-400'>Tokens</span>
               </div>
               <p className='text-lg font-bold text-white'>
@@ -198,7 +198,7 @@ function ProjectPage() {
         {/* Compact Metrics Section */}
         <div className='bg-white/[0.03] border border-white/10 rounded-lg p-4 hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300'>
           <div className='flex items-center gap-2 mb-4'>
-            <BarChart3 className='w-4 h-4 text-indigo-400' />
+            <BarChart3 className='w-4 h-4 text-sky-400' />
             <h2 className='text-lg font-semibold text-white'>
               Usage Analytics
             </h2>

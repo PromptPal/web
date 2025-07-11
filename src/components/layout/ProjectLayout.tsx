@@ -11,10 +11,10 @@ const LoadingState = () => (
   <div className='flex items-center justify-center min-h-[60vh]'>
     <div className='text-center space-y-4'>
       <div className='relative'>
-        <div className='w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center mx-auto border border-blue-500/30'>
-          <Loader2 className='w-8 h-8 text-blue-400 animate-spin' />
+        <div className='w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500/20 to-blue-600/20 flex items-center justify-center mx-auto border border-sky-500/30'>
+          <Loader2 className='w-8 h-8 text-sky-400 animate-spin' />
         </div>
-        <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 blur-lg opacity-50 animate-pulse' />
+        <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-sky-500/30 to-blue-600/30 blur-lg opacity-50 animate-pulse' />
       </div>
       <div className='space-y-2'>
         <h3 className='text-lg font-semibold text-white'>Loading</h3>
@@ -28,11 +28,11 @@ function ProjectLayout() {
   const token = useAtomValue(tokenAtom)
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/5 to-slate-900 relative'>
+    <div className='min-h-screen bg-gradient-to-br from-slate-900 via-sky-900/5 to-slate-900 relative'>
       {/* Ambient background elements */}
       <div className='absolute inset-0 pointer-events-none'>
-        <div className='absolute top-1/4 left-1/6 w-64 h-64 bg-gradient-to-br from-blue-500/3 to-purple-500/3 rounded-full blur-3xl animate-pulse' />
-        <div className='absolute bottom-1/3 right-1/6 w-96 h-96 bg-gradient-to-br from-purple-500/3 to-pink-500/3 rounded-full blur-3xl animate-pulse delay-1000' />
+        <div className='absolute top-1/4 left-1/6 w-64 h-64 bg-gradient-to-br from-sky-500/3 to-blue-500/3 rounded-full blur-3xl animate-pulse' />
+        <div className='absolute bottom-1/3 right-1/6 w-96 h-96 bg-gradient-to-br from-blue-500/3 to-indigo-500/3 rounded-full blur-3xl animate-pulse delay-1000' />
       </div>
 
       <div className='z-10 flex min-h-screen'>

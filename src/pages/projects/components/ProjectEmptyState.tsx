@@ -16,9 +16,9 @@ export function ProjectEmptyState() {
         'shadow-xl min-h-[300px]', // Added shadow and min-height for better presence
       )}
     >
-      <FolderKanban className='h-16 w-16 mb-6 text-purple-400' />
+      <FolderKanban className='h-16 w-16 mb-6 text-sky-400' />
       <div className='space-y-2 text-center mb-6'>
-        <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
+        <h2 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-sky-400 to-blue-500'>
           No Projects Yet
         </h2>
         <p className='text-lg text-gray-400'>
@@ -29,9 +29,9 @@ export function ProjectEmptyState() {
         to='/projects/new'
         className={cn(
           'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-base',
-          'bg-purple-600 hover:bg-purple-700 text-white',
+          'bg-orange-600 hover:bg-orange-700 text-white',
           'transition-colors duration-200',
-          'shadow-lg shadow-purple-600/30 hover:shadow-purple-700/40',
+          'shadow-lg shadow-orange-600/30 hover:shadow-orange-700/40',
         )}
       >
         <PlusCircle className='w-5 h-5' />

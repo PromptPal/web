@@ -38,18 +38,18 @@ export function ProviderList({ providers }: ProviderListProps) {
           >
             <div className='relative h-full rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200/50 dark:border-gray-600/50 overflow-hidden'>
               {/* Background gradient overlay */}
-              <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10 pointer-events-none' />
+              <div className='absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-blue-500/5 dark:from-sky-400/10 dark:via-transparent dark:to-blue-400/10 pointer-events-none' />
 
               <div className='relative p-6 h-full flex flex-col'>
                 {/* Header */}
                 <div className='flex items-start justify-between mb-4'>
                   <div className='flex items-center gap-3'>
-                    <div className='p-2.5 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-400/30 dark:to-purple-400/30 backdrop-blur-sm border border-blue-500/20 dark:border-blue-400/30'>
-                      <Server className='w-5 h-5 text-blue-600 dark:text-blue-400' />
+                    <div className='p-2.5 rounded-xl bg-gradient-to-br from-sky-500/20 to-blue-500/20 dark:from-sky-400/30 dark:to-blue-400/30 backdrop-blur-sm border border-sky-500/20 dark:border-sky-400/30'>
+                      <Server className='w-5 h-5 text-sky-600 dark:text-sky-400' />
                     </div>
                     <div className='min-w-0 flex-1'>
                       <Tooltip content={provider.name}>
-                        <h3 className='font-semibold text-lg text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 max-w-48'>
+                        <h3 className='font-semibold text-lg text-gray-900 dark:text-white truncate group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors duration-200 max-w-48'>
                           {provider.name}
                         </h3>
                       </Tooltip>
@@ -100,7 +100,7 @@ export function ProviderList({ providers }: ProviderListProps) {
                     {' '}
                     {provider.id}
                   </span>
-                  <div className='flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors duration-200'>
+                  <div className='flex items-center gap-2 text-sm font-medium text-sky-600 dark:text-sky-400 group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors duration-200'>
                     <span>View Details</span>
                     <ArrowRight className='w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5' />
                   </div>
@@ -108,7 +108,7 @@ export function ProviderList({ providers }: ProviderListProps) {
               </div>
 
               {/* Hover effect overlay */}
-              <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none' />
+              <div className='absolute inset-0 bg-gradient-to-br from-sky-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none' />
             </div>
           </Link>
         </motion.div>

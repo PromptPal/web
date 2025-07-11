@@ -22,7 +22,7 @@ export function EmptyState() {
       )}
     >
       {/* Background gradient overlay */}
-      <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10 rounded-2xl pointer-events-none' />
+      <div className='absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-blue-500/5 dark:from-sky-400/10 dark:via-transparent dark:to-blue-400/10 rounded-2xl pointer-events-none' />
 
       <div className='relative z-10 space-y-8'>
         {/* Icon */}
@@ -32,8 +32,8 @@ export function EmptyState() {
           transition={{ duration: 0.4, delay: 0.2 }}
           className='flex justify-center'
         >
-          <div className='p-6 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-400/30 dark:to-purple-400/30 backdrop-blur-sm border border-blue-500/20 dark:border-blue-400/30'>
-            <Server className='h-12 w-12 text-blue-600 dark:text-blue-400' />
+          <div className='p-6 rounded-2xl bg-gradient-to-br from-sky-500/20 to-blue-500/20 dark:from-sky-400/30 dark:to-blue-400/30 backdrop-blur-sm border border-sky-500/20 dark:border-sky-400/30'>
+            <Server className='h-12 w-12 text-sky-600 dark:text-sky-400' />
           </div>
         </motion.div>
 
@@ -62,12 +62,12 @@ export function EmptyState() {
             to='/providers/new'
             className={cn(
               'group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium text-white',
-              'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600',
-              'transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50',
+              'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600',
+              'transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/40',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50',
             )}
           >
-            <div className='absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-300' />
+            <div className='absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-300' />
             <PlusCircle className='w-4 h-4 relative z-10' />
             <span className='relative z-10'>Create Your First Provider</span>
             <Sparkles className='w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />

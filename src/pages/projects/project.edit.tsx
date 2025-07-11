@@ -177,7 +177,7 @@ function ProjectEditPage() {
   const projectName = watch('name')
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/5 to-slate-900 p-4'>
+    <div className='min-h-screen bg-gradient-to-br from-slate-900 via-sky-900/5 to-slate-900 p-4'>
       <div className='max-w-4xl mx-auto space-y-6'>
         {/* Enhanced Header */}
         <div className='bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl shadow-black/20'>
@@ -192,8 +192,8 @@ function ProjectEditPage() {
                 Back
               </Link>
               <div className='flex items-center gap-3'>
-                <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center border border-blue-500/30'>
-                  <Settings className='w-5 h-5 text-blue-400' />
+                <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500/20 to-blue-600/20 flex items-center justify-center border border-sky-500/30'>
+                  <Settings className='w-5 h-5 text-sky-400' />
                 </div>
                 <div>
                   <h1 className='text-2xl font-bold text-white'>Edit Project</h1>
@@ -262,7 +262,7 @@ function ProjectEditPage() {
                   <h3 className='text-lg font-semibold text-white'>AI Provider</h3>
                   <Link
                     to='/providers'
-                    className='inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/15 hover:border-blue-500/30 transition-all duration-200'
+                    className='inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-sky-400 bg-sky-500/10 border border-sky-500/20 hover:bg-sky-500/15 hover:border-sky-500/30 transition-all duration-200'
                   >
                     Manage Providers
                   </Link>
@@ -305,7 +305,7 @@ function ProjectEditPage() {
                   className={cn(
                     'inline-flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200',
                     formState.isValid && !isLoading
-                      ? 'text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25'
+                      ? 'text-white bg-orange-600 hover:bg-orange-700 shadow-lg shadow-orange-600/25'
                       : 'text-gray-400 bg-gray-600/50 cursor-not-allowed',
                   )}
                 >

@@ -101,13 +101,13 @@ function ProviderForm({
         <div className='flex items-center gap-4'>
           <div className={`p-3 rounded-2xl backdrop-blur-sm border ${
             submitButtonText === 'Create Provider'
-              ? 'bg-gradient-to-br from-violet-500/20 to-purple-500/20 dark:from-violet-400/30 dark:to-purple-400/30 border-violet-500/20 dark:border-violet-400/30'
+              ? 'bg-gradient-to-br from-sky-500/20 to-blue-500/20 dark:from-sky-400/30 dark:to-blue-400/30 border-sky-500/20 dark:border-sky-400/30'
               : 'bg-gradient-to-br from-orange-500/20 to-red-500/20 dark:from-orange-400/30 dark:to-red-400/30 border-orange-500/20 dark:border-orange-400/30'
           }`}
           >
             {submitButtonText === 'Create Provider'
               ? (
-                  <Sparkles className='w-8 h-8 text-violet-600 dark:text-violet-400' />
+                  <Sparkles className='w-8 h-8 text-sky-600 dark:text-sky-400' />
                 )
               : (
                   <Settings className='w-8 h-8 text-orange-600 dark:text-orange-400' />
@@ -191,7 +191,7 @@ function ProviderForm({
                 type='submit'
                 isLoading={isSubmitting}
                 icon={Save}
-                className='min-w-[140px] bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-700 shadow-lg shadow-violet-500/25'
+                className='min-w-[140px] bg-gradient-to-r from-orange-500 via-red-500 to-red-600 hover:from-orange-600 hover:via-red-600 hover:to-red-700 shadow-lg shadow-orange-500/25'
               >
                 {submitButtonText}
               </Button>

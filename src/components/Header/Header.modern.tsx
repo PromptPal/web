@@ -24,16 +24,16 @@ export function Header() {
           <div className='flex items-center gap-8'>
             <Link to='/' className='flex items-center gap-3 group'>
               <div className='relative'>
-                <div className='absolute inset-0 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl blur-lg opacity-75 group-hover:opacity-100 transition-opacity' />
-                <div className='relative bg-gradient-to-br from-violet-500 to-indigo-600 p-2.5 rounded-xl shadow-lg transform group-hover:scale-110 transition-all duration-300'>
+                <div className='absolute inset-0 bg-gradient-to-br from-sky-600 to-blue-600 rounded-xl blur-lg opacity-75 group-hover:opacity-100 transition-opacity' />
+                <div className='relative bg-gradient-to-br from-sky-500 to-blue-600 p-2.5 rounded-xl shadow-lg transform group-hover:scale-110 transition-all duration-300'>
                   <BookText className='h-5 w-5 text-white' strokeWidth={2.5} />
                 </div>
               </div>
               <div className='flex items-center gap-1.5'>
-                <span className='text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent'>
+                <span className='text-xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 dark:from-sky-400 dark:to-blue-400 bg-clip-text text-transparent'>
                   PromptPal
                 </span>
-                <Sparkles className='h-4 w-4 text-violet-500 dark:text-violet-400 animate-pulse' />
+                <Sparkles className='h-4 w-4 text-sky-500 dark:text-sky-400 animate-pulse' />
               </div>
             </Link>
 
@@ -84,12 +84,12 @@ function NavItem({ icon, label, active, to }: NavItemProps) {
         transition-all duration-200 group
         ${
     active
-      ? 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10'
+      ? 'text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-500/10'
       : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800/50'
     }
       `}
       activeProps={{
-        className: 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10',
+        className: 'text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-500/10',
       }}
     >
       <span className='relative z-10 flex items-center gap-2'>
@@ -97,7 +97,7 @@ function NavItem({ icon, label, active, to }: NavItemProps) {
         <span className='hidden lg:inline'>{label}</span>
       </span>
       {active && (
-        <div className='absolute inset-0 bg-gradient-to-r from-violet-500/10 to-indigo-500/10 dark:from-violet-500/20 dark:to-indigo-500/20 rounded-lg' />
+        <div className='absolute inset-0 bg-gradient-to-r from-sky-500/10 to-blue-500/10 dark:from-sky-500/20 dark:to-blue-500/20 rounded-lg' />
       )}
     </Link>
   )

@@ -27,7 +27,7 @@ function LandingPage() {
       <section className='relative'>
         {/* Background Gradient Effects */}
         <div className='absolute inset-0'>
-          <div className='absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl' />
+          <div className='absolute top-0 left-1/4 w-96 h-96 bg-sky-500/20 rounded-full blur-3xl' />
           <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl' />
         </div>
 
@@ -38,7 +38,7 @@ function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <h1 className='text-5xl md:text-7xl font-bold mb-6'>
-              <span className='bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent'>
+              <span className='bg-gradient-to-r from-sky-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent'>
                 PromptPal
               </span>
             </h1>
@@ -86,8 +86,8 @@ function LandingPage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className='group'
               >
-                <div className='p-8 rounded-2xl bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10'>
-                  <div className='w-12 h-12 mb-4 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white'>
+                <div className='p-8 rounded-2xl bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm border border-gray-700/50 hover:border-sky-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-sky-500/10'>
+                  <div className='w-12 h-12 mb-4 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white'>
                     {feature.icon}
                   </div>
                   <h3 className='text-xl font-semibold mb-2 text-white'>{feature.title}</h3>
@@ -111,7 +111,7 @@ function LandingPage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className='text-center'
               >
-                <div className='text-4xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent mb-2'>
+                <div className='text-4xl font-bold bg-gradient-to-r from-sky-400 to-blue-400 bg-clip-text text-transparent mb-2'>
                   {stat.value}
                 </div>
                 <div className='text-gray-400'>{stat.label}</div>
@@ -130,10 +130,10 @@ function LandingPage() {
           className='container mx-auto text-center'
         >
           <div className='relative inline-block'>
-            <div className='absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500 blur-2xl opacity-50' />
+            <div className='absolute inset-0 bg-gradient-to-r from-sky-500 to-blue-500 blur-2xl opacity-50' />
             <div className='relative bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-12'>
               <h2 className='text-3xl md:text-4xl font-bold mb-4'>
-                <span className='bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent'>
+                <span className='bg-gradient-to-r from-sky-400 to-blue-400 bg-clip-text text-transparent'>
                   Ready to elevate your AI workflow?
                 </span>
               </h2>

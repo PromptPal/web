@@ -43,7 +43,7 @@ function ProvidersPage() {
     <div className='min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-950 dark:via-gray-900/95 dark:to-gray-800/90'>
       {/* Background Pattern */}
       <div className='absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10'></div>
-      <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-400/10 dark:via-transparent dark:to-purple-400/10'></div>
+      <div className='absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-blue-500/5 dark:from-sky-400/10 dark:via-transparent dark:to-blue-400/10'></div>
 
       <div className='relative z-10'>
         <div className='container max-w-7xl mx-auto px-4 py-8'>
