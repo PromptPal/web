@@ -96,9 +96,7 @@ function ProviderCard({
             >
               <Server className={cn(
                 'w-5 h-5 transition-colors duration-200',
-                isSelected
-                  ? 'text-sky-600 dark:text-sky-400'
-                  : 'text-sky-600 dark:text-sky-400',
+                'text-sky-600 dark:text-sky-400',
               )}
               />
             </div>
