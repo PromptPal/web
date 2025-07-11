@@ -5,6 +5,7 @@ import { ArrowRight, Shield, Sparkles } from 'lucide-react'
 import React from 'react'
 import { HTTP_ENDPOINT } from '../../constants'
 import { fetchSSOSettings } from '../../service/sso'
+
 const LoginButtonContainer = React.lazy(() => import('@/components/Header/login-container'))
 
 function AuthorizePage() {
