@@ -16,17 +16,17 @@ export function VariablesSection({
   return (
     <section className='relative w-full backdrop-blur-xl bg-linear-to-br from-gray-900/90 via-gray-800/90 to-gray-900/90 rounded-2xl overflow-hidden'>
       {/* Background blur effect */}
-      <div className='absolute inset-0 bg-linear-to-br from-blue-500/5 to-purple-500/5 backdrop-blur-3xl' />
+      <div className='absolute inset-0 bg-linear-to-br from-sky-500/5 to-blue-500/5 backdrop-blur-3xl' />
 
       {/* Content */}
       <div className='relative p-8'>
         <div className='flex flex-col gap-8'>
           {/* Header */}
           <div className='flex items-center gap-3'>
-            <div className='p-2 rounded-xl bg-linear-to-br from-blue-500/10 to-purple-500/10'>
-              <Variable size={24} className='text-blue-400' />
+            <div className='p-2 rounded-xl bg-linear-to-br from-sky-500/10 to-blue-500/10'>
+              <Variable size={24} className='text-sky-400' />
             </div>
-            <h3 className='text-2xl font-bold tracking-tight bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
+            <h3 className='text-2xl font-bold tracking-tight bg-linear-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent'>
               Variables
             </h3>
           </div>
@@ -37,7 +37,7 @@ export function VariablesSection({
               return (
                 <div
                   key={field.id}
-                  className='group relative flex flex-col gap-3 w-full p-4 rounded-xl bg-linear-to-br from-gray-800/40 via-gray-800/20 to-gray-800/40 backdrop-blur-xl border border-gray-700/30 hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5'
+                  className='group relative flex flex-col gap-3 w-full p-4 rounded-xl bg-linear-to-br from-gray-800/40 via-gray-800/20 to-gray-800/40 backdrop-blur-xl border border-gray-700/30 hover:border-sky-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-sky-500/5'
                 >
                   {/* Settings icon */}
                   {/* <div className='absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
@@ -59,7 +59,7 @@ export function VariablesSection({
                             'bg-gray-900/50 border border-gray-700/50',
                             'text-gray-200 disabled:opacity-70',
                             'transition-colors duration-200',
-                            'focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/10 outline-hidden',
+                            'focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/10 outline-hidden',
                           )}
                         />
                       </div>

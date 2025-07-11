@@ -26,7 +26,7 @@ const menus = [
     text: 'Analytics',
     description: 'Detailed insights',
     link: (id: number) => `/${id}/view`,
-    color: 'from-purple-500 to-pink-500',
+    color: 'from-sky-500 to-blue-500',
   },
   {
     icon: Sparkles,
@@ -52,7 +52,7 @@ function Menubar() {
       {/* Header */}
       <div className='p-6 border-b border-white/10'>
         <div className='flex items-center gap-3'>
-          <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg'>
+          <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-sky-600 flex items-center justify-center shadow-lg'>
             <Zap className='w-5 h-5 text-white' />
           </div>
           <div>

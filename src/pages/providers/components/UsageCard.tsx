@@ -15,10 +15,10 @@ export function UsageCard({ projects, prompts }: UsageCardProps) {
     <DetailCard title='Usage Statistics'>
       <div className='space-y-4'>
         {/* Summary Card */}
-        <div className='p-4 rounded-xl bg-gradient-to-r from-indigo-50/80 to-purple-50/80 dark:from-indigo-950/30 dark:to-purple-950/30 border border-indigo-200/50 dark:border-indigo-800/50'>
+        <div className='p-4 rounded-xl bg-gradient-to-r from-sky-50/80 to-blue-50/80 dark:from-sky-950/30 dark:to-blue-950/30 border border-sky-200/50 dark:border-sky-800/50'>
           <div className='flex items-center gap-3 mb-2'>
-            <div className='p-2 rounded-lg bg-indigo-100/80 dark:bg-indigo-900/40'>
-              <TrendingUp className='h-4 w-4 text-indigo-600 dark:text-indigo-400' />
+            <div className='p-2 rounded-lg bg-sky-100/80 dark:bg-sky-900/40'>
+              <TrendingUp className='h-4 w-4 text-sky-600 dark:text-sky-400' />
             </div>
             <div className='text-sm font-medium text-gray-600 dark:text-gray-400'>
               Total Items
@@ -31,7 +31,7 @@ export function UsageCard({ projects, prompts }: UsageCardProps) {
         </div>
 
         {/* Projects Card */}
-        <div className='p-4 rounded-xl bg-gradient-to-r from-blue-50/80 to-cyan-50/80 dark:from-blue-950/30 dark:to-cyan-950/30 border border-blue-200/50 dark:border-blue-800/50'>
+        <div className='p-4 rounded-xl bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200/50 dark:border-blue-800/50'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='p-2 rounded-lg bg-blue-100/80 dark:bg-blue-900/40'>

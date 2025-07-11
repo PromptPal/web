@@ -77,7 +77,7 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
   if (data?.prompt.histories.count === 0) {
     return (
       <div className='flex flex-col items-center justify-center py-20 text-center'>
-        <ArchiveXIcon className='w-16 h-16 mb-4 text-purple-400 dark:text-purple-500 opacity-70' />
+        <ArchiveXIcon className='w-16 h-16 mb-4 text-sky-400 dark:text-sky-500 opacity-70' />
         <p className='text-xl font-semibold text-gray-700 dark:text-gray-300'>No History Found</p>
         <p className='text-sm text-gray-500 dark:text-gray-400'>There are no recorded changes for this prompt yet.</p>
       </div>
@@ -90,23 +90,23 @@ function PromptHistoriesPage(props: PromptHistoriesPageProps) {
         return (
           <details
             key={idx}
-            className='bg-white/60 dark:bg-black/50 backdrop-blur-lg rounded-xl shadow-lg overflow-hidden group transition-all duration-300 ease-in-out open:shadow-2xl open:ring-1 open:ring-purple-300 dark:open:ring-purple-700'
+            className='bg-white/60 dark:bg-black/50 backdrop-blur-lg rounded-xl shadow-lg overflow-hidden group transition-all duration-300 ease-in-out open:shadow-2xl open:ring-1 open:ring-sky-300 dark:open:ring-sky-700'
           >
-            <summary className='p-5 cursor-pointer flex justify-between items-center font-semibold text-lg text-purple-700 dark:text-purple-400 hover:bg-purple-100/70 dark:hover:bg-purple-900/40 transition-colors duration-150 list-none'>
+            <summary className='p-5 cursor-pointer flex justify-between items-center font-semibold text-lg text-sky-700 dark:text-sky-400 hover:bg-sky-100/70 dark:hover:bg-sky-900/40 transition-colors duration-150 list-none'>
               <span>{dayjs(x.createdAt).fromNow()}</span>
-              <ChevronDownIcon className='w-6 h-6 text-purple-500 dark:text-purple-300 transition-transform duration-300 group-open:rotate-180' />
+              <ChevronDownIcon className='w-6 h-6 text-sky-500 dark:text-sky-300 transition-transform duration-300 group-open:rotate-180' />
             </summary>
-            <div className='p-6 border-t border-purple-200/80 dark:border-purple-800/60 bg-white/30 dark:bg-black/20'>
+            <div className='p-6 border-t border-sky-200/80 dark:border-sky-800/60 bg-white/30 dark:bg-black/20'>
               <div className='flex justify-between items-center mb-4'>
                 <UserAvatar
                   addr={x.modifiedBy?.addr}
                   name={x.modifiedBy?.name ?? ''}
                 />
-                <span className='px-3 py-1.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100 shadow-sm'>
+                <span className='px-3 py-1.5 text-xs font-semibold rounded-full bg-sky-100 text-sky-800 dark:bg-sky-800 dark:text-sky-100 shadow-sm'>
                   {dayjs(x.createdAt).format('MMM D, YYYY h:mm A')}
                 </span>
               </div>
-              <hr className='my-4 border-t-2 border-purple-200/60 dark:border-purple-700/50 rounded-full' />
+              <hr className='my-4 border-t-2 border-sky-200/60 dark:border-sky-700/50 rounded-full' />
               <div className='grid gap-4'>
                 <PromptDiffView
                   originalPrompt={x.prompts}

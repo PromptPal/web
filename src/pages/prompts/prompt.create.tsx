@@ -296,7 +296,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
         <div className='p-6'>
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-3'>
-              <h1 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500'>
+              <h1 className='text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-sky-400 to-blue-500'>
                 {isUpdate ? 'Update Prompt' : 'Create New Prompt'}
               </h1>
             </div>
@@ -352,7 +352,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                 placeholder='Description'
                 rows={4}
                 {...field}
-                className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 placeholder-gray-400 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
+                className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 placeholder-gray-400 resize-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all'
               />
             </div>
           )}
@@ -360,7 +360,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
 
         <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 rounded-xl overflow-hidden p-6'>
           <div className='flex flex-col gap-6'>
-            <h3 className='text-xl font-bold tracking-tight bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent'>
+            <h3 className='text-xl font-bold tracking-tight bg-linear-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent'>
               Prompts
             </h3>
             <div className='flex flex-col gap-4'>
@@ -368,7 +368,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                 return (
                   <div
                     key={field.id}
-                    className='flex flex-row gap-4 p-4 rounded-xl bg-linear-to-br from-gray-800/40 via-gray-800/20 to-gray-800/40 backdrop-blur-xl border border-gray-700/50 hover:border-blue-500/50 transition-all'
+                    className='flex flex-row gap-4 p-4 rounded-xl bg-linear-to-br from-gray-800/40 via-gray-800/20 to-gray-800/40 backdrop-blur-xl border border-gray-700/50 hover:border-sky-500/50 transition-all'
                   >
                     <Controller
                       control={control}
@@ -420,7 +420,7 @@ function PromptCreatePage(props: PromptCreatePageProps) {
               <button
                 type='button'
                 className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transition-all',
+                  'flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium transition-all',
                   promptsFields.length >= 20 && 'opacity-50 cursor-not-allowed',
                 )}
                 disabled={promptsFields.length >= 20}

@@ -50,7 +50,7 @@ export function PromptDetailCard({
     <section className='w-full backdrop-blur-xs bg-linear-to-br from-gray-900/80 to-gray-800/80 border border-gray-700/50 shadow-xl rounded-xl'>
       <div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-6'>
         <div className='flex items-start flex-col space-y-2'>
-          <h1 className='text-2xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-600'>
+          <h1 className='text-2xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-sky-600'>
             {promptDetail?.name}
           </h1>
           <span className='text-gray-400 font-medium'>
@@ -59,7 +59,7 @@ export function PromptDetailCard({
         </div>
         <div className='flex flex-wrap gap-3 items-center'>
           <button
-            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-purple-500/90 to-indigo-600/90 hover:from-purple-400 hover:to-indigo-500 text-white shadow-lg shadow-purple-500/20 transition-all duration-200 transform hover:scale-105'
+            className='px-5 py-2.5 flex items-center gap-2 rounded-lg font-medium text-sm cursor-pointer backdrop-blur-sm bg-gradient-to-r from-sky-500/90 to-blue-600/90 hover:from-sky-400 hover:to-blue-500 text-white shadow-lg shadow-sky-500/20 transition-all duration-200 transform hover:scale-105'
             onClick={() => {
               historyHandlers.open()
             }}
@@ -152,7 +152,7 @@ export function PromptDetailCard({
                 checked={promptDetail?.enabled}
                 readOnly
               />
-              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:rtl:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-linear-to-r after:from-blue-500 after:to-purple-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
+              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:rtl:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-linear-to-r after:from-blue-500 after:to-sky-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
             </label>
           </div>
 
@@ -170,7 +170,7 @@ export function PromptDetailCard({
                 onChange={e => onDebugChange(e.target.checked)}
                 disabled={isPromptUpdating}
               />
-              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:rtl:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-linear-to-r after:from-blue-500 after:to-purple-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
+              <div className='w-11 h-6 bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:rtl:after:-translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:start-[2px] after:bg-linear-to-r after:from-blue-500 after:to-sky-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-700'></div>
             </label>
           </div>
         </div>

@@ -24,8 +24,8 @@ export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
     <div className='group relative'>
       <div className='relative rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 shadow-sm hover:shadow-md transition-all duration-300'>
         <div className='flex items-center gap-3 mb-6'>
-          <div className='p-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/20'>
-            <Settings className='w-5 h-5 text-purple-400' />
+          <div className='p-2 rounded-xl bg-gradient-to-br from-sky-500/20 to-blue-500/20 backdrop-blur-sm border border-sky-500/20'>
+            <Settings className='w-5 h-5 text-sky-400' />
           </div>
           <div>
             <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>
@@ -48,12 +48,12 @@ export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
               <div className='flex items-center gap-2'>
                 <label className='text-sm font-medium leading-none text-gray-700 dark:text-gray-300'>Provider Source</label>
                 <Tooltip content='The AI provider service you want to connect to'>
-                  <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-purple-400 dark:hover:text-purple-300 transition-colors' />
+                  <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors' />
                 </Tooltip>
               </div>
               <a
                 href='https://platform.openai.com/docs/models/overview'
-                className='inline-flex items-center gap-1.5 text-purple-400 hover:text-purple-300 text-xs group transition-all duration-200 hover:bg-purple-500/10 px-2 py-1 rounded-lg'
+                className='inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 text-xs group transition-all duration-200 hover:bg-sky-500/10 px-2 py-1 rounded-lg'
                 target='_blank'
                 rel='noreferrer'
               >
@@ -88,7 +88,7 @@ export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
                 Endpoint URL
               </label>
               <Tooltip content='The API endpoint URL for your provider service'>
-                <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-purple-400 dark:hover:text-purple-300 transition-colors' />
+                <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors' />
               </Tooltip>
             </div>
             <InputField
@@ -112,13 +112,13 @@ export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
                   API Key
                 </label>
                 <Tooltip content='Your API key for authentication with the provider'>
-                  <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-purple-400 dark:hover:text-purple-300 transition-colors' />
+                  <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors' />
                 </Tooltip>
               </div>
               {source === 'openai' && (
                 <a
                   href='https://platform.openai.com/account/api-keys'
-                  className='inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 text-xs hover:bg-purple-500/10 px-2 py-1 rounded-lg transition-all duration-200'
+                  className='inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 text-xs hover:bg-sky-500/10 px-2 py-1 rounded-lg transition-all duration-200'
                   target='_blank'
                   rel='noreferrer'
                 >
@@ -147,7 +147,7 @@ export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
                 Organization ID
               </label>
               <Tooltip content='Optional organization ID for team or enterprise accounts'>
-                <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-purple-400 dark:hover:text-purple-300 transition-colors' />
+                <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors' />
               </Tooltip>
             </div>
             <InputField
@@ -168,7 +168,7 @@ export const ProviderConfigSection = ({ form }: ProviderConfigSectionProps) => {
             <div className='flex items-center gap-2'>
               <label className='text-sm font-medium leading-none text-gray-700 dark:text-gray-300'>Default Model</label>
               <Tooltip content='The default AI model to use for this provider'>
-                <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-purple-400 dark:hover:text-purple-300 transition-colors' />
+                <Info className='w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors' />
               </Tooltip>
             </div>
             <InputField

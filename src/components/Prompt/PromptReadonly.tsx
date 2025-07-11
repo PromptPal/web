@@ -35,7 +35,7 @@ function PromptReadonly(props: PromptReadonlyProps) {
       key={index}
       className='flex flex-col sm:flex-row gap-3 sm:gap-6 w-full group'
     >
-      <div className='font-semibold w-full sm:w-52 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500/25 to-purple-500/15 text-blue-200 backdrop-blur-md border border-gray-700/40 shadow-lg shadow-blue-500/10 flex items-center justify-center sm:justify-start transition-all duration-200 hover:shadow-blue-500/20 hover:from-blue-500/30 hover:to-purple-500/20'>
+      <div className='font-semibold w-full sm:w-52 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500/25 to-sky-500/15 text-blue-200 backdrop-blur-md border border-gray-700/40 shadow-lg shadow-blue-500/10 flex items-center justify-center sm:justify-start transition-all duration-200 hover:shadow-blue-500/20 hover:from-blue-500/30 hover:to-sky-500/20'>
         {prompt.role}
       </div>
       <div className='whitespace-break-spaces bg-gradient-to-br from-gray-900/70 via-gray-800/50 to-gray-900/70 backdrop-blur-md border border-gray-700/40 rounded-xl w-full p-6 shadow-xl transition-all duration-200 hover:shadow-2xl hover:bg-gradient-to-br hover:from-gray-900/80 hover:via-gray-800/60 hover:to-gray-900/80 hover:border-gray-600/50'>

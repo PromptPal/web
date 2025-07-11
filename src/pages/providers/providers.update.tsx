@@ -109,7 +109,7 @@ function ProvidersUpdatePage() {
     return (
       <div className='min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-950 dark:via-gray-900/95 dark:to-gray-800/90'>
         <div className='absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10'></div>
-        <div className='absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-indigo-500/5 dark:from-violet-400/10 dark:via-transparent dark:to-indigo-400/10'></div>
+        <div className='absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-blue-500/5 dark:from-sky-400/10 dark:via-transparent dark:to-blue-400/10'></div>
 
         <div className='relative z-10'>
           <div className='container max-w-4xl mx-auto px-4 py-8'>
@@ -120,8 +120,8 @@ function ProvidersUpdatePage() {
                 transition={{ duration: 0.3 }}
                 className='flex flex-col items-center gap-4 p-8 rounded-2xl bg-card/50 dark:bg-gray-800/50 backdrop-blur-xl border border-border/50 dark:border-gray-600/50'
               >
-                <div className='p-3 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/20 dark:from-violet-400/30 dark:to-purple-400/30'>
-                  <Loader2 className='w-8 h-8 text-violet-600 dark:text-violet-400 animate-spin' />
+                <div className='p-3 rounded-full bg-gradient-to-br from-sky-500/20 to-blue-500/20 dark:from-sky-400/30 dark:to-blue-400/30'>
+                  <Loader2 className='w-8 h-8 text-sky-600 dark:text-sky-400 animate-spin' />
                 </div>
                 <div className='text-center space-y-2'>
                   <h3 className='text-lg font-semibold text-foreground dark:text-gray-100'>
@@ -143,7 +143,7 @@ function ProvidersUpdatePage() {
     <div className='min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-950 dark:via-gray-900/95 dark:to-gray-800/90'>
       {/* Background Pattern */}
       <div className='absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10'></div>
-      <div className='absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-indigo-500/5 dark:from-violet-400/10 dark:via-transparent dark:to-indigo-400/10'></div>
+      <div className='absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-blue-500/5 dark:from-sky-400/10 dark:via-transparent dark:to-blue-400/10'></div>
 
       <div className='relative z-10'>
         <div className='container max-w-4xl mx-auto px-4 py-8'>

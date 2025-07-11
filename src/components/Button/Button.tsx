@@ -63,11 +63,11 @@ export function Button({
 
   const variantClasses = {
     primary:
-      'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl focus:ring-indigo-500 disabled:from-purple-400 disabled:to-indigo-400',
+      'bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl focus:ring-blue-500 disabled:from-sky-400 disabled:to-blue-400',
     secondary:
       'bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-500 hover:to-cyan-600 text-white shadow-md hover:shadow-lg focus:ring-cyan-400 disabled:from-teal-300 disabled:to-cyan-400',
     danger:
-      'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white shadow-md hover:shadow-lg focus:ring-red-500 disabled:from-red-400 disabled:to-pink-400',
+      'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-md hover:shadow-lg focus:ring-orange-500 disabled:from-orange-400 disabled:to-red-400',
     ghost:
       'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:ring-gray-400',
   }
