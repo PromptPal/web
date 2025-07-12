@@ -28,6 +28,7 @@ export function renderWithProviders(
 }
 
 export { userEvent } from '@testing-library/user-event'
+export { screen } from '@testing-library/react'
 
 // Override render method
 export { renderWithProviders as render }

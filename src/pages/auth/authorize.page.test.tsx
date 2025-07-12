@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import AuthorizePage from './authorize.page'
 
@@ -9,33 +9,29 @@ vi.mock('@/components/Header/login-container', () => ({
   ),
 }))
 
-// Mock React.lazy
+// Mock React.lazy to return the component directly instead of a promise
 vi.mock('react', async () => {
   const actual = await vi.importActual('react')
   return {
     ...actual,
-    lazy: (fn: any) => {
-      const Component = vi.fn(({ buttonText }: { buttonText: string }) => (
+    lazy: (factory: any) => {
+      // Return the component directly instead of wrapping in lazy
+      const Component = ({ buttonText }: { buttonText: string }) => (
         <button data-testid='metamask-login'>{buttonText}</button>
-      ))
-      Component.displayName = 'MockLoginButtonContainer'
+      )
       return Component
     },
+    Suspense: ({ children }: { children: React.ReactNode }) => children,
   }
 })
 
-// Mock TanStack Query
-const mockSSOSettings = {
-  enableSsoGoogle: false,
-}
+// Mock React.lazy - don't need to mock React.lazy, just mock the component directly
+// The issue was that the lazy component wasn't being properly mocked
 
-vi.mock('@tanstack/react-query', () => ({
-  useQuery: vi.fn(() => ({
-    data: mockSSOSettings,
-    isLoading: false,
-    error: null,
-  })),
-}))
+// Mock TanStack Query - using factory function to avoid hoisting issues
+vi.mock('@tanstack/react-query')
+
+import * as ReactQuery from '@tanstack/react-query'
 
 // Mock auto-animate
 vi.mock('@formkit/auto-animate/react', () => ({
@@ -65,13 +61,25 @@ vi.mock('../../service/sso', () => ({
 describe('AuthorizePage Component', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // Set default mock return value
+    vi.mocked(ReactQuery.useQuery).mockReturnValue({
+      data: { enableSsoGoogle: false },
+      isLoading: false,
+      error: null,
+    } as any)
   })
 
-  it('renders the main authorization page content', () => {
+  it('renders the main authorization page content', async () => {
     render(<AuthorizePage />)
 
+    // Wait for lazy component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('metamask-login')).toBeInTheDocument()
+    })
+
+    // Now check for the main content
     expect(screen.getByText('Welcome to PromptPal')).toBeInTheDocument()
-    expect(screen.getByText(/Sign in to access your AI prompts/)).toBeInTheDocument()
+    expect(screen.getByText(/Sign in to access your AI prompts, providers, and projects/)).toBeInTheDocument()
     expect(screen.getByText(/Secure authentication powered by blockchain/)).toBeInTheDocument()
   })
 
@@ -90,12 +98,11 @@ describe('AuthorizePage Component', () => {
 
   describe('when Google SSO is enabled', () => {
     beforeEach(() => {
-      const mockUseQuery = vi.mocked(require('@tanstack/react-query').useQuery)
-      mockUseQuery.mockReturnValue({
+      vi.mocked(ReactQuery.useQuery).mockReturnValue({
         data: { enableSsoGoogle: true },
         isLoading: false,
         error: null,
-      })
+      } as any)
     })
 
     it('shows Google SSO button when enabled', () => {
@@ -116,12 +123,11 @@ describe('AuthorizePage Component', () => {
 
   describe('loading state', () => {
     beforeEach(() => {
-      const mockUseQuery = vi.mocked(require('@tanstack/react-query').useQuery)
-      mockUseQuery.mockReturnValue({
+      vi.mocked(ReactQuery.useQuery).mockReturnValue({
         data: undefined,
         isLoading: true,
         error: null,
-      })
+      } as any)
     })
 
     it('renders without SSO settings during loading', () => {
@@ -135,12 +141,11 @@ describe('AuthorizePage Component', () => {
 
   describe('error state', () => {
     beforeEach(() => {
-      const mockUseQuery = vi.mocked(require('@tanstack/react-query').useQuery)
-      mockUseQuery.mockReturnValue({
+      vi.mocked(ReactQuery.useQuery).mockReturnValue({
         data: undefined,
         isLoading: false,
         error: new Error('Failed to fetch settings'),
-      })
+      } as any)
     })
 
     it('renders basic auth options when settings fail to load', () => {
@@ -168,12 +173,11 @@ describe('AuthorizePage Component', () => {
     })
 
     it('has proper links with accessible names when Google SSO is enabled', () => {
-      const mockUseQuery = vi.mocked(require('@tanstack/react-query').useQuery)
-      mockUseQuery.mockReturnValue({
+      vi.mocked(ReactQuery.useQuery).mockReturnValue({
         data: { enableSsoGoogle: true },
         isLoading: false,
         error: null,
-      })
+      } as any)
 
       render(<AuthorizePage />)
 
@@ -195,19 +199,20 @@ describe('AuthorizePage Component', () => {
     it('applies responsive classes correctly', () => {
       render(<AuthorizePage />)
 
-      const container = screen.getByText('Welcome to PromptPal').closest('div')
-      expect(container?.parentElement?.parentElement).toHaveClass('max-w-lg')
+      // The max-w-lg class is on the main motion.div container
+      const welcomeText = screen.getByText('Welcome to PromptPal')
+      const motionContainer = welcomeText.closest('[class*="max-w-lg"]')
+      expect(motionContainer).toBeInTheDocument()
     })
   })
 
   describe('security considerations', () => {
     it('Google SSO link has proper security attributes', () => {
-      const mockUseQuery = vi.mocked(require('@tanstack/react-query').useQuery)
-      mockUseQuery.mockReturnValue({
+      vi.mocked(ReactQuery.useQuery).mockReturnValue({
         data: { enableSsoGoogle: true },
         isLoading: false,
         error: null,
-      })
+      } as any)
 
       render(<AuthorizePage />)
 
