@@ -1,12 +1,12 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen, waitFor } from '@/test/utils/test-utils'
+import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import AuthorizePage from './authorize.page'
 
 // Mock the lazy-loaded component
 vi.mock('@/components/Header/login-container', () => ({
   default: ({ buttonText }: { buttonText: string }) => (
-    <button data-testid="metamask-login">{buttonText}</button>
-  )
+    <button data-testid='metamask-login'>{buttonText}</button>
+  ),
 }))
 
 // Mock React.lazy
@@ -16,30 +16,30 @@ vi.mock('react', async () => {
     ...actual,
     lazy: (fn: any) => {
       const Component = vi.fn(({ buttonText }: { buttonText: string }) => (
-        <button data-testid="metamask-login">{buttonText}</button>
+        <button data-testid='metamask-login'>{buttonText}</button>
       ))
       Component.displayName = 'MockLoginButtonContainer'
       return Component
-    }
+    },
   }
 })
 
 // Mock TanStack Query
 const mockSSOSettings = {
-  enableSsoGoogle: false
+  enableSsoGoogle: false,
 }
 
 vi.mock('@tanstack/react-query', () => ({
   useQuery: vi.fn(() => ({
     data: mockSSOSettings,
     isLoading: false,
-    error: null
-  }))
+    error: null,
+  })),
 }))
 
 // Mock auto-animate
 vi.mock('@formkit/auto-animate/react', () => ({
-  useAutoAnimate: () => [null]
+  useAutoAnimate: () => [null],
 }))
 
 // Mock framer-motion
@@ -48,18 +48,18 @@ vi.mock('framer-motion', () => ({
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
     h1: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
     p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
-    a: ({ children, ...props }: any) => <a {...props}>{children}</a>
-  }
+    a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+  },
 }))
 
 // Mock constants
 vi.mock('../../constants', () => ({
-  HTTP_ENDPOINT: 'http://localhost:7788'
+  HTTP_ENDPOINT: 'http://localhost:7788',
 }))
 
 // Mock SSO service
 vi.mock('../../service/sso', () => ({
-  fetchSSOSettings: vi.fn(() => Promise.resolve({ enableSsoGoogle: false }))
+  fetchSSOSettings: vi.fn(() => Promise.resolve({ enableSsoGoogle: false })),
 }))
 
 describe('AuthorizePage Component', () => {
@@ -94,7 +94,7 @@ describe('AuthorizePage Component', () => {
       mockUseQuery.mockReturnValue({
         data: { enableSsoGoogle: true },
         isLoading: false,
-        error: null
+        error: null,
       })
     })
 
@@ -120,7 +120,7 @@ describe('AuthorizePage Component', () => {
       mockUseQuery.mockReturnValue({
         data: undefined,
         isLoading: true,
-        error: null
+        error: null,
       })
     })
 
@@ -139,7 +139,7 @@ describe('AuthorizePage Component', () => {
       mockUseQuery.mockReturnValue({
         data: undefined,
         isLoading: false,
-        error: new Error('Failed to fetch settings')
+        error: new Error('Failed to fetch settings'),
       })
     })
 
@@ -172,7 +172,7 @@ describe('AuthorizePage Component', () => {
       mockUseQuery.mockReturnValue({
         data: { enableSsoGoogle: true },
         isLoading: false,
-        error: null
+        error: null,
       })
 
       render(<AuthorizePage />)
@@ -206,7 +206,7 @@ describe('AuthorizePage Component', () => {
       mockUseQuery.mockReturnValue({
         data: { enableSsoGoogle: true },
         isLoading: false,
-        error: null
+        error: null,
       })
 
       render(<AuthorizePage />)
