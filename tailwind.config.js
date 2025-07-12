@@ -7,6 +7,10 @@ export default {
   ],
   darkMode: ['class', '[data-mantine-color-scheme="dark"]'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Lato', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif'],
+      },
+    },
   },
 }
