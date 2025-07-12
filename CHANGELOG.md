@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.15.0](https://github.com/PromptPal/web/compare/v1.14.1...v1.15.0) (2025-07-12)
+
+
+### Features
+
+* add copy button for Hash ID and refactor PromptDetailCard ([3fc81a3](https://github.com/PromptPal/web/commit/3fc81a3c63edabc8e0425e7082570cf789864c1f))
+* add user profile page with enhanced UI design ([ea88580](https://github.com/PromptPal/web/commit/ea88580830deebc36abd8bb4d92b5c8e1bb54cef))
+* enhance login button with MetaMask branding and improved UI ([c95f829](https://github.com/PromptPal/web/commit/c95f8297c203b34bbb421a8c99ba7b9d22589e5a))
+
+
+### Bug Fixes
+
+* remove redundant ternary operator in ProviderSelector ([c664ecd](https://github.com/PromptPal/web/commit/c664ecd750cf3afa74ed443d36a1ee0378de01e5))
+* replace purple/pink colors with elegant light blue/light purple scheme ([5041319](https://github.com/PromptPal/web/commit/5041319305e00b31c83333dd98ca51d487041062))
+* replace purple/pink colors with elegant light blue/light purple scheme ([7bf93da](https://github.com/PromptPal/web/commit/7bf93da3bb0cbcd5f143bd71c5a9645c1e8ce8a7))
+
 ## [1.14.1](https://github.com/PromptPal/web/compare/v1.14.0...v1.14.1) (2025-07-10)
 
 
