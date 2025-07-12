@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.16.0](https://github.com/PromptPal/web/compare/v1.15.0...v1.16.0) (2025-07-12)
+
+
+### Features
+
+* add comprehensive tests for all pages ([4abbaf8](https://github.com/PromptPal/web/commit/4abbaf83c3bead18613b659736541e9a78a63b90))
+* add comprehensive tests for all pages ([d2facbd](https://github.com/PromptPal/web/commit/d2facbdc3c16edbe2a1d41263981cdd66cfeb060))
+* add Vitest unit testing with MSW for API mocking ([f5ff072](https://github.com/PromptPal/web/commit/f5ff072dd2c75132c79d8f331fdc695468916038))
+* add Vitest unit testing with MSW for API mocking ([1ff5fce](https://github.com/PromptPal/web/commit/1ff5fce3dfe6626ff13013cc65fee714a6d264fd))
+
+
+### Bug Fixes
+
+* **test:** fix landing page test cases ([d600a31](https://github.com/PromptPal/web/commit/d600a31df3362d1f33e3f7e12c57205806424e3f))
+
 ## [1.15.0](https://github.com/PromptPal/web/compare/v1.14.1...v1.15.0) (2025-07-12)
 
 
