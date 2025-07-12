@@ -2,7 +2,7 @@ import { useApolloClient, useQuery as useGraphQLQuery } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
-import { FolderKanban, LogOut, Server, User, Settings, CreditCard } from 'lucide-react'
+import { CreditCard, FolderKanban, LogOut, Server, Settings, User } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { graphql } from '../../gql'
 import { useClickOutside } from '../../hooks/useClickOutside'
@@ -10,7 +10,7 @@ import { tokenAtom } from '../../stats/profile'
 import UserAvatar from '../User/UserAvatar'
 
 const q = graphql(`
-  query getUserProfile($id: Int!) {
+  query getUserProfile($id: Int) {
     user(id: $id) {
       id
       name
@@ -35,9 +35,7 @@ function Profile() {
 
   const client = useApolloClient()
   const { data } = useGraphQLQuery(q, {
-    variables: {
-      id: -1,
-    },
+    variables: { },
     skip: !loggedIn,
   })
 
