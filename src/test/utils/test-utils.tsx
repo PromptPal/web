@@ -1,35 +1,34 @@
-import React from 'react'
-import { render, RenderOptions } from '@testing-library/react'
 import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import { render, RenderOptions } from '@testing-library/react'
+import React from 'react'
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-	mocks?: MockedResponse[]
-	addTypename?: boolean
+  mocks?: MockedResponse[]
+  addTypename?: boolean
 }
 
 // Simplified render function that includes Apollo Client provider
 export function renderWithProviders(
-	ui: React.ReactElement,
-	{
-		mocks = [],
-		addTypename = false,
-		...renderOptions
-	}: CustomRenderOptions = {}
+  ui: React.ReactElement,
+  {
+    mocks = [],
+    addTypename = false,
+    ...renderOptions
+  }: CustomRenderOptions = {},
 ) {
-	function Wrapper({ children }: { children: React.ReactNode }) {
-		return (
-			<MockedProvider mocks={mocks} addTypename={addTypename}>
-				{children}
-			</MockedProvider>
-		)
-	}
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return (
+      <MockedProvider mocks={mocks} addTypename={addTypename}>
+        {children}
+      </MockedProvider>
+    )
+  }
 
-	return render(ui, { wrapper: Wrapper, ...renderOptions })
+  return render(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
-// Re-export everything from testing-library/react
-export * from '@testing-library/react'
 export { userEvent } from '@testing-library/user-event'
+export { screen } from '@testing-library/react'
 
 // Override render method
 export { renderWithProviders as render }
