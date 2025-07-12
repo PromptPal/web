@@ -1,6 +1,6 @@
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Link } from '@tanstack/react-router'
-import { BarChart3, Loader2, PlusCircle, TrendingUp, Calendar, Activity, Sparkles } from 'lucide-react'
+import { Activity, BarChart3, Calendar, Loader2, PlusCircle, Sparkles, TrendingUp } from 'lucide-react'
 import HelpIntegration from '../../components/Helps/Intergation'
 import ProjectTopPromptsByDate from '../../components/Project/TopPromptsByDate'
 import { graphql } from '../../gql'
@@ -169,14 +169,7 @@ function OverallPage() {
           )}
 
           {pj?.promptMetrics.last7Days.length > 0 && (
-            <div className='bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl shadow-black/20'>
-              <div className='flex items-center gap-2 mb-6'>
-                <BarChart3 className='w-5 h-5 text-sky-400' />
-                <h2 className='text-lg font-semibold text-white'>
-                  Usage Trends
-                </h2>
-                <span className='text-xs text-gray-400'>Daily breakdown</span>
-              </div>
+            <div>
               <ProjectTopPromptsByDate
                 recentCounts={pj?.promptMetrics.last7Days}
                 loading={loading}

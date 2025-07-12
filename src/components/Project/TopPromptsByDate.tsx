@@ -142,12 +142,10 @@ function ProjectTopPromptsByDate(props: ProjectTopPromptsChartProps) {
             <YAxis className='text-xs text-muted-foreground' />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'hsl(var(--background))',
-                borderColor: 'hsl(var(--border))',
                 borderRadius: '0.5rem',
               }}
               labelFormatter={value => dayjs(value).format('YYYY-MM-DD')}
-              formatter={(value: number) => [value.toLocaleString(), '']}
+              formatter={(value: number, name) => [value.toLocaleString(), name]}
             />
             <Legend />
             {series.map((dataKey, index) => (

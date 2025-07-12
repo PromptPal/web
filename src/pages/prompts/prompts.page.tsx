@@ -1,11 +1,11 @@
+import PromptCardItem from '@/components/Prompt/CardItem'
+import { graphql } from '@/gql'
+import { useProjectId } from '@/hooks/route'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Link } from '@tanstack/react-router'
-import { PlusCircle, MessageSquare, Sparkles, Hash } from 'lucide-react'
+import { Hash, MessageSquare, PlusCircle } from 'lucide-react'
+import { motion } from 'motion/react'
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
-import PromptCardItem from '../../components/Prompt/CardItem'
-import { graphql } from '../../gql'
-import { useProjectId } from '../../hooks/route'
 
 const q = graphql(`
   query fetchPrompts($id: Int!, $pagination: PaginationInput!) {
@@ -94,7 +94,6 @@ function PromptsPage() {
                 <div className='absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-300' />
                 <PlusCircle className='w-4 h-4 relative z-10' />
                 <span className='relative z-10'>Create Prompt</span>
-                <Sparkles className='w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
               </Link>
             </div>
           </div>
