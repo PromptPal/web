@@ -1,7 +1,13 @@
 import { useQuery as useGraphQLQuery } from '@apollo/client'
-import { User, Mail, Phone, Globe, Shield, Calendar } from 'lucide-react'
+import { User, Mail, Phone, Globe, Shield, Calendar, Settings, FolderKanban, CreditCard, Server } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { cn } from '../../utils'
 import { graphql } from '../../gql'
+import SystemAdminTab from './components/SystemAdminTab'
+import ProjectsTab from './components/ProjectsTab'
+import BillingTab from './components/BillingTab'
+import SystemTab from './components/SystemTab'
 
 const userQuery = graphql(`
   query user($id: Int) {
@@ -20,6 +26,7 @@ const userQuery = graphql(`
 `)
 
 function ProfilePage() {
+  const [activeTab, setActiveTab] = useState<'projects' | 'billing' | 'system' | 'admin'>('projects')
   const { data, loading } = useGraphQLQuery(userQuery, {
     variables: { id: undefined }, // Will use current user
   })
@@ -220,6 +227,85 @@ function ProfilePage() {
               <p className='text-gray-200 capitalize'>{user.source}</p>
             </div>
           </div>
+        </motion.div>
+      </motion.div>
+
+      {/* Tabs Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className='space-y-6'
+      >
+        {/* Tab Navigation */}
+        <div className='backdrop-blur-md bg-gradient-to-br from-gray-900/90 to-gray-800/90 border border-gray-700/50 rounded-xl p-2'>
+          <div className='flex flex-wrap gap-1'>
+            <button
+              onClick={() => setActiveTab('projects')}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
+                activeTab === 'projects'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50',
+              )}
+            >
+              <FolderKanban className='w-4 h-4 flex-shrink-0' />
+              <span className='truncate'>Projects</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('billing')}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
+                activeTab === 'billing'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50',
+              )}
+            >
+              <CreditCard className='w-4 h-4 flex-shrink-0' />
+              <span className='truncate'>Billing</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('system')}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
+                activeTab === 'system'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50',
+              )}
+            >
+              <Server className='w-4 h-4 flex-shrink-0' />
+              <span className='truncate'>System</span>
+            </button>
+            {user?.level && user.level >= 100 && (
+              <button
+                onClick={() => setActiveTab('admin')}
+                className={cn(
+                  'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
+                  activeTab === 'admin'
+                    ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-lg'
+                    : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50',
+                )}
+              >
+                <Settings className='w-4 h-4 flex-shrink-0' />
+                <span className='truncate'>Admin</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Tab Content */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className='min-h-[400px]'
+        >
+          {activeTab === 'projects' && <ProjectsTab />}
+          {activeTab === 'billing' && <BillingTab />}
+          {activeTab === 'system' && <SystemTab />}
+          {activeTab === 'admin' && user?.level && (
+            <SystemAdminTab currentUserLevel={user.level} />
+          )}
         </motion.div>
       </motion.div>
     </div>
