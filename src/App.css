@@ -263,4 +263,76 @@
     @apply hover:bg-slate-200/60 dark:hover:bg-gray-700/60;
     @apply text-slate-900 dark:text-gray-100 placeholder:text-slate-900 dark:placeholder:text-gray-500;
   }
+
+  /* Firefox scrollbar styling - Deep dark optimized */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0 188 255) oklch(0.21 0.04 265.77);
+  }
+
+  /* Minimal scrollbar variant for dense content */
+  .scrollbar-minimal::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-minimal::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-minimal::-webkit-scrollbar-thumb {
+    background: rgba(50, 25, 75, 0.8);
+    border-radius: 6px;
+    border: none;
+    box-shadow: none;
+  }
+
+  .scrollbar-minimal::-webkit-scrollbar-thumb:hover {
+    background: rgba(60, 30, 85, 1);
+    box-shadow: 0 2px 6px rgba(50, 25, 75, 0.4);
+  }
+
+  /* Enhanced scrollbar for important containers */
+  .scrollbar-enhanced::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  .scrollbar-enhanced::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-enhanced::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      45deg,
+      rgba(25, 10, 45, 0.95) 0%,
+      rgba(35, 15, 60, 1) 25%,
+      rgba(50, 25, 75, 1) 50%,
+      rgba(65, 30, 90, 1) 75%,
+      rgba(80, 35, 105, 1) 100%
+    );
+    border-radius: 10px;
+    border: 1px solid rgba(40, 20, 65, 0.8);
+    box-shadow:
+      0 3px 10px rgba(25, 10, 45, 0.5),
+      0 1px 3px rgba(35, 15, 60, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .scrollbar-enhanced::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      45deg,
+      rgba(35, 15, 60, 1) 0%,
+      rgba(50, 25, 75, 1) 25%,
+      rgba(65, 30, 90, 1) 50%,
+      rgba(80, 35, 105, 1) 75%,
+      rgba(95, 40, 120, 1) 100%
+    );
+    border-color: rgba(55, 30, 80, 1);
+    box-shadow:
+      0 6px 16px rgba(35, 15, 60, 0.7),
+      0 3px 8px rgba(50, 25, 75, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: scale(1.08);
+  }
 }
