@@ -1,13 +1,9 @@
+import { graphql } from '@/gql'
+import { cn } from '@/utils'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
-import { User, Mail, Phone, Globe, Shield, Calendar, Settings, FolderKanban, CreditCard, Server } from 'lucide-react'
+import { Link, Outlet, useLocation } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { cn } from '../../utils'
-import { graphql } from '../../gql'
-import SystemAdminTab from './components/SystemAdminTab'
-import ProjectsTab from './components/ProjectsTab'
-import BillingTab from './components/BillingTab'
-import SystemTab from './components/SystemTab'
+import { Calendar, CreditCard, FolderKanban, Globe, Mail, Phone, Server, Settings, Shield, User } from 'lucide-react'
 
 const userQuery = graphql(`
   query user($id: Int) {
@@ -26,7 +22,25 @@ const userQuery = graphql(`
 `)
 
 function ProfilePage() {
-  const [activeTab, setActiveTab] = useState<'projects' | 'billing' | 'system' | 'admin'>('projects')
+  const pathname = useLocation({ select: location => location.pathname })
+
+  let activeTab: 'projects' | 'billing' | 'system' | 'admin' = 'projects'
+
+  switch (pathname) {
+    case '/profile/projects':
+      activeTab = 'projects'
+      break
+    case '/profile/billing':
+      activeTab = 'billing'
+      break
+    case '/profile/system':
+      activeTab = 'system'
+      break
+    case '/profile/admin':
+      activeTab = 'admin'
+      break
+  }
+
   const { data, loading } = useGraphQLQuery(userQuery, {
     variables: { id: undefined }, // Will use current user
   })
@@ -240,8 +254,8 @@ function ProfilePage() {
         {/* Tab Navigation */}
         <div className='backdrop-blur-md bg-gradient-to-br from-gray-900/90 to-gray-800/90 border border-gray-700/50 rounded-xl p-2'>
           <div className='flex flex-wrap gap-1'>
-            <button
-              onClick={() => setActiveTab('projects')}
+            <Link
+              to='/profile/projects'
               className={cn(
                 'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
                 activeTab === 'projects'
@@ -251,9 +265,9 @@ function ProfilePage() {
             >
               <FolderKanban className='w-4 h-4 flex-shrink-0' />
               <span className='truncate'>Projects</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('billing')}
+            </Link>
+            <Link
+              to='/profile/billing'
               className={cn(
                 'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
                 activeTab === 'billing'
@@ -263,9 +277,9 @@ function ProfilePage() {
             >
               <CreditCard className='w-4 h-4 flex-shrink-0' />
               <span className='truncate'>Billing</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('system')}
+            </Link>
+            <Link
+              to='/profile/system'
               className={cn(
                 'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
                 activeTab === 'system'
@@ -275,10 +289,10 @@ function ProfilePage() {
             >
               <Server className='w-4 h-4 flex-shrink-0' />
               <span className='truncate'>System</span>
-            </button>
+            </Link>
             {user?.level && user.level >= 100 && (
-              <button
-                onClick={() => setActiveTab('admin')}
+              <Link
+                to='/profile/admin'
                 className={cn(
                   'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 min-w-0',
                   activeTab === 'admin'
@@ -288,7 +302,7 @@ function ProfilePage() {
               >
                 <Settings className='w-4 h-4 flex-shrink-0' />
                 <span className='truncate'>Admin</span>
-              </button>
+              </Link>
             )}
           </div>
         </div>
@@ -300,12 +314,7 @@ function ProfilePage() {
           transition={{ duration: 0.3 }}
           className='min-h-[400px]'
         >
-          {activeTab === 'projects' && <ProjectsTab />}
-          {activeTab === 'billing' && <BillingTab />}
-          {activeTab === 'system' && <SystemTab />}
-          {activeTab === 'admin' && user?.level && (
-            <SystemAdminTab currentUserLevel={user.level} />
-          )}
+          <Outlet />
         </motion.div>
       </motion.div>
     </div>

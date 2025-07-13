@@ -11,7 +11,6 @@ import { UserList } from './components/UserList'
 import { GET_PROJECT, MockRole, MockUserRole } from './permissions.query'
 
 function PermissionsPage() {
-  console.log('popppppp')
   const pid = useParams({ strict: false }).pid ?? '0'
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false)
   const [isAssignPermissionModalOpen, setIsAssignPermissionModalOpen] = useState(false)
