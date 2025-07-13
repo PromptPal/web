@@ -97,9 +97,9 @@ export function Button({
           <LoadingIcon className={cn(iconSizeClasses[size], 'text-current')} />
         </span>
       )}
-      <span className={cn('flex items-center gap-2', isLoading && 'invisible')}>
+      <span className={cn('flex flex-row items-center gap-2', isLoading && 'invisible')}>
         {Icon && !isLoading && <Icon className={iconSizeClasses[size]} />}
-        {children && <span>{children}</span>}
+        {children}
       </span>
     </button>
   )
