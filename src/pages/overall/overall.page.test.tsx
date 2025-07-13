@@ -27,6 +27,7 @@ vi.mock('../../components/Project/TopPromptsByDate', () => ({
       {loading && <span>Chart Loading...</span>}
       <span>
         Data points:
+        {' '}
         {recentCounts?.length || 0}
       </span>
     </div>

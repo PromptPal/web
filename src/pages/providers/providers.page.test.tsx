@@ -50,6 +50,7 @@ vi.mock('./components/ProviderList', () => ({
           <h3>{provider.name}</h3>
           <span>
             Type:
+            {' '}
             {provider.type}
           </span>
         </div>

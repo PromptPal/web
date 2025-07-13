@@ -26,10 +26,12 @@ vi.mock('../../components/Project/CardItem', () => ({
       <h3>{project.name}</h3>
       <span>
         Status:
+        {' '}
         {project.enabled ? 'enabled' : 'disabled'}
       </span>
       <span>
         Created:
+        {' '}
         {project.createdAt}
       </span>
     </div>

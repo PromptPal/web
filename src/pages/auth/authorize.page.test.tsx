@@ -87,7 +87,7 @@ describe('AuthorizePage Component', () => {
     render(<AuthorizePage />)
 
     expect(screen.getByTestId('metamask-login')).toBeInTheDocument()
-    expect(screen.getByText('Connect with Metamask')).toBeInTheDocument()
+    expect(screen.getByText('Connect with MetaMask')).toBeInTheDocument()
   })
 
   it('does not show Google SSO button when disabled', () => {
