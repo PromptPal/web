@@ -1,4 +1,4 @@
-# PromptPal
+# PromptPal [![codecov](https://codecov.io/gh/PromptPal/web/graph/badge.svg?token=H8DVMAYJ9V)](https://codecov.io/gh/PromptPal/web)
 
 > **Warning**
 > This project is currently in an early stage of development and may not be suitable for production use. Use with caution and expect frequent updates and changes.
