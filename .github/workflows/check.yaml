@@ -28,20 +28,24 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
-      - name: Build
+      - name: Prepare
         run: |
           sed -i 's/\.\.\/PromptPal\/schema\/schema\.gql/.\/PromptPal\/schema\/schema\.gql/g' ./codegen.ts
           cat ./codegen.ts
           pnpm install
           pnpm run g
-          pnpm run build
       - name: Test
         run: pnpm run test:cov
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Deploy
+      - name: Build
+        env:
+          NODE_ENV: production
+        run: |
+          pnpm run build
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
