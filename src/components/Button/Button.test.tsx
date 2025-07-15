@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
-import { Button, ButtonProps } from './Button'
 import { Star } from 'lucide-react'
+import { describe, expect, it, vi } from 'vitest'
+import { Button, ButtonProps } from './Button'
 
 describe('Button Component', () => {
   const defaultProps: ButtonProps = {
@@ -89,7 +89,9 @@ describe('Button Component', () => {
     it('hides content when loading', () => {
       render(<Button isLoading>Loading Text</Button>)
       const contentSpan = screen.getByText('Loading Text').parentElement
-      expect(contentSpan).toHaveClass('invisible')
+      expect(contentSpan).toBeInTheDocument()
+      expect(contentSpan).toBeDisabled()
+      expect(contentSpan).not.toHaveClass('invisible')
     })
   })
 

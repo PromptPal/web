@@ -1,12 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import * as apolloClient from '@apollo/client'
 import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ProfilePage from './profile.page'
 
 // Mock framer-motion
-vi.mock('framer-motion', () => ({
+vi.mock('motion', () => ({
   motion: {
-    section: ({ children, ...props }: any) => <section {...props}>{children}</section>,
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    section: ({ children, ...props }: { children: React.ReactNode, [key: string]: unknown }) => <section {...props}>{children}</section>,
+    div: ({ children, ...props }: { children: React.ReactNode, [key: string]: unknown }) => <div {...props}>{children}</div>,
   },
 }))
 
@@ -17,7 +18,23 @@ vi.mock('../../gql', () => ({
 
 // Mock useQuery hook from Apollo
 vi.mock('@apollo/client')
-import * as apolloClient from '@apollo/client'
+
+vi.mock('@tanstack/react-router', () => ({
+  useRouter: vi.fn(() => ({
+    navigate: vi.fn(),
+  })),
+  useLocation: vi.fn(() => ({
+    pathname: '/profile',
+  })),
+  Link: ({ children, to, ...props }: { children: React.ReactNode, to: string, [key: string]: unknown }) => (
+    <a href={to} {...props}>
+      {children}
+    </a>
+  ),
+  Outlet: ({ children }: { children?: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+}))
 
 describe('ProfilePage Component', () => {
   const mockUseQuery = vi.mocked(apolloClient.useQuery)

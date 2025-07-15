@@ -2,8 +2,8 @@ import { graphql } from '@/gql'
 import { cn } from '@/utils'
 import { useQuery as useGraphQLQuery } from '@apollo/client'
 import { Link, Outlet, useLocation } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
 import { Calendar, CreditCard, FolderKanban, Globe, Mail, Phone, Server, Settings, Shield, User } from 'lucide-react'
+import { motion } from 'motion/react'
 
 const userQuery = graphql(`
   query user($id: Int) {
