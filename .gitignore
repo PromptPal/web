@@ -28,3 +28,4 @@ graphql.schema.json
 gql/
 *storybook.log
 src/routeTree.gen.ts
+.env

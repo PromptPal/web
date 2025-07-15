@@ -34,11 +34,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
-      - name: Build
+      - name: Prepare
         run: |
           sed -i 's/\.\.\/PromptPal\/schema\/schema\.gql/.\/PromptPal\/schema\/schema\.gql/g' ./codegen.ts
           pnpm install
           pnpm run g
+      - name: Build
+        env:
+          NODE_ENV: production
+          VITE_HTTP_ENDPOINT: ''
+        run: |
           pnpm run build
       - name: Upload Release Artifact
         if: ${{ steps.release.outputs.release_created }}

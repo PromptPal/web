@@ -43,6 +43,7 @@ jobs:
       - name: Build
         env:
           NODE_ENV: production
+          VITE_HTTP_ENDPOINT: ${{ secrets.TESTING_HTTP_ENDPOINT }}
         # build for cloudflare pages
         run: pnpm run build:cf
       - name: Deploy to Cloudflare Pages
