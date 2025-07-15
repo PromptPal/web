@@ -48,3 +48,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=promptpal-web
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          packageManager: pnpm
