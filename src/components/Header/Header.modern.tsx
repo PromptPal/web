@@ -1,5 +1,5 @@
 import { Link, useMatch } from '@tanstack/react-router'
-import { BookText, Home, PlusCircle, Settings, Sparkles } from 'lucide-react'
+import { BookText, Home, PlusCircle, Settings, Sparkles, Webhook } from 'lucide-react'
 import React from 'react'
 import Profile from './Profile'
 import ProjectSelector from './ProjectSelector'
@@ -53,6 +53,11 @@ export function Header() {
                   icon={<PlusCircle size={18} strokeWidth={2} />}
                   to={`/${pid}/prompts/new`}
                   label='New Prompt'
+                />
+                <NavItem
+                  icon={<Webhook size={18} strokeWidth={2} />}
+                  to={`/${pid}/webhooks`}
+                  label='Webhooks'
                 />
                 <NavItem
                   icon={<Settings size={18} strokeWidth={2} />}
