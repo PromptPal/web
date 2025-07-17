@@ -36,6 +36,126 @@ interface Webhook {
   updatedAt: string
 }
 
+// Table header component
+interface TableHeaderProps {
+  headerGroups: ReturnType<typeof useReactTable>['getHeaderGroups']
+}
+
+function TableHeader({ headerGroups }: TableHeaderProps) {
+  return (
+    <thead>
+      {headerGroups.map(headerGroup => (
+        <tr key={headerGroup.id} className='border-b border-gray-200 dark:border-gray-700'>
+          {headerGroup.headers.map(header => (
+            <th
+              key={header.id}
+              className='px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'
+            >
+              {header.isPlaceholder
+                ? null
+                : (
+                    <div
+                      className={`flex items-center gap-2 ${
+                        header.column.getCanSort() ? 'cursor-pointer select-none' : ''
+                      }`}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.column.getCanSort() && (
+                        <div className='flex flex-col'>
+                          {header.column.getIsSorted() === 'asc'
+                            ? (
+                                <ChevronUp className='h-3 w-3' />
+                              )
+                            : header.column.getIsSorted() === 'desc'
+                              ? (
+                                  <ChevronDown className='h-3 w-3' />
+                                )
+                              : (
+                                  <MoreHorizontal className='h-3 w-3 opacity-50' />
+                                )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+            </th>
+          ))}
+        </tr>
+      ))}
+    </thead>
+  )
+}
+
+// Table body component
+interface TableBodyProps {
+  rows: ReturnType<typeof useReactTable>['getRowModel']['rows']
+}
+
+function TableBody({ rows }: TableBodyProps) {
+  return (
+    <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
+      {rows.map(row => (
+        <tr
+          key={row.id}
+          className='hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors'
+        >
+          {row.getVisibleCells().map(cell => (
+            <td key={cell.id} className='px-4 py-4 whitespace-nowrap'>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  )
+}
+
+// No results component
+function NoResults() {
+  return (
+    <div className='text-center py-12'>
+      <AlertCircle className='h-8 w-8 text-gray-400 mx-auto mb-3' />
+      <p className='text-gray-500 dark:text-gray-400'>
+        No webhooks found matching your search.
+      </p>
+    </div>
+  )
+}
+
+// Search and filter bar component
+interface SearchBarProps {
+  globalFilter: string
+  setGlobalFilter: (value: string) => void
+  webhooks: Webhook[]
+}
+
+function SearchBar({ globalFilter, setGlobalFilter, webhooks }: SearchBarProps) {
+  return (
+    <div className='mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between'>
+      <div className='relative flex-1 max-w-md'>
+        <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
+        <input
+          type='text'
+          placeholder='Search webhooks...'
+          value={globalFilter}
+          onChange={e => setGlobalFilter(e.target.value)}
+          className='w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent'
+        />
+      </div>
+
+      <div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
+        <Activity className='h-4 w-4' />
+        {webhooks.filter(w => w.enabled).length}
+        {' '}
+        of
+        {webhooks.length}
+        {' '}
+        active
+      </div>
+    </div>
+  )
+}
+
 interface WebhookListProps {
   webhooks: Webhook[]
   onRefetch: () => void
@@ -51,19 +171,20 @@ export function WebhookList({ webhooks, onRefetch }: WebhookListProps) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
 
-  const [deleteWebhookMutation] = useMutation(deleteWebhook)
+  const [deleteWebhookMutation] = useMutation(deleteWebhook, {
+    onCompleted: () => {
+      onRefetch()
+    },
+    onError: (error) => {
+      console.error('Failed to delete webhook:', error)
+    },
+  })
 
   const handleDelete = async (webhookId: number) => {
     if (confirm('Are you sure you want to delete this webhook? This action cannot be undone.')) {
-      try {
-        await deleteWebhookMutation({
-          variables: { id: webhookId },
-        })
-        onRefetch()
-      }
-      catch (error) {
-        console.error('Failed to delete webhook:', error)
-      }
+      deleteWebhookMutation({
+        variables: { id: webhookId },
+      })
     }
   }
 
@@ -193,99 +314,22 @@ export function WebhookList({ webhooks, onRefetch }: WebhookListProps) {
 
   return (
     <div className='p-6'>
-      {/* Search and filters */}
-      <div className='mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between'>
-        <div className='relative flex-1 max-w-md'>
-          <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
-          <input
-            type='text'
-            placeholder='Search webhooks...'
-            value={globalFilter}
-            onChange={e => setGlobalFilter(e.target.value)}
-            className='w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent'
-          />
-        </div>
-
-        <div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
-          <Activity className='h-4 w-4' />
-          {webhooks.filter(w => w.enabled).length}
-          {' '}
-          of
-          {webhooks.length}
-          {' '}
-          active
-        </div>
-      </div>
+      <SearchBar
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+        webhooks={webhooks}
+      />
 
       {/* Table */}
       <div className='overflow-x-auto'>
         <table className='w-full'>
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} className='border-b border-gray-200 dark:border-gray-700'>
-                {headerGroup.headers.map(header => (
-                  <th
-                    key={header.id}
-                    className='px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : (
-                          <div
-                            className={`flex items-center gap-2 ${
-                              header.column.getCanSort() ? 'cursor-pointer select-none' : ''
-                            }`}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {header.column.getCanSort() && (
-                              <div className='flex flex-col'>
-                                {header.column.getIsSorted() === 'asc'
-                                  ? (
-                                      <ChevronUp className='h-3 w-3' />
-                                    )
-                                  : header.column.getIsSorted() === 'desc'
-                                    ? (
-                                        <ChevronDown className='h-3 w-3' />
-                                      )
-                                    : (
-                                        <MoreHorizontal className='h-3 w-3 opacity-50' />
-                                      )}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
-            {table.getRowModel().rows.map(row => (
-              <tr
-                key={row.id}
-                className='hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors'
-              >
-                {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} className='px-4 py-4 whitespace-nowrap'>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          <TableHeader headerGroups={table.getHeaderGroups()} />
+          <TableBody rows={table.getRowModel().rows} />
         </table>
       </div>
 
       {/* No results */}
-      {table.getRowModel().rows.length === 0 && (
-        <div className='text-center py-12'>
-          <AlertCircle className='h-8 w-8 text-gray-400 mx-auto mb-3' />
-          <p className='text-gray-500 dark:text-gray-400'>
-            No webhooks found matching your search.
-          </p>
-        </div>
-      )}
+      {table.getRowModel().rows.length === 0 && <NoResults />}
     </div>
   )
 }

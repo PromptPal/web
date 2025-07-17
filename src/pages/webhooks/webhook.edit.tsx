@@ -24,7 +24,16 @@ function EditWebhookPage() {
     variables: { id: webhookId },
   })
 
-  const [updateWebhookMutation, { loading }] = useMutation(updateWebhook)
+  const [updateWebhookMutation, { loading }] = useMutation(updateWebhook, {
+    onCompleted: (data) => {
+      if (data?.updateWebhook.id) {
+        navigate({ to: `/${projectId}/webhooks/${webhookId}` })
+      }
+    },
+    onError: (error) => {
+      console.error('Failed to update webhook:', error)
+    },
+  })
 
   const {
     register,
@@ -62,27 +71,18 @@ function EditWebhookPage() {
   const watchedEvents = watch('events')
 
   const onSubmit = async (data: WebhookFormData) => {
-    try {
-      const result = await updateWebhookMutation({
-        variables: {
-          id: webhookId,
-          data: {
-            name: data.name,
-            url: data.url,
-            events: data.events,
-            enabled: data.enabled,
-            secret: data.secret || undefined,
-          },
+    updateWebhookMutation({
+      variables: {
+        id: webhookId,
+        data: {
+          name: data.name,
+          url: data.url,
+          events: data.events,
+          enabled: data.enabled,
+          secret: data.secret || undefined,
         },
-      })
-
-      if (result.data?.updateWebhook.id) {
-        navigate({ to: `/${projectId}/webhooks/${webhookId}` })
-      }
-    }
-    catch (error) {
-      console.error('Failed to update webhook:', error)
-    }
+      },
+    })
   }
 
   const handleEventToggle = (event: string) => {

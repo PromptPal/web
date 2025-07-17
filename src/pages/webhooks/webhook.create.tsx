@@ -14,7 +14,16 @@ function CreateWebhookPage() {
   const projectId = ~~params.pid
 
   const [showSecret, setShowSecret] = useState(false)
-  const [createWebhookMutation, { loading }] = useMutation(createWebhook)
+  const [createWebhookMutation, { loading }] = useMutation(createWebhook, {
+    onCompleted: (data) => {
+      if (data?.createWebhook.id) {
+        navigate({ to: `/${projectId}/webhooks` })
+      }
+    },
+    onError: (error) => {
+      console.error('Failed to create webhook:', error)
+    },
+  })
 
   const {
     register,
@@ -37,27 +46,18 @@ function CreateWebhookPage() {
   const watchedEvents = watch('events')
 
   const onSubmit = async (data: WebhookFormData) => {
-    try {
-      const result = await createWebhookMutation({
-        variables: {
-          projectId,
-          data: {
-            name: data.name,
-            url: data.url,
-            events: data.events,
-            enabled: data.enabled,
-            secret: data.secret || undefined,
-          },
+    createWebhookMutation({
+      variables: {
+        projectId,
+        data: {
+          name: data.name,
+          url: data.url,
+          events: data.events,
+          enabled: data.enabled,
+          secret: data.secret || undefined,
         },
-      })
-
-      if (result.data?.createWebhook.id) {
-        navigate({ to: `/${projectId}/webhooks` })
-      }
-    }
-    catch (error) {
-      console.error('Failed to create webhook:', error)
-    }
+      },
+    })
   }
 
   const handleEventToggle = (event: string) => {
