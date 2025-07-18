@@ -8,6 +8,7 @@ import {
   GitBranch,
   Home,
   Sparkles,
+  Webhook,
   Zap,
 } from 'lucide-react'
 import { lastTag } from '~build/git'
@@ -34,6 +35,13 @@ const menus = [
     description: 'Manage prompts',
     link: (id: number) => `/${id}/prompts`,
     color: 'from-emerald-500 to-teal-500',
+  },
+  {
+    icon: Webhook,
+    text: 'Webhooks',
+    description: 'Event notifications',
+    link: (id: number) => `/${id}/webhooks`,
+    color: 'from-violet-500 to-purple-500',
   },
 ]
 
