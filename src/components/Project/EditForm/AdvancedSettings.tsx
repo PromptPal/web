@@ -1,4 +1,5 @@
 import { cn } from '@/utils'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import { Info } from 'lucide-react'
 
 interface AdvancedSettingsProps {
@@ -131,34 +132,24 @@ function AdvancedSettings({
         </div>
 
         <div className='space-y-2'>
-          <div className='flex items-center gap-1'>
-            <label className='text-sm font-medium leading-none'>
-              Max Tokens
-            </label>
-            <div className='group relative'>
-              <Info className='w-4 h-4 text-muted-foreground' />
-              <div
-                className='absolute bottom-full left-0 mb-2 px-3 py-1.5 rounded-lg
-              bg-popover/80 text-popover-foreground border border-border/40 text-sm min-w-[16rem] hidden
-              group-hover:block shadow-lg backdrop-blur-md z-10'
-              >
-                The maximum number of tokens to generate. Leave empty for model
-                default.
+          <InputField
+            label={(
+              <div className='flex items-center gap-1'>
+                <span className='text-sm font-medium leading-none'>Max Tokens</span>
+                <div className='group relative'>
+                  <Info className='w-4 h-4 text-muted-foreground' />
+                  <div
+                    className='absolute bottom-full left-0 mb-2 px-3 py-1.5 rounded-lg
+                  bg-popover/80 text-popover-foreground border border-border/40 text-sm min-w-[16rem] hidden
+                  group-hover:block shadow-lg backdrop-blur-md z-10'
+                  >
+                    The maximum number of tokens to generate. Leave empty for model
+                    default.
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <input
-            type='number'
-            className={cn(
-              'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
-              'text-sm ring-offset-background focus-visible:outline-hidden',
-              'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-              'disabled:cursor-not-allowed disabled:opacity-50',
-              'backdrop-blur-lg transition-all duration-300 ease-in-out',
-              'hover:bg-background/50 border-none shadow-md',
-              'bg-gradient-to-r from-background/40 to-background/20',
             )}
+            type='number'
             value={maxTokens || ''}
             onChange={(e) => {
               const value = e.target.value
@@ -168,13 +159,8 @@ function AdvancedSettings({
             }}
             placeholder='Model default'
             min='0'
+            error={errors.openAIMaxTokens?.message}
           />
-
-          {errors.openAIMaxTokens && (
-            <p className='text-sm text-destructive mt-1'>
-              {errors.openAIMaxTokens.message}
-            </p>
-          )}
         </div>
       </div>
     </div>

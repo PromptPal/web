@@ -1,5 +1,6 @@
 import { SupportedVariableType } from '@/constants'
-import { cn } from '@/utils'
+import InputField from '@annatarhe/lake-ui/form-input-field'
+import SelectField from '@annatarhe/lake-ui/form-select-field'
 import { Variable } from 'lucide-react'
 import { Control, Controller } from 'react-hook-form'
 import { mutatePromptType } from '../types'
@@ -49,20 +50,11 @@ export function VariablesSection({
                     control={control}
                     name={`variables.${index}.name`}
                     render={({ field }) => (
-                      <div className='relative'>
-                        <input
-                          type='text'
-                          {...field}
-                          disabled
-                          className={cn(
-                            'w-full px-4 py-2.5 rounded-lg',
-                            'bg-gray-900/50 border border-gray-700/50',
-                            'text-gray-200 disabled:opacity-70',
-                            'transition-colors duration-200',
-                            'focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/10 outline-hidden',
-                          )}
-                        />
-                      </div>
+                      <InputField
+                        {...field}
+                        disabled
+                        placeholder='Variable name'
+                      />
                     )}
                   />
 
@@ -71,27 +63,14 @@ export function VariablesSection({
                     control={control}
                     name={`variables.${index}.type`}
                     render={({ field }) => (
-                      <select
+                      <SelectField
                         {...field}
-                        className={cn(
-                          'w-full px-4 py-2.5 rounded-lg appearance-none',
-                          'bg-gray-900/50 border border-gray-700/50',
-                          'text-gray-200',
-                          'transition-colors duration-200',
-                          'focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/10 outline-hidden',
-                          'hover:border-gray-600/50',
-                        )}
-                      >
-                        {SupportedVariableType.map(x => (
-                          <option
-                            key={x}
-                            value={x.toLowerCase()}
-                            className='bg-gray-900 text-gray-200'
-                          >
-                            {x}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder='Select type'
+                        options={SupportedVariableType.map(x => ({
+                          value: x.toLowerCase(),
+                          label: x,
+                        }))}
+                      />
                     )}
                   />
                 </div>

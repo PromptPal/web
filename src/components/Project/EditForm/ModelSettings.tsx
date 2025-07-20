@@ -1,5 +1,6 @@
 import { OpenAIModels } from '@/constants'
 import { cn } from '@/utils'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { ExternalLink, Info } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -116,26 +117,13 @@ function ModelSettings({
                   </div>
                 </div>
               </div>
-              <input
+              <InputField
                 type='text'
-                className={cn(
-                  'flex h-12 w-full rounded-xl bg-background/30 px-4 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-hidden',
-                  'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-lg transition-all duration-300 ease-in-out',
-                  'hover:bg-background/50 border-none shadow-md',
-                  'bg-gradient-to-r from-background/40 to-background/20',
-                )}
                 value={openAIBaseURL}
                 onChange={e => onOpenAIBaseURLChange(e.target.value)}
                 placeholder='https://api.openai.com/v1'
+                error={errors.openAIBaseURL?.message}
               />
-              {errors.openAIBaseURL && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.openAIBaseURL.message}
-                </p>
-              )}
             </div>
 
             <div className='space-y-2'>
@@ -153,25 +141,13 @@ function ModelSettings({
                   <ExternalLink className='w-3 h-3' />
                 </a>
               </div>
-              <input
+              <InputField
                 type='password'
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-hidden',
-                  'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70 border border-border/20',
-                )}
                 value={openAIToken || ''}
                 onChange={e => onOpenAITokenChange(e.target.value)}
                 placeholder='sk-...'
+                error={errors.openAIToken?.message}
               />
-              {errors.openAIToken && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.openAIToken.message}
-                </p>
-              )}
             </div>
           </div>
         )}
@@ -199,50 +175,26 @@ function ModelSettings({
                   </div>
                 </div>
               </div>
-              <input
+              <InputField
                 type='text'
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-hidden',
-                  'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70 border border-border/20',
-                )}
                 value={geminiBaseURL}
                 onChange={e => onGeminiBaseURLChange(e.target.value)}
                 placeholder='https://generativelanguage.googleapis.com'
+                error={errors.geminiBaseURL?.message}
               />
-              {errors.geminiBaseURL && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.geminiBaseURL.message}
-                </p>
-              )}
             </div>
 
             <div className='space-y-2'>
               <label className='text-sm font-medium leading-none'>
                 Gemini Token
               </label>
-              <input
+              <InputField
                 type='password'
-                className={cn(
-                  'flex h-10 w-full rounded-lg bg-background/50 px-4 py-2',
-                  'text-sm ring-offset-background focus-visible:outline-hidden',
-                  'focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                  'backdrop-blur-xs transition-all duration-200 ease-in-out',
-                  'hover:bg-background/70 border border-border/20',
-                )}
                 value={geminiToken || ''}
                 onChange={e => onGeminiTokenChange(e.target.value)}
                 placeholder='Your Gemini API token'
+                error={errors.geminiToken?.message}
               />
-              {errors.geminiToken && (
-                <p className='text-sm text-destructive mt-1'>
-                  {errors.geminiToken.message}
-                </p>
-              )}
             </div>
           </div>
         )}

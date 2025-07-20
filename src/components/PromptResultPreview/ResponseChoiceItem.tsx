@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 import React from 'react'
+import InputField from '@annatarhe/lake-ui/form-input-field'
+import TextareaField from '@annatarhe/lake-ui/form-textarea-field'
 import { ResponseChoice } from './types'
 
 type ResponseChoiceItemProps = {
@@ -18,17 +20,16 @@ const ResponseChoiceItem = ({ choice, index }: ResponseChoiceItemProps) => (
     transition={{ delay: index * 0.1 }}
     className='space-y-2'
   >
-    <input
-      type='text'
+    <InputField
       disabled
       value={choice.message.role}
-      className='w-[150px] px-3 py-2 rounded-sm bg-gray-800/50 text-gray-200 outline-hidden'
+      className='w-[150px]'
     />
-    <textarea
+    <TextareaField
       value={choice.message.content}
       rows={8}
       disabled
-      className='w-full px-3 py-2 rounded-sm bg-gray-800/50 text-gray-200 font-mono text-sm outline-hidden resize-none'
+      className='font-mono text-sm'
     />
   </motion.div>
 )

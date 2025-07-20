@@ -1,5 +1,7 @@
 import LakeModal from '@annatarhe/lake-ui/modal'
 import Switch from '@annatarhe/lake-ui/form-switch-field'
+import InputField from '@annatarhe/lake-ui/form-input-field'
+import TextareaField from '@annatarhe/lake-ui/form-textarea-field'
 import FileInput from '../FileInput'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -183,16 +185,9 @@ function PromptTestButton(props: PromptTestButtonProps) {
                       className='space-y-2'
                       key={`number-${index}`}
                     >
-                      <label
-                        htmlFor={`var-${index}`}
-                        className='block text-sm font-medium text-gray-700 dark:text-gray-200'
-                      >
-                        {field.name}
-                      </label>
-                      <input
+                      <InputField
+                        label={field.name}
                         type='number'
-                        id={`var-${index}`}
-                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-hidden transition-all dark:text-white'
                         placeholder='Value'
                         {...register(`variables.${index}.value`, { valueAsNumber: true })}
                       />
@@ -204,16 +199,10 @@ function PromptTestButton(props: PromptTestButtonProps) {
                       className='space-y-2'
                       key={`string-${index}`}
                     >
-                      <label
-                        htmlFor={`var-${index}`}
-                        className='block text-sm font-medium text-gray-700 dark:text-gray-200'
-                      >
-                        {field.name}
-                      </label>
-                      <textarea
-                        id={`var-${index}`}
-                        className='w-full px-4 py-2 bg-white/5 backdrop-blur-xl rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-hidden transition-all resize-y min-h-[200px] dark:text-white'
+                      <TextareaField
+                        label={field.name}
                         placeholder='Value'
+                        rows={8}
                         {...register(`variables.${index}.value`)}
                       />
                     </div>
