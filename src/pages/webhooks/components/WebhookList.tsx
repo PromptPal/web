@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Link, useParams } from '@tanstack/react-router'
+import { useMutation } from '@apollo/client'
+import { Link } from '@tanstack/react-router'
 import {
   createColumnHelper,
   flexRender,
@@ -7,35 +7,29 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-  type SortingState,
   type ColumnFiltersState,
+  type SortingState,
 } from '@tanstack/react-table'
 import {
-  ChevronDown,
-  ChevronUp,
-  ExternalLink,
-  MoreHorizontal,
-  Edit,
-  Trash2,
   Activity,
   AlertCircle,
+  ChevronDown,
+  ChevronUp,
+  Edit,
+  ExternalLink,
+  MoreHorizontal,
   Search,
+  Trash2,
 } from 'lucide-react'
-import { useMutation } from '@apollo/client'
-import { deleteWebhook } from '../webhook.query'
+import { useMemo, useState } from 'react'
+import { AllWebhooksListQuery, Webhook } from '../../../gql/graphql'
+import { useProjectId } from '../../../hooks/route'
 import { WEBHOOK_STATUS_COLORS } from '../types'
+import { deleteWebhook } from '../webhook.query'
+
+type Webhook = AllWebhooksListQuery['webhooks']['edges'][number]
 
 // Define the webhook type structure based on our GraphQL query
-interface Webhook {
-  id: number
-  name: string
-  url: string
-  events: string[]
-  enabled: boolean
-  createdAt: string
-  updatedAt: string
-}
-
 // Table header component
 interface TableHeaderProps {
   headerGroups: ReturnType<typeof useReactTable>['getHeaderGroups']
@@ -164,8 +158,7 @@ interface WebhookListProps {
 const columnHelper = createColumnHelper<Webhook>()
 
 export function WebhookList({ webhooks, onRefetch }: WebhookListProps) {
-  const params = useParams({ from: '/$pid/webhooks' })
-  const projectId = params.pid
+  const projectId = useProjectId()
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -201,7 +194,9 @@ export function WebhookList({ webhooks, onRefetch }: WebhookListProps) {
             }`}
             />
             <Link
-              to={`/${projectId}/webhooks/${row.original.id}`}
+              // to={`/${projectId}/webhooks/${row.original.id}`}
+              to='/$pid/webhooks/$id'
+              params={{ pid: projectId.toString(), id: row.original.id.toString() }}
               className='font-medium text-gray-900 dark:text-white hover:text-violet-600 dark:hover:text-violet-400 transition-colors'
             >
               {row.original.name}
@@ -225,28 +220,17 @@ export function WebhookList({ webhooks, onRefetch }: WebhookListProps) {
           </div>
         ),
       }),
-      columnHelper.accessor('events', {
-        header: 'Events',
+      columnHelper.accessor('event', {
+        header: 'Event',
         cell: ({ getValue }) => {
           const events = getValue()
           return (
             <div className='flex flex-wrap gap-1'>
-              {events.slice(0, 2).map(event => (
-                <span
-                  key={event}
-                  className='px-2 py-1 text-xs bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200 rounded-full'
-                >
-                  {event}
-                </span>
-              ))}
-              {events.length > 2 && (
-                <span className='px-2 py-1 text-xs bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 rounded-full'>
-                  +
-                  {events.length - 2}
-                  {' '}
-                  more
-                </span>
-              )}
+              <span
+                className='px-2 py-1 text-xs bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200 rounded-full'
+              >
+                {events}
+              </span>
             </div>
           )
         },

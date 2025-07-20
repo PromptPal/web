@@ -1,25 +1,25 @@
-import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { useParams, Link } from '@tanstack/react-router'
+import { Link, useParams } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import {
+  Activity,
+  AlertCircle,
   ArrowLeft,
+  CheckCircle,
   Edit,
   ExternalLink,
-  Activity,
   Shield,
-  AlertCircle,
-  CheckCircle,
   XCircle,
 } from 'lucide-react'
+import { useState } from 'react'
 // import { getWebhook, getWebhookCalls } from './webhook.query'
 import { WebhookCallsTable } from './components/WebhookCallsTable'
 import { WEBHOOK_STATUS_COLORS } from './types'
 
 function WebhookDetailPage() {
-  const params = useParams({ from: '/$pid/webhooks/$id' })
-  const projectId = ~~params.pid
-  const webhookId = ~~params.id
+  const params = useParams({ strict: false })
+  const projectId = ~~params.pid!
+  const webhookId = ~~params.id!
 
   const [pagination] = useState({
     limit: 20,

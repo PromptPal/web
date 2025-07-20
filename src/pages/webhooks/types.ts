@@ -12,7 +12,7 @@ export type WebhookFormData = z.infer<typeof webhookFormSchema>
 
 // Available webhook events
 export const WEBHOOK_EVENTS = [
-  'prompt.called', // onPromptFinished is mapped to prompt.called
+  'onPromptFinished', // onPromptFinished is mapped to prompt.called
 ] as const
 
 // Disabled events for future use
