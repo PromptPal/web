@@ -1,9 +1,9 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Plus, Webhook, Zap } from 'lucide-react'
+import { useProjectId } from '../../../hooks/route'
 
 export function EmptyState() {
-  const params = useParams({ from: '/$pid/webhooks' })
-  const projectId = params.pid
+  const projectId = useProjectId()
 
   return (
     <div className='flex flex-col items-center justify-center p-12 text-center space-y-6'>

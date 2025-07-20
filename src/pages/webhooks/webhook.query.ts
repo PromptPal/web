@@ -8,61 +8,40 @@ export const webhooksList = graphql(`
       edges {
         id
         name
+        description
         url
-        events
+        event
         enabled
         createdAt
         updatedAt
+        creator {
+          id
+          name
+        }
+        project {
+          id
+          name
+        }
       }
     }
   }
 `)
 
-// Get single webhook for editing
-export const getWebhook = graphql(`
-  query getWebhookForEdit($id: Int!) {
-    webhook(id: $id) {
-      id
-      name
-      url
-      events
-      enabled
-      secret
-      createdAt
-      updatedAt
-      project {
-        id
-        name
-      }
-    }
-  }
-`)
-
-// Get webhook calls history
-export const getWebhookCalls = graphql(`
-  query getWebhookCalls($webhookId: Int!, $pagination: PaginationInput!) {
-    webhookCalls(webhookId: $webhookId, pagination: $pagination) {
-      count
-      edges {
-        id
-        status
-        payload
-        response
-        createdAt
-      }
-    }
-  }
-`)
+// Get single webhook - Note: This query is not available in the schema, webhook details should be fetched from the list
+// If you need individual webhook details, you can filter from the webhooks list query
 
 // Create webhook mutation
 export const createWebhook = graphql(`
-  mutation createWebhook($projectId: Int!, $data: WebhookPayload!) {
-    createWebhook(projectId: $projectId, data: $data) {
+  mutation createWebhook($data: WebhookPayload!) {
+    createWebhook(data: $data) {
       id
       name
+      description
       url
-      events
+      event
       enabled
+      createdAt
+      updatedAt
     }
   }
 `)
@@ -73,9 +52,12 @@ export const updateWebhook = graphql(`
     updateWebhook(id: $id, data: $data) {
       id
       name
+      description
       url
-      events
+      event
       enabled
+      createdAt
+      updatedAt
     }
   }
 `)
@@ -86,3 +68,6 @@ export const deleteWebhook = graphql(`
     deleteWebhook(id: $id)
   }
 `)
+
+// Note: Webhook calls functionality is not yet available in the current schema
+// The webhook_call.gql extensions need to be properly integrated in the backend first

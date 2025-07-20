@@ -6,7 +6,6 @@ export const webhookFormSchema = z.object({
   url: z.string().url('Must be a valid URL'),
   events: z.array(z.string()).min(1, 'At least one event must be selected'),
   enabled: z.boolean().default(true),
-  secret: z.string().optional(),
 })
 
 export type WebhookFormData = z.infer<typeof webhookFormSchema>

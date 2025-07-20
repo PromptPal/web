@@ -1,21 +1,18 @@
-import { useQuery } from '@apollo/client'
 import { motion } from 'framer-motion'
-import { Settings, Users, Shield, AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Shield, Users } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { AssignPermissionModal } from '../../permissions/components/AssignPermissionModal'
 import CreateUserModal from '../../permissions/components/CreateUserModal'
 import { UserList } from '../../permissions/components/UserList'
-import { GET_PROJECT, MockRole, MockUserRole } from '../../permissions/permissions.query'
-import { useState, useMemo } from 'react'
-import toast from 'react-hot-toast'
+import { MockRole, MockUserRole } from '../../permissions/permissions.query'
 
-interface SystemAdminTabProps {
-  currentUserLevel: number
-}
-
-function SystemAdminTab({ currentUserLevel }: SystemAdminTabProps) {
+function SystemAdminTab() {
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false)
   const [isAssignPermissionModalOpen, setIsAssignPermissionModalOpen] = useState(false)
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
+
+  // Mock current user level for demonstration
+  const currentUserLevel = 1000
 
   const isSystemAdmin = currentUserLevel >= 100
 
@@ -174,7 +171,7 @@ function SystemAdminTab({ currentUserLevel }: SystemAdminTabProps) {
           refetchUsers()
           setIsCreateUserModalOpen(false)
         }}
-        projectId={'system'} // System-wide user creation
+        projectId='system' // System-wide user creation
       />
 
       <AssignPermissionModal
@@ -184,7 +181,7 @@ function SystemAdminTab({ currentUserLevel }: SystemAdminTabProps) {
           setSelectedUserId(null)
         }}
         userId={selectedUserId}
-        projectId={'system'}
+        projectId='system'
         availableRoles={availableRoles}
         onPermissionAssigned={() => {
           refetchUsers()

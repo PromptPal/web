@@ -1,17 +1,16 @@
-import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { useParams } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { webhooksList } from './webhook.query'
-import { WebhookList } from './components/WebhookList'
+import { useState } from 'react'
+import { useProjectId } from '../../hooks/route'
 import { EmptyState } from './components/EmptyState'
 import { ErrorState } from './components/ErrorState'
 import { LoadingState } from './components/LoadingState'
 import { PageHeader } from './components/PageHeader'
+import { WebhookList } from './components/WebhookList'
+import { webhooksList } from './webhook.query'
 
 function WebhooksPage() {
-  const params = useParams({ from: '/$pid/webhooks' })
-  const projectId = ~~params.pid
+  const projectId = useProjectId()
   const [pagination] = useState({
     limit: 20,
     offset: 0,

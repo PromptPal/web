@@ -1,5 +1,5 @@
 import { cn } from '@/utils'
-import { Link, useLocation, useParams } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import {
   BarChart3,
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { lastTag } from '~build/git'
 import buildTime from '~build/time'
+import { useProjectId } from '../hooks/route'
 
 const menus = [
   {
@@ -46,13 +47,13 @@ const menus = [
 ]
 
 function Menubar() {
-  const params: { pid: string } = useParams({ strict: false })
+  const pid = useProjectId()
   const location = useLocation()
 
   const isActive = (menu: typeof menus[0]) => {
     const currentPath = location.pathname
-    const menuPath = menu.link(params?.pid ? ~~params.pid : 0)
-    return currentPath === menuPath
+    const menuPath = menu.link(pid)
+    return currentPath.includes(menuPath)
   }
 
   return (
@@ -80,7 +81,7 @@ function Menubar() {
             <Link
               key={menu.text}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              to={menu.link(params?.pid ? ~~params.pid : 0) as any}
+              to={menu.link(pid) as any}
               className={cn(
                 'group relative flex items-center w-full p-4 rounded-xl transition-all duration-300 overflow-hidden',
                 active

@@ -1,9 +1,9 @@
-import { Link, useParams } from '@tanstack/react-router'
-import { Plus, Webhook, Settings, Activity } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Activity, Plus, Settings, Webhook } from 'lucide-react'
+import { useProjectId } from '../../../hooks/route'
 
 export function PageHeader() {
-  const params = useParams({ from: '/$pid/webhooks' })
-  const projectId = params.pid
+  const projectId = useProjectId()
 
   return (
     <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-6'>
@@ -42,7 +42,8 @@ export function PageHeader() {
         {/* Action buttons */}
         <div className='flex items-center gap-2'>
           <Link
-            to={`/${projectId}/webhooks/new`}
+            to='/$pid/webhooks/new'
+            params={{ pid: projectId.toString() }}
             className='inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900'
           >
             <Plus className='h-4 w-4' />

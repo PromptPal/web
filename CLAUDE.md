@@ -73,6 +73,7 @@ Uses TanStack Router with file-based routing:
 - Type-safe route parameters and search params
 
 ### 2. GraphQL Integration
+- schema is in `../server/schema/**/*.gql`
 - Schema-first approach with code generation
 - Queries and mutations co-located with components
 - Apollo Client with error handling and caching

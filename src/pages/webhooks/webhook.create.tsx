@@ -1,11 +1,10 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@apollo/client'
-import { useParams, useNavigate } from '@tanstack/react-router'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Save, Eye, EyeOff } from 'lucide-react'
-import { webhookFormSchema, type WebhookFormData, WEBHOOK_EVENTS } from './types'
+import { ArrowLeft, Save } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { WEBHOOK_EVENTS, webhookFormSchema, type WebhookFormData } from './types'
 import { createWebhook } from './webhook.query'
 
 function CreateWebhookPage() {
@@ -13,7 +12,6 @@ function CreateWebhookPage() {
   const navigate = useNavigate()
   const projectId = ~~params.pid
 
-  const [showSecret, setShowSecret] = useState(false)
   const [createWebhookMutation, { loading }] = useMutation(createWebhook, {
     onCompleted: (data) => {
       if (data?.createWebhook.id) {
@@ -48,13 +46,12 @@ function CreateWebhookPage() {
   const onSubmit = async (data: WebhookFormData) => {
     createWebhookMutation({
       variables: {
-        projectId,
         data: {
+          projectId,
           name: data.name,
           url: data.url,
-          events: data.events,
+          event: data.events[0],
           enabled: data.enabled,
-          secret: data.secret || undefined,
         },
       },
     })
@@ -66,12 +63,6 @@ function CreateWebhookPage() {
       ? currentEvents.filter(e => e !== event)
       : [...currentEvents, event]
     setValue('events', newEvents, { shouldValidate: true })
-  }
-
-  const generateSecret = () => {
-    const secret = crypto.getRandomValues(new Uint8Array(32))
-    const secretString = Array.from(secret, byte => byte.toString(16).padStart(2, '0')).join('')
-    setValue('secret', secretString, { shouldValidate: true })
   }
 
   return (
@@ -202,40 +193,6 @@ function CreateWebhookPage() {
                 <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
                   Security
                 </h2>
-
-                <div>
-                  <label htmlFor='secret' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                    Webhook Secret (Optional)
-                  </label>
-                  <div className='flex gap-2'>
-                    <div className='relative flex-1'>
-                      <input
-                        {...register('secret')}
-                        type={showSecret ? 'text' : 'password'}
-                        id='secret'
-                        placeholder='Leave empty to auto-generate'
-                        className='w-full px-4 py-3 pr-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors'
-                      />
-                      <button
-                        type='button'
-                        onClick={() => setShowSecret(!showSecret)}
-                        className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
-                      >
-                        {showSecret ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
-                      </button>
-                    </div>
-                    <button
-                      type='button'
-                      onClick={generateSecret}
-                      className='px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
-                    >
-                      Generate
-                    </button>
-                  </div>
-                  <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                    Used to verify webhook authenticity. Will be included in the X-Webhook-Signature header.
-                  </p>
-                </div>
 
                 {/* Enabled toggle */}
                 <div className='flex items-center gap-3'>
