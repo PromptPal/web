@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { FolderKanban, Eye, Edit, Trash2, Settings, Users } from 'lucide-react'
+import { FolderKanban, Eye, Edit, Settings, Users } from 'lucide-react'
 
 interface ProjectPermission {
   id: string
@@ -130,7 +130,10 @@ function ProjectsTab() {
                 {getRoleIcon(project.role)}
                 <span className='text-xs font-medium capitalize'>{project.role}</span>
               </div>
-              <span className='text-xs text-gray-500'>ID: #{project.id}</span>
+              <span className='text-xs text-gray-500'>
+                ID: #
+                {project.id}
+              </span>
             </div>
 
             {/* Project Stats */}

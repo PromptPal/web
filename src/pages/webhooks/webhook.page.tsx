@@ -12,7 +12,7 @@ import {
   CheckCircle,
   XCircle,
 } from 'lucide-react'
-import { getWebhook, getWebhookCalls } from './webhook.query'
+// import { getWebhook, getWebhookCalls } from './webhook.query'
 import { WebhookCallsTable } from './components/WebhookCallsTable'
 import { WEBHOOK_STATUS_COLORS } from './types'
 
@@ -66,7 +66,7 @@ function WebhookDetailPage() {
             Webhook not found
           </h3>
           <p className='text-gray-500 dark:text-gray-400'>
-            The webhook you're looking for doesn't exist or has been deleted.
+            The webhook you&apos;re looking for doesn&apos;t exist or has been deleted.
           </p>
           <Link
             to={`/${projectId}/webhooks`}

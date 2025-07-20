@@ -142,9 +142,15 @@ function BillingTab() {
           <div className='space-y-4'>
             <div className='flex items-center justify-between'>
               <div>
-                <p className='text-xl font-bold text-gray-200'>{currentPlan.name} Plan</p>
+                <p className='text-xl font-bold text-gray-200'>
+                  {currentPlan.name}
+                  {' '}
+                  Plan
+                </p>
                 <p className='text-sm text-gray-400'>
-                  {formatCurrency(currentPlan.price)}/{currentPlan.period}
+                  {formatCurrency(currentPlan.price)}
+                  /
+                  {currentPlan.period}
                 </p>
               </div>
               <button className='px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200'>
@@ -169,7 +175,7 @@ function BillingTab() {
             <div className='p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500'>
               <TrendingUp className='w-5 h-5 text-white' />
             </div>
-            <h4 className='text-lg font-semibold text-gray-200'>This Month's Usage</h4>
+            <h4 className='text-lg font-semibold text-gray-200'>This Month&apos;s Usage</h4>
           </div>
 
           <div className='space-y-4'>
@@ -177,7 +183,10 @@ function BillingTab() {
               <div className='flex items-center justify-between mb-2'>
                 <span className='text-sm text-gray-400'>API Calls</span>
                 <span className='text-sm text-gray-300'>
-                  {formatNumber(currentUsage.apiCalls)} / {formatNumber(currentUsage.limit)}
+                  {formatNumber(currentUsage.apiCalls)}
+                  {' '}
+                  /
+                  {formatNumber(currentUsage.limit)}
                 </span>
               </div>
               <div className='w-full bg-gray-700 rounded-full h-2'>
@@ -186,7 +195,10 @@ function BillingTab() {
                   style={{ width: `${Math.min(usagePercentage, 100)}%` }}
                 />
               </div>
-              <p className='text-xs text-gray-400 mt-1'>{usagePercentage.toFixed(1)}% used</p>
+              <p className='text-xs text-gray-400 mt-1'>
+                {usagePercentage.toFixed(1)}
+                % used
+              </p>
             </div>
 
             <div className='grid gap-4 grid-cols-2'>
@@ -201,7 +213,9 @@ function BillingTab() {
             </div>
 
             <div className='text-xs text-gray-400'>
-              Resets on {new Date(currentUsage.resetDate).toLocaleDateString()}
+              Resets on
+              {' '}
+              {new Date(currentUsage.resetDate).toLocaleDateString()}
             </div>
           </div>
         </div>
@@ -256,7 +270,7 @@ function BillingTab() {
         </div>
 
         <div className='space-y-3'>
-          {recentInvoices.map((invoice) => (
+          {recentInvoices.map(invoice => (
             <div key={invoice.id} className='flex items-center justify-between p-4 rounded-lg bg-gray-800/50'>
               <div className='flex items-center gap-4'>
                 <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs border ${getStatusColor(invoice.status)}`}>
@@ -265,7 +279,13 @@ function BillingTab() {
                 </div>
                 <div>
                   <p className='text-gray-200 font-medium'>{invoice.description}</p>
-                  <p className='text-sm text-gray-400'>{invoice.id} • {new Date(invoice.date).toLocaleDateString()}</p>
+                  <p className='text-sm text-gray-400'>
+                    {invoice.id}
+                    {' '}
+                    •
+                    {' '}
+                    {new Date(invoice.date).toLocaleDateString()}
+                  </p>
                 </div>
               </div>
               <div className='flex items-center gap-3'>

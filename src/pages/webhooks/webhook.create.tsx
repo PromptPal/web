@@ -3,7 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Save } from 'lucide-react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import InputField from '@annatarhe/lake-ui/form-input-field'
+import SwitchField from '@annatarhe/lake-ui/form-switch-field'
 import { WEBHOOK_EVENTS, webhookFormSchema, type WebhookFormData } from './types'
 import { createWebhook } from './webhook.query'
 
@@ -24,19 +26,18 @@ function CreateWebhookPage() {
   })
 
   const {
-    register,
+    control,
     handleSubmit,
     watch,
     setValue,
     formState: { errors, isValid },
-  } = useForm<WebhookFormData>({
+  } = useForm({
     resolver: zodResolver(webhookFormSchema),
     defaultValues: {
       name: '',
       url: '',
       events: [],
       enabled: true,
-      secret: '',
     },
     mode: 'onChange',
   })
@@ -112,42 +113,33 @@ function CreateWebhookPage() {
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                   {/* Name */}
-                  <div>
-                    <label htmlFor='name' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                      Webhook Name
-                    </label>
-                    <input
-                      {...register('name')}
-                      type='text'
-                      id='name'
-                      placeholder='My webhook endpoint'
-                      className='w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors'
-                    />
-                    {errors.name && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
-                        {errors.name.message}
-                      </p>
+                  <Controller
+                    name='name'
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <InputField
+                        {...field}
+                        label='Webhook Name'
+                        placeholder='My webhook endpoint'
+                        error={fieldState.error?.message}
+                      />
                     )}
-                  </div>
+                  />
 
                   {/* URL */}
-                  <div>
-                    <label htmlFor='url' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                      Endpoint URL
-                    </label>
-                    <input
-                      {...register('url')}
-                      type='url'
-                      id='url'
-                      placeholder='https://api.example.com/webhooks'
-                      className='w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors'
-                    />
-                    {errors.url && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
-                        {errors.url.message}
-                      </p>
+                  <Controller
+                    name='url'
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <InputField
+                        {...field}
+                        type='url'
+                        label='Endpoint URL'
+                        placeholder='https://api.example.com/webhooks'
+                        error={fieldState.error?.message}
+                      />
                     )}
-                  </div>
+                  />
                 </div>
               </div>
 
@@ -195,17 +187,16 @@ function CreateWebhookPage() {
                 </h2>
 
                 {/* Enabled toggle */}
-                <div className='flex items-center gap-3'>
-                  <input
-                    {...register('enabled')}
-                    type='checkbox'
-                    id='enabled'
-                    className='w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 rounded focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
-                  />
-                  <label htmlFor='enabled' className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    Enable webhook immediately
-                  </label>
-                </div>
+                <Controller
+                  name='enabled'
+                  control={control}
+                  render={({ field }) => (
+                    <SwitchField
+                      {...field}
+                      label='Enable webhook immediately'
+                    />
+                  )}
+                />
               </div>
 
               {/* Submit */}

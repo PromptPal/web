@@ -6,7 +6,8 @@ import { useParams, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Save, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { webhookFormSchema, type WebhookFormData, WEBHOOK_EVENTS } from './types'
-import { updateWebhook, getWebhook } from './webhook.query'
+import { updateWebhook } from './webhook.query'
+// import { getWebhook } from './webhook.query'
 
 function EditWebhookPage() {
   const params = useParams({ from: '/$pid/webhooks/$id/edit' })
@@ -119,7 +120,7 @@ function EditWebhookPage() {
             Webhook not found
           </h3>
           <p className='text-gray-500 dark:text-gray-400'>
-            The webhook you're trying to edit doesn't exist or has been deleted.
+            The webhook you&apos;re trying to edit doesn&apos;t exist or has been deleted.
           </p>
           <button
             onClick={() => navigate({ to: `/${projectId}/webhooks` })}
