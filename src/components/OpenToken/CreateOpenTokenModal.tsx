@@ -1,5 +1,6 @@
 import InputField from '@annatarhe/lake-ui/form-input-field'
 import Switch from '@annatarhe/lake-ui/form-switch-field'
+import TextareaField from '@annatarhe/lake-ui/form-textarea-field'
 import LakeModal from '@annatarhe/lake-ui/modal'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import { useMutation as useGraphQLMutation } from '@apollo/client'
@@ -123,54 +124,39 @@ function CreateOpenTokenModal(props: CreateOpenTokenModalProps) {
             />
 
             {/* Description Field */}
-            <div>
-              <label className='block text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2'>
-                Description
-              </label>
-              <div className='relative'>
-                <div className='absolute top-3 left-0 flex items-start pl-3 pointer-events-none text-gray-500'>
-                  <MessageSquare className='h-5 w-5' />
+            <TextareaField
+              label={(
+                <div>
+                  <span className='text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+                    Description
+                  </span>
+                  <Tooltip content='Optional description for better organization'>
+                    <MessageSquare className='w-4 h-4 ml-2' />
+                  </Tooltip>
                 </div>
-                <textarea
-                  className='pl-10 w-full bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg py-3 px-4 text-gray-200 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:outline-none transition duration-200 min-h-[80px]'
-                  placeholder='Describe the purpose of this token'
-                  {...f.register('description')}
-                />
-              </div>
-              {f.formState.errors.description && (
-                <p className='mt-2 text-sm text-red-400'>
-                  {f.formState.errors.description?.message}
-                </p>
               )}
-              <p className='mt-1 text-xs text-gray-400'>
-                Optional description for better organization
-              </p>
-            </div>
+              placeholder='Describe the purpose of this token'
+              rows={3}
+              {...f.register('description')}
+              error={f.formState.errors.description?.message}
+            />
 
             {/* Expiration Date Field */}
-            <div>
-              <label className='block text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2'>
-                Expiration Date
-              </label>
-              <div className='relative'>
-                <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500'>
-                  <CalendarIcon className='h-5 w-5' />
+            <InputField
+              label={(
+                <div>
+                  <span className='text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500'>
+                    Expiration Date
+                  </span>
+                  <Tooltip content='When this token will expire (maximum 3 years from now)'>
+                    <CalendarIcon className='w-4 h-4 ml-2' />
+                  </Tooltip>
                 </div>
-                <input
-                  type='date'
-                  className='pl-10 w-full bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg py-3 px-4 text-gray-200 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:outline-none transition duration-200'
-                  {...f.register('expireAt')}
-                />
-              </div>
-              {f.formState.errors.expireAt && (
-                <p className='mt-2 text-sm text-red-400'>
-                  {f.formState.errors.expireAt?.message}
-                </p>
               )}
-              <p className='mt-1 text-xs text-gray-400'>
-                When this token will expire (maximum 3 years from now)
-              </p>
-            </div>
+              type='date'
+              {...f.register('expireAt')}
+              error={f.formState.errors.expireAt?.message}
+            />
 
             {/* Validation Toggle */}
             <div>

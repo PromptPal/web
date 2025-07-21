@@ -9,6 +9,7 @@ import { PromptVariable } from '@/service/types'
 import { cn } from '@/utils'
 import InputField from '@annatarhe/lake-ui/form-input-field'
 import SelectField from '@annatarhe/lake-ui/form-select-field'
+import TextareaField from '@annatarhe/lake-ui/form-textarea-field'
 import Tooltip from '@annatarhe/lake-ui/tooltip'
 import {
   useApolloClient,
@@ -344,17 +345,12 @@ function PromptCreatePage(props: PromptCreatePageProps) {
           control={control}
           name='description'
           render={({ field }) => (
-            <div className='flex flex-col gap-2'>
-              <label className='text-sm font-medium text-gray-200'>
-                Description
-              </label>
-              <textarea
-                placeholder='Description'
-                rows={4}
-                {...field}
-                className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 placeholder-gray-400 resize-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all'
-              />
-            </div>
+            <TextareaField
+              label='Description'
+              placeholder='Description'
+              rows={4}
+              {...field}
+            />
           )}
         />
 
@@ -392,9 +388,8 @@ function PromptCreatePage(props: PromptCreatePageProps) {
                       control={control}
                       name={`prompts.${index}.prompt`}
                       render={({ field }) => (
-                        <textarea
+                        <TextareaField
                           placeholder='Prompt'
-                          className='w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-gray-200 placeholder-gray-400'
                           rows={8}
                           {...field}
                         />
