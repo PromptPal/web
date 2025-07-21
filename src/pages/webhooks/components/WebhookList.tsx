@@ -1,3 +1,6 @@
+import { AllWebhooksListQuery } from '@/gql/graphql'
+import { useProjectId } from '@/hooks/route'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import { useMutation } from '@apollo/client'
 import { Link } from '@tanstack/react-router'
 import {
@@ -6,6 +9,8 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  HeaderGroup,
+  RowModel,
   useReactTable,
   type ColumnFiltersState,
   type SortingState,
@@ -16,14 +21,11 @@ import {
   ChevronDown,
   ChevronUp,
   Edit,
-  ExternalLink,
   MoreHorizontal,
   Search,
   Trash2,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { AllWebhooksListQuery, Webhook } from '../../../gql/graphql'
-import { useProjectId } from '../../../hooks/route'
 import { WEBHOOK_STATUS_COLORS } from '../types'
 import { deleteWebhook } from '../webhook.query'
 
@@ -32,7 +34,7 @@ type Webhook = AllWebhooksListQuery['webhooks']['edges'][number]
 // Define the webhook type structure based on our GraphQL query
 // Table header component
 interface TableHeaderProps {
-  headerGroups: ReturnType<typeof useReactTable>['getHeaderGroups']
+  headerGroups: HeaderGroup<Webhook>[]
 }
 
 function TableHeader({ headerGroups }: TableHeaderProps) {
@@ -82,7 +84,7 @@ function TableHeader({ headerGroups }: TableHeaderProps) {
 
 // Table body component
 interface TableBodyProps {
-  rows: ReturnType<typeof useReactTable>['getRowModel']['rows']
+  rows: RowModel<Webhook>['rows']
 }
 
 function TableBody({ rows }: TableBodyProps) {
@@ -127,9 +129,10 @@ function SearchBar({ globalFilter, setGlobalFilter, webhooks }: SearchBarProps) 
   return (
     <div className='mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between'>
       <div className='relative flex-1 max-w-md'>
-        <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
-        <input
-          type='text'
+        <Search className='absolute left-3 top-1/2 transform translate-y-0.5  h-5 w-5 text-gray-400 z-10' />
+        <InputField
+          label='Search Webhooks'
+          type='search'
           placeholder='Search webhooks...'
           value={globalFilter}
           onChange={e => setGlobalFilter(e.target.value)}
@@ -208,15 +211,12 @@ export function WebhookList({ webhooks, onRefetch }: WebhookListProps) {
         header: 'Endpoint URL',
         cell: ({ getValue }) => (
           <div className='flex items-center gap-2'>
-            <code className='px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded font-mono max-w-xs truncate'>
-              {getValue()}
-            </code>
-            <button
-              onClick={() => window.open(getValue(), '_blank')}
-              className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
-            >
-              <ExternalLink className='h-3 w-3' />
-            </button>
+            <InputField
+              value={getValue()}
+              readOnly
+              className='bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 w-full'
+              disabled
+            />
           </div>
         ),
       }),
@@ -262,7 +262,9 @@ export function WebhookList({ webhooks, onRefetch }: WebhookListProps) {
         cell: ({ row }) => (
           <div className='flex items-center gap-2'>
             <Link
-              to={`/${projectId}/webhooks/${row.original.id}/edit`}
+              to='/$pid/webhooks/$id/edit'
+              params={{ pid: projectId.toString(), id: row.original.id.toString() }}
+
               className='p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors'
             >
               <Edit className='h-4 w-4' />

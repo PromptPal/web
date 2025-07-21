@@ -1,3 +1,4 @@
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import { useQuery } from '@apollo/client'
 import { Link, useParams } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
@@ -7,14 +8,12 @@ import {
   ArrowLeft,
   CheckCircle,
   Edit,
-  ExternalLink,
-  Shield,
   XCircle,
 } from 'lucide-react'
 import { useState } from 'react'
-// import { getWebhook, getWebhookCalls } from './webhook.query'
 import { WebhookCallsTable } from './components/WebhookCallsTable'
 import { WEBHOOK_STATUS_COLORS } from './types'
+import { getWebhook, webhookCalls } from './webhook.query'
 
 function WebhookDetailPage() {
   const params = useParams({ strict: false })
@@ -39,10 +38,12 @@ function WebhookDetailPage() {
     loading: callsLoading,
     error: callsError,
     refetch: refetchCalls,
-  } = useQuery(getWebhookCalls, {
+  } = useQuery(webhookCalls, {
     variables: {
-      webhookId,
-      pagination,
+      input: {
+        webhookId,
+        pagination,
+      },
     },
   })
 
@@ -69,7 +70,9 @@ function WebhookDetailPage() {
             The webhook you&apos;re looking for doesn&apos;t exist or has been deleted.
           </p>
           <Link
-            to={`/${projectId}/webhooks`}
+            to='/$pid/webhooks'
+            params={{ pid: projectId.toString() }}
+
             className='inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 rounded-lg'
           >
             <ArrowLeft className='h-4 w-4' />
@@ -99,7 +102,8 @@ function WebhookDetailPage() {
             className='mb-8'
           >
             <Link
-              to={`/${projectId}/webhooks`}
+              to='/$pid/webhooks'
+              params={{ pid: projectId.toString() }}
               className='inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 mb-4'
             >
               <ArrowLeft className='h-4 w-4' />
@@ -134,7 +138,8 @@ function WebhookDetailPage() {
 
               <div className='flex items-center gap-3'>
                 <Link
-                  to={`/${projectId}/webhooks/${webhookId}/edit`}
+                  to='/$pid/webhooks/$id/edit'
+                  params={{ pid: projectId.toString(), id: webhookId.toString() }}
                   className='inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
                 >
                   <Edit className='h-4 w-4' />
@@ -159,61 +164,25 @@ function WebhookDetailPage() {
                 </h2>
 
                 <div className='space-y-4'>
-                  <div>
-                    <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
-                      Endpoint URL
-                    </label>
-                    <div className='mt-1 flex items-center gap-2'>
-                      <code className='flex-1 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 rounded font-mono break-all'>
-                        {webhook.url}
-                      </code>
-                      <button
-                        onClick={() => window.open(webhook.url, '_blank')}
-                        className='p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
-                      >
-                        <ExternalLink className='h-4 w-4' />
-                      </button>
-                    </div>
-                  </div>
+                  <InputField
+                    label='Endpoint URL'
+                    value={webhook.url}
+                    readOnly
+                    className='bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
+                    disabled
+                    type='url'
+                  />
 
                   <div>
                     <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
                       Events
                     </label>
                     <div className='mt-2 flex flex-wrap gap-2'>
-                      {webhook.events.map(event => (
-                        <span
-                          key={event}
-                          className='px-2 py-1 text-xs bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200 rounded-full'
-                        >
-                          {event}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
-                      Secret Configured
-                    </label>
-                    <div className='mt-1 flex items-center gap-2'>
-                      {webhook.secret
-                        ? (
-                            <>
-                              <Shield className='h-4 w-4 text-green-500' />
-                              <span className='text-sm text-green-600 dark:text-green-400'>
-                                Yes, webhook is secured
-                              </span>
-                            </>
-                          )
-                        : (
-                            <>
-                              <AlertCircle className='h-4 w-4 text-yellow-500' />
-                              <span className='text-sm text-yellow-600 dark:text-yellow-400'>
-                                No secret configured
-                              </span>
-                            </>
-                          )}
+                      <span
+                        className='px-2 py-1 text-xs bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200 rounded-full'
+                      >
+                        {webhook.event}
+                      </span>
                     </div>
                   </div>
 
@@ -250,7 +219,7 @@ function WebhookDetailPage() {
                   <div className='text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg'>
                     <CheckCircle className='h-6 w-6 text-green-500 mx-auto mb-1' />
                     <p className='text-lg font-bold text-green-600 dark:text-green-400'>
-                      {calls.filter(call => call.status === 'success').length}
+                      {calls.filter(call => call.statusCode === 200).length}
                     </p>
                     <p className='text-xs text-green-600 dark:text-green-400'>
                       Successful
@@ -259,7 +228,7 @@ function WebhookDetailPage() {
                   <div className='text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg'>
                     <XCircle className='h-6 w-6 text-red-500 mx-auto mb-1' />
                     <p className='text-lg font-bold text-red-600 dark:text-red-400'>
-                      {calls.filter(call => call.status === 'error').length}
+                      {calls.filter(call => call.statusCode !== 200).length}
                     </p>
                     <p className='text-xs text-red-600 dark:text-red-400'>
                       Failed

@@ -3,9 +3,8 @@ import { z } from 'zod/v4'
 // Webhook form validation schema
 export const webhookFormSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
-  url: z.string().url('Must be a valid URL'),
+  url: z.url('Must be a valid URL'),
   events: z.array(z.string()).min(1, 'At least one event must be selected'),
-  enabled: z.boolean().default(true),
 })
 
 export type WebhookFormData = z.infer<typeof webhookFormSchema>

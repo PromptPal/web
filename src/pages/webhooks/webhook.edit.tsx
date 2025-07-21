@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import InputField from '@annatarhe/lake-ui/form-input-field'
 import { useMutation, useQuery } from '@apollo/client'
-import { useParams, useNavigate } from '@tanstack/react-router'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Save, Eye, EyeOff, AlertCircle } from 'lucide-react'
-import { webhookFormSchema, type WebhookFormData, WEBHOOK_EVENTS } from './types'
-import { updateWebhook } from './webhook.query'
-// import { getWebhook } from './webhook.query'
+import { AlertCircle, ArrowLeft, Save } from 'lucide-react'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { WEBHOOK_EVENTS, webhookFormSchema, type WebhookFormData } from './types'
+import { getWebhook, updateWebhook } from './webhook.query'
 
 function EditWebhookPage() {
   const params = useParams({ from: '/$pid/webhooks/$id/edit' })
   const navigate = useNavigate()
   const projectId = ~~params.pid
   const webhookId = ~~params.id
-
-  const [showSecret, setShowSecret] = useState(false)
 
   const {
     data: webhookData,
@@ -27,12 +26,17 @@ function EditWebhookPage() {
 
   const [updateWebhookMutation, { loading }] = useMutation(updateWebhook, {
     onCompleted: (data) => {
-      if (data?.updateWebhook.id) {
-        navigate({ to: `/${projectId}/webhooks/${webhookId}` })
+      const updatedWebhook = data?.updateWebhook.id
+      if (!updatedWebhook) {
+        toast.error('Failed to update webhook')
+        return
       }
+      toast.success('Webhook updated successfully')
+      navigate({ to: `/${projectId}/webhooks/${webhookId}` })
     },
     onError: (error) => {
       console.error('Failed to update webhook:', error)
+      toast.error('Failed to update webhook')
     },
   })
 
@@ -42,15 +46,13 @@ function EditWebhookPage() {
     watch,
     setValue,
     reset,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isValid },
   } = useForm<WebhookFormData>({
     resolver: zodResolver(webhookFormSchema),
     defaultValues: {
       name: '',
       url: '',
       events: [],
-      enabled: true,
-      secret: '',
     },
     mode: 'onChange',
   })
@@ -62,9 +64,7 @@ function EditWebhookPage() {
       reset({
         name: webhook.name,
         url: webhook.url,
-        events: webhook.events,
-        enabled: webhook.enabled,
-        secret: webhook.secret || '',
+        events: webhook.event ? [webhook.event] : [],
       })
     }
   }, [webhookData, reset])
@@ -78,9 +78,8 @@ function EditWebhookPage() {
         data: {
           name: data.name,
           url: data.url,
-          events: data.events,
-          enabled: data.enabled,
-          secret: data.secret || undefined,
+          event: data.events[0],
+          enabled: true,
         },
       },
     })
@@ -92,12 +91,6 @@ function EditWebhookPage() {
       ? currentEvents.filter(e => e !== event)
       : [...currentEvents, event]
     setValue('events', newEvents, { shouldValidate: true })
-  }
-
-  const generateSecret = () => {
-    const secret = crypto.getRandomValues(new Uint8Array(32))
-    const secretString = Array.from(secret, byte => byte.toString(16).padStart(2, '0')).join('')
-    setValue('secret', secretString, { shouldValidate: true })
   }
 
   if (webhookLoading) {
@@ -185,7 +178,7 @@ function EditWebhookPage() {
                     <label htmlFor='name' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                       Webhook Name
                     </label>
-                    <input
+                    <InputField
                       {...register('name')}
                       type='text'
                       id='name'
@@ -204,7 +197,7 @@ function EditWebhookPage() {
                     <label htmlFor='url' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
                       Endpoint URL
                     </label>
-                    <input
+                    <InputField
                       {...register('url')}
                       type='url'
                       id='url'
@@ -257,60 +250,6 @@ function EditWebhookPage() {
                 )}
               </div>
 
-              {/* Security */}
-              <div className='space-y-6'>
-                <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
-                  Security
-                </h2>
-
-                <div>
-                  <label htmlFor='secret' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                    Webhook Secret (Optional)
-                  </label>
-                  <div className='flex gap-2'>
-                    <div className='relative flex-1'>
-                      <input
-                        {...register('secret')}
-                        type={showSecret ? 'text' : 'password'}
-                        id='secret'
-                        placeholder='Leave empty to remove secret'
-                        className='w-full px-4 py-3 pr-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors'
-                      />
-                      <button
-                        type='button'
-                        onClick={() => setShowSecret(!showSecret)}
-                        className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
-                      >
-                        {showSecret ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
-                      </button>
-                    </div>
-                    <button
-                      type='button'
-                      onClick={generateSecret}
-                      className='px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors'
-                    >
-                      Generate
-                    </button>
-                  </div>
-                  <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                    Used to verify webhook authenticity. Will be included in the X-Webhook-Signature header.
-                  </p>
-                </div>
-
-                {/* Enabled toggle */}
-                <div className='flex items-center gap-3'>
-                  <input
-                    {...register('enabled')}
-                    type='checkbox'
-                    id='enabled'
-                    className='w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 rounded focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
-                  />
-                  <label htmlFor='enabled' className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    Enable webhook
-                  </label>
-                </div>
-              </div>
-
               {/* Submit */}
               <div className='flex items-center justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700'>
                 <button
@@ -322,7 +261,7 @@ function EditWebhookPage() {
                 </button>
                 <button
                   type='submit'
-                  disabled={!isValid || !isDirty || loading}
+                  disabled={!isValid || loading}
                   className='inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900'
                 >
                   {loading

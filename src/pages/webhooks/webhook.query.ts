@@ -1,5 +1,28 @@
 import { graphql } from '@/gql'
 
+export const getWebhook = graphql(`
+  query getWebhook($id: Int!) {
+    webhook(id: $id) {
+      id
+      name
+      description
+      url
+      event
+      enabled
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+      }
+      project {
+        id
+        name
+      }
+    }
+  }
+`)
+
 // List all webhooks for a project
 export const webhooksList = graphql(`
   query allWebhooksList($projectId: Int!, $pagination: PaginationInput!) {
@@ -69,5 +92,37 @@ export const deleteWebhook = graphql(`
   }
 `)
 
-// Note: Webhook calls functionality is not yet available in the current schema
-// The webhook_call.gql extensions need to be properly integrated in the backend first
+// Note: Webhook calls functionality is defined in ../PromptPal/schema/types/webhook_call.gql
+// but has not been integrated into the backend GraphQL server yet.
+// Once the backend exposes the webhookCalls query, uncomment the following:
+
+export const webhookCalls = graphql(`
+  query webhookCalls($input: WebhookCallsInput!) {
+    webhookCalls(input: $input) {
+      count
+      edges {
+        id
+        webhookId
+        traceId
+        url
+        requestHeaders
+        requestBody
+        statusCode
+        responseHeaders
+        responseBody
+        startTime
+        endTime
+        isTimeout
+        errorMessage
+        userAgent
+        ip
+        createdAt
+        updatedAt
+        webhook {
+          id
+          name
+        }
+      }
+    }
+  }
+`)

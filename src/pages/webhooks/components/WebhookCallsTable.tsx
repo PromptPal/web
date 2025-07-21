@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { WebhookCall } from '@/gql/graphql'
+import { ApolloError } from '@apollo/client'
 import {
   createColumnHelper,
   flexRender,
@@ -8,35 +9,27 @@ import {
   type SortingState,
 } from '@tanstack/react-table'
 import {
+  AlertCircle,
+  CheckCircle,
   ChevronDown,
   ChevronUp,
-  MoreHorizontal,
-  CheckCircle,
-  XCircle,
   Clock,
   Eye,
+  MoreHorizontal,
   RefreshCw,
-  AlertCircle,
+  XCircle,
 } from 'lucide-react'
-import { ApolloError } from '@apollo/client'
-import { WEBHOOK_STATUS_COLORS, type WebhookCallStatus } from '../types'
-
-interface WebhookCall {
-  id: number
-  status: string
-  payload: string
-  response: string
-  createdAt: string
-}
+import { useMemo, useState } from 'react'
+import { WEBHOOK_STATUS_COLORS } from '../types'
 
 interface WebhookCallsTableProps {
-  calls: WebhookCall[]
+  calls: Omit<WebhookCall, 'webhook'>[]
   loading: boolean
   error?: ApolloError
   onRefetch: () => void
 }
 
-const columnHelper = createColumnHelper<WebhookCall>()
+const columnHelper = createColumnHelper<Omit<WebhookCall, 'webhook'>>()
 
 export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookCallsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'createdAt', desc: true }])
@@ -44,10 +37,21 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('status', {
+      columnHelper.accessor('statusCode', {
         header: 'Status',
         cell: ({ getValue }) => {
-          const status = getValue() as WebhookCallStatus
+          const statusCode = getValue() ?? 0
+          if (statusCode === 0) {
+            return (
+              <div className='flex items-center gap-2'>
+                <Clock className='h-4 w-4 text-yellow-500' />
+                <span className='px-2 py-1 text-xs rounded-full font-medium text-yellow-500'>
+                  Pending
+                </span>
+              </div>
+            )
+          }
+          const status = statusCode >= 200 && statusCode < 300 ? 'success' : statusCode >= 400 ? 'error' : 'pending'
           const statusColors = WEBHOOK_STATUS_COLORS[status] || WEBHOOK_STATUS_COLORS.error
 
           return (
@@ -86,7 +90,7 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
           )
         },
       }),
-      columnHelper.accessor('payload', {
+      columnHelper.accessor('requestBody', {
         header: 'Payload',
         cell: ({ getValue, row }) => {
           const payload = getValue()
@@ -107,7 +111,7 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
           )
         },
       }),
-      columnHelper.accessor('response', {
+      columnHelper.accessor('requestBody', {
         header: 'Response',
         cell: ({ getValue }) => {
           const response = getValue()
@@ -292,10 +296,10 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
                           <XCircle className='h-4 w-4 text-red-500' />
                         )}
                     <span className={`px-2 py-1 text-xs rounded-full font-medium ${
-                      WEBHOOK_STATUS_COLORS[selectedCall.status as WebhookCallStatus] || WEBHOOK_STATUS_COLORS.error
+                      WEBHOOK_STATUS_COLORS[selectedCall.statusCode] || WEBHOOK_STATUS_COLORS.error
                     }`}
                     >
-                      {selectedCall.status}
+                      {selectedCall.statusCode}
                     </span>
                   </div>
                 </div>
@@ -315,7 +319,7 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
                   Request Payload
                 </label>
                 <pre className='mt-1 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm overflow-x-auto'>
-                  {JSON.stringify(JSON.parse(selectedCall.payload || '{}'), null, 2)}
+                  {JSON.stringify(JSON.parse(selectedCall.requestBody || '{}'), null, 2)}
                 </pre>
               </div>
 
@@ -325,7 +329,7 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
                   Response
                 </label>
                 <pre className='mt-1 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm overflow-x-auto'>
-                  {selectedCall.response || 'No response received'}
+                  {selectedCall.responseBody || 'No response received'}
                 </pre>
               </div>
             </div>
