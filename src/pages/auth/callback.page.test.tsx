@@ -22,7 +22,7 @@ describe('AuthSSOCallbackPage Component', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     // Set default mock return value
-    vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: undefined } as any)
+    vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: undefined } as Record<string, unknown>)
   })
 
   it('renders loading message', () => {
@@ -39,7 +39,7 @@ describe('AuthSSOCallbackPage Component', () => {
 
   describe('when token is present in search params', () => {
     beforeEach(() => {
-      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: 'test-auth-token' } as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: 'test-auth-token' } as Record<string, unknown>)
     })
 
     it('sets the token when token is present in search params', () => {
@@ -57,7 +57,7 @@ describe('AuthSSOCallbackPage Component', () => {
 
   describe('with different token values', () => {
     it('handles empty string token', () => {
-      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: '' } as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: '' } as Record<string, unknown>)
       render(<AuthSSOCallbackPage />)
 
       expect(mockSetToken).not.toHaveBeenCalled()
@@ -65,7 +65,7 @@ describe('AuthSSOCallbackPage Component', () => {
 
     it('handles JWT-like token', () => {
       const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
-      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: jwtToken } as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: jwtToken } as Record<string, unknown>)
 
       render(<AuthSSOCallbackPage />)
 
@@ -73,7 +73,7 @@ describe('AuthSSOCallbackPage Component', () => {
     })
 
     it('handles simple string token', () => {
-      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: 'simple-token-123' } as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: 'simple-token-123' } as Record<string, unknown>)
 
       render(<AuthSSOCallbackPage />)
 
@@ -106,7 +106,7 @@ describe('AuthSSOCallbackPage Component', () => {
 
   describe('error scenarios', () => {
     it('handles missing search params gracefully', () => {
-      vi.mocked(ReactRouter.useSearch).mockReturnValueOnce({} as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValueOnce({} as Record<string, unknown>)
 
       render(<AuthSSOCallbackPage />)
 
@@ -115,7 +115,7 @@ describe('AuthSSOCallbackPage Component', () => {
     })
 
     it('handles null search params', () => {
-      vi.mocked(ReactRouter.useSearch).mockReturnValueOnce({} as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValueOnce({} as Record<string, unknown>)
 
       render(<AuthSSOCallbackPage />)
 
@@ -127,14 +127,14 @@ describe('AuthSSOCallbackPage Component', () => {
   describe('component lifecycle', () => {
     it('sets token in useEffect when token changes', () => {
       // First render with no token
-      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: undefined } as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: undefined } as Record<string, unknown>)
       const { rerender } = render(<AuthSSOCallbackPage />)
 
       // Initially no token should not call setToken
       expect(mockSetToken).not.toHaveBeenCalled()
 
       // Update mock to return a token
-      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: 'new-token' } as any)
+      vi.mocked(ReactRouter.useSearch).mockReturnValue({ token: 'new-token' } as Record<string, unknown>)
 
       rerender(<AuthSSOCallbackPage />)
 

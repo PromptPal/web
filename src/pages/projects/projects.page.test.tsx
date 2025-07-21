@@ -4,7 +4,7 @@ import ProjectsPage from './projects.page'
 
 // Mock TanStack Router
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, to, ...props }: any) => (
+  Link: ({ children, to, ...props }: { children: React.ReactNode, to: string } & React.ComponentProps<'a'>) => (
     <a href={to} {...props}>
       {children}
     </a>
@@ -14,14 +14,14 @@ vi.mock('@tanstack/react-router', () => ({
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    section: ({ children, ...props }: any) => <section {...props}>{children}</section>,
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    section: ({ children, ...props }: React.ComponentProps<'section'>) => <section {...props}>{children}</section>,
+    div: ({ children, ...props }: React.ComponentProps<'div'>) => <div {...props}>{children}</div>,
   },
 }))
 
 // Mock components
 vi.mock('../../components/Project/CardItem', () => ({
-  default: ({ project }: any) => (
+  default: ({ project }: { project: { id: number, name: string, enabled: boolean } }) => (
     <div data-testid={`project-card-${project.id}`}>
       <h3>{project.name}</h3>
       <span>
