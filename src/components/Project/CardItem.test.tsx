@@ -5,7 +5,7 @@ import ProjectCardItem from './CardItem'
 
 // Mock TanStack Router Link component
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, className, ...props }: any) => (
+  Link: ({ children, className, ...props }: React.ComponentProps<'a'>) => (
     <a href='#' className={className} {...props}>
       {children}
     </a>

@@ -8,7 +8,7 @@ import * as routeHooks from '../../hooks/route'
 
 // Mock TanStack Router
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, to, ...props }: any) => (
+  Link: ({ children, to, ...props }: { children: React.ReactNode, to: string } & React.ComponentProps<'a'>) => (
     <a href={to} {...props}>
       {children}
     </a>
@@ -21,7 +21,7 @@ vi.mock('../../components/Helps/Intergation', () => ({
 }))
 
 vi.mock('../../components/Project/TopPromptsByDate', () => ({
-  default: ({ recentCounts, loading }: any) => (
+  default: ({ recentCounts, loading }: { recentCounts?: Array<{ count: number }>, loading?: boolean }) => (
     <div data-testid='top-prompts-by-date'>
       <span>Top Prompts Chart</span>
       {loading && <span>Chart Loading...</span>}

@@ -5,7 +5,7 @@ import ProvidersPage from './providers.page'
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.ComponentProps<'div'>) => <div {...props}>{children}</div>,
   },
 }))
 
@@ -15,7 +15,7 @@ vi.mock('./components/LoadingState', () => ({
 }))
 
 vi.mock('./components/ErrorState', () => ({
-  ErrorState: ({ error }: any) => (
+  ErrorState: ({ error }: { error?: { message?: string } }) => (
     <div data-testid='error-state'>
       <h2>Error loading providers</h2>
       <p>{error?.message || 'Unknown error'}</p>
@@ -33,7 +33,7 @@ vi.mock('./components/EmptyState', () => ({
 }))
 
 vi.mock('./components/PageHeader', () => ({
-  PageHeader: ({ isDisabled }: any) => (
+  PageHeader: ({ isDisabled }: { isDisabled?: boolean }) => (
     <div data-testid='page-header'>
       <h1>Providers</h1>
       <button disabled={isDisabled}>Add Provider</button>
@@ -42,10 +42,10 @@ vi.mock('./components/PageHeader', () => ({
 }))
 
 vi.mock('./components/ProviderList', () => ({
-  ProviderList: ({ providers }: any) => (
+  ProviderList: ({ providers }: { providers: Array<{ id: number, name: string, type: string }> }) => (
     <div data-testid='provider-list'>
       <h2>Provider List</h2>
-      {providers.map((provider: any) => (
+      {providers.map(provider => (
         <div key={provider.id} data-testid={`provider-item-${provider.id}`}>
           <h3>{provider.name}</h3>
           <span>

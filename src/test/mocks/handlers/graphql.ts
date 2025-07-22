@@ -1,7 +1,7 @@
 import { graphql, HttpResponse } from 'msw'
 
 // Mock data factories
-export const createMockProject = (overrides: any = {}) => ({
+export const createMockProject = (overrides: Record<string, unknown> = {}) => ({
   id: 1,
   name: 'Test Project',
   description: 'Test project description',
@@ -11,7 +11,7 @@ export const createMockProject = (overrides: any = {}) => ({
   ...overrides,
 })
 
-export const createMockPrompt = (overrides: any = {}) => ({
+export const createMockPrompt = (overrides: Record<string, unknown> = {}) => ({
   id: 1,
   hashId: 'test-hash-id',
   name: 'Test Prompt',
@@ -54,7 +54,7 @@ export const createMockPrompt = (overrides: any = {}) => ({
   ...overrides,
 })
 
-export const createMockProvider = (overrides: any = {}) => ({
+export const createMockProvider = (overrides: Record<string, unknown> = {}) => ({
   id: 1,
   name: 'OpenAI',
   description: 'OpenAI provider',
@@ -143,7 +143,7 @@ export const graphqlHandlers = [
     })
   }),
 
-  graphql.mutation('deleteProject', ({ variables }) => {
+  graphql.mutation('deleteProject', () => {
     return HttpResponse.json({
       data: {
         deleteProject: { success: true },
@@ -167,7 +167,7 @@ export const graphqlHandlers = [
     })
   }),
 
-  graphql.mutation('deletePrompt', ({ variables }) => {
+  graphql.mutation('deletePrompt', () => {
     return HttpResponse.json({
       data: {
         deletePrompt: { success: true },

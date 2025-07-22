@@ -14,7 +14,7 @@ vi.mock('react', async () => {
   const actual = await vi.importActual('react')
   return {
     ...actual,
-    lazy: (factory: any) => {
+    lazy: () => {
       // Return the component directly instead of wrapping in lazy
       const Component = ({ buttonText }: { buttonText: string }) => (
         <button data-testid='metamask-login'>{buttonText}</button>
@@ -41,10 +41,10 @@ vi.mock('@formkit/auto-animate/react', () => ({
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    h1: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
-    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
-    a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+    div: ({ children, ...props }: React.ComponentProps<'div'>) => <div {...props}>{children}</div>,
+    h1: ({ children, ...props }: React.ComponentProps<'h1'>) => <h1 {...props}>{children}</h1>,
+    p: ({ children, ...props }: React.ComponentProps<'p'>) => <p {...props}>{children}</p>,
+    a: ({ children, ...props }: React.ComponentProps<'a'>) => <a {...props}>{children}</a>,
   },
 }))
 
@@ -66,7 +66,7 @@ describe('AuthorizePage Component', () => {
       data: { enableSsoGoogle: false },
       isLoading: false,
       error: null,
-    } as any)
+    } as ReactQuery.UseQueryResult<{ enableSsoGoogle: boolean }>)
   })
 
   it('renders the main authorization page content', async () => {
@@ -102,7 +102,7 @@ describe('AuthorizePage Component', () => {
         data: { enableSsoGoogle: true },
         isLoading: false,
         error: null,
-      } as any)
+      } as ReactQuery.UseQueryResult<{ enableSsoGoogle: boolean }>)
     })
 
     it('shows Google SSO button when enabled', () => {
@@ -127,7 +127,7 @@ describe('AuthorizePage Component', () => {
         data: undefined,
         isLoading: true,
         error: null,
-      } as any)
+      } as ReactQuery.UseQueryResult<{ enableSsoGoogle: boolean }>)
     })
 
     it('renders without SSO settings during loading', () => {
@@ -145,7 +145,7 @@ describe('AuthorizePage Component', () => {
         data: undefined,
         isLoading: false,
         error: new Error('Failed to fetch settings'),
-      } as any)
+      } as ReactQuery.UseQueryResult<{ enableSsoGoogle: boolean }>)
     })
 
     it('renders basic auth options when settings fail to load', () => {
@@ -177,7 +177,7 @@ describe('AuthorizePage Component', () => {
         data: { enableSsoGoogle: true },
         isLoading: false,
         error: null,
-      } as any)
+      } as ReactQuery.UseQueryResult<{ enableSsoGoogle: boolean }>)
 
       render(<AuthorizePage />)
 
@@ -212,7 +212,7 @@ describe('AuthorizePage Component', () => {
         data: { enableSsoGoogle: true },
         isLoading: false,
         error: null,
-      } as any)
+      } as ReactQuery.UseQueryResult<{ enableSsoGoogle: boolean }>)
 
       render(<AuthorizePage />)
 

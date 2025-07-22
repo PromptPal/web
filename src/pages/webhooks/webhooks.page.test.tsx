@@ -6,7 +6,7 @@ import { webhooksList } from './webhook.query'
 
 // Mock TanStack Router
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, to, ...props }: any) => (
+  Link: ({ children, to, ...props }: { children: React.ReactNode, to: string } & React.ComponentProps<'a'>) => (
     <a href={to} {...props}>
       {children}
     </a>
@@ -17,15 +17,15 @@ vi.mock('@tanstack/react-router', () => ({
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.ComponentProps<'div'>) => <div {...props}>{children}</div>,
   },
 }))
 
 // Mock components
 vi.mock('./components/WebhookList', () => ({
-  WebhookList: ({ webhooks }: any) => (
+  WebhookList: ({ webhooks }: { webhooks: Array<{ id: number, name: string, enabled: boolean }> }) => (
     <div data-testid='webhook-list'>
-      {webhooks.map((webhook: any) => (
+      {webhooks.map(webhook => (
         <div key={webhook.id} data-testid={`webhook-item-${webhook.id}`}>
           <h3>{webhook.name}</h3>
           <span>
@@ -43,7 +43,7 @@ vi.mock('./components/EmptyState', () => ({
 }))
 
 vi.mock('./components/ErrorState', () => ({
-  ErrorState: ({ error }: any) => (
+  ErrorState: ({ error }: { error: { message: string } }) => (
     <div data-testid='error-state'>
       Error:
       {error.message}

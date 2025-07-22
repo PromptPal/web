@@ -3,10 +3,10 @@ import { createMockProject, createMockPrompt, createMockProvider } from '../mock
 
 // Helper to create GraphQL mocks
 export function createGraphQLMock(
-  query: any,
-  variables: any = {},
-  result: any,
-  error?: any,
+  query: unknown,
+  variables: Record<string, unknown> = {},
+  result: unknown,
+  error?: string,
 ): MockedResponse {
   return {
     request: {
