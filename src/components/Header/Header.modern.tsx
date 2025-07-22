@@ -8,6 +8,7 @@ interface NavItemProps {
   icon: React.ReactNode
   label: string
   to: React.ComponentProps<typeof Link>['to']
+  params?: React.ComponentProps<typeof Link>['params']
   active?: boolean
 }
 
@@ -46,22 +47,26 @@ export function Header() {
               <nav className='hidden md:flex items-center gap-1 mr-4'>
                 <NavItem
                   icon={<Home size={18} strokeWidth={2} />}
-                  to={`/${pid}`}
+                  to='/$pid'
+                  params={{ pid }}
                   label='Dashboard'
                 />
                 <NavItem
                   icon={<PlusCircle size={18} strokeWidth={2} />}
-                  to={`/${pid}/prompts/new`}
+                  to='/$pid/prompts/new'
+                  params={{ pid }}
                   label='New Prompt'
                 />
                 <NavItem
                   icon={<Webhook size={18} strokeWidth={2} />}
-                  to={`/${pid}/webhooks`}
+                  to='/$pid/webhooks'
+                  params={{ pid }}
                   label='Webhooks'
                 />
                 <NavItem
                   icon={<Settings size={18} strokeWidth={2} />}
-                  to={`/${pid}/edit`}
+                  to='/$pid/edit'
+                  params={{ pid }}
                   label='Settings'
                 />
               </nav>
@@ -77,10 +82,11 @@ export function Header() {
   )
 }
 
-function NavItem({ icon, label, active, to }: NavItemProps) {
+function NavItem({ icon, label, active, to, params }: NavItemProps) {
   return (
     <Link
       to={to}
+      params={params}
       className={`
         relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
         transition-all duration-200 group

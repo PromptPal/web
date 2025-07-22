@@ -33,7 +33,8 @@ export function EmptyState() {
       {/* Action buttons */}
       <div className='flex flex-col sm:flex-row gap-4 pt-4'>
         <Link
-          to={`/${projectId}/webhooks/new`}
+          to='/$pid/webhooks/new'
+          params={{ pid: projectId.toString() }}
           className='inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900'
         >
           <Plus className='h-4 w-4' />
