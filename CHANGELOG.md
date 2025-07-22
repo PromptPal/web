@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.15.1](https://github.com/PromptPal/web/compare/v1.15.0...v1.15.1) (2025-07-22)
+
+
+### Features
+
+* add Cloudflare Pages build script and update CI workflow ([0181d87](https://github.com/PromptPal/web/commit/0181d8732c057befdf0fae1b5360ae641d92ca8e))
+* add Cloudflare Pages deployment to CI workflow ([3e9c5bb](https://github.com/PromptPal/web/commit/3e9c5bb57775bc4ade57e85afc409db0e56d9002))
+* add comprehensive tests for all pages ([4abbaf8](https://github.com/PromptPal/web/commit/4abbaf83c3bead18613b659736541e9a78a63b90))
+* add comprehensive tests for all pages ([d2facbd](https://github.com/PromptPal/web/commit/d2facbdc3c16edbe2a1d41263981cdd66cfeb060))
+* add comprehensive webhook support ([1cdaf15](https://github.com/PromptPal/web/commit/1cdaf152fc7c322bb5ae174e3f61661539d8408b))
+* add comprehensive webhook support ([0005595](https://github.com/PromptPal/web/commit/000559515c0f12a4c78575238d510f743cf60e5b))
+* add configurable HTTP endpoint with environment variable support ([f5c5e0b](https://github.com/PromptPal/web/commit/f5c5e0b85f16b4bb85be2e2247abf8eaccb9882d))
+* add TypeScript declaration for HTTP endpoint build constant ([869e826](https://github.com/PromptPal/web/commit/869e826e505e80782844a5768b19d6e4a04cb744))
+* add Vitest unit testing with MSW for API mocking ([f5ff072](https://github.com/PromptPal/web/commit/f5ff072dd2c75132c79d8f331fdc695468916038))
+* add Vitest unit testing with MSW for API mocking ([1ff5fce](https://github.com/PromptPal/web/commit/1ff5fce3dfe6626ff13013cc65fee714a6d264fd))
+* enhance auth UI with email/password login and improved UX ([b090a75](https://github.com/PromptPal/web/commit/b090a75427ab3e34a161d111ad14cd40c3e726d3))
+* enhance profile page with tabbed interface ([223654e](https://github.com/PromptPal/web/commit/223654e66c6b8aaf4f1295b63d89c46d1f43a24c))
+* enhance profile page with tabbed interface ([f8432a4](https://github.com/PromptPal/web/commit/f8432a460d2d90d58e7fc2dc766be524fe5a0638))
+* refactor permissions management with improved component architecture ([8aadc19](https://github.com/PromptPal/web/commit/8aadc198b944d02e5a71479bb828aaedd595712c))
+
+
+### Bug Fixes
+
+* address review comments for webhook implementation ([2d75f6f](https://github.com/PromptPal/web/commit/2d75f6f0c18ed68f7d6fb25c1b237e7d2ee6e201))
+* convert Link components to use proper TanStack Router syntax ([6f6afa2](https://github.com/PromptPal/web/commit/6f6afa2519d6d15969af916a80496a5df6edfa5d))
+* convert Link components to use proper TanStack Router syntax ([a00c0db](https://github.com/PromptPal/web/commit/a00c0db6866fa783810a45863b25c6d65e4e7558))
+* reorganize CI workflow steps and add production environment ([6a9711e](https://github.com/PromptPal/web/commit/6a9711e811c89dd94630d957e12481c11220536e))
+* resolve all TypeScript and ESLint issues across test files ([acd0608](https://github.com/PromptPal/web/commit/acd06080f7fdfca39d3073297d9b1ecc12d8244f))
+* resolve all TypeScript and ESLint issues across test files ([7a82294](https://github.com/PromptPal/web/commit/7a82294d1092c64f85512fb5251a14b6b653d0d6))
+* specify pnpm as package manager for Cloudflare deployment ([ff6eddc](https://github.com/PromptPal/web/commit/ff6eddc9bf9ed3aab908623280c257b5f5ac150d))
+* **test:** fix landing page test cases ([d600a31](https://github.com/PromptPal/web/commit/d600a31df3362d1f33e3f7e12c57205806424e3f))
+* update tests and migrate to motion/react ([bb3d844](https://github.com/PromptPal/web/commit/bb3d844faf8106ede881183d92c392296e822093))
+* **webhooks:** remove unused useParams import from WebhookList ([4ae5ea6](https://github.com/PromptPal/web/commit/4ae5ea68f267a0dfada3616da233640575ae802d))
+
+
+### Miscellaneous Chores
+
+* release 1.15.1 ([d3dcbf4](https://github.com/PromptPal/web/commit/d3dcbf4917588fedc1ea8a3f02f772ee8d6e504e))
+
 ## [1.15.0](https://github.com/PromptPal/web/compare/v1.14.1...v1.15.0) (2025-07-12)
 
 
