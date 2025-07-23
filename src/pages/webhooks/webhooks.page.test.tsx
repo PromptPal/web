@@ -1,8 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
-import { MockedProvider } from '@apollo/client/testing'
+import { render, screen } from '@testing-library/react'
 import WebhooksPage from './webhooks.page'
-import { webhooksList } from './webhook.query'
 
 // Mock TanStack Router
 vi.mock('@tanstack/react-router', () => ({
@@ -12,6 +10,11 @@ vi.mock('@tanstack/react-router', () => ({
     </a>
   ),
   useParams: () => ({ pid: '1' }),
+}))
+
+// Mock the route hook
+vi.mock('../../hooks/route', () => ({
+  useProjectId: () => 1,
 }))
 
 // Mock framer-motion
@@ -46,6 +49,7 @@ vi.mock('./components/ErrorState', () => ({
   ErrorState: ({ error }: { error: { message: string } }) => (
     <div data-testid='error-state'>
       Error:
+      {' '}
       {error.message}
     </div>
   ),
@@ -58,6 +62,15 @@ vi.mock('./components/LoadingState', () => ({
 vi.mock('./components/PageHeader', () => ({
   PageHeader: () => <div data-testid='page-header'>Webhooks Header</div>,
 }))
+
+// Mock the graphql function and query
+vi.mock('@/gql', () => ({
+  graphql: vi.fn(() => 'MOCK_WEBHOOKS_QUERY'),
+}))
+
+// Mock useQuery hook from Apollo
+vi.mock('@apollo/client')
+import * as apolloClient from '@apollo/client'
 
 const mockWebhooks = [
   {
@@ -80,131 +93,106 @@ const mockWebhooks = [
   },
 ]
 
-const mocks = [
-  {
-    request: {
-      query: webhooksList,
-      variables: {
-        projectId: 1,
-        pagination: { limit: 20, offset: 0 },
-      },
-    },
-    result: {
+describe('WebhooksPage', () => {
+  const mockUseQuery = vi.mocked(apolloClient.useQuery)
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    // Default mock return value
+    mockUseQuery.mockReturnValue({
+      data: null,
+      loading: false,
+      error: null,
+      refetch: vi.fn(),
+    })
+  })
+
+  it('renders loading state initially', () => {
+    mockUseQuery.mockReturnValue({
+      data: null,
+      loading: true,
+      error: null,
+      refetch: vi.fn(),
+    })
+
+    render(<WebhooksPage />)
+
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument()
+  })
+
+  it('renders webhooks list when data is loaded', () => {
+    mockUseQuery.mockReturnValue({
       data: {
         webhooks: {
           count: 2,
           edges: mockWebhooks,
         },
       },
-    },
-  },
-]
+      loading: false,
+      error: null,
+      refetch: vi.fn(),
+    })
 
-const emptyMocks = [
-  {
-    request: {
-      query: webhooksList,
-      variables: {
-        projectId: 1,
-        pagination: { limit: 20, offset: 0 },
-      },
-    },
-    result: {
+    render(<WebhooksPage />)
+
+    expect(screen.getByTestId('page-header')).toBeInTheDocument()
+    expect(screen.getByTestId('webhook-list')).toBeInTheDocument()
+    expect(screen.getByTestId('webhook-item-1')).toBeInTheDocument()
+    expect(screen.getByTestId('webhook-item-2')).toBeInTheDocument()
+    expect(screen.getByText('Test Webhook 1')).toBeInTheDocument()
+    expect(screen.getByText('Test Webhook 2')).toBeInTheDocument()
+  })
+
+  it('renders empty state when no webhooks exist', () => {
+    mockUseQuery.mockReturnValue({
       data: {
         webhooks: {
           count: 0,
           edges: [],
         },
       },
-    },
-  },
-]
-
-const errorMocks = [
-  {
-    request: {
-      query: webhooksList,
-      variables: {
-        projectId: 1,
-        pagination: { limit: 20, offset: 0 },
-      },
-    },
-    error: new Error('Failed to fetch webhooks'),
-  },
-]
-
-describe('WebhooksPage', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  it('renders loading state initially', () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <WebhooksPage />
-      </MockedProvider>,
-    )
-
-    expect(screen.getByTestId('loading-state')).toBeInTheDocument()
-  })
-
-  it('renders webhooks list when data is loaded', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <WebhooksPage />
-      </MockedProvider>,
-    )
-
-    await waitFor(() => {
-      expect(screen.getByTestId('page-header')).toBeInTheDocument()
-      expect(screen.getByTestId('webhook-list')).toBeInTheDocument()
-      expect(screen.getByTestId('webhook-item-1')).toBeInTheDocument()
-      expect(screen.getByTestId('webhook-item-2')).toBeInTheDocument()
+      loading: false,
+      error: null,
+      refetch: vi.fn(),
     })
 
-    expect(screen.getByText('Test Webhook 1')).toBeInTheDocument()
-    expect(screen.getByText('Test Webhook 2')).toBeInTheDocument()
-  })
+    render(<WebhooksPage />)
 
-  it('renders empty state when no webhooks exist', async () => {
-    render(
-      <MockedProvider mocks={emptyMocks} addTypename={false}>
-        <WebhooksPage />
-      </MockedProvider>,
-    )
-
-    await waitFor(() => {
-      expect(screen.getByTestId('empty-state')).toBeInTheDocument()
-    })
-
+    expect(screen.getByTestId('page-header')).toBeInTheDocument()
+    expect(screen.getByTestId('empty-state')).toBeInTheDocument()
     expect(screen.getByText('No webhooks found')).toBeInTheDocument()
   })
 
-  it('renders error state when query fails', async () => {
-    render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
-        <WebhooksPage />
-      </MockedProvider>,
-    )
-
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument()
+  it('renders error state when query fails', () => {
+    mockUseQuery.mockReturnValue({
+      data: null,
+      loading: false,
+      error: new Error('Failed to fetch webhooks'),
+      refetch: vi.fn(),
     })
 
+    render(<WebhooksPage />)
+
+    expect(screen.getByTestId('error-state')).toBeInTheDocument()
     expect(screen.getByText('Error: Failed to fetch webhooks')).toBeInTheDocument()
   })
 
-  it('renders page header consistently', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <WebhooksPage />
-      </MockedProvider>,
-    )
-
-    await waitFor(() => {
-      expect(screen.getByTestId('page-header')).toBeInTheDocument()
+  it('renders page header consistently', () => {
+    mockUseQuery.mockReturnValue({
+      data: {
+        webhooks: {
+          count: 2,
+          edges: mockWebhooks,
+        },
+      },
+      loading: false,
+      error: null,
+      refetch: vi.fn(),
     })
 
+    render(<WebhooksPage />)
+
+    expect(screen.getByTestId('page-header')).toBeInTheDocument()
     expect(screen.getByText('Webhooks Header')).toBeInTheDocument()
   })
 })
