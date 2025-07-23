@@ -15,6 +15,7 @@ function CreateWebhookPage() {
   const projectId = ~~params.pid
 
   const [createWebhookMutation, { loading }] = useMutation(createWebhook, {
+    refetchQueries: ['allWebhooksList'],
     onCompleted: (data) => {
       if (data?.createWebhook.id) {
         navigate({ to: `/${projectId}/webhooks` })
