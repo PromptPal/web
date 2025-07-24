@@ -25,6 +25,7 @@ function EditWebhookPage() {
   })
 
   const [updateWebhookMutation, { loading }] = useMutation(updateWebhook, {
+    refetchQueries: ['allWebhooksList'],
     onCompleted: (data) => {
       const updatedWebhook = data?.updateWebhook.id
       if (!updatedWebhook) {
