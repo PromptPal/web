@@ -20,6 +20,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import LakeModal from '@annatarhe/lake-ui/modal'
 import { WEBHOOK_STATUS_COLORS } from '../types'
 
 interface WebhookCallsTableProps {
@@ -30,6 +31,17 @@ interface WebhookCallsTableProps {
 }
 
 const columnHelper = createColumnHelper<Omit<WebhookCall, 'webhook'>>()
+
+// Helper function to format JSON content with proper styling
+function formatJsonContent(content: string) {
+  try {
+    const parsed = JSON.parse(content || '{}')
+    return JSON.stringify(parsed, null, 2)
+  }
+  catch {
+    return content || 'Invalid JSON'
+  }
+}
 
 export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookCallsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'createdAt', desc: true }])
@@ -263,89 +275,67 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
       </div>
 
       {/* Call Detail Modal */}
-      {selectedCall && (
-        <div className='fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50'>
-          <div className='bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden'>
-            {/* Header */}
-            <div className='px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between'>
-              <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>
-                Webhook Call Details
-              </h3>
-              <button
-                onClick={() => setSelectedCall(null)}
-                className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className='p-6 overflow-y-auto max-h-[60vh] space-y-6'>
-              {/* Status and timestamp */}
-              <div className='grid grid-cols-2 gap-4'>
-                <div>
-                  <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
-                    Status
-                  </label>
-                  <div className='mt-1 flex items-center gap-2'>
-                    {selectedCall.status === 'success'
-                      ? (
-                          <CheckCircle className='h-4 w-4 text-green-500' />
-                        )
-                      : (
-                          <XCircle className='h-4 w-4 text-red-500' />
-                        )}
-                    <span className={`px-2 py-1 text-xs rounded-full font-medium ${
-                      WEBHOOK_STATUS_COLORS[selectedCall.statusCode] || WEBHOOK_STATUS_COLORS.error
-                    }`}
-                    >
-                      {selectedCall.statusCode}
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
-                    Timestamp
-                  </label>
-                  <p className='mt-1 text-sm text-gray-900 dark:text-white'>
-                    {new Date(selectedCall.createdAt).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-
-              {/* Payload */}
+      <LakeModal
+        isOpen={!!selectedCall}
+        onClose={() => setSelectedCall(null)}
+        title='Webhook Call Details'
+      >
+        {selectedCall && (
+          <div className='p-6 space-y-6'>
+            {/* Status and timestamp */}
+            <div className='grid grid-cols-2 gap-4'>
               <div>
                 <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
-                  Request Payload
+                  Status
                 </label>
-                <pre className='mt-1 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm overflow-x-auto'>
-                  {JSON.stringify(JSON.parse(selectedCall.requestBody || '{}'), null, 2)}
-                </pre>
+                <div className='mt-1 flex items-center gap-2'>
+                  {selectedCall.status === 'success'
+                    ? (
+                        <CheckCircle className='h-4 w-4 text-green-500' />
+                      )
+                    : (
+                        <XCircle className='h-4 w-4 text-red-500' />
+                      )}
+                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${
+                    WEBHOOK_STATUS_COLORS[selectedCall.statusCode] || WEBHOOK_STATUS_COLORS.error
+                  }`}
+                  >
+                    {selectedCall.statusCode}
+                  </span>
+                </div>
               </div>
-
-              {/* Response */}
               <div>
                 <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
-                  Response
+                  Timestamp
                 </label>
-                <pre className='mt-1 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm overflow-x-auto'>
-                  {selectedCall.responseBody || 'No response received'}
-                </pre>
+                <p className='mt-1 text-sm text-gray-900 dark:text-white'>
+                  {new Date(selectedCall.createdAt).toLocaleString()}
+                </p>
               </div>
             </div>
 
-            {/* Footer */}
-            <div className='px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end'>
-              <button
-                onClick={() => setSelectedCall(null)}
-                className='px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors'
-              >
-                Close
-              </button>
+            {/* Payload */}
+            <div>
+              <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
+                Request Payload
+              </label>
+              <pre className='mt-2 p-4 bg-black/10 rounded-lg text-xs text-gray-400 overflow-x-auto border border-white/5 font-mono'>
+                {formatJsonContent(selectedCall.requestBody)}
+              </pre>
+            </div>
+
+            {/* Response */}
+            <div>
+              <label className='text-sm font-medium text-gray-500 dark:text-gray-400'>
+                Response
+              </label>
+              <pre className='mt-2 p-4 bg-black/10 rounded-lg text-xs text-gray-400 overflow-x-auto border border-white/5 font-mono'>
+                {selectedCall.responseBody || 'No response received'}
+              </pre>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </LakeModal>
     </>
   )
 }
