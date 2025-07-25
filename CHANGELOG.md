@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.15.2](https://github.com/PromptPal/web/compare/v1.15.1...v1.15.2) (2025-07-25)
+
+
+### Bug Fixes
+
+* improve webhook delivery history modal styling for dark theme ([2c5e06d](https://github.com/PromptPal/web/commit/2c5e06dcef65be6d1114a7034672e67336bc73e0))
+* improve webhook delivery history modal styling for dark theme ([bfd489a](https://github.com/PromptPal/web/commit/bfd489a0d36d72e5a6cc2c99e6896e88c75858b3))
+* refresh webhooks list after create/update mutations ([0e76172](https://github.com/PromptPal/web/commit/0e76172bd126a77cb21a86e57a4cd3c35abef8a4))
+* refresh webhooks list after create/update mutations ([b9d3bc9](https://github.com/PromptPal/web/commit/b9d3bc966f5a6eec574461040ab7950ce2fb120c))
+* resolve WebhooksPage test error by switching from MockedProvider to direct Apollo mocking ([f7fe793](https://github.com/PromptPal/web/commit/f7fe793782295e9989bb25a9cfd197f3e8105aec))
+* resolve WebhooksPage test error by switching from MockedProvider to direct Apollo mocking ([27dcbce](https://github.com/PromptPal/web/commit/27dcbceed702e849b2198ee8427adbcb527e5ac9))
+
 ## [1.15.1](https://github.com/PromptPal/web/compare/v1.15.0...v1.15.1) (2025-07-22)
 
 
