@@ -34,12 +34,16 @@ const columnHelper = createColumnHelper<Omit<WebhookCall, 'webhook'>>()
 
 // Helper function to format JSON content with proper styling
 function formatJsonContent(content: string) {
+  if (!content || content === 'No response received') {
+    return content
+  }
+
   try {
-    const parsed = JSON.parse(content || '{}')
+    const parsed = JSON.parse(content)
     return JSON.stringify(parsed, null, 2)
   }
   catch {
-    return content || 'Invalid JSON'
+    return content
   }
 }
 
@@ -330,7 +334,7 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
                 Response
               </label>
               <pre className='mt-2 p-4 bg-black/10 rounded-lg text-xs text-gray-400 overflow-x-auto border border-white/5 font-mono'>
-                {selectedCall.responseBody || 'No response received'}
+                {formatJsonContent(selectedCall.responseBody || 'No response received')}
               </pre>
             </div>
           </div>
