@@ -114,7 +114,7 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
 
           return (
             <div className='space-y-1'>
-              <code className='text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded'>
+              <code className='text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 rounded'>
                 {preview}
               </code>
               <button
@@ -137,7 +137,7 @@ export function WebhookCallsTable({ calls, loading, error, onRefetch }: WebhookC
 
           const preview = response.length > 50 ? response.substring(0, 50) + '...' : response
           return (
-            <code className='text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded'>
+            <code className='text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 rounded'>
               {preview}
             </code>
           )

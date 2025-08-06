@@ -149,16 +149,16 @@ function WebhookDetailPage() {
             </div>
           </motion.div>
 
-          <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+          <div className='flex flex-col gap-8'>
             {/* Webhook Details */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className='lg:col-span-1 space-y-6'
+              className='flex flex-col lg:flex-row gap-6'
             >
               {/* Basic Info */}
-              <div className='bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-gray-700/50 shadow-xl p-6'>
+              <div className='flex-1 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-gray-700/50 shadow-xl p-6'>
                 <h2 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
                   Webhook Details
                 </h2>
@@ -210,7 +210,7 @@ function WebhookDetailPage() {
               </div>
 
               {/* Quick Stats */}
-              <div className='bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-gray-700/50 shadow-xl p-6'>
+              <div className='flex-shrink-0 lg:w-80 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-gray-700/50 shadow-xl p-6'>
                 <h2 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
                   Delivery Stats
                 </h2>
@@ -243,7 +243,7 @@ function WebhookDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className='lg:col-span-2'
+              className='w-full'
             >
               <div className='bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-gray-700/50 shadow-xl'>
                 <div className='p-6 border-b border-gray-200 dark:border-gray-700'>
