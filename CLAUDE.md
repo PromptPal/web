@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # PromptPal Web Application
 
 ## Project Overview
@@ -96,25 +100,46 @@ Uses TanStack Router with file-based routing:
 ### Available Scripts
 ```bash
 # Development
-pnpm dev                 # Start dev server
-pnpm build              # Production build
+pnpm dev                 # Start dev server on http://localhost:5173
+pnpm build              # Production build with base path /public
+pnpm build:cf           # Cloudflare build without base path
 pnpm preview            # Preview production build
 
 # Code Quality
-pnpm lint               # Run ESLint
-pnpm g                  # Generate GraphQL types
+pnpm lint               # Run ESLint on src/ directory (auto-fix enabled)
+pnpm g                  # Generate GraphQL types from schema
 
-# Testing & Storybook
-pnpm storybook          # Start Storybook dev server
-pnpm build-storybook    # Build Storybook
+# Testing
+pnpm test               # Run tests in watch mode with Vitest
+pnpm test:ui            # Open Vitest UI interface
+pnpm test:run           # Run tests once (CI mode)
+pnpm test:cov           # Run tests with coverage report
+
+# Storybook
+pnpm storybook          # Start Storybook dev server on port 6006
+pnpm build-storybook    # Build Storybook for production
 pnpm test:storybook     # Run Storybook tests
 ```
+
+### Testing Configuration
+- **Framework**: Vitest with happy-dom environment
+- **Test Files**: `src/**/*.{test,spec}.{js,ts,jsx,tsx}`
+- **Setup File**: `src/test/setup.ts`
+- **Coverage**: V8 provider with HTML, JSON, and text reporters
+- **Globals**: Test globals are enabled
+- **Path Alias**: `@` maps to `src/` directory
 
 ### Environment Configuration
 - **Development**: API calls to `http://localhost:7788`
 - **Production**: Static files served from backend server
-- GraphQL endpoint: `/api/v2/graphql`
-- REST API prefix: `/api/v1`
+- **GraphQL endpoint**: `/api/v2/graphql`
+- **REST API prefix**: `/api/v1`
+- **Environment variable**: `VITE_HTTP_ENDPOINT` for custom API endpoints
+
+### Git Hooks (Lefthook)
+Pre-commit hooks automatically run ESLint with auto-fix on staged files:
+- Files matched: `*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}`
+- Auto-fixes are applied and re-staged
 
 ## Key Features & Modules
 
@@ -150,6 +175,17 @@ pnpm test:storybook     # Run Storybook tests
 - Usage history and trends
 
 ## Code Style & Conventions
+
+### Commit Rules
+You must follow the Conventional Commits rules, ensuring that the scope and module are included.
+
+For example:
+```md
+fix(home): add price link on home page
+feat(ai): add AI module
+refactor(cell): update cell module for better maintenance
+perf(parser): improve parser performance by over 30%
+```
 
 ### ESLint Configuration
 - TypeScript strict rules
@@ -189,10 +225,13 @@ function ExampleComponent({ id }: { id: number }) {
 
 ## API Integration
 
-### GraphQL Schema
-- Located at `../PromptPal/schema/schema.gql`
-- Auto-generated types in `src/gql/`
-- Supports persisted queries for optimization
+### GraphQL Configuration
+- **Schema location**: `../PromptPal/schema/schema.gql` (relative to web directory)
+- **Generated types**: `src/gql/` directory (auto-generated, do not edit)
+- **Code generation config**: `codegen.ts`
+- **Persisted queries**: Enabled for production optimization
+- **Document sources**: All `*.ts` and `*.tsx` files in `src/`
+- Run `pnpm g` after schema changes to regenerate types
 
 ### Key GraphQL Operations
 - **Projects**: CRUD operations, metrics, token management
@@ -203,16 +242,23 @@ function ExampleComponent({ id }: { id: number }) {
 ## Build & Deployment
 
 ### Build Configuration
-- **Vite** with React SWC plugin for fast builds
-- **Base path**: `/public` for production builds
-- **ZIP packaging** in production for easy deployment
-- **Source maps** and build info injection
+- **Build tool**: Vite with React SWC plugin
+- **Base path**: `/public` for production builds (configurable via `pnpm build:cf` for Cloudflare)
+- **Code splitting**: Automatic via TanStack Router
+- **Bundle analysis**: Available in development mode
+- **ZIP packaging**: Automatic in production builds
+- **Build info**: Injected via unplugin-info
+
+### Package Manager
+- **PNPM**: Version 10.12.1 (enforced via packageManager field)
+- Always use `pnpm` instead of `npm` or `yarn`
 
 ### Development Setup
 1. Install dependencies: `pnpm install`
-2. Ensure backend GraphQL schema is available
-3. Start development server: `pnpm dev`
-4. Generate GraphQL types: `pnpm g`
+2. Ensure backend GraphQL schema is available at `../PromptPal/schema/schema.gql`
+3. Generate GraphQL types: `pnpm g`
+4. Start development server: `pnpm dev`
+5. Access application at `http://localhost:5173`
 
 ## Common Development Tasks
 
@@ -253,5 +299,18 @@ function ExampleComponent({ id }: { id: number }) {
 - **Image optimization**: Proper asset handling
 - **Bundle analysis**: Monitor build size
 - **Persisted queries**: Reduced network overhead
+
+## Backend Integration
+
+The web application expects a PromptPal backend server running locally:
+- Default backend URL: `http://localhost:7788`
+- GraphQL endpoint: `http://localhost:7788/api/v2/graphql`
+- REST API: `http://localhost:7788/api/v1/*`
+
+To run the backend locally:
+```bash
+cd ../PromptPal
+# Follow the backend setup instructions in that directory
+```
 
 This architecture provides a solid foundation for rapid feature development while maintaining code quality and type safety throughout the application.
