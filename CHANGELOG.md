@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.3](https://github.com/PromptPal/web/compare/v1.15.2...v1.15.3) (2025-08-07)
+
+
+### Bug Fixes
+
+* **webhooks:** improve dark theme support and layout for webhook details page ([4baf31c](https://github.com/PromptPal/web/commit/4baf31cac4d9d8e7c35ce7f7b8d60b5a161bfd1c))
+* **webhooks:** render JSON responses properly in webhook detail modal ([6cb0759](https://github.com/PromptPal/web/commit/6cb07596d277104b8e6dea29f5b4baa3e8a8dbbe))
+
 ## [1.15.2](https://github.com/PromptPal/web/compare/v1.15.1...v1.15.2) (2025-07-25)
 
 
